@@ -5,16 +5,171 @@
 \access{Advance Access Publication Date: Day Month Year}
 \appnotes{Manuscript Category}
 
+
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=1pt
+  \plitemsep=1pt
+  \plparsep=1pt  
+\usepackage{hyperref} 
+\usepackage{xspace} 
+\usepackage{amsmath,amssymb} 
+\usepackage{bm}
+\usepackage{verbatim}
+\usepackage{longtable}
+\usepackage[vlined]{algorithm2e}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Rolf's includegraphicstop
+\makeatletter
+\newsavebox{\@alignepsbox}
+\newlength{\@aligneps}
+\newcommand{\includegraphicstop}[2][]{%
+\sbox{\@alignepsbox}{\includegraphics[#1]{#2}}%
+\setlength{\@aligneps}{-\ht\@alignepsbox}%
+\addtolength{\@aligneps}{2ex}%
+\raisebox{\@aligneps}{\usebox{\@alignepsbox}}}
+\makeatother
+
+
+\makeatletter
+\let\oldlt\longtable
+\let\endoldlt\endlongtable
+\def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
+\def\longtable@i[#1]{\begin{figure}[t]
+\onecolumn
+\begin{minipage}{0.5\textwidth}
+\oldlt[#1]
+}
+\def\longtable@ii{\begin{figure}[t]
+\onecolumn
+\begin{minipage}{0.5\textwidth}
+\oldlt
+}
+\def\endlongtable{\endoldlt
+\end{minipage}
+\twocolumn
+\end{figure}}
+\makeatother
+
+%%%%%%%%%%%%%%%%% Theorems %%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \newtheorem{theorem}{Theoreme}
+ \newtheorem{definition}[theorem]{Definition}
+ \newtheorem{remark}[theorem]{Remark}
+ \newtheorem{corollary}[theorem]{Corollary}
+ \newtheorem{lemma}[theorem]{Lemma}
+ \newtheorem{proposition}[theorem]{Proposition}
+
+\newtheorem{observation}[theorem]{Observation}
+
+%\newtheorem{algorithm}{Algorithm}
+\newtheorem{axiom}{Axiom}
+\newtheorem{hypothesis}{Working Hypothesis}
+
+%%% macros for notation in DP framework
+\newcommand{\network}{\mathcal{N}}
+\newcommand{\dom}{\operatorname{dom}} %domain
+\newcommand{\val}{a} % valuation aka assignment
+\newcommand{\vars}{\operatorname{vars}}
+\newcommand{\dep}{\operatorname{dep}}
+\newcommand{\energy}[1]{\operatorname{e}_{#1}}
+\newcommand{\numberof}{\operatorname{\#}}
+\newcommand{\partfun}[1]{\mathcal{Z}_{#1}}
+\newcommand{\separator}[2]{\operatorname{sep}(#1,#2)}
+\newcommand{\difference}[2]{\operatorname{diff}(#1 \rightarrow #2)}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\genmarg}[1]{(\!|\!#1\!|\!)}
+\newcommand{\gencomb}[1]{\langle\!|#1|\!\rangle}
+\newcommand{\Message}[2]{m_{#1\rightarrow #2}}
+
+
+\newcommand{\energyModel}{{\cal M}}
+\newcommand{\structureElements}{{\cal SE}}
+\newcommand{\powerSet}[1]{2^{#1}}
+\newcommand{\underConstruction}[1]{{\LARGE$\triangle$\Large\!\!\!\!!}$\quad$\textcolor{red}{#1}}
+\newcommand{\argmin}{\operatorname*{arg\,min}}
+\newcommand{\objective}{{\mathbb{F}}}
+
+%\newcommand{\assignments}{\operatorname{as}}
+\newcommand{\assignments}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\R}{\mathcal{R}}
+\renewcommand{\S}{\mathcal{S}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\Y}{\mathcal{Y}}
+
+\newcommand{\width}{w}
+
+\newcommand{\sample}{\texttt{Sample}}
+\newcommand{\elim}[2]{\operatorname{elim}(#1,#2)}
+\newcommand{\edgesToR}{E^r_T}
+
+\newcommand{\phitotal}{\phi_{\operatorname{m}}}
+
+\newcommand{\Ebp}[2]{E^{\textrm{bp}}_{#1}(#2)}
+\newcommand{\Ehp}[1]{E^{\textrm{hp}}(#1)}
+\newcommand{\Eint}[1]{E^{\textrm{int}}(#1)}
+
+\newcommand{\Def}[1]{{\bf #1}}
+
+\newcommand{\TargetE}{E^{\star}}
+
+
+
+\newcommand{\TODO}[1]{\Final{\begin{mdframed}[leftline=false,rightline=false,linecolor=red!70!black,linewidth=1.5pt]\color{red!70!black}\sf TODO: #1\end{mdframed}}}
+\newcommand{\parHead}[1]{\Final{\paragraph{#1}}}
+
+
+\newcommand{\Final}[1]{#1}
+%% Uncomment the line below for ``Final'' version
+\renewcommand{\Final}[1]{}
+
+\newcommand{\Design}[1]{{\sf Designs}^{\star}(#1)}
+\newcommand{\NumDesign}{\ensuremath{\#}{\sf Designs}\xspace}
+\newcommand{\IS}[1]{{\sf IndSets}(#1)}
+\newcommand{\Nuc}[1]{{\sf #1}}
+\newcommand{\Ab}{\Nuc{A}}
+\newcommand{\Cb}{\Nuc{C}}
+\newcommand{\Gb}{\Nuc{G}}
+\newcommand{\Ub}{\Nuc{U}}
+
+\newcommand{\Software}[1]{{\ttfamily #1}}
+
+\newcommand{\ourprog}{\Software{RNARedPrint}}
+
+\setlength{\parskip}{.2em}
+
+
+
+%%% end macro defs
+
+
+
 \begin{document}
 \firstpage{1}
 
 \subtitle{Subject Section}
 
-\title[short Title]{This is a title}
-\author[Sample \textit{et~al}.]{Corresponding Author\,$^{\text{\sfb 1,}*}$, Co-Author\,$^{\text{\sfb 2}}$ and Co-Author\,$^{\text{\sfb 2,}*}$}
-\address{$^{\text{\sf 1}}$Department, Institution, City, Post Code, Country and \\
-$^{\text{\sf 2}}$Department, Institution, City, Post Code,
-Country.}
+\title[short Title]{Fixed-Parameter Tractable Sampling for RNA Design with Multiple Target Structures}
+\author[Hammer, Ponty, Wang and Will]{Stefan Hammer\,$^{\text{\sfb 1,2,3}}$, Yann Ponty\,$^{\text{\sfb 4,5,}\star}$, Wei Wang\,$^{\text{\sfb 4}}$ and Sebastian Will\,$^{\text{\sfb 2}}$}
+\address{$^{\text{\sf 1}}$University Leipzig, Department of Computer Science and Interdisciplinary Center for Bioinformatics, 04107 Leipzig, Germany; 
+$^{\text{\sf 2}}$University of Vienna, Faculty of Chemistry, Department of Theoretical Chemistry, 1090 Vienna, Austria;
+$^{\text{\sf 3}}$University of Vienna, Faculty of Computer Science, Research Group Bioinformatics and
+Computational Biology, 1090 Vienna, Austria;
+$^{\text{\sf 4}}$CNRS UMR 7161 LIX, Ecole Polytechnique, Bat. Turing, 91120 Palaiseau, France;
+and $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaiseau, France}
 
 \corresp{$^\ast$To whom correspondence should be addressed.}
 
@@ -22,527 +177,688 @@ Country.}
 
 \editor{Associate Editor: XXXXXXX}
 
-\abstract{\textbf{Motivation:} Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text
-Text Text Text Text Text.\\
-\textbf{Results:} Text  Text Text Text Text Text Text Text Text Text  Text Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text  Text Text Text Text Text Text\\
-\textbf{Availability:} Text  Text Text Text Text Text Text Text Text Text  Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text Text  Text\\
-\textbf{Contact:} \href{name@bio.com}{name@bio.com}\\
+\abstract{\textbf{Motivation:} The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches largely benefit from effective in-silico methods, which can tremendously impact their cost and feasibility. \\
+\textbf{Results:} Here, we revisit a central ingredient of most in-silico design methods: the sampling of sequences for multi-target design. We establish the $\#${\sf P}-hardness of uniform sampling, and introduce \ourprog{}, a tree decomposition-based algorithm for efficient, fixed parameter tractable sampling. By modeling the problem as a constraint network, \ourprog{} supports generic Boltzmann-weighted sampling for arbitrary additive RNA energy models; this enables generating designs meeting specific goals like expected free energies or \Gb\Cb-content. Finally, we empirically study general properties of the approach and generate biologically relevant multi-target Boltzmann-weighted designs for a common design benchmark. In particular, we show significant improvements over seed sequences generated by uniform sampling, the previously best available sampling strategy for multi-target design.\\
+\textbf{Availability:} \url{https://github.com/yannponty/RNARedPrint}\\
+\textbf{Contact:} Our software is freely available at: \href{yann.ponty@lix.polytechnique.fr}{yann.ponty@lix.polytechnique.fr}\\
 \textbf{Supplementary information:} Supplementary data are available at \textit{Bioinformatics}
 online.}
 
 \maketitle
 
+
+
 \section{Introduction}
+\parHead{Design, applications and motivation for multiple design.}Synthetic biology endeavors the engineering of artificial biological
+systems, promising broad applications in biology, biotechnology and
+medicine. Centrally, this requires the design of biological
+macromolecules with highly specific properties and programmable functions.
+In particular, RNAs present themselves as well-suited tools for
+rational design targeting specific functions~\cite{Kushwaha2016}. RNA function is tightly
+coupled to the formation of secondary structure, as well as changes in
+base pairing propensities and the accessibility of regions, e.g. by
+burying or exposing interaction sites~\cite{Rodrigo2014}. At the same time, the
+thermodynamics of RNA secondary structure is well understood and its prediction is
+computationally tractable~\cite{McCaskill1990}. Thus,  structure can serve as effective
+proxy within rational design approaches, ultimately targeting catalytic~\cite{Zhang2013} or regulatory~\cite{Rodrigo2014} functions.
 
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text. Figure~\ref{fig:01}
-shows that the above method  Text Text Text Text  Text Text Text
-Text Text Text  Text Text.  \citep{Bag01} wants to know about
-{\ldots}{\ldots} text follows.
-\begin{equation}
-\sum \text{\it x}+ \text{\it y} =\text{\it Z}\label{eq:01}\vspace*{-10pt}
-\end{equation}
+\parHead{Motivating multiple RNA design.} The function of many RNAs
+depends on their selective folding into one or several alternative
+conformations. Classic examples include riboswitches, which
+notoriously adopt different stable structures upon binding a specific
+ligand. Riboswitches have been a popular application of rational
+design~\cite{Wachsmuth2013,Domin2017}, partly motivated by their capacity to
+act as biosensors~\cite{Findeiss2017}. At the co-transcriptional
+level, certain RNA families feature alternative, evolutionarily
+conserved, transient structures~\cite{Zhu2013}, which facilitate the
+ultimate adoption of functional structures at full elongation.  More
+generally, simultaneous compatibility to multiple structures
+is a relevant design objective for engineering kinetically controlled RNAs, finally targeting prescribed folding pathways. Thus,
+modern applications of RNA design often target (the simultaneous
+stability of) multiple structures, additionally aiming at other
+features, such as specific \Gb\Cb-content~\cite{Reinharz2013} or the
+presence/absence of functionally relevant motifs (either anywhere or
+at specific positions)~\cite{Zhou2013}; these objectives motivate flexible
+computational design methods.
 
-%\enlargethispage{12pt}
+\parHead{On the importance of sampling for design.}
+Many computational methods for RNA design rely on similar overall
+strategies: initially generating one or several \Def{seed} sequences
+and optimizing them subsequently. In many cases, the seed quality was
+found to be critical for the empirical performance (and solution
+quality) of RNA design methods~\cite{Levin2012}. For instance, random
+seed generation improves the prospect of subsequent optimizations, helping
+to overcome local optima of the objective function, and induce better
+sequence diversity across designs~\cite{Reinharz2013}.  For
+single-target approaches, \Software{INFO-RNA}~\cite{Busch2006} made
+significant improvements mainly by starting its local search from the
+minimum energy sequence for the target structure instead of (uniform)
+random sequences for the early \Software{RNAinverse}
+algorithm~\cite{Hofacker1994}. This strategy was later shown to result
+in unrealistically high \Gb\Cb-contents in designed sequences. To
+address this issue, \Software{IncaRNAtion}~\cite{Reinharz2013}
+controls the \Gb\Cb-content through an adaptive sampling strategy.
 
-\section{Approach}
+\parHead{Specificities and similarities of multi-target design.}
+Specifically, for multi-target design, virtually all available methods~\cite{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} follow the same overall generation/optimization scheme.
+%
+Facing the complex sequence constraints induced by multiple targets, early methods such as \Software{Frnakenstein}~\cite{Lyngsoe2012} and \Software{Modena}~\cite{Taneda2015} did not attempt to solve sequence generation systematically, but rely on \emph{ad-hoc} sampling strategies. 
+%
+Recently, the \Software{RNAdesign} approach~\cite{HoenerzuSiederdissen2013}, coupled with powerful local search within \Software{RNAblueprint}~\cite{Hammer2017}, solved the problem of sampling seeds from the uniform distribution for multiple targets. These methods adopt a graph coloring perspective, initially decomposing the graph hierarchically using various decomposition algorithms, and \Def{precomputing} the number of valid sequences within each subgraph. The decomposition is then reinterpreted as a decision tree to perform a \Def{stochastic backtrack}, inspired by Ding and Lawrence~\cite{Ding2003}, where individual assignments are chosen with probabilities derived from the subsolution counts, leading to uniform sampling. The overall complexity of \Software{RNAdesign} grows like $\Theta(4^{\gamma})$, where $\gamma$ is a parameter whose value is bounded only by the length of the designed RNA. 
 
-Equation~(\ref{eq:01}) Text Text Text Text Text Text  Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-.....
+\TODO{Develop questions (relevance, difficulty...). Maybe tease results?}
+\parHead{Motivation.} The exponential time and space requirements of the \Software{RNAdesign} method already raise the question of the \Def{complexity of (uniform) sampling for multi-target design}. Since stochastic backtrack can be performed in linear time per sample, the method is dominated by the precomputation step, which requires counting valid designs. Thus, we focus on the question: \emph{Is there a polynomial-time algorithm to count valid multi-target designs?} In Section~\ref{sec:counting}, we answer in the negative, showing that there exists no such algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences  and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\cite{Bulatov2013,Cai2016}.
+The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, in a principled way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as the \Gb\Cb-content, complex sequence constraints, or the energy of individual structures?} 
 
 
-\begin{methods}
-\section{Methods}
+\begin{figure*}[t]
+{\centering\includegraphics[width=.8\textwidth]{Workflow}\\}
+\caption{General outline of \ourprog{} for base pair-based energy models. From a set of target secondary structures (i), base-pairs are merged (ii) into a compatibility graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and $\Gb\Cb$-content, leading to the production of suitable designs (vi).}
+\label{fig:workflow}
+\end{figure*}
 
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text
-text\vspace*{1pt}
+To answer these questions, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures (Section~\ref{sec:FPT}). Guided by a \Def{tree decomposition} of the network, we devise dynamic programming to compute partition functions and sample sequences from the Boltzmann distribution%
+% (Subsection~\ref{sec:PF})
+. We show that these algorithms are \Def{Fixed-Parameter Tractable} for the \Def{treewidth}%
+% Subsection~\ref{sec:complexity}
+%
+; in practice, we limit this parameter by using state-of-the-art tree decomposition algorithms. 
+%Uniform sampling is handled as a special case of Boltzmann sampling, where each valid sequence receives energy zero and---consequently---computing partition functions specializes to counting.
+By modeling sequences as variable assignments in a weighted constraint
+network, we support arbitrary multi-ary constraints and thus
+arbitrarily complex energy models,
+notably subsuming all commonly
+used RNA energy models%
+%(Subsection~\ref{sec:energy_models})
+.  Moreover, we describe an \Def{adaptive
+  sampling} strategy to control the free energies of the individual
+target structures and the $\Gb\Cb$-content%
+% (SubSection~\ref{sec:multiBoltzmann})
+. Notably, the sampling procedure is based on a simplified RNA energy model, taking only the most important energy contributions into account, which crucially limits computation time and space; at the same time, our approach targets realistic RNA energies in the well-accepted Turner RNA energy model. This high accuracy enables efficiently generating biologically relevant multi-target designs in our final application of our overall strategy to a large set of multi-target RNA design instances from a representative benchmark Section~\ref{sec:results}).
 
+%In this work, we present a generic approach to multi-target sequence sampling that enables Boltzmann-weighted sampling (subsuming uniform sampling) for a wide class of objective functions that can even make use of the commonly used ``full-featured'' RNA energy models (like the Turner model~\cite{turner}). Due to its high expressivity the same framework allows combining objective functions with various hard and soft constraints, which can accommodate various desirable multi-target design scenarios.
+
+%To provide a simple concrete example of multi-target design, consider designing a single sequence where all target structures are as stable as possible.
+%That is, one asks for the sequence $S$ that minimizes the energy differences of the target structures to the minimum energy for this sequence among all possible structures; one aims to minimize
+%   \begin{equation}
+%\label{eq:design-objective}
+%\sum_{\ell\in[1,k]} E(S;R_\ell) - E_0(S),
+%\end{equation}
+%over all sequences $S$, where $E_0(S):=\min_R E(S;R)$.
+%\TODO{even Taneda's objective is significantly more complex; how much do we want to talk about this...}
+%
+%The proposed Boltzmann-weighted sampling approach can support this design procedure by sampling start structures from the Boltzmann distribution over
+%\begin{equation}
+%\label{eq:sampling-objective} \sum_{\ell\in[1,k]} w_\ell E(S;R_\ell)
+%\end{equation}
+%or extensions thereof, e.g.~for controlling base frequencies. Suitable weights $w_\ell$ to accommodate the design objective can be approximated automatically after the machinery for Boltzmann sampling over such functions is set up.
+%
+%\TODO{Rewrite (from here to "Contributions"): sounds too negative}
+%Notably, by Eq.~(\ref{eq:sampling-objective}) we do not suggest to sample over the energy difference of Eq.~$(\ref{eq:design-objective})$. The term $\min_R E(S;R)$, which---for each sequence---minimizes over the entire structure space, precludes efficient sampling even by the proposed approach.
+%
+%Already sampling over Eq.~(\ref{eq:sampling-objective}) strictly extends the only previously existing approach to controlled sampling from single to multi-target sampling (in complete analogy to IncaRNAtion only after GC content is controlled, which we present later) and subsumes uniform sampling for multi-target design.
+%
+%Naturally, also more complex objective functions are desirable for RNA design and have been discussed in the literature; e.g. the ensemble defect~\cite{Zadeh:2010}. Typically, more complex objective functions make design computationally much more challenging. Similarily, also the proposed sampling framework supports only a limited class of objective functions directly and efficiently---namely ``only'' all additive energy functions. Nevertheless, one can safely assume that the design under various more realistic objective functions profits from controlled sampling as long as the sampling is directed towards the final objective function.
+
+
+
+%\TODO{Recycled material: To be merged with intro later}
+%{\it 
+%This graph coloring perspective was the basis for the uniform sampling method of \Software{RNADesign} / \Software{RNAblueprint}, which decomposes the graph hierarchically, counts the solutions in subgraphs, and finally samples solutions. Essentially, an \Def{ear decomposition} is used as a decision tree, where decisions are made according to the subsolution counts in order to guarantee uniform sampling.
+%
+%However, highly desirable objectives of RNA design, such as a control over the energy of individual structures, require one to depart from the uniform generation, and therefore generalize this setting. First, instead of subsolution counts, one needs partition functions for guiding the sampling procedure. Second, in the case of realistic energy models %like Eq.~(\ref{eq:sampling-objective}) are based on realistic RNA energy models 
+%(e.g.~the Turner model), the atomic energy contributions depend on bases at more than two sequence positions---i.e. they cannot be captured by a strategy that only accounts for base-pairs.
+%%
+%
+%
+%These considerations motivate our sampling strategy, where we:
+%\begin{itemize}
+%\item Model RNA sequences as assignments over a constraint network. The network consists of one variable per sequence position; constraints and energy contributions are modeled as functions of arbitrary arity over the variables, such that the total energy is the sum of all function values;
+%\item Translate the dependency hyper-graph into a binary dependency graph by inserting cliques (Appendix), such that a tree decomposition with small treewidth can be computed by a generic tree decomposition algorithm;
+%\item Compute the partition functions by specializing the generic ``Cluster Tree Elimination'' (CTE) dynamic programming algorithm, based on the cluster tree decomposition induced by the constraint network; 
+%
+%\item Sample sequences are from the Boltzmann-distribution guided by the decomposition tree and the sub-partition functions.
+%\end{itemize}
+%}
+
+
+\section{Definitions and problem statement}
+\label{sec:problem-statement}
+
+An \Def{RNA sequence $S$} is a word over the \Def{nucleotides
+  alphabet} $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$; let $\S_n$ denote the set of
+sequences of length $n$. An \Def{RNA (secondary) structure of length
+  $n$} is a set of \Def{base pairs} $(i,j)$, where $1\leq i<j\leq
+n$. We call an RNA structure $R$ \Def{non-crossing}, iff it does not
+contain any two different base pairs $(i,j)$ and $(i',j')$ such that
+$i\leq i'\leq j \leq j'.$ \Def{Valid base pair} must pair bases from
+the $\B:=\left\{\{\Ab,\Cb\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}.$
+Consequently, $S$ is \Def{valid} for $R$, iff
+$(S_i,S_j)\in \B$ for all $(i,j)\in R$.
+%
+%\TODO{Also, we need to decide whether base-pairs are oriented or not ($(x,y)$ versus $\{x,y\}$). Right now, we are inconsistent in the definitions above. SW: i would prefer $(i,j)$ with $i<j$; } %% where is this inconsistent?
+
+Given is a fixed set of target RNA structures
+$\R:=\{R_1, \dots, R_k\}$ for sequences of length $n$. $\R$ induces a
+\Def{compatibility graph}
+$G_{\R}$ with nodes $\{1,\dots,n\}$ and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Valid
+sequences for $\R$ can then be seen as specific colorings of $G_{\R}$,
+using the four colors in $\Sigma$, such that the colors assigned to
+adjacent vertices of $G_{\R}$ constitute valid base pairs.
+%
+We define the energy of a sequence $S$ based on the set of structures
+$\R$ as $E_\R(S) \in \mathbb{R}\cup\{\infty\}$. In
+our setting, the energy $E_\R(S)$ is additively composed of
+the energies of the single RNA structures in an RNA energy model, as
+well as sequence dependent features like \Gb\Cb-content.  Furthermore note
+that $E_\R(S)$ is finite iff $S$ is valid for each structure
+$R_1,\dots,R_k$.
+
+At the core of this work, we study the computation of partition
+functions over sequences.\smallskip\\
+\textbf{Central problem (Partition function over sequences).}
+  Given an energy function $E$ and a set $\R$ of structures of length $n$, compute the
+  partition function
+  \begin{equation}
+    \label{eq:mainproblem}
+    \partfun{E_\R}(S) = \sum_{S\in\S_n} \exp(-\beta E_\R(S)),
+  \end{equation}
+  where $\beta$ denotes the inverse pseudo-temperature, and $\S_n$ the set of sequences of length $n$.
+
+%We solve the problem efficiently for any fixed parameter $w$, whose value reflects the intrinsic complexity of the structures and energy function $E_\R$.
+%
+As will be explicited in future sections, our approach relies on breaking down the energy function $E_\R(S)$ into additive components, each depending on only few sequence positions. Given $\R$, we express $E_\R(S)$
+as the sum of energy contributions $f(S)$ over a set $\F$ (of
+functions $f:\S_n\to\real$), s.t.~$E_\R(S)=\sum_{f\in\F} f(S)$. This
+captures realistic RNA energy models, while bounding the
+dependencies to sequence positions introduced by each single $f$. Formally, define the \Def{dependencies} $\dep(f)$ of $f$ as the minimal set of sequence positions $\I\subseteq\{1,\dots,n\}$, where $f(S)=f(S')$ for all sequences $S$ and $S'$ agreeing at all positions in $\I$.
+
+The \Def{dependency graph} of the set $\F$ of functions (on
+sequences of length $n$) is the \Def{hypergraph}
+$G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\})$. 
+Our algorithms will critically rely on a \Def{tree decomposition} of the dependency graph, which we define below.
+\begin{definition}[Tree decomposition and width]
+  \label{def:treedecomp}
+  Given an hypergraph $G=(X, E)$,a \Def{tree decomposition} is a
+  pair $(T,\chi)$, where $T$ is an unrooted tree/forest, and
+  $\chi(v)\subseteq X$ is the set of vertices from $G$ assigned to the node $v\in T$, such
+  that
+\begin{enumerate}
+\item each $x\in X$ occurs in at least one $\chi(v)$;
+\item for each $x\in X$, the set $\{ v \mid x \in \chi(v) \}$ induces a connected subtree of $T$.
+\item for every hyper-edge $e\in E$ of $G$, there is a node $v\in T$, such that $e\subseteq\chi(v)$.
+\end{enumerate}
+The \Def{width} of a tree decomposition $(T,\chi)$ is defined as
+$\width(T,\chi) = \min_{u\in T} |\chi(u)| - 1 $. The \Def{treewidth}
+of $G$ is the smallest width in any tree decomposition of $G$.
+\end{definition}
+
+
+\section{Counting designs for multiple structures is \#{\sf P}-hard}\label{sec:counting}
+
+%%% reformulate later
+%We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
+Now we turn to the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that this problem corresponds to the partition function problem in a simple $(0/\infty)$-valued base pair models,with $\beta\neq 1$. As previously noted~\cite{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
+Moreover, without $\{\Gb, \Ub\}$ base pairs, any connected component  $C\in {\rm CC}(G)$ is entirely determined by the assignment of a single of its nucleotides. The number of valid designs is thus simply $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of connected components}.
+
+The introduction of $\{\Gb, \Ub\}$ base pairs radically changes this picture, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. The latter equality would, in particular, imply the classic ${\sf P}={\sf NP}$, and solving $\NumDesign(G)$ is polynomial time is therefore probably difficult. 
+
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are  strongly connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
+
+
+We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$. 
+Now, consider the function $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
+
+\begin{proposition}
+ $\Psi$ is a bijection between $\Design{G}$ and $\IS{G}$.
+\end{proposition}
+\begin{proof}
+Let us establish the injectivity of  $\Psi$, i.e. that $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
+If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$. 
+Assume that $v\in V_1$, and remind that the only nucleotides allowed in $V_1$ are $\Ab$ and $\Gb$. Since $f(v)\neq f'(v)$, then we have $\{f(v),f'(v)\}=\{\Ab,\Gb\}$
+and we conclude that $\Psi(f)$ differs from $\Psi(f')$ at least with respect to its inclusion/exclusion of $v$.
+
+We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $S\in \IS{G}$. Let us consider the function $f$ defined as
+\begin{align}
+ \forall v_1\in V_1, f(v_1)&= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases}& 
+ \forall v_2\in V_2, f(v_2)&= \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S\end{cases}
+\end{align}
+One easily verifies that $\Psi(f) = S$. 
+
+We are then left to determine if $f$ is a valid design for $G$, i.e. if for each $(v, v') \in E$ one has  $\{f(v),f(v')\}\in \B.$ Since $G$ is bipartite, any edge in $E$ involves two nodes $v_1\in V_1$ and $v_2\in V_2$. Remark that, among all the possible assignments $f(v_1)$ and $f(v_2)$, the only invalid combination of nucleotides is $(f(v_1),f(v_2)) = (\Ab,\Cb)$. However, such nucleotides are assigned to positions that are in the independent set $S$, and therefore cannot be adjacent. We conclude that $\Psi$ is surjective, and thus bijective.
+\end{proof}
+
+Now we can build on the connection between the two problems to obtain complexity results for \NumDesign. Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is indeed a well-studied \#{\sf P}-hard problem~\cite{Ge2012}, from which we immediately conclude:
+\begin{corollary}
+  \NumDesign is $\#{\sf P}$-hard
+\end{corollary}
+\begin{proof}
+  Note that $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ is given by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. Thus any efficient algorithm for $\#{\sf BIS}$ on connected instances provides an efficient algorithm for general graphs.
+  
+  Let us now hypothesize the existence of a polynomial-time algorithm $\mathcal{A}$ for \NumDesign over strongly-connected graphs $G$. Now consider the polynomial-time algorithm $\mathcal{A}'$ that first executes $\mathcal{A}$ on $G$ to produce $\NumDesign(G)$, and returns $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$. We conclude that $\mathcal{A}'$ solves $\#{\sf BIS}$ in polynomial-time. This means that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
+\end{proof}
+
+\section{An FPT algorithm for sampling Boltzmann-weighted designs}
+\label{sec:FPT}
+
+For our algorithmic description, we translate the concepts of
+Section~\ref{sec:problem-statement} to the formalism of constraint networks, here
+specialized as RNA design network. This allows us to base our
+algorithm on cluster tree elimination (CTE) by Rina
+Dechter~\cite{Dechter2013}.
+%
+In the RNA design network, sequences $S\in\S_n$ are isomorphically
+modeled as assignments $\val_S$ of bases to $n$ variables, each associated to
+a sequence position. The functions $f\in\F$ of
+Section~\ref{sec:problem-statement}, are interpreted as functions on the network's variables.
+
+\begin{definition}[RNA design network]
+An \Def{RNA design network} is a tuple $\network=(\X,\F)$ such that:
 \begin{itemize}
-\item for bulleted list, use itemize
-\item for bulleted list, use itemize
-\item for bulleted list, use itemize\vspace*{1pt}
+\item $\X$ is a set of \Def{variables} $\{x_1,\dots,x_n\}$ associated with the sequence positions
+\item $\F$ is a set of \Def{functions} $f:\S_n\to\real$, each function $f\in \F$ being associated with the set $\vars(f)=\{x_i\mid i\in\dep(f) \}\subset X$ of variables.
 \end{itemize}
+\end{definition}
 
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method Text
-Text Text Text Text Text Text Text Text Text Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
+A \Def{(partial) assignment} is a function $\val: \X' \to \Sigma$
+that maps the variables $\X'\subseteq \X$ to bases; we call $\X'$ the \Def{domain of the assignment
+  $\val$}, written $\dom(\val)$; $\val$ is \Def{total} iff $\dom(\val)=\X.$
+%
+For assignments $\val$ and functions $f$, we define the
+special notation $f[a]$ to \Def{evaluate $f$ for $\val$}; i.e.{}
+$f[\val] := f(S),$ for any sequence $S$ where $S_i=\val(i)$ for all
+$i\in\dep(f).$ Then, the \Def{energy $\energy{\network}(S)$ of a
+  sequence} $S$ in a network $\network$ is defined as sum of the
+values of all functions in $f\in\F$ evaluated for $\val_S$, i.e.
+$\energy{\network}(S) := \sum_{f\in F} f[\val_S].$
 
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text\vadjust{\newpage}.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method Text
-Text Text Text Text Text Text Text Text Text Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
+The network energy $\energy{\network}(S)$ corresponds to the energy in
+Eq.~$(\ref{eq:mainproblem}),$ where this energy is modeled as sum of
+the functions in $\F$. Consequently, $\partfun{\R}$ of
+Eq.~$(\ref{eq:mainproblem})$ is modeled as network partition function
+$\partfun{\network} := \sum_{S}\exp(-\beta\energy{\network}(S)) = \sum_{S}\prod_{f\in F} \exp( -\beta\cdot
+f[\val_S] ).$
+
+% For a given RNA design network, one is typically interested in the \Def{minimum free energy sequence} $\energy{\network}:=\min_{S}\energy{\network}(S)$, the \Def{enumeration of valid sequences} $\numberof{\network}$ and the \Def{partition function} of the network $\network$ as \begin{equation}
+%  \partfun{\network;\beta} := \sum_{S}\prod_{f\in F} \exp( -\beta\cdot f[\val_S] ).
+%  \end{equation}
 
 
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
+\subsection{Partition function and Boltzmann sampling through stochastic backtrack}\label{sec:PF}
+The minimum energy, counting, and partition function
+over RNA design network can be computed by dynamic programming based
+on a tree decomposition of the network's dependency graph
+(i.e. cluster tree elimination).
+%This yields fixed parameter tractable (FPT) algorithms, based on the treewidth.
+We focus on the efficient computation of the partition
+function. %Observe that counting is a special case of the partition function and can be obtained by setting $\beta =0$.%; moreover, efficient energy minimization can be obtained by a simple $(+,\times)\to (\min,+)$ algebraic substitution and dropping the transformation of energy contributions to Boltzmann weights.
 
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-
-\subsection{This is subheading}
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text
-text. Text Text Text Text Text Text  Text Text Text Text Text Text
-Text Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-
-
-\subsubsection{This is subsubheading}
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text\break
-text text
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text
-textText Text Text Text Text Text  Text Text Text Text Text Text
-Text Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-
-\enlargethispage{6pt}
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-\begin{table}[!t]
-\processtable{This is table caption\label{Tab:01}} {\begin{tabular}{@{}llll@{}}\toprule head1 &
-head2 & head3 & head4\\\midrule
-row1 & row1 & row1 & row1\\
-row2 & row2 & row2 & row2\\
-row3 & row3 & row3 & row3\\
-row4 & row4 & row4 & row4\\\botrule
-\end{tabular}}{This is a footnote}
-\end{table}
-
-\end{methods}
-
-\begin{figure}[!tpb]%figure1
-\fboxsep=0pt\colorbox{gray}{\begin{minipage}[t]{235pt} \vbox to 100pt{\vfill\hbox to
-235pt{\hfill\fontsize{24pt}{24pt}\selectfont FPO\hfill}\vfill}
-\end{minipage}}
-%\centerline{\includegraphics{fig01.eps}}
-\caption{Caption, caption.}\label{fig:01}
-\end{figure}
-
-%\begin{figure}[!tpb]%figure2
-%%\centerline{\includegraphics{fig02.eps}}
-%\caption{Caption, caption.}\label{fig:02}
+%\begin{figure}[t]
+%{\centering\scalebox{11}{\fbox{$\phantom{5689}$}}\\}
+%
+%  \caption{Figure illustrating RNA network to hypergraph to tree decomposition}
 %\end{figure}
 
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
+Let us now introduce some definitions. A \Def{cluster tree} for the network $\network=(\X,\F)$ is a tuple $(T,\chi,\phi)$, where $(T,\chi)$ is a tree decomposition of $G_\F$, and $\phi(v)$ represents a set of functions $f$, each uniquely assigned to a node $v\in T$; $\vars(f)\subseteq\chi(v)$ and $\phi(v)\cap \phi(v')=\varnothing$ for all $v\neq v'$.
+For two nodes $v$ and $u$ of the cluster tree, define their \Def{separator} as $\separator{u}{v} := \chi(u)\cap\chi(v)$; moreover, we define the \Def{difference variables} from $u$ to $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
 
+Denote by $\assignments(\Y)$ the set of all assignments of the variables in $\Y$; moreover, given non-overlapping assignments $\val'$ and $\val''$, we write $\val'\mid\val''$ to denote the assignment defined as $\val'$ and $\val''$ respectively on $\dom(\val')$ and $\dom(\val'')$. 
+Finally we assume, w.l.o.g., that all variable difference sets $\difference{u}{v}$ are restricted to a single variable: for any given cluster tree, an equivalent (in term of treewidth) cluster tree can always be obtained by inserting at most $\Theta(|\X|)$ additional clusters.
 
-\subsection{Test1}
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
+Let us now consider the \Def{computation of the partition function}.
+Given is the RNA design network $\network=(\X,\F)$ and its cluster
+tree decomposition $(T,\chi,\phi)$.  W.l.o.g, we assume that $T$ is
+connected and contains a dedicated node $r$, with $\chi(r)=\varnothing$
+and $\phi(r)=\varnothing$, added as a virtual root
+$r$ connected to a node in each connected
+component of $T$.  Now, we consider the set of directed edges
+$\edgesToR{}$ of $T$ oriented to $r$; define $T_r(u)$ as the induced
+subtree of $u$. Algorithm~\ref{alg:pf} computes the partition function by
+passing messages along these directed edges $u\to v$ (i.e. always from
+some child $u$ to its parent $v$). Each message is a function on
+variables $\vars(m)\subseteq \X$ to $\real\cup\{\infty\}$. The message
+from $u$ to $v$ represents the partition functions of the subtree of
+$u$ for all possible assignments to the variables
+$\vars(m)=\separator{u}{v}$. Its correctness can be shown by induction over $T$ (Appendix~\ref{appsec:correctness}).
+After running Alg.~\ref{alg:pf}, 
+multiplying the 0-ary messages sent to the root $r$ yields the total partition function:
+\begin{math}
+  \partfun{\network} = \prod_{(u\to r)\in T} m_{u\to r}[\varnothing].
+\end{math}
 
 
 
-
-
-\section{Discussion}
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text.
-
-
-
-
-Table~\ref{Tab:01} shows that Text Text Text Text Text  Text Text
-Text Text Text Text. Figure~2\vphantom{\ref{fig:02}} shows that
-the above method Text Text. Text Text Text  Text Text Text Text
-Text Text. Figure~2\vphantom{\ref{fig:02}} shows that the above
-method Text Text. Text Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method Text
-Text.
+\begin{algorithm}[t]
+ \KwData{Cluster tree $(T,\chi,\phi)$}
+ \KwResult{Messages $\Message{u}{v}$ for all $(u\to v)\in T$; i.e.~partition functions of the subtrees of all $v$ for all possible assignments of variables $\separator{u}{v}$.}
+ \For{$u\to v\in T$ in postorder}{
+  \For{$\val\in\assignments(\separator{u}{v})$}{
+    $\Message{u}{v}[\val] \gets 0$\;
+    \For{$\val'\in\assignments(\difference{u}{v})$}{
+     $p \gets$ product( $exp(-\beta f[\val\mid \val'])$ for $f\in \phi(u)$ )\;
+     $p \gets p\ \times\ $product( $\Message{w}{u}\left[\val\mid \val'\right]$ for $(w\to u)\in T$ )\;
+     $\Message{u}{v}[\val] \gets \Message{u}{v}[\val] + p$\; 
+   }
+  } 
+  \Return {$m$}\;
+  }
+ \caption{FPT computation of the partition function using
+   dynamic programming (CTE). }\label{alg:pf}
+\end{algorithm}
 
 
 
+\SetKwProg{Fn}{Function}{}{}
+ \SetKwFunction{Sample}{$\sample$}
+ \SetKwFunction{Random}{UnifRand}
 
 
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The partition functions can then direct a \Def{stochastic backtrack} to achieve \Def{Boltzmann sampling of sequences}, such that one samples from the Boltzmann distribution of a given desgin network $\network$. The sampling algorithm assumes that the cluster tree was expanded and the messages $\Message{u}{v}$ for the edges in $\edgesToR{}$ are already generated by Algorithm \ref{alg:pf} for the expanded cluster tree.
 %
-%     please remove the " % " symbol from \centerline{\includegraphics{fig01.eps}}
-%     as it may ignore the figures.
+Algorithm~\ref{alg:sampling} defines the recursive procedure $\sample(u,\val)$, which returns an  assignment of all variables in the subtree rooted at $u$ from the Boltzmann-distribution.
+Called on $r$ and the empty assignment, the procedure returns a total assignment corresponding to a Boltzmann-distributed random sequence. 
+
+
+
+%\begin{algorithm}[Boltzmann weighted sampling]
+%\label{alg:sampling}
+% \ \\
+%  Define $\sample(u,\val)$:
+%  \begin{enumerate}[1)]
+%  \item Let $\Delta:=\chi(u)-\dom(\val)$ be the set of free variables for $u$.
+%  \item For all assignments $\val'\in\assignments(\Delta)$, compute
+%  $$\partfun{\val'} := \prod_{f\in \phitotal(u)} \exp(-\beta f[\val'|\val]).$$
+%  \item Choose one of the assignments $\val'\in\assignments(\Delta)$ with probability $\partfun{\val'}/\partfun{u}$, where $\partfun{u}$ is the sum of the $\partfun{\val'}$.
+%  \item For all edges $(v',u)$ in $\edgesToR{}$:\quad update $\val':=\sample(v',\val'|\val)$.
+%  \item Return $\val'$.
+%  \end{enumerate}
+%\end{algorithm}
+
+
+\subsection{Computational complexity of the multiple target sampling algorithm}\label{sec:complexity}
+
+%The complexity of the proposed sampling algorithm depends on the treewidth of the dependency graph $G_\F$.
+% The treewidth $w$ of a cluster tree $(T,\chi,\phi)$, $T=(V,E)$, is $\max_{v\in V} |\chi(v)| - 1$, i.e.~the maximum number of variables in any of its clusters minus 1.
+
+First, we observed that the computation time of tree decomposition
+(\Software{GreedyFillIn}, implemented in \Software{LibTW}~\cite{Dijk2006}) for multi-target
+sampling is negligible compared to Alg.~\ref{alg:pf} (Appendix~\ref{appsec:treedecomp} and \ref{appsec:dependency-cliques});
+consequently, we discuss complexities without the tree decomposition
+step.
+
+For our analysis, we define the \emph{maximum separator size} $s$ as
+$\max_{u,v\in V} | \separator{u}{v} |$ and denote the maximum size of
+$\difference{u}{v}$ over $(u,v)\in\edgesToR{}$ as $D$.  Generally,
+without specific optimizations, running Alg.~\ref{alg:pf} requires
+$\mathcal{O}((|\F|+|V|)\cdot 4^{w+1})$ and $\mathcal{O}(|V|\cdot4^s)$ space (Appendix~\ref{appsec:algcomplexity});
+Alg.~\ref{alg:sampling} would require $\mathcal{O}((|\F|+|V|)\cdot 4^D)$ per
+sample on arbitrary tree decompositions (Appendix~\ref{appsec:algcomplexity}). W.l.o.g. we assume that
+$D=1$; note that tree decompositions can generally be transformed,
+such that $\difference{u}{v}\leq 1$.
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Moreover, the size of $\F$ is linearly bounded: for $k$
+input structures for sequences of length $n$, the energy function is
+expressed by $\mathcal{O}(n\,k)$ functions. Finally, the number of cluster
+tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
+
+\begin{algorithm}
+ \KwData{Node $u$, partial assignment $\val\in\assignments(\separator{u}{v})$;\newline
+ Cluster tree $(T,\chi,\phi)$ and partition functions $\Message{u'}{v'}[\val']$, $\forall (u'\to v')\in T$ and $\val'\in\assignments(\separator{u'}{v'})$.}
+ \KwResult{Boltzmann-distributed random assignment for the subtree rooted at $u$, under the assumption of a partial assignment $\val$.}
+ \Fn{\Sample$(u,\val;T,\chi,\phi,m)$}{
+   $r \gets \Random(\Message{u}{v}[\val])$\;
+   \For{$\val'\in\assignments(\difference{u}{v})$}{
+
+     $p \gets$ product( $exp(-\beta f[\val\mid \val'])$ for $f\in \phi(u)$ )\;
+     $p \gets p\ \times\ $product( $\Message{w}{u}\left[\val\mid \val'\right]$ for $(w\to u)\in T$ )\;
+%
+%     $p \gets 1$\;
+%     \For{$f\in \phi(v)$}{
+%  	      $p \gets p \times \exp(-\beta f[\val\mid \val'])$\; 
+%     }
+%     \For{$v\to w\in T$}{
+%  	      $p \gets p \times \Message{v}{w}\left[\val\mid \val'\right]$\; 
+%     }
+  	  $r \gets r - p$\; 
+  	  \If{$r<0$}{
+  	    $a_{\rm res} \gets a\mid a'$\;
+  	  \For{$(v\to w)\in T$}{
+  	      $a_{\rm res} \gets a_{\rm res} \mid \Sample(v,a\mid a';T,\chi,\phi,m)$\; 
+     }
+  	  \Return {$a_{\rm res}$}
+  	  \;}
+ }
+ }
+ \caption{Stochastic backtrack algorithm for assignments in the Boltzmann distribution.}\label{alg:sampling}
+\end{algorithm}
+%For example, for design to a single non-crossing target in the nearest neighbor energy model, the complexity of Algs.~\ref{alg:pf} and \ref{alg:sampling} degrades to linear time (as reported for IncaRNAtion), since there are only $O(n)$ many functions and nodes (in the sequence length $n$). Moreover, the dependencies are tree-like owing to the tree-like non-crossing structure; this implies a constantly bounded maximum treewidth.
+
+As already noted by Flamm \emph{et al}~\cite{Flamm2001}, the
+requirement of canonical base pairing induces a bi-partition of each connected
+component of the compatibility graph, such that the variables of one
+partition are restricted to values $\{\Ab,\Gb\}$, but for other
+partition, to values $\{\Cb,\Ub\}$. This suggests a strong
+optimization of our algorithms, which reduces the basis in the
+exponential factor from 4 to 2. The price for this reduction is a
+binary choice for each of $c$ connected component. For each of the
+$2^c$ combinations, the partition functions can be computed separately
+in $O(n\,m\, 2^{w+1})$ time. This strategy is applied only if
+$c< w+1$. 
+%% SW: This could be optimized further by applying the strategy only to (optimally) selected components
+Finally, we compute the sums of the partition functions for all possible combinations.
+
+\begin{theorem}[Partition function and sampling complexity]
+  For sequence length $n$, $k$ target structures, treewidth $w$ and
+  a compatibility graph having $c$ connected components, $t$ sequences
+  are sampled from the Boltzmann distribution  in
+  %$O( n\, k \min(2^{w+c+1},4^{w+1}) + t\, n\, k )$ time.
+  $\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
+\end{theorem}
+
+\subsection{Encoding sequence features, constraints, and energy
+  models.}\label{sec:energy_models}
+
+The functions in $\F$ allow expressing complex features of the
+sequences alone, e.g. rewarding or penalizing specific sequence
+motifs, as well as features depending on the target structures.
+Naturally, hard
+constraints, which enforce or forbid features, can also be expressed by functions that
+assign infinite penalties to invalid partial assignments. More concretely, we briefly 
+discuss the modeling of RNA energy models in our
+framework.
+
+% To illustrate the expressivity of the framework, we outline the construction of function sets that express two different energy models for the energies $E(S;R_\ell)$ for encoding
+% \begin{equation}
+%   \label{eq:nussinov-network-energy}
+%   \energy{\network}(S) = \sum_{\ell\in[1,k]} w_\ell E(S;R_\ell)
+% \end{equation}
+In simple \Def{base pair-based energy models}, energy is defined as the sum of base pair (pseudo)energies. If base pair energies $\Ebp{k}{i,j,x,y}$ (where
+$i$ and $j$ are sequence positions, $x$ and $y$ are bases in $\Sigma$)
+are given for each target structure $\ell$, s.t.
+$ E(S;R_\ell) := \sum_{(i,j)\in R_\ell} \Ebp{k}{i,j,S_i,S_j}$, we
+encode the network energy by the set of functions
+$f$ for each base pair $(i,j)\in R_\ell$ of each input structure
+$R_\ell$ that evaluate to $w_\ell \Ebp{k}{i,j,\val(x_i),\val(x_j)}$
+under assignment $\val$.
+
+% \paragraph{Nearest-neighbor model.}
+% Let us now consider a simplified version of the nearest-neighbor model, where the free energy contribution  $\Ehp{x,y,s}$ of a hairpin only depends on the closing base pair $(x,y)$, and the contribution $\Eint{x,y,x',y',s}$ of an interior loop depends on its opening/closing bases pairs $(x,y)/(x',y)$, and its length $s$. Moreover, the energy of a multi loops with $s$ inner base pairs and $t$ unpaired base pairs is approximated as $a+b\,s+c\,t$, where $a,b,c$ are predefined constants.
 
 
+% Again, the energy is expressed by adding functions to $F$ for each $R_\ell$ and base pair $(i,j)\in R_\ell$:
+% \begin{itemize}
+%   \item if $(i,j)$ closes a hairpin in $R_\ell$, add $f$, s.t.~$f[\val_S]=\Ehp{S_i,S_j,j-i}$
+%   \item if $(i,j)$ closes an interior loop, bulge or stack with inner base pair $(i_1,j_1)$ in $R_\ell$, add $f$, s.t.~$f[\val_S]=\Ehp{S_i,S_j,S_k,S_l,i_1-i+j_1-j}$
+%   \item if $(i,j)$ closes a multiloop add $f$, s.t.~$f[\val_S]=a$.
+%   \item if $(i,j)$ is inner base pair of a multiloop of $R_\ell$ add $f$, s.t.~$f[\val_S]=b$.
+% \end{itemize}
+% Finally add for each $R_\ell$ and unpaired base $i$ in a multi loop of $R_\ell$, the function $f$, $f[\val_S]=c$.
+
+More complex \Def{Loop-based}
+ energy models ---e.g.~the Turner model,
+which among others adds energy terms for special loops and dangling
+ends---are encoded as straightforward extensions. An interesting
+stripped-down variant of the nearest neighbor model is the
+\Def{stacking energy model}. This model assigns non-zero energy
+contributions only to stacks, i.e. interior loops with closing base
+pair $(i,j)$ and inner base pair $(i+1,j-1)$.
+
+The arity of the introduced functions provides an important bound on the
+treewidth of the network (and therefore computational
+complexity). Thus, it is noteworthy that the base pair energy model
+requires only binary functions; the stacking model, only quarternary
+dependencies. This arity is increased in a few cases by the commonly
+used Turner 2004 model~\cite{Turner2009} for encoding tabulated
+special hairpin and interior loop contributions, which depend on up to
+nine bases for the interior loops with a total of 5 unpaired bases
+(``2x3'' interior loops)---all other energy contributions (like
+dangling ends) still depend on at most four bases of the sequence.
+
+\subsection{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
+The flexibility of our framework supports an advanced sampling technique, named multidimensional Boltzmann sampling~\cite{Bodini2010} to (probabilistically) enforce additional constraints.
+This technique was previously used to control the $\Gb\Cb$-content~\cite{Waldispuehl2011,Reinharz2013} and dinucleotide content~\cite{Zhang2013} of sampled RNA sequences; it enables explicit control of the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets. %We use multidimensional Boltzmann sampling to generate sequences having predetermined targeted energies $(\TargetE_1,\ldots,\TargetE_k)$ for the $k$ structures.
+
+Multidimensional Boltzmann sampling requires the ability to \Def{sample from a weighted distribution} over the set of compatible sequences, where the probability of a sequence $S$ with free energies $(E_1,\ldots,E_k)$ for its target structures is
+$\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=1}^{k} \pi_i^{-E_i}}{\partfun{\pmb{\pi}}},$
+where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function. Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \log(\pi_\ell)\, E(\val)/\beta$. The probability of a sequence $S$ is thus proportional to 
+$ \prod_{\ell=1}^{k} e^{-\log(\pi_\ell)\, E_i} = \prod_{\ell=1}^{k} \pi_i^{-E_i}. $
+
+One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution, \emph{i.e.} such that  $\mathbb{E}(E_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$.
+The expected value of $E_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see App.~\ref{sec:weight_derivatives}). More generally, computing a suitable $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\cite{Denise2010,Bendkowski2017}. 
+In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(exp(\beta),\dots,\exp(\beta))$ and, at each iteration, generates a sample $\mathcal{S}$ of sequences. The expected value of an energy $E_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}E_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$. 
+$\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$.
+While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its reasonable empirical behavior.
+
+A further \Def{rejection step} is applied to the generated structures to retain only sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rationale for a rejection approach follows from: 
+i)\emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing Cupal \emph{et al}~\cite{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
+ii) \emph{Induced distributions are typically concentrated.} Intuitively, unless sequences are fully constrained individual energy terms are independent enough so that their sum is concentrated around its mean -- the targeted energy (cf Fig.~\ref{fig:energydist}). 
+%Indeed, as shown in Figure~\ref{fig:shifting_mean}, empirical joint distributions in the energies have good fits towards Normal multidimensional distributions with linear (co-)variances. 
+For base pair-based energy models and special compatibility graph (paths, cycles\ldots) this property rigorously follows from analytic combinatorics, see Bender-Richmond-Williamson~\cite{Bender1983} and Drmota~\cite{Drmota1997}. In such cases, the expected number of rejections before reaching the targeted energies grows like $\Theta(1)$ when $\varepsilon\ge 1/\sqrt{n}$, and $\Theta(n^{k/2})$ when $\varepsilon=0$. The \Gb\Cb-content of designs can also be controlled, jointly and in a similar way, as done in \Software{IncaRNAtion}~\cite{Reinharz2013}.
 
 
+\section{Results}\label{sec:results}
 
+\subsection{Implementation targeting Turner energies and GC-content}
+We implemented the Boltzmann sampling approach (Algorithms
+\ref{alg:pf} and \ref{alg:sampling}), performing sampling for given
+target structures and weights $\pi_1,\dots,\pi_n$; moreover on top,
+multi-dimensional Boltzmann sampling (see
+Section~\ref{sec:multiBoltzmann}) to target specific energies and
+\Gb\Cb-content.  Our tool \ourprog{} evaluates energies according to the base
+pair energy model or the stacking energy model, using parameters which
+were trained to approximate Turner energies
+(Appendix~\ref{appsec:modelparameters}).
+%
+%\paragraph{Implementation of multi-dimensional Boltzmann sampling}
+%As suggested in Section~\ref{sec:multiBoltzmann}, we heuristically optimize weights to target specific energies and GC content in an iterative procedure (based on the core sampling algorithm).
+%Specifically, energy weights are initialized as $w_\ell=e^{\frac{1}{RT}}$; the gc weight as $w_{gc}=1$. For each iteration, $\psi\cdot n$ sequences are sampled with the current weights. Then, we determine the mean energies $E(S;R_\ell)$ and the mean GC content over the sampled sequences. For the next iteration, the weights are updated by the rules $w_\ell = w_\ell \gamma^{mean(E(S;R_\ell))-E_\ell}$ and $w_{gc} = w_{gc}\frac{GC_{target}}{mean(GC)}$. During this procedure, we collect   in a set $P$ all the sequences exhibiting energies within $[E_1-\delta,E_1+\delta]\times [E_2-\delta,E_2+\delta]\ldots$ and and GC-content within $[GC_{target}-\idelta',GC_{target}+\delta']$. 
+%If $|P| > n$ or an maximum amount of iterations is reached, the sequences in $P$ are returned.
+%
+
+To capture the realistic Turner model $E_{\mathcal{T}}$, we exploit its very good correlation (supp. Fig~\ref{fig:training-cor}) with our simple stacking-based model $E_{\mathcal{S}}$. Namely, we observe a structure-specific affine dependency between these Turner and stacking energy models, so that $E_{\mathcal{T}}(S_\ell;R_\ell) \approx \gamma_\ell\, E_{\mathcal{S};R_\ell}(S_\ell) + \delta_\ell$ for each structure $R_\ell$. We learn the $(\gamma_\ell,\delta_\ell)$ parameters from a set of sequences generated with homogenous weights $w=e^{\beta}$, tuning only the \Gb\Cb-content to a predetermined target frequency.  Finally, we adjust the targeted energy of our stacking model to $E_{\mathcal{S}}^{\star} = (E_{\mathcal{T}}^{\star}- \delta_\ell)/\gamma_\ell$.
+
+To illustrate our above strategy, we sampled $n=1\,000$ sequences
+targeting ${\sf GC}_{target}=0.5$ and different Turner energies for
+the three structure targets of an example
+instance. Figure~\ref{fig:energydist}A illustrates how the Turner
+energy distributions of the shown target structures can be accurately
+shifted to prescribed target energies; for comparison, we plot the
+respective energy distribution of uniformly and Boltzmann sampled
+sequences. Figure~\ref{fig:energydist}B summarizes the targeting accuracy for the single structure energies over a larger set of instances
+from the \texttt{Modena} benchmark. We emphasize that only the simple stacking energies
+are directly targeted (at $\pm$10\% tolerance, expect for a few hard
+instances). Due to our linear adjustment, we still achieve well
+controlled energies in the ultimately relevant Turner energy model.
+\begin{figure*}[t]
+  \begin{center}
+    {\sf \bfseries A}\includegraphicstop[width=0.57\textwidth]{Figs/energy_distribution}
+    {\sf \bfseries B}\includegraphicstop[width=0.32\textwidth]{Figs/offset}
+  \end{center}
+  \caption{%
+  	Targeting specific energies using multi-dimensional Boltzmann sampling. (A) Turner energy distributions for three target structures (right) while targeting $(-40,-40,-20)$ and $(-20,-20,-20)$ free energy vectors. For comparison, we show the distribution of uniform and Boltzmann samples; respectively associated with homogenous weights $1$ and $e^\beta$. (B) Accuracy of targeting over all target structures of the \Software{Modena} benchmark instances \texttt{RNAtabupath}, \texttt{3str} and \texttt{4str}. Shown is the relative deviation of targeted and achieved energies in the simple stacking model and the Turner model.
+%    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
+}
+  \label{fig:energydist}
+\end{figure*}
+\subsection{Generating high-quality seeds for further optimization}
+We empirically study the capacity of \ourprog{} to improve the generation of seed sequences for subsequent local optimizations, showing an important application in biologically relevant scenario.
+
+For a multi-target design instance, individual reasonable target energies are estimated from averaging the energy over samples at relatively high weights $e^{\beta}$, controlling the \Gb\Cb-content at 50\%. For each instance of the \Software{Modena} benchmark~\cite{Taneda2015}, we estimated such target energies and subsequently generated $1\,000$ seed sequences at these energies.
+As its rationale, this procedure is tailored to produce sequences with similar Turner energy that favor the stability of the target structures having moderate \Gb\Cb-content; all these properties are desirable objectives for RNA design.
+All sampled sequences are evaluated under the multi-stable design objective function of \cite{Hammer2017}:
+\vspace{-12pt}
+\begin{equation}
+  \label{eq:blueprintobjective}
+  f(S) = \frac{1}{k} \sum_\ell^{k} (E(S, R_\ell) - G(S))
+   + \xi \frac{2}{k(k-1)} \sum\limits_{\ell<j}^k|E(S,R_\ell) - E(S,R_j)|
+\end{equation}
+\vspace{-12pt}
+
+Using our strategy, we generated at least 1\,000 seeds per instance of the subsets \texttt{RNAtabupath}, \texttt{3str}, and \texttt{4str}, of the \Software{Modena} benchmark set
+ with 2,3, and 4 structures. The results are compared, in terms of their value for the objective function of Eq.~\eqref{eq:blueprintobjective}, to seed sequences uniformly sampled using \Software{RNAblueprint}~\cite{Hammer2017}  (Table~\ref{tab:benchmark-results}, seeds). Our first analysis reveals that Boltzmann-weighted sequences constitute better seeds, associated with better values ($\sim 69\%$ improvement on average), compared to uniform seeds for \emph{all instances} of our benchmark (Supp. section~\ref{sec:validity}). 
+
+Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps. At each step, we resampled (uniformly at random) the positions of a randomly selected component in the compatibility graph, and accepted the modification only if it resulted in a gain, as described in \Software{RNAblueprint}~\cite{Hammer2017}.
+%
+Once again, for all instances, we observe a positive improvement of the quality of Boltzmann designs over uniform ones, suggesting a superior potential for optimization ($\sim 32\%$ avg improvement, Table~\ref{tab:benchmark-results}, optimized). This improvement is however more modest than in the absence of optimization, but we attribute this relative decay to the uniform nature of the resampling strategy, which somehow ends up canceling the benefits of the initial Boltzmann distribution, by uniformizing the sequence over longer runs. This suggests an alternative resampling strategy based on Boltzmann-distributed steps.
+
+\begin{table}[t]
+\centering
+\medskip
+\begin{tabular}{@{}>{\bf}l@{\quad}>{\tt}l@{\quad}@{\quad}c@{\quad}c@{\quad}c@{}}
+             &   Dataset   & {\bfseries\ourprog{}} & \textbf{Uniform} & \textbf{Improvement} \\\toprule
+  Seeds      & RNAtabupath & 21.67 ($\pm$4.38) & 37.74 ($\pm$6.45) & 73\%\\
+             & 3str & 18.09 ($\pm$3.98) & 30.49 ($\pm$5.41) & 71\%\\
+             & 4str & 19.94 ($\pm$3.84) & 32.29 ($\pm$5.24) & 63\%\\\midrule
+
+  Optimized  & RNAtabupath & 5.84 ($\pm$1.31) & 7.95 ($\pm$1.76) & 28\%\\
+             & 3str & 5.08 ($\pm$1.10) & 7.04 ($\pm$1.52) & 31\%\\
+             & 4str & 8.77($\pm$1.48) & 13.13 ($\pm$2.13) & 37\% \\ \bottomrule
+\end{tabular}\\[1em]
+
+\caption{Comparison of the multi-stable design objective function (
+  Eq.~(\ref{eq:blueprintobjective}) of sequences sampled by \ourprog{}
+  vs.\ uniform samples for three benchmark sets; before (seeds) and
+  after optimization (optimized). We report the average scores with
+  standard deviations. Smaller scores are better; the final column
+  reports our improvements over uniform sampling.}
+\label{tab:benchmark-results}
+
+\vspace{-12pt}
+\end{table}
 
 \section{Conclusion}
+Motivated by the---here established---hardness of the problem, we introduced a general framework and efficient algorithms for design of RNA sequences to multiple target structures with fine-tuned properties. Our method combines an FPT stochastic sampling algorithm with multi-dimensional Boltzmann sampling over distributions controlled by expressive RNA energy models.
+Compared to the previously best available sampling method (uniform sampling), this approach generated significantly better seed sequences for instances of a common multi-target design benchmark.
 
-(Table~\ref{Tab:01}) Text Text Text Text Text Text  Text Text Text
-Text Text Text Text Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
+The presented method enables new possibilities for sequence generation in the field of RNA sequence design by enforcing additional constraints, like the \Gb\Cb-content, while controlling the energy of  multiple target structures. Thus it presents a major advance over previously used ad-hoc sampling and even uniform sampling strategies. We have shown the practicality of such controlled sequence generation and studied its use for multi-target RNA design. Moreover, our framework is already equipped to include more complex sequence constraints, including mandatory/forbidden motifs at specific positions or anywhere in the designed sequences. It could also support negative design principles, for instance by penalizing a set of alternative helices/structures. However, such extensions require delicate calibration, and will be the object of future work.
 
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text \cite{Jukes69}
-
+\Final{
+Extensions: 
 \begin{enumerate}
-\item this is item, use enumerate
-\item this is item, use enumerate
-\item this is item, use enumerate
-\end{enumerate}
+  \item What if the input graph is not bipartite? \\
+  Extract a minimal subset of edges such that new graph is bipartite!\\ 
+  $\to $ Graph bipartization (cf implementation by Hüffner, JGAA 2009)
+  \item Is the optimization version in the \emph{weighted base-pair model} already {\sf NP}-hard?
+  \item Does it help to know that there are cliques of size $k$ during the tree decomposition?\\
+  If anything, it provides a lower bound on tree decomposition (helps branch and bound algorithms)
+  \item What if some degree of freedom is allowed in the structure definition?\\ Can we still use tree decomposition?\\
+  This looks like a very reasonable first step towards the definition of an {\em optimal} DP decomposition for RNA folding (with Pseudoknots) or RNA-RNA interactions\ldots
+  \item Structures can also be penalized, but they must be specified explicitly.\\
+  However, any competing structure must consist of helices, and it is possible to penalize each of the $\Theta(n^2)$ helices of any given length $L$. What would be the impact on treewidth?
+  \item More general energy  models $\to$ Turner. (Pseudoknots)
+  For this description, we assume that all input structures are non-crossing, while the framework would otherwise support crossing input structures as well as according energy models (e.g. the Hotknots model~\cite{Ren2005}) by considering special pseudoknot loops.
+\end{enumerate}\label{lbl:theend}
+}
 
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows\vadjust{\pagebreak} that the
-above method  Text Text Text Text Text Text Text Text Text Text
-Text Text.  \citealp{Boffelli03} might want to know about text
-text text text Text Text Text Text Text Text  Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text\break Text.
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text\vspace*{-10pt}
-
-
+\newpage 
 \section*{Acknowledgements}
+YP is supported by the French/Austrian RNALands project (ANR-14-CE34-0011), jointly supported by the French {\em Agence Nationale de la Recherche} and the Austrian FWF.
+SH is supported within the
+German Network for Bioinformatics Infrastructure (de.NBI) by the
+German Federal Ministry of Education and Research (BMBF; support code
+031A538B) and the project RiboNets acknowledged by financial support of the Future and Emerging Technologies (FET) programme within the Seventh Framework Programme for Research of the European Commission, under FET-Open grant number: 323987. 
+All authors wish to express their gratitude to Leonid Chindelevitch for very accurately pointing out that the bipartite nature of the dependency graph directly implies a reduced complexity for our dynamic programming scheme. We also thank Arie Koster for fruitful discussions regarding the practical computation of the tree decomposition.
 
-Text Text Text Text Text Text  Text Text.  \citealp{Boffelli03} might want to know about  text
-text text text\vspace*{-12pt}
-
-\section*{Funding}
-
-This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
 
 \bibliographystyle{natbib}
 %\bibliographystyle{achemnat}
@@ -552,41 +868,338 @@ This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
 %
 %\bibliographystyle{plain}
 %
-\bibliography{document}
+\bibliography{biblio}
 
 
-% \begin{thebibliography}{}
+\newpage 
 
-% \bibitem[Bofelli {\it et~al}., 2000]{Boffelli03}
-% Bofelli,F., Name2, Name3 (2003) Article title, {\it Journal Name}, {\bf 199}, 133-154.
+\appendix
+{\centering \relsize{+4}Supplementary material\\%
+%{\relsize{-1}\BackupTitle}\\
+}
 
-% \bibitem[Bag {\it et~al}., 2001]{Bag01}
-% Bag,M., Name2, Name3 (2001) Article title, {\it Journal Name}, {\bf 99}, 33-54.
+\section{Approximate counting and random generation}
+In fact, not only is $\#{\sf BIS}$ a reference problem in counting complexity, but it is also a landmark problem with respect to the complexity of approximate counting problems. In this context, it is the representative for a class of $\#{\sf BIS}$-hard problems~\cite{Bulatov2013} that are easier to approximate than $\# {\sf SAT}$, yet are widely believed not to admit any Fully Polynomial-time Randomized Approximation Scheme. Recent results reveal a surprising dichotomy in the behavior of $\#{\sf BIS}$: it admits a Fully Polynomial-Time Approximation Scheme (FPTAS) for graphs of max degree $\le 5$~\cite{Weitz2006}, but is as hard to approximate as the general $\#{\sf BIS}$ problem on graphs of degree $\ge 6$~\cite{Cai2016}. In other words, there is a clear threshold, in term of the max degree, separating (relatively) easy instances from really hard ones.
 
-% \bibitem[Yoo \textit{et~al}., 2003]{Yoo03}
-% Yoo,M.S. \textit{et~al}. (2003) Oxidative stress regulated genes
-% in nigral dopaminergic neurnol cell: correlation with the known
-% pathology in Parkinson's disease. \textit{Brain Res. Mol. Brain
-% Res.}, \textbf{110}(Suppl. 1), 76--84.
+Additionally, let us note that, from the classic Vizing Theorem, any bipartite graph $G$ having maximum degree $\Delta$ can be decomposed in polynomial time in exactly $\Delta$ matchings. Any such matching can be reinterpreted as a secondary structure, possibly with crossing interactions (\Def{pseudoknots}). These results have two immediate consequences for the pseudoknotted version of the multiple design counting problem.
+\begin{corollary}[as follows from~\cite{Weitz2006}]The number of designs compatible with $m\le 5$ pseudoknotted RNA structures can be approximated within any fixed ratio by a deterministic polynomial-time algorithm.
+\end{corollary}
+\begin{corollary}[as follows from~\cite{Cai2016}]
+  As soon as the number of pseudoknotted RNA structures strictly exceeds $5$, \NumDesign is as hard to approximate as {\#{\sf BIS}}.
+\end{corollary}
 
-% \bibitem[Lehmann, 1986]{Leh86}
-% Lehmann,E.L. (1986) Chapter title. \textit{Book Title}. Vol.~1, 2nd edn. Springer-Verlag, New York.
+It is worth noting that the $\#{\sf P}$ hardness of \NumDesign does not immediately imply the hardness of generating a valid design uniformly at random, as demonstrated constructively by Jerrum, Valiant and Vazirani~\cite{Jerrum1986}. However, in the same work, the authors establish a strong connection between the complexity of approximate counting and the uniform random generation. Namely, they showed that, for problems associated with self-reducible relations, approximate counting is equally as hard as (almost) uniform random generation. We conjecture that the (almost) uniform sampling of sequences from multiple structures with pseudoknots is in fact \#{\sf BIS}-hard as soon as the number of input structures strictly exceeds $5$, as indicated by Goldberg \emph{et al.}~\cite{Goldberg2004}, motivating even further our parameterized approach.
 
-% \bibitem[Crenshaw and Jones, 2003]{Cre03}
-% Crenshaw, B.,III, and Jones, W.B.,Jr (2003) The future of clinical
-% cancer management: one tumor, one chip. \textit{Bioinformatics},
-% doi:10.1093/bioinformatics/btn000.
+\section{Tree decomposition for RNA design instances in practice}
+\label{appsec:treedecomp}
 
-% \bibitem[Auhtor \textit{et~al}. (2000)]{Aut00}
-% Auhtor,A.B. \textit{et~al}. (2000) Chapter title. In Smith, A.C.
-% (ed.), \textit{Book Title}, 2nd edn. Publisher, Location, Vol. 1, pp.
-% ???--???.
+For studying the typically expected treewidths and tree decomposition
+run times in multi-target design instances, we consider five sets of
+multi-target RNA design instances of different complexity. Our first
+set consists of the Modena benchmark instances.
 
-% \bibitem[Bardet, 1920]{Bar20}
-% Bardet, G. (1920) Sur un syndrome d'obesite infantile avec
-% polydactylie et retinite pigmentaire (contribution a l'etude des
-% formes cliniques de l'obesite hypophysaire). PhD Thesis, name of
-% institution, Paris, France.
+In addition, we generated four sets of instances of increasing
+complexity. The instances of the sets RF3, RF4, RF5, and RF6, each
+respectively specify 3,4,5, and 6 target structures for sequence
+length 100.  For each instance (100 instances per set), we generated a
+set of $k$ ($k=3,\dots,6$) compatible structures as follows
+\begin{itemize}
+\item generate a random sequence of length 100
+\item compute its minimum free energy structure (ViennaRNA package)
+\item add the new structure to the instances if the resulting compatibility graph is bipartite
+\item repeat until $k$ structures are collected
+\end{itemize}
+For each instance, we generated the dependency graphs in the base pair
+model and in the stacking model. Then, we performed tree decomposition
+(using strategy ``GreedyFillIn'' of LibTW~\cite{Dijk2006}) on each dependency
+graph. The obtained treewidths are reported in
+Fig.~\ref{fig:td-widths}, while Fig.~\ref{fig:td-times} shows the
+corresponding run-times of the tree decomposition.
+Figure~\ref{fig:td-example} shows the tree decompositions for an example
+instance from set RF3.
 
-% \end{thebibliography}
+
+\begin{figure}
+  \hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
+  \centering\includegraphics[width=0.9\textwidth]{Figs/td-widths}
+  \vspace*{-24pt}
+  \caption{Treewidths for multi-target RNA design instances of
+    different complexity. Distributions of treewidths shown as boxplots for the base pair (left) and stacking model (right).}
+  \label{fig:td-widths}
+\end{figure}
+
+\begin{figure}
+  \hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Figs/td-times}
+  \vspace*{-24pt}
+  \caption{Computation time of tree decompositions for
+    multi-target RNA design instances of different complexity.
+    Distributions of times (in ms/instance) shown as boxplots for the base pair (left) and stacking model (right).}
+  \label{fig:td-times}
+\end{figure}
+
+
+\begin{figure}[t!]
+  %% the figure shows benchmark_inputs/RNAfold/3str/f3.100.0.inp
+  \centering
+  \verbatiminput{Figs/f3_100_0.txt}
+  \includegraphicstop[width=0.6\textwidth]{Figs/td-example-basepair}%
+  \includegraphicstop[width=0.35\textwidth]{Figs/td-example-stacking}
+  \caption{Example instance from RF3 (top) with its tree decompositions in the base pair (left) and stacking model (right). The respective treewidths are 2 and 12.}
+  \label{fig:td-example}
+\end{figure}
+
+\section{Expressing higher arity functions as cliques in the dependency graph}
+\label{appsec:dependency-cliques}
+
+Our implementation relies on external tools for the tree decomposition. Therefore it is not trivial that the weight functions (i.e. terms of the energy function) can be captured within the tree decompositions returned by a specific tool. In other words, it is not immediately clear how one can construct a cluster tree from an arbitrary tree decomposition for a given network. 
+
+Fortunately, we can show that, as long as the network the arguments $\vars(f)$ of a function $f$ are materialized by a clique within the network $\network$, then there exists at least one node in the tree decomposition that contains $\vars(f)$, thus allowing the evaluation of $f$.
+\begin{lemma}\label{lem:cliques}
+Let $G=(V,E)$ be an undirected graph, and  $T,\chi$ be a tree decomposition for $G$. For each clique $C\subset V$, there exists a node $n\in T$ such that $C\subset\chi(v)$.
+\end{lemma}
+\begin{proof}
+  \newcommand{\TransVars}[1]{{\rm tvars}(#1)}
+  \newcommand{\Children}[1]{{\rm Children}(#1)}
+  For the sake of simplicity, let us consider $T$ as rooted on an arbitrary node, inducing an orientation, and denote by $\TransVars{n}\in V$ the set of vertices found in a node $n$ or its descendants, namely
+    $$\TransVars{n} = \chi(n) \bigcup_{n'\in\Children{n}} \TransVars{n'}.$$ 
+  
+  Now consider (one of) the deepest node(s) $n\in T$, such that $C\subset\TransVars{v}$. We are going to prove that $C\subset\chi(n)$, using contradiction, by showing that $C\not\subset\chi(n)$ implies that $T$ is not a tree decomposition. 
+  
+  Indeed, let us assume that $C\not\subset\chi(n)$, then there exists a node $v'\notin\chi(n)$ whose presence in $\TransVars{n}$ stems from its presence in some descendant of $n$. Let us denote by $n'\neq n$ the closest descendant of $n$ such that $v'\in\chi(n')$. Now, consider a node $v\in C$ such that $v\in \TransVars{v'}$ and $v\notin \TransVars{v'}$. Such a node always exists, otherwise $n'$, and not $n$, would be the deepest node such that $C\subset \TransVars{v'}$. From the definition of the tree decomposition, we know that neither $n'$ nor its descendants may contain $v$. On the other hand, none of the parents or siblings of $n'$ may contain $v'$. It follows that is no node $n''\in T$ whose vertex set $\chi(v'')$ includes, at the same time, $v$ and $v'$. Since both $v$ and $v'$ belong to a clique, one has $\{v,v'\}\in E$. The absence of a node in $T$ capturing an edge in $E$ contradicts our initial assumption that $T$ is tree decomposition for $G$.
+  
+  We conclude that $n$ is such that $C\not\subset\chi(n)$.
+\end{proof}
+
+This result implies that classic tree decomposition algorithms and, more importantly, implementations can be directly re-used to produce decompositions that capture energy models of arbitrary complexity, functions of arbitrary arity. Indeed, it suffices to add a clique, involving the parameters of the function, and Lemma~\ref{lem:cliques} guarantees that the tree decomposition will feature one node to which the function can be associated.
+
+
+\section{Correctness of the FPT partition function algorithm}
+\label{appsec:correctness}
+
+\begin{theorem}[Correctness of Alg.~\ref{alg:pf}]
+  \label{the:pfalgo-correctness}
+  As computed by Alg.~\ref{alg:pf} for cluster tree $(T,\chi,\phi)$,
+  the messages $\Message{u}{v}$, for all edges $u\to v\in T$, yield
+  the partition functions of subtree of $u$ for the partial
+  assignments $\val\in\assignments(\separator{u}{v})$, i.e. the
+  messages satisfy
+  \begin{equation}
+   \Message{u}{v}[\val] = \sum_{\val'\in\assignments(\chi(T_r(u))-\separator{u}{v})} \quad
+   \prod_{f\in\phi(T_r(u))} \exp(-\beta f[\val'|\val]),\label{eq:pfalgo-correct}
+ \end{equation}
+ where $\chi(T_r(u))$ denotes all $\chi$-assigned variables of nodes in $T_r(u)$;
+ respectively $\phi(T_r(u))$; all $\phi$-assigned functions.
+%
+\end{theorem}
+
+\begin{proof}
+  Note that in more concise notation, Alg.~\ref{alg:pf} computes
+  messages such that
+\begin{equation}
+  \Message{u}{v}[\val] := \sum_{\val'\in\assignments(\difference{u}{v})}\quad
+  \prod_{f\in \phi(u) } \exp(-\beta f[\val'|\val]) \prod_{(w\to u) \in T} m_{w\to u}[\val'|\val].\label{eq:messages}
+\end{equation}
+
+Proof by induction on $T$. If $u$ is a leaf, $\chi(r) = \chi(T_r(u))$,
+there are no messages sent to $u$, and $\phi(u) = \phi(T_r(u));$ implying
+Eq.~$(\ref{eq:pfalgo-correct}).$
+%
+Otherwise, since the algorithm traverses edges in postorder, $u$ received from its children
+$w_1,\dots,w_q$ the messages $m_{w_1\to u}, \dots, m_{w_q\to u}$, which satisfy Eq.~$(\ref{eq:pfalgo-correct})$ (induction hypothesis). Let $\val\in\assignments(\separator{u}{v})$; then, $\Message{u}{v}[\val]$ is computed by the algorithm according to Eq.~$(\ref{eq:messages})$. We rewrite as follows
+\begin{align*}
+  & \sum_{\val'\in\assignments(\difference{u}{v})}\quad
+    \prod_{f\in \phi(u) } \exp(-\beta f[\val'|\val])
+    \prod_{(w\to u) \in T} m_{w\to u}[\val'|\val]\\
+  & = \sum_{\val'\in\assignments(\chi(u)-\separator{u}{v})}\quad
+    \prod_{f\in \phi(u) } \exp(-\beta f[\val'|\val])
+    \prod_{i=1}^q m_{w_i\to u}[\val'|\val]\\
+  & =_{IH}
+    \sum_{\val'\in\assignments(\chi(u)-\separator{u}{v})}\quad
+    \prod_{f\in \phi(u) } \exp(-\beta f[\val'|\val])
+    \prod_{i=1}^q \sum_{\val''\in\assignments(\chi(T_r(w_i))-\separator{w_i}{u})} \quad
+    \prod_{f\in\phi(T_r(w_i))} \exp(-\beta f[\val'' | \val' | \val]) \\
+& =_{*}
+    \sum_{\val'\in\assignments(\chi(u)-\separator{u}{v})}\quad
+  \sum_{\val''\in\assignments(\bigcup_{i=1}^q\chi(T_r(w_i))-\separator{w_i}{u})} \quad
+  \prod_{f\in \phi(u) } \exp(-\beta f[\val'|\val])
+  \prod_{f\in\phi(T_r(w_i))} \exp(-\beta f[\val'' | \val' | \val]) \\
+  & =_{(**)} \sum_{\val'\in\assignments(\chi(T_r(u))-\separator{u}{v})}\quad
+    \prod_{f\in \phi(T_r(u)) } \exp(-\beta f[\val'|\val])\\
+\end{align*}
+To see (*) and (**), we observe:
+\begin{itemize}
+\item The sets $\chi(u)-\separator{u}{v}$ and
+  $\chi(T_r(w_i))-\separator{w_i}{u}$ are all disjoint due to
+  Def.~\ref{def:treedecomp}, property 2. First, this property implies
+  that any shared variable between the subtrees of $w_i$ and $w_j$
+  must be in $\chi(w_i)$, $\chi(w_j)$ and $\chi(u)$, thus the
+  variables of $\chi(T_r(w_i))-\separator{w_i}{u}$ are
+  disjoint. Second, if a variable $\chi(T_r(w_i))$ occurs in
+  $\chi(u)$, it must occur in $\chi(w_i)$ and consequently in $\separator{u}{v}$.
+\item The union of the sets $\chi(u)-\separator{u}{v}$ and
+  $\chi(T_r(w_i))-\separator{w_i}{u}$ is $\chi(T_r(u))-\separator{u}{v}).$
+\end{itemize}
+
+\end{proof}
+
+\section{General complexity of the partition function computation by cluster tree elimination and generation of samples}
+\label{appsec:algcomplexity}
+
+\begin{proposition}
+  \label{prop:general-complexity}
+Given a cluster tree $(T,\chi,\phi)$, $T=(V,E)$ of the RNA design network $\network=(\X,\F)$ with treewidth $w$ and maximum separator size $s$, computing the partition function by Algorithm~\ref{alg:pf} takes $O((|F|+|V|)\cdot 4^{w+1})$ time and $O(|V| 4^s)$ space (for storing all messages). The sampling step has time complexity of $O((|F|+|V|)\cdot 4^D)$ per sample.
+\end{proposition}
+
+\begin{proof}[Proposition~\ref{prop:general-complexity}]
+Let $d_u$ denote the degree of node $u$ in $T$, $s_u$ is the size of the separator between 
+$u$ and its parent in $T$ rooted at $r$. For each node in the cluster tree, Alg.~\ref{alg:pf} computes one message by combining $(|\phi(u)|+d_u-1)$ functions, each time enumerating $4^{|\chi(u)|}$ combinations; Alg.~\ref{alg:sampling} computes $4^{|\chi{u}|-s_u}$ partition functions each time combining $(|\phi(u)|+d_u-1)$ functions.  $4^{|\chi(u)|}$ is bound by $4^{w+1}$ and $4^{|\chi{u}|-s_u}$ by $4^D$; moreover $\sum_{u\in V} (|\phi(u)|+d_u-1) = |F|+|V|-1$.
+\end{proof}
+
+\section{Parameters for the base pair and the stacking energy model}
+\label{appsec:modelparameters}
+
+We trained parameters for two RNA energy models to approximate the
+Turner energy model, as implemented in the \Software{ViennaRNA}
+package.  In the \Def{base pair model}, the total energy of a sequence $S$
+for an RNA structure $R$ is given as sum of base pair energies, where
+we consider six types of base pairs distinguishing by the bases A-U,
+C-G or G-U (symmetrically) and between stacked and non-stacked base
+pairs; here, we consider base pairs $(i,j)\in R$ \emph{stacked} iff
+$(i+1,j-1)\in R$, otherwise \emph{non-stacked}. In the \Def{stacking model},
+our features are defined by the stacks, i.e. pairs $(i,j)$ and
+$(i+1,j-1)$ which both occur in $R$; we distinguish 18 types based on
+$S_i,S_j,S_{i+1},S_{j-1}$ (i.e. all combinations that allow canonical
+base pairs; the configurations $S_i,S_j,S_{i+1},S_{j-1}$ and
+$S_{i+1},S_{j-1},S_j,S_i$ are symmetric).
+
+Both models describe the energy assigned to a pair of sequence and
+structure in linear dependency of the number of features and their
+weights. We can thus train weights for linear predictors of the Turner
+energy in both models.
+
+For this purpose, we generated 5000 uniform random RNA sequences of
+random lengths between 100 and 200. For each sample, we predict the
+minimum free energy and corresponding structure using the ViennaRNA
+package; then, we count the distinguished features (i.e., base pair or
+stack types). The parameters are estimated fitting linear models
+without intercept (\texttt{R} function \texttt{lm}). For both models,
+\texttt{R} reports an adjusted R-squared value of 0.99. The resulting
+parameters are reported in Tables~\ref{tab:basepairmodel} and
+\ref{tab:stackingmodel}.
+
+For validating the trained parameters, we generate a second
+independent test set of random RNA sequences in the same
+way. Figure~\ref{fig:training-cor} shows correlation plots for the
+trained parameters in the base pair and stacking models for predicting
+the Turner energies in the test set with respective correlations of
+$0.95$ an $0.94$.
+
+\begin{figure}
+  \centering
+  A)\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/basepaircor}
+  B)\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor}
+  \caption{Validation of the trained parameters for the A) base pair
+    model B) stacking model for predicting energies of the
+    independently sampled sequences in the test set. We show
+    correlation plots against the Turner energies reported by the
+    ViennaRNA package.}
+  \label{fig:training-cor}
+\end{figure}
+
+\begin{table}
+  \centering
+  \caption{Trained weights for the base pair energy model.} 
+  \label{tab:basepairmodel}
+  \begin{tabular}{c@{\quad}c@{\quad}c@{\quad}|@{\quad}c@{\quad}c@{\quad}c}
+    \multicolumn{3}{c}{non-stacked} & \multicolumn{3}{c}{stacked}\\ 
+    AU      & CG       & GU      & AU       & GC       & GU \\\hline
+    1.26630 & -0.09070 & 0.78566 & -0.52309 & -2.10208 & -0.88474
+  \end{tabular}
+\end{table}
+
+% GC_IN = -0.09070;
+% AU_IN = 1.26630;
+% GU_IN = 0.78566;
+% GC_TERM = -2.10208;
+% AU_TERM = -0.52309;
+% GU_TERM = -0.88474;
+
+\begin{table}
+  \centering
+  \caption{Trained weights for the stacking energy model (the rows specify $S_i,S_j$; the columns, $S_{i+1},S_{j-1}$; we do not show the symmetric weights).}
+  \label{tab:stackingmodel}
+  \begin{tabular}{c@{\quad}|@{\quad}c@{\quad}c@{\quad}c@{\quad}c@{\quad}c@{\quad}c@{\quad}c@{\quad}c}
+       & AU & CG & GC & GU & UA & UG \\\hline
+    AU &
+-0.18826 &
+-1.13291 &
+-1.09787 &
+-0.38606 &
+-0.26510 &
+-0.62086
+    \\
+    CG &
+-1.11752 &
+-2.23740 &
+-1.89434 &
+-1.22942 &
+-1.10548 &
+-1.44085
+    \\
+    GU &
+-0.55066 &
+-1.26209 &
+-1.58478 &
+-0.72185 &
+-0.49625 &
+-0.68876
+    \\
+  \end{tabular}
+\end{table}
+
+\section{Monotonicity of the partial derivatives within weight calibration}
+\label{sec:weight_derivatives}
+%
+In weighted distributions, one witnesses a fairly predictable impact of the variation of any weight $\pi_\ell$ over the expected value $\mathbb{E}(E_\ell\mid \pmb{\pi})$, $\pmb{\pi}:= (\pi_1\cdots\pi_k)$, of the free energy $E_\ell$ of structure $\ell$.  Let us  first remind the probability of a sequence $S$ in the weighted distribution
+\begin{align*} 
+  \mathcal{B}_{\pmb{\pi}}(S) &= \prod_{i=1}^{k} \pi_i^{-E_i(S)}, &
+  \partfun{\pmb{\pi}}&=\sum_{S'}\mathcal{B}_{\pmb{\pi}}(S') &
+    \text{and}& &
+  \mathbb{P}(S\mid \pmb{\pi}) &= \frac{\mathcal{B}_{\pmb{\pi}}(S)}{\partfun{\pmb{\pi}}}.
+  \end{align*}
+  
+Remind also the definition of the expectation of $E_\ell(S)$, for $S$ a Boltzmann-distributed sequence:
+$$\mathbb{E}(E_\ell\mid \pmb{\pi}) = \sum_S E_\ell(S)\cdot \mathbb{P}(S\mid \pmb{\pi}).$$
+
+We first remark that the partial derivative of $\mathcal{B}$ yields
+\begin{align*} 
+  \frac{\partial \mathcal{B}_{\pmb{\pi}}(S)}{\partial \pi_\ell} = -E_\ell(S)\cdot \pi_\ell^{-E_\ell(S)-1}\prod_{\substack{i=1\\i\neq \ell}}^{k} \pi_i^{-E_i(S)} = \frac{-E_\ell(S)}{\pi_\ell}\cdot\mathcal{B}_{\pmb{\pi}}(S) = -E_\ell(S)\cdot \mathbb{P}(S\mid \pmb{\pi})\cdot \frac{\partfun{\pmb{\pi}}}{\pi_\ell }
+\end{align*}
+while the partial derivative of $\mathcal{Z}$ gives 
+\begin{align*} 
+  \frac{\partial \partfun{\pmb{\pi}}(S)}{\partial \pi_\ell} = \sum_{S'} -E_\ell(S')\cdot \mathbb{P}(S'\mid \pmb{\pi})\cdot \frac{\partfun{\pmb{\pi}}}{\pi_\ell }= -\mathbb{E}(E_\ell\mid \pmb{\pi})\cdot \frac{\partfun{\pmb{\pi}}}{\pi_\ell}.
+\end{align*}
+From these expressions, we conclude that
+\begin{align*} 
+  \frac{\partial \mathbb{E}(E_\ell\mid \pmb{\pi})}{\partial \pi_\ell} &= \sum_S E_\ell(S)\cdot\frac{\partial \mathbb{P}(S\mid \pmb{\pi})}{\partial \pi_\ell}\\
+  %
+  & = \sum_S E_\ell(S)\left(\frac{\frac{\partial \mathcal{B}_{\pmb{\pi}}(S)}{\partial \pi_\ell}}{\mathcal{Z}_{\pmb{\pi}}} - \frac{\frac{\partial \mathcal{Z}_{\pmb{\pi}}}{\partial \pi_\ell}\cdot\mathcal{B}_{\pmb{\pi}}(S)}{\mathcal{Z}_{\pmb{\pi}}^2}\right)\\
+  %
+  & = \sum_S E_\ell(S)\left(\frac{-E_\ell(S)\cdot \mathbb{P}(S\mid \pmb{\pi})\cdot \frac{\mathcal{Z}_{\pmb{\pi}}}{\pi_\ell }}{\mathcal{Z}_{\pmb{\pi}}} + \frac{\mathbb{E}(E_\ell\mid \pmb{\pi})\cdot \frac{\mathcal{Z}_{\pmb{\pi}}}{\pi_\ell}\cdot\mathcal{B}_{\pmb{\pi}}(S)}{\mathcal{Z}_{\pmb{\pi}}^2}\right)\\
+  %
+  & = \sum_S - \frac{E_\ell(S)^2\cdot\mathbb{P}(S\mid \pmb{\pi})}{\pi_\ell} + \frac{\mathbb{E}(E_\ell\mid \pmb{\pi})}{\pi_\ell}\sum_S E_\ell(S)\cdot \mathbb{P}(S\mid \pmb{\pi})\\
+  & = -\frac{\mathbb{E}(E_\ell^2\mid \pmb{\pi}) - \mathbb{E}(E_\ell\mid \pmb{\pi})^2}{\pi_\ell}
+\end{align*}
+In the numerator of the above expression, one recognizes the variance of the distribution of $E_\ell$.
+Remark that a variance is always non-negative and, in our case, also strictly positive for $\pmb{\pi}$, $\pi_\ell>0$, as soon as there exist at least two distinct sequences $S$ and $S'$ such that $E_\ell(S)\neq E_\ell(S')$.
+Moreover, weights are always positive so the partial derivative in $\pi_\ell$ is always positive. Ultimately, it is always possible to increase (resp. decrease) the expected free energy of a structure by simply decreasing (resp. increasing) its weight, supporting our weight optimization procedure.
+\newpage
+\section{Detailed result of quality analysis}\label{sec:validity}
+N/A values correspond to data that could not be obtained by the time of this submission for two main reasons: In the case of the initial sampling (left columns), they correspond to instances which, in conjunction with an expressive energy model, resulted in very high tree-width, leading to unreasonable memory requirements incompatible with our available computing resources; The case of missing values after optimization  (right columns), they indicate situations where the initial optimization took too long ($\approx$ 1 day) and was killed.
+\input{table}
+
 \end{document}
+
+

@@ -1,0 +1,54 @@
+% PGF style template to be used in the ktikz program
+\documentclass[a4paper,twoside,11pt]{book}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsmath}
+\usepackage{relsize}
+\usepackage{DejaVuSans}
+\usepackage[T1]{fontenc}
+
+\usepackage[charter]{mathdesign}
+\DeclareFontFamily{OMS}{mdbch}{\skewchar\font=48}
+\DeclareFontShape{OMS}{mdbch}{m}{n}{<->s*[0.96] mdbchr7y}{}
+\DeclareFontShape{OMS}{mdbch}{m}{it}{<->ssub * mdbch/m/n}{}
+\DeclareFontShape{OMS}{mdbch}{b}{n}{<->s*[0.96] mdbchb7y}{}
+\DeclareFontShape{OMS}{mdbch}{bx}{n}{<->ssub * mdbch/b/n}{}
+\usepackage{tikz}
+
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{calc}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{decorations}
+\usetikzlibrary{decorations.shapes}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{matrix}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes.arrows}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{shadows}
+\usetikzlibrary{spy}
+
+
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{backbackground}
+\pgfdeclarelayer{backbackbackground}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{backbackbackground,backbackground,background,main,foreground}
+%\usepackage{color}
+\usepackage[active,pdftex,tightpage]{preview}
+\PreviewEnvironment[]{tikzpicture}
+\PreviewEnvironment[]{pgfpicture}
+\InputIfFileExists{../macros.tex}{}{
+  \InputIfFileExists{macros.tex}{}%
+}
+
+\begin{document}
+\input{example.pgf}
+\end{document}
