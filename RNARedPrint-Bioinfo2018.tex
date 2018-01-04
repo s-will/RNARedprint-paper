@@ -252,7 +252,7 @@ The hardness of counting (and conjectured hardness of sampling) does not preclud
 
 
 \begin{figure*}[t]
-{\centering\includegraphics[width=.8\textwidth]{workflow}\\}
+%{\centering\includegraphics[width=.8\textwidth]{Figs/Workflow}\\}
 \caption{General outline of \ourprog{} for base pair-based energy models. From a set of target secondary structures (i), base-pairs are merged (ii) into a compatibility graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and $\Gb\Cb$-content, leading to the production of suitable designs (vi).}
 \label{fig:workflow}
 \end{figure*}
@@ -771,8 +771,8 @@ instances). Due to our linear adjustment, we still achieve well
 controlled energies in the ultimately relevant Turner energy model.
 \begin{figure*}[t]
   \begin{center}
-    {\sf \bfseries A}\includegraphicstop[width=0.57\textwidth]{Figs/energy_distribution}
-    {\sf \bfseries B}\includegraphicstop[width=0.32\textwidth]{Figs/offset}
+   % {\sf \bfseries A}\includegraphicstop[width=0.57\textwidth]{Figs/energy_distribution}
+    %{\sf \bfseries B}\includegraphicstop[width=0.32\textwidth]{Figs/offset}
   \end{center}
   \caption{%
   	Targeting specific energies using multi-dimensional Boltzmann sampling. (A) Turner energy distributions for three target structures (right) while targeting $(-40,-40,-20)$ and $(-20,-20,-20)$ free energy vectors. For comparison, we show the distribution of uniform and Boltzmann samples; respectively associated with homogenous weights $1$ and $e^\beta$. (B) Accuracy of targeting over all target structures of the \Software{Modena} benchmark instances \texttt{RNAtabupath}, \texttt{3str} and \texttt{4str}. Shown is the relative deviation of targeted and achieved energies in the simple stacking model and the Turner model.
@@ -921,7 +921,7 @@ instance from set RF3.
 
 \begin{figure}
   \hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
-  \centering\includegraphics[width=0.9\textwidth]{Figs/td-widths}
+  \centering%\includegraphics[width=0.9\textwidth]{Figs/td-widths}
   \vspace*{-24pt}
   \caption{Treewidths for multi-target RNA design instances of
     different complexity. Distributions of treewidths shown as boxplots for the base pair (left) and stacking model (right).}
@@ -931,7 +931,7 @@ instance from set RF3.
 \begin{figure}
   \hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
   \centering
-  \includegraphics[width=0.9\textwidth]{Figs/td-times}
+  %\includegraphics[width=0.9\textwidth]{Figs/td-times}
   \vspace*{-24pt}
   \caption{Computation time of tree decompositions for
     multi-target RNA design instances of different complexity.
@@ -944,8 +944,8 @@ instance from set RF3.
   %% the figure shows benchmark_inputs/RNAfold/3str/f3.100.0.inp
   \centering
   \verbatiminput{Figs/f3_100_0.txt}
-  \includegraphicstop[width=0.6\textwidth]{Figs/td-example-basepair}%
-  \includegraphicstop[width=0.35\textwidth]{Figs/td-example-stacking}
+  %\includegraphicstop[width=0.6\textwidth]{Figs/td-example-basepair}%
+  %\includegraphicstop[width=0.35\textwidth]{Figs/td-example-stacking}
   \caption{Example instance from RF3 (top) with its tree decompositions in the base pair (left) and stacking model (right). The respective treewidths are 2 and 12.}
   \label{fig:td-example}
 \end{figure}
@@ -1098,8 +1098,8 @@ $0.95$ an $0.94$.
 
 \begin{figure}
   \centering
-  A)\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/basepaircor}
-  B)\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor}
+  A)%\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/basepaircor}
+  B)%\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor}
   \caption{Validation of the trained parameters for the A) base pair
     model B) stacking model for predicting energies of the
     independently sampled sequences in the test set. We show
