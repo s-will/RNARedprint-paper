@@ -1,0 +1,291 @@
+----------------------- REVIEW 1 ---------------------
+PAPER: 139
+TITLE: Fixed-Parameter Tractable Sampling for RNA Design with Multiple
+Target Structures
+AUTHORS: Stefan Hammer, Yann Ponty, Wei Wang and Sebastian Will
+
+
+----------- Overall evaluation -----------
+The paper presents a framework based on a basic method in
+Parameterized Complexity to handle some aspects, which are argued to
+be computational bottlenecks, of the design of multi-stable RNA
+molecules. The central problem formulated in this paper concerns the
+computation of a partition function over sequences. The precise
+definition of this problem was not at all clear to me when I read the
+paper for the first time (see page 3), given that there seems to be
+overload of notations (in particular, S is given as argument but also
+appears in the sum). Generally, the definitions given in this paper
+are mostly intuitive/vague rather than mathematically
+precise. However, I did understand the problems that are actually
+solved subsequently from their specific explanations and
+solutions. Thus, the intent of the authors can be deciphered if
+desired. Given that the paper is not submitted to a TCS conference, it
+might be that this writing style is in fact more appropriate, and
+hence I do not know whether it should be criticized.
+
+Firstly, the authors consider a problem where we are given a graph, and we
+need to assign a letter (A,G,C or U) to each vertex so that every two
+adjacent vertices u,v are assigned one of the following configurations:
+{A,C}, {G,C} or {G,U}. The authors show that the problem of counting the
+number of solutions to this problem is #P-hard by a simple reduction from
+Independent Set on bipartite graphs.
+
+Secondly, the authors present an algorithm for sampling
+Boltzmann-weighted designs. Here, they solve a more general problem
+than only the counting problem above, but can compute a partition
+function depending on the assignments. The result is a parameterized
+algorithm with respect to the treewidth of the input graph (Section
+4.1). The design of this algorithm is completely straightforward. The
+authors further suggest an optimization of their algorithm that is
+based on a simple yet nice observation (from a previous paper) that
+speeds-up the computation. The authors use their own notation rather
+than standard notation in Parameterized Complexity. In general, the
+presentation and proofs of the algorithms are quite cumbersome, making
+them appear more difficult than they truly are. There also seems to be
+several typos in the presentation (e.g., how can we have a|a' in the
+entry m_{w\rightarrow u}?). Nevertheless, the ideas of the algorithms
+themselves are correct. Next, the computation is further extended by
+enriching the functions computed at individual nodes to suit
+multidimensional sampling.
+
+The algorithms above were implemented, and the authors conducted several
+experiments to evaluate their approach. I have carefully read this
+section, but given that this subject is completely outside my area of
+expertise, I cannot comment on this. It seems to me that this part has
+taken most of the efforts invested in this project. The authors also argue
+here that in practice, the treewidth of the graphs relevant to their
+applications will be small.
+
+Overall, the acceptance of this paper depends on whether the biological
+motivation behind it is reasonable and of interest. The technique used is
+a straightforward application of a known method in Parameterized
+Complexity (DP over tree decomposition for counting), and the hardness
+proof is also quite simple. However, I greatly appreciate seeing this
+technique applied in a new context, as well as seeing such algorithms
+implemented and used in practice. In this sense, the paper is indeed quite
+novel. I therefore believe that, if the biological motivation is good
+enough, this paper can greatly advance relations between bioinformatics
+and parameterized analysis. Although I disliked the presentation (I would
+have preferred much more formal, precise definitions and arguments,
+preferably also using standard notations), I have carefully read the
+proofs themselves and the results in the paper are correct. I therefore
+recommend acceptance, but with very low confidence.
+
+-------------------------------------------------------------------------------------------
+Main Reviewer's comment: My sub-reviewer is an expert in parameterized
+complexity rather than bioinformatics. She originally set the confidence
+to 2, stating that it is up to the other reviewers to decide if the
+application is important in bioinformatics. My opinion is that the
+application (sampling for multi-target RNA design) is an important, highly
+motivated problem in structural RNAomics. Furthermore, the fact that the
+authors implemented their algorithm as a tool and made their code
+available via GitHub is appreciated.  Therefore, I raised the confidence
+score.
+
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 139
+TITLE: Fixed-Parameter Tractable Sampling for RNA Design with Multiple
+Target Structures
+AUTHORS: Stefan Hammer, Yann Ponty, Wei Wang and Sebastian Will
+
+
+----------- Overall evaluation -----------
+The paper presents an algorithm for sampling RNA sequences with the
+aim of obtaining a sequence whose energy in a given set of secondary
+structures is close to a desired vector of target energies.
+
+The algorithm is based on dynamic programming on a tree decomposition
+of a graph that is built from the constraints by the given secondary
+structures. The main and most difficult part of the algorithm is to
+fill a dynamic programming table for computing the partition functions
+of the given energies. Afterwards, the sampling is performed using the
+entries of the dynamic programming table.
+
+In addition to this algorithm a negative result about the computation
+of the number of valid RNA sequences for a given set of secondary
+structures is given, stating that this number cannot be computed in
+polynomial time unless #P=P.
+
+The approach to use dynamic programming on a dependency graph in the
+context of sampling seems novel. The algorithm itself works more or
+less as expected. The authors describe one improvement over brute-force DP
+that is based on the fact that the constraint graph obtained from the
+structures is bipartite.
+
+The experimental part of the paper demonstrates that the sampling
+based on the new approach leads to better results than uniform
+sampling both in terms of the energy distribution of the sample
+population itself but also if the samples are used as starting
+solutions in a local search algorithm. A small caveat is that the
+paper does not compare with any of the previous approaches for RNA
+Design but in my opinion, the sampling procedure itself is
+sufficiently important to make the experiments meaningful.
+
+Overall, I recommend to accept the paper. The topic and the treatment
+with dependency networks make it a timely contribution. The paper is
+reasonably well-written.
+
+Specific suggestions for improvements:
+
+-Page 1: "The overall complexity ... grows like Theta(4^gamma) where gamma
+is a parameter whose value is bounded only by the length" This seems
+rather strange because if gamma is the overall length, then 4^gamma can be
+trivially obtained by enumerating all sequences and then computing the
+energies for each sequence. Maybe it is supposed to mean that in the
+worst-case gamma can be the length of the sequence? But this is also true
+for the treewidth making this remark maybe a bit unfair. I suggest to be
+more precise and explain roughly what gamma is.
+
+>>>>> Elaborate that gamma=n is worst case and in practice much smaller due to ear decomp (similar to tree width)
+
+
+-Page 2 "in a principled way" Could you provide some further explanation
+what "principled" means here?
+
+>>>>> --> YANN; something like 'generic'?
+
+-Page 3 The definition of RNA structure allows that one position i takes
+part in more than one base pair (e.g. {(1,2),(1,3)} is a set of base pairs
+and thus a secondary structure according to the definition).
+
+>>>>> add this restriction (we do not need degree>1, even if it does not harm)
+
+-Page 3 "{A,C}" -> "{A,U}"
+
+-Page 3 "(Si,Sj)" -> "{Si,Sj}"
+
+-Page 3 Please highlight a bit better when the compatability graph is of
+interest and when the dependency graph is of interest. It seems that the
+compatability graph is only interesting in Section 3?
+
+-Page 3 It seems strange that the partition function depends on S while S
+is used in the sum. Should it be "Z_E_R(n)" or "Z_E_R(S_n)"?
+
+>>>> Embarassing typo: this should be Z_E_R(\R)
+
+-Page 3 "as the minimal set" Is it necessarily unique? If not, "as a
+minimal set".
+
+-Page 3 "an hypergraph" -> "a hypergraph"
+
+-Page 4 "base pair models" -> "base pair model"
+
+-Page 4 "ins polynomial time" -> "in polynomial time"
+
+-Page 4 "strongly connected" Why "strongly" is the graph directed? There
+is no discussion of weak vs. strong connected components.
+
+-Page 4,5 two missing "\qed"s
+
+-Page 5 In the definition of "f[a]" one needs that "dep(f)" contains "dom(A)"
+
+>>>> CHECK
+
+-Page 5 The difference variables should probably be defined only for
+adjacent bags of the tree decomposition? Otherwise, I don't see how the
+claim about the one-variable difference is true.
+
+-Page 5 "Denote by A(Y)" What is Y?
+
+-Page 6 In Line 6 of the algorithm, I don't see how m_w->u has an entry
+for "[a|a']" as "a" may contain some new variables.
+
+-Page 6 "Its correctness" -> "The correctness of the algorithm"
+
+-Page 6 Running times are not reported here but it seems crucial to obtain
+good tree decompositions, I am not sure whether greedy fill-in is the best
+strategy. A more recent approach is for example Flow-Cutter by Ben
+Strasser (github.com/kit-algo/flow-cutter-pace17).
+
+-Page 6 "requires O(..." + "time"
+
+-Page 7 For Theorem 1, I was wondering whether it is really necessary to
+consider the total number of connected components. It seems that only the
+maximum number of components per bag is crucial?
+
+-Page 7 "we encode the network energy ..." I was a bit confused here. What
+is w_l? Is it possible to give the formula?
+
+-Page 8 Should it "ln" instead of "log"?
+
+>>>>> YES
+
+-Page 8 What is "gamma" in "gamma^{mu_l}"?
+
+-Page 8 "expected number grows like Theta(1)" This sounds a bit awkward as
+Theta(1) doesn't really grow. How about "expected number is Theta(1)"?
+
+>>>> REFORMULATE
+
+-Page 9 In the definition of f(S), the first sum should be from l=1?
+
+-Page 14 Lemma 1 is a well-known fact about tree decompositions. It does
+not need a proof and should be found in some surveys about treewidth.
+
+>>>>> AGREED (Discuss with Yann: drop proof and cite some text book)
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 139
+TITLE: Fixed-Parameter Tractable Sampling for RNA Design with Multiple
+Target Structures
+AUTHORS: Stefan Hammer, Yann Ponty, Wei Wang and Sebastian Will
+
+
+----------- Overall evaluation -----------
+The manuscript by Hammer et al. describes an general theoretical framework
+for designing RNA sequences with multiple target secondary structures.
+First, the authors show that the problem of counting the number of
+possible designs is #P-hard. Then, they develop an algorithm for
+calculating the partition function, and sampling design instances from
+this distribution. The complexity of these algorithms is determined by the
+tree-width of the constraint graph.
+
+The method is timely and nicely expands recent contributions in the same
+area. Moreover, I believe that the nature of the work and theoretical
+results presented in this paper should be of interest for the broad RECOMB
+community.
+
+Comments:
+
+* There are a couple of shortcuts in the notations that occasionally
+distracted me (although it was correct). For instance, in definition 1,
+point 3, e is an edge and X(v) is a set of vertice. Or in the definition
+of E_R(S) the dependency between F and R is not explicited. Similarly,
+definition 2 introduces the RNA design networks but the definition stays
+at a relatively abstract level. If the object is associated with RNA, why
+not using a specialized terminology (e.g. nucleotide instead of
+variables)?
+
+>>>>> Notation could be adapted; e.g. "nucleotide instead of
+variables" would work for this paper (but not for all possible extensions)
+
+* The experimental validation is limited, but it is (to my point-of-view)
+not an issue as the core of the paper are the theoretical results. If
+possible, it would be useful to expand this benchmark. For instance, by
+including a discussion using known multi-stable RNAs and comparing real
+and artificial sequences. It would be interesting to characterize which
+parameters increase the difficulty of the design, or determine a priori
+the range of possible target energies.
+
+>>>>> Don't we already have artificial vs. real; can we write some discussion?
+
+* This is an open question, but I was wondering how the authors could use
+their algorithm to control the energy barrier between two target
+structures. For instance, one could identify a structure near the saddle
+point and force the design to assign a high energy to the latter (and by
+constrast low energies to the targets).
+
+Controling the energy barrier between two stable structure An important
+feature when designing multi-stable RNA
+
+>>>>> INTERESTING IDEA; rather for design than sampling. We could try to optimize 
+the direct path barrier in this way (for producing decoys...) 
+
+* It was not clear to me if the authors implemented dangling ends?
+
+>>>>> NO; if possible, reformulate the resepctive sentence
+
+Typos:
+* Eq 1: Z is a function of S but S is in the sum as well...
+* Sec. 2, start of paragraph 2: "Given is"?
