@@ -784,7 +784,7 @@ controlled energies in the ultimately relevant Turner energy model.
     {\sf \bfseries B}\includegraphicstop[width=0.32\textwidth]{Figs/offset}
   \end{center}
   \caption{%
-  	Targeting specific energies using multi-dimensional Boltzmann sampling. (A) Turner energy distributions for three target structures (right) while targeting $(-40,-40,-20)$ and $(-20,-20,-20)$ free energy vectors. For comparison, we show the distribution of uniform and Boltzmann samples; respectively associated with homogenous weights $1$ and $e^\beta$. (B) Accuracy of targeting over all target structures of the \Software{Modena} benchmark instances \texttt{RNAtabupath}, \texttt{3str} and \texttt{4str}. Shown is the relative deviation of targeted and achieved energies in the simple stacking model and the Turner model.
+  	Targeting specific energies using multi-dimensional Boltzmann sampling. (A) Turner energy distributions for three target structures (right) while targeting $(-40,-40,-20)$ and $(-20,-20,-20)$ free energy vectors. For comparison, we show the distribution of uniform and Boltzmann samples; respectively associated with homogenous weights $1$ and $e^\beta$. (B) Accuracy of targeting over all target structures of the \Software{Modena} benchmark instances \texttt{RNAtabupath} (2str), \texttt{3str} and \texttt{4str}. Shown is the relative deviation of targeted and achieved energies in the simple stacking model and the Turner model.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
 }
   \label{fig:energydist}
@@ -803,7 +803,7 @@ All sampled sequences are evaluated under the multi-stable design objective func
 \end{align}
 
 Using our strategy, we generated at least 1\,000 seeds per instance of
-the subsets \texttt{RNAtabupath}, \texttt{3str}, and \texttt{4str}, of
+the subsets \texttt{RNAtabupath} (2str), \texttt{3str}, and \texttt{4str}, of
 the \Software{Modena} benchmark set with 2,3, and 4 structures. The
 results are compared, in terms of their value for the objective
 function of Eq.~\eqref{eq:blueprintobjective}, to seed sequences
@@ -822,12 +822,12 @@ Once again, for all instances, we observe a positive improvement of the quality 
 \centering
 \medskip
 \begin{tabular}{@{}>{\bf}l@{\quad}>{\tt}l@{\quad}@{\quad}c@{\quad}c@{\quad}c@{}}
-             &   Dataset   & {\bfseries\ourprog{}} & \textbf{Uniform} & \textbf{Improvement} \\\toprule
-  Seeds      & RNAtabupath & 21.67 ($\pm$4.38) & 37.74 ($\pm$6.45) & 73\%\\
+             &   \textbf{\textrm{Dataset}}   & {\bfseries\ourprog{}} & \textbf{Uniform} & \textbf{Improvement} \\\toprule
+  Seeds      & 2str & 21.67 ($\pm$4.38) & 37.74 ($\pm$6.45) & 73\%\\
              & 3str & 18.09 ($\pm$3.98) & 30.49 ($\pm$5.41) & 71\%\\
              & 4str & 19.94 ($\pm$3.84) & 32.29 ($\pm$5.24) & 63\%\\\midrule
 
-  Optimized  & RNAtabupath & 5.84 ($\pm$1.31) & 7.95 ($\pm$1.76) & 28\%\\
+  Optimized  & 2str & 5.84 ($\pm$1.31) & 7.95 ($\pm$1.76) & 28\%\\
              & 3str & 5.08 ($\pm$1.10) & 7.04 ($\pm$1.52) & 31\%\\
              & 4str & 8.77($\pm$1.48) & 13.13 ($\pm$2.13) & 37\% \\ \bottomrule
 \end{tabular}\\[1em]
@@ -869,12 +869,28 @@ Extensions:
 
 \newpage 
 \section*{Acknowledgements}
-YP is supported by the French/Austrian RNALands project (ANR-14-CE34-0011), jointly supported by the French {\em Agence Nationale de la Recherche} and the Austrian FWF.
-SH is supported within the
-German Network for Bioinformatics Infrastructure (de.NBI) by the
-German Federal Ministry of Education and Research (BMBF; support code
-031A538B) and the project RiboNets acknowledged by financial support of the Future and Emerging Technologies (FET) programme within the Seventh Framework Programme for Research of the European Commission, under FET-Open grant number: 323987. 
-All authors wish to express their gratitude to Leonid Chindelevitch for very accurately pointing out that the bipartite nature of the dependency graph directly implies a reduced complexity for our dynamic programming scheme. We also thank Arie Koster for fruitful discussions regarding the practical computation of the tree decomposition.
+YP is supported 
+%jointly supported 
+by
+% the French 
+{\em Agence
+  Nationale de la Recherche} and the 
+%Austrian
+FWF (ANR-14-CE34-0011; project RNALands).  SH is supported by the
+German Federal Ministry of Education and Research (BMBF support code
+031A538B; de.NBI: German Network for Bioinformatics Infrastructure)
+and the
+% acknowledged by
+%financial support 
+of the Future and Emerging Technologies programme
+% within the Seventh Framework Programme for Research of the
+%European Commission, under 
+(FET-Open grant 323987; project RiboNets).
+%
+We thank Leonid Chindelevitch for pointing out the potential for
+complexity reductions due to the bipartiteness of the compatibility
+graph; moreover, Arie Koster for discussing the practical computation
+of the tree decomposition.
 
 
 \bibliographystyle{natbib}
