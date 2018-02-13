@@ -83,6 +83,9 @@ available via GitHub is appreciated.  Therefore, I raised the confidence
 score.
 
 
+>>>> TODO: check description of notation m_{w\to u}[\val]; change notation? also \val|\val'
+>>>> TODO: 
+
 ----------------------- REVIEW 2 ---------------------
 PAPER: 139
 TITLE: Fixed-Parameter Tractable Sampling for RNA Design with Multiple
