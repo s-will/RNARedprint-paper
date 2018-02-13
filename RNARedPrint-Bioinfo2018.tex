@@ -45,25 +45,25 @@
 \makeatother
 
 
-\makeatletter
-\let\oldlt\longtable
-\let\endoldlt\endlongtable
-\def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
-\def\longtable@i[#1]{\begin{figure}[t]
-\onecolumn
-\begin{minipage}{0.5\textwidth}
-\oldlt[#1]
-}
-\def\longtable@ii{\begin{figure}[t]
-\onecolumn
-\begin{minipage}{0.5\textwidth}
-\oldlt
-}
-\def\endlongtable{\endoldlt
-\end{minipage}
-\twocolumn
-\end{figure}}
-\makeatother
+%\makeatletter
+%\let\oldlt\longtable
+%\let\endoldlt\endlongtable
+%\def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
+%\def\longtable@i[#1]{\begin{figure}[t]
+%\onecolumn
+%\begin{minipage}{0.5\textwidth}
+%\oldlt[#1]
+%}
+%\def\longtable@ii{\begin{figure}[t]
+%\onecolumn
+%\begin{minipage}{0.5\textwidth}
+%\oldlt
+%}
+%\def\endlongtable{\endoldlt
+%\end{minipage}
+%\twocolumn
+%\end{figure}}
+%\makeatother
 
 %%%%%%%%%%%%%%%%% Theorems %%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -670,7 +670,7 @@ $c< w+1$.
 %% SW: This could be optimized further by applying the strategy only to (optimally) selected components
 Finally, we compute the sums of the partition functions for all possible combinations.
 
-\begin{theorem}[Partition function and sampling complexity]
+\begin{theorem}[Complexities]
   For sequence length $n$, $k$ target structures, treewidth $w$ and
   a compatibility graph having $c$ connected components, $t$ sequences
   are sampled from the Boltzmann distribution  in
@@ -937,7 +937,7 @@ of the tree decomposition.
 {\centering \relsize{+4}Supplementary material\\%
 %{\relsize{-1}\BackupTitle}\\
 }
-
+\relsize{+1}
 \section{Approximate counting and random generation}
 In fact, not only is $\#{\sf BIS}$ a reference problem in counting complexity, but it is also a landmark problem with respect to the complexity of approximate counting problems. In this context, it is the representative for a class of $\#{\sf BIS}$-hard problems~\cite{Bulatov2013} that are easier to approximate than $\# {\sf SAT}$, yet are widely believed not to admit any Fully Polynomial-time Randomized Approximation Scheme. Recent results reveal a surprising dichotomy in the behavior of $\#{\sf BIS}$: it admits a Fully Polynomial-Time Approximation Scheme (FPTAS) for graphs of max degree $\le 5$~\cite{Weitz2006}, but is as hard to approximate as the general $\#{\sf BIS}$ problem on graphs of degree $\ge 6$~\cite{Cai2016}. In other words, there is a clear threshold, in term of the max degree, separating (relatively) easy instances from really hard ones.
 
