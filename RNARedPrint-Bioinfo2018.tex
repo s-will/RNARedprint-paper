@@ -30,6 +30,8 @@
 
 \usepackage{stmaryrd}
 
+\usepackage{xcolor}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rolf's includegraphicstop
 \makeatletter
@@ -128,11 +130,9 @@
 
 \newcommand{\TargetE}{E^{\star}}
 
+\newcommand{\TODO}[1]{\textcolor{red!70!black}{\textbf{TODO: #1}}}
 
-
-\newcommand{\TODO}[1]{\Final{\begin{mdframed}[leftline=false,rightline=false,linecolor=red!70!black,linewidth=1.5pt]\color{red!70!black}\sf TODO: #1\end{mdframed}}}
 \newcommand{\parHead}[1]{\Final{\paragraph{#1}}}
-
 
 \newcommand{\Final}[1]{#1}
 %% Uncomment the line below for ``Final'' version
@@ -255,7 +255,6 @@ Facing the complex sequence constraints induced by multiple targets, early metho
 %
 Recently, the \Software{RNAdesign} approach~\cite{HoenerzuSiederdissen2013}, coupled with powerful local search within \Software{RNAblueprint}~\cite{Hammer2017}, solved the problem of sampling seeds from the uniform distribution for multiple targets. These methods adopt a graph coloring perspective, initially decomposing the graph hierarchically using various decomposition algorithms, and \Def{precomputing} the number of valid sequences within each subgraph. The decomposition is then reinterpreted as a decision tree to perform a \Def{stochastic backtrack}, inspired by Ding and Lawrence~\cite{Ding2003}, where individual assignments are chosen with probabilities derived from the subsolution counts, leading to uniform sampling. The overall complexity of \Software{RNAdesign} grows like $\Theta(4^{\gamma})$, where $\gamma$ is a parameter whose value is bounded only by the length of the designed RNA. 
 
-\TODO{Develop questions (relevance, difficulty...). Maybe tease results?}
 \parHead{Motivation.} The exponential time and space requirements of the \Software{RNAdesign} method already raise the question of the \Def{complexity of (uniform) sampling for multi-target design}. Since stochastic backtrack can be performed in linear time per sample, the method is dominated by the precomputation step, which requires counting valid designs. Thus, we focus on the question: \emph{Is there a polynomial-time algorithm to count valid multi-target designs?} In Section~\ref{sec:counting}, we answer in the negative, showing that there exists no such algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences  and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\cite{Bulatov2013,Cai2016}.
 The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, in a principled way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as the \GCb-content, complex sequence constraints, or the energy of individual structures?} 
 
@@ -294,7 +293,6 @@ target structures and the \GCb-content%
 %\sum_{\ell\in[1,k]} E(S;R_\ell) - E_0(S),
 %\end{equation}
 %over all sequences $S$, where $E_0(S):=\min_R E(S;R)$.
-%\TODO{even Taneda's objective is significantly more complex; how much do we want to talk about this...}
 %
 %The proposed Boltzmann-weighted sampling approach can support this design procedure by sampling start structures from the Boltzmann distribution over
 %\begin{equation}
@@ -380,7 +378,7 @@ As will be explicited in subsequent sections, our approach relies on breaking do
 as the sum of energy contributions $f(S)$ over a set $\F$ (of
 functions $f:\S_n\to\real$), s.t.~$E_\R(S)=\sum_{f\in\F} f(S)$. This
 captures realistic RNA energy models, while bounding the
-dependencies to sequence positions introduced by each single $f$. Formally, define the \Def{dependencies} $\dep(f)$ of $f$ as the minimal set of sequence positions $\I\subseteq\{1,\dots,n\}$, where $f(S)=f(S')$ for all sequences $S$ and $S'$ agreeing at all positions in $\I$.
+dependencies to sequence positions introduced by each single $f$. Formally, define the \Def{dependencies} $\dep(f)$ of $f$ as a minimal set of sequence positions $\I\subseteq\{1,\dots,n\}$, where $f(S)=f(S')$ for all sequences $S$ and $S'$ agreeing at all positions in $\I$.
 
 The \Def{dependency graph} of the set $\F$ of functions (on
 sequences of length $n$) is the \Def{hypergraph}
@@ -407,12 +405,12 @@ of $G$ is the smallest width in any tree decomposition of $G$.
 
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-Now we turn to the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that this problem corresponds to the partition function problem in a simple $(0/\infty)$-valued base pair models,with $\beta\neq 1$. As previously noted~\cite{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
+Now we turn to the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that this problem corresponds to the partition function problem in a simple $(0/\infty)$-valued base pair model, with $\beta\neq 1$. As previously noted~\cite{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
 Moreover, without $\{\Gb, \Ub\}$ base pairs, any connected component  $C\in {\rm CC}(G)$ is entirely determined by the assignment of a single of its nucleotides. The number of valid designs is thus simply $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of connected components}.
 
 The introduction of $\{\Gb, \Ub\}$ base pairs radically changes this picture, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. The latter equality would, in particular, imply the classic ${\sf P}={\sf NP}$, and solving $\NumDesign(G)$ is polynomial time is therefore probably difficult. 
 
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are  strongly connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
 
 
 We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$. 
@@ -473,12 +471,13 @@ A \Def{(partial) assignment} is a function $\val: \X' \to \Sigma$
 that maps the variables $\X'\subseteq \X$ to bases; we call $\X'$ the \Def{domain of the assignment
   $\val$}, written $\dom(\val)$; $\val$ is \Def{total} iff $\dom(\val)=\X.$
 %
-For assignments $\val$ and functions $f$, we define the
-special notation $\evalfor{f}{\val}$ to \Def{evaluate $f$ for $\val$}; i.e.{}
-$\evalfor{f}{\val} := f(S),$ for any sequence $S$ where $S_i=\val(i)$ for all
-$i\in\dep(f).$ Then, the \Def{energy $\energy{\network}(S)$ of a
-  sequence} $S$ in a network $\network$ is defined as sum of the
-values of all functions in $f\in\F$ evaluated for $\val_S$, i.e.
+For assignments $\val$ and functions $f$, $\dep(f)\subseteq\dom(\val)$,
+we define the special notation $\evalfor{f}{\val}$ to \Def{evaluate
+  $f$ for $\val$}; i.e.{} $\evalfor{f}{\val} := f(S),$ for any
+sequence $S$ where $S_i=\val(i)$ for all $i\in\dep(f).$ Then, the
+\Def{energy $\energy{\network}(S)$ of a sequence} $S$ in a network
+$\network$ is defined as sum of the values of all functions in
+$f\in\F$ evaluated for $\val_S$, i.e.
 $\energy{\network}(S) := \sum_{f\in F} \evalfor{f}{\val_S}.$
 
 The network energy $\energy{\network}(S)$ corresponds to the energy in
@@ -508,11 +507,26 @@ function. %Observe that counting is a special case of the partition function and
 %  \caption{Figure illustrating RNA network to hypergraph to tree decomposition}
 %\end{figure}
 
-Let us now introduce some definitions. A \Def{cluster tree} for the network $\network=(\X,\F)$ is a tuple $(T,\chi,\phi)$, where $(T,\chi)$ is a tree decomposition of $G_\F$, and $\phi(v)$ represents a set of functions $f$, each uniquely assigned to a node $v\in T$; $\vars(f)\subseteq\chi(v)$ and $\phi(v)\cap \phi(v')=\varnothing$ for all $v\neq v'$.
-For two nodes $v$ and $u$ of the cluster tree, define their \Def{separator} as $\separator{u}{v} := \chi(u)\cap\chi(v)$; moreover, we define the \Def{difference variables} from $u$ to $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
+Let us now introduce some definitions. A \Def{cluster tree} for the
+network $\network=(\X,\F)$ is a tuple $(T,\chi,\phi)$, where
+$(T,\chi)$ is a tree decomposition of $G_\F$, and $\phi(v)$ represents
+a set of functions $f$, each uniquely assigned to a node $v\in T$;
+$\vars(f)\subseteq\chi(v)$ and $\phi(v)\cap \phi(v')=\varnothing$ for
+all $v\neq v'$.  For two nodes $v$ and $u$ of the cluster tree, define
+their \Def{separator} as $\separator{u}{v} := \chi(u)\cap\chi(v)$;
+moreover, we define the \Def{difference variables} from $u$ to an
+adjacent $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
 
-Denote by $\assignments(\Y)$ the set of all assignments of the variables in $\Y$; moreover, given non-overlapping assignments $\val'$ and $\val''$, we write $\substitute{\val'}{\val''}$ to denote the assignment defined as $\val'$ and $\val''$ respectively on $\dom(\val')$ and $\dom(\val'')$. 
-Finally we assume, w.l.o.g., that all variable difference sets $\difference{u}{v}$ are restricted to a single variable: for any given cluster tree, an equivalent (in term of treewidth) cluster tree can always be obtained by inserting at most $\Theta(|\X|)$ additional clusters.
+For a set $Y$ of variables, denote the set of all assignments of the
+variables in $\Y$ by $\assignments(\Y)$; moreover, given
+non-overlapping assignments $\val'$ and $\val''$, we write
+$\substitute{\val'}{\val''}$ to denote the assignment defined as
+$\val'$ and $\val''$ respectively on $\dom(\val')$ and $\dom(\val'')$.
+Finally we assume, w.l.o.g., that all variable difference sets
+$\difference{u}{v}$ are restricted to a single variable: for any given
+cluster tree, an equivalent (in term of treewidth) cluster tree can
+always be obtained by inserting at most $\Theta(|\X|)$ additional
+clusters.
 
 Let us now consider the \Def{computation of the partition function}.
 Given is the RNA design network $\network=(\X,\F)$ and its cluster
@@ -528,7 +542,7 @@ some child $u$ to its parent $v$). Each message is a function on
 variables $\vars(m)\subseteq \X$ to $\real\cup\{\infty\}$. The message
 from $u$ to $v$ represents the partition functions of the subtree of
 $u$ for all possible assignments to the variables
-$\vars(m)=\separator{u}{v}$. Its correctness can be shown by induction over $T$ (Appendix~\ref{appsec:correctness}).
+$\vars(m)=\separator{u}{v}$. The correctness of the algorithm can be shown by induction over $T$ (Appendix~\ref{appsec:correctness}).
 After running Alg.~\ref{alg:pf}, 
 multiplying the 0-ary messages sent to the root $r$ yields the total partition function:
 \begin{math}
@@ -599,7 +613,7 @@ For our analysis, we define the \emph{maximum separator size} $s$ as
 $\max_{u,v\in V} | \separator{u}{v} |$ and denote the maximum size of
 $\difference{u}{v}$ over $(u,v)\in\edgesToR{}$ as $D$.  Generally,
 without specific optimizations, running Alg.~\ref{alg:pf} requires
-$\mathcal{O}((|\F|+|V|)\cdot 4^{w+1})$ and $\mathcal{O}(|V|\cdot4^s)$ space (Appendix~\ref{appsec:algcomplexity});
+$\mathcal{O}((|\F|+|V|)\cdot 4^{w+1})$ time and $\mathcal{O}(|V|\cdot4^s)$ space (Appendix~\ref{appsec:algcomplexity});
 Alg.~\ref{alg:sampling} would require $\mathcal{O}((|\F|+|V|)\cdot 4^D)$ per
 sample on arbitrary tree decompositions (Appendix~\ref{appsec:algcomplexity}). W.l.o.g. we assume that
 $D=1$; note that tree decompositions can generally be transformed,
@@ -729,20 +743,28 @@ This technique was previously used to control the \GCb-content~\cite{Waldispuehl
 
 Multidimensional Boltzmann sampling requires the ability to \Def{sample from a weighted distribution} over the set of compatible sequences, where the probability of a sequence $S$ with free energies $(E_1,\ldots,E_k)$ for its target structures is
 $\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=1}^{k} \pi_i^{-E_i}}{\partfun{\pmb{\pi}}},$
-where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function. Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \log(\pi_\ell)\, E(\val)/\beta$. The probability of a sequence $S$ is thus proportional to 
-$ \prod_{\ell=1}^{k} e^{-\log(\pi_\ell)\, E_i} = \prod_{\ell=1}^{k} \pi_i^{-E_i}. $
+where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function. Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \ln(\pi_\ell)\, E(\val)/\beta$. The probability of a sequence $S$ is thus proportional to 
+$ \prod_{\ell=1}^{k} e^{-\ln(\pi_\ell)\, E_i} = \prod_{\ell=1}^{k} \pi_i^{-E_i}. $
 
 One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution, \emph{i.e.} such that  $\mathbb{E}(E_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$.
 The expected value of $E_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see App.~\ref{sec:weight_derivatives}). More generally, computing a suitable $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\cite{Denise2010,Bendkowski2017}. 
 In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(exp(\beta),\dots,\exp(\beta))$ and, at each iteration, generates a sample $\mathcal{S}$ of sequences. The expected value of an energy $E_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}E_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$. 
-$\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$.
-While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its reasonable empirical behavior.
+$\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically to achieve effective optimization. 
+While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its reasonable empirical behavior (choosing $\gamma=1.2$).
 
 A further \Def{rejection step} is applied to the generated structures to retain only sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rationale for a rejection approach follows from: 
 i)\emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing Cupal \emph{et al}~\cite{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
 ii) \emph{Induced distributions are typically concentrated.} Intuitively, unless sequences are fully constrained individual energy terms are independent enough so that their sum is concentrated around its mean -- the targeted energy (cf Fig.~\ref{fig:energydist}). 
 %Indeed, as shown in Figure~\ref{fig:shifting_mean}, empirical joint distributions in the energies have good fits towards Normal multidimensional distributions with linear (co-)variances. 
-For base pair-based energy models and special compatibility graph (paths, cycles\ldots) this property rigorously follows from analytic combinatorics, see Bender-Richmond-Williamson~\cite{Bender1983} and Drmota~\cite{Drmota1997}. In such cases, the expected number of rejections before reaching the targeted energies grows like $\Theta(1)$ when $\varepsilon\ge 1/\sqrt{n}$, and $\Theta(n^{k/2})$ when $\varepsilon=0$. The \GCb-content of designs can also be controlled, jointly and in a similar way, as done in \Software{IncaRNAtion}~\cite{Reinharz2013}.
+For base pair-based energy models and special compatibility graph
+(paths, cycles\ldots) this property rigorously follows from analytic
+combinatorics, see Bender-Richmond-Williamson~\cite{Bender1983} and
+Drmota~\cite{Drmota1997}. In such cases, the expected number of
+rejections before reaching the targeted energies remains constant when
+$\varepsilon\ge 1/\sqrt{n}$, and $\Theta(n^{k/2})$ when
+$\varepsilon=0$. The \GCb-content of designs can also be controlled,
+jointly and in a similar way, as done in
+\Software{IncaRNAtion}~\cite{Reinharz2013}.
 
 
 \section{Results}\label{sec:results}
@@ -796,10 +818,14 @@ For a multi-target design instance, individual reasonable target energies are es
 As its rationale, this procedure is tailored to produce sequences with similar Turner energy that favor the stability of the target structures having moderate \GCb-content; all these properties are desirable objectives for RNA design.
 All sampled sequences are evaluated under the multi-stable design objective function of \cite{Hammer2017}:
 \vspace{-12pt}
+% \begin{align}
+%   f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
+%    & +\ \xi \frac{2}{k(k-1)} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
+% \end{align}
 \begin{align}
   \label{eq:blueprintobjective}
-  f(S)= \quad & \frac{1}{k} \sum_\ell^{k} (E(S, R_\ell) - G(S))\notag\\
-   & +\ \xi \frac{2}{k(k-1)} \sum\limits_{\ell<j}^k|E(S,R_\ell) - E(S,R_j)|.
+    f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
+   & +\ 0.5\frac{1}{\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
 \end{align}
 
 Using our strategy, we generated at least 1\,000 seeds per instance of
