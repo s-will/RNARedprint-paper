@@ -240,8 +240,8 @@ DONE
 
 -Page 14 Lemma 1 is a well-known fact about tree decompositions. It
 does not need a proof and should be found in some surveys about
-treewidth.  >>>> -> YANN: add that this is a folklore results, which
-we show for the sake of completeness
+treewidth. 
+DONE
 
 ----------------------- REVIEW 3 ---------------------
 PAPER: 139
@@ -286,7 +286,9 @@ and artificial sequences. It would be interesting to characterize which
 parameters increase the difficulty of the design, or determine a priori
 the range of possible target energies.
 
->>>>> Don't we already have artificial vs. real; can we write some discussion?
+TODO Discuss:
+Adenin-Riboswitch (Schwalbe). Details aus Stefans Diss: 3-state/4-state riboswitch.
+Experimentell ueberpruefte Designs gibts bisher nur fuer 2-state.
 
 * This is an open question, but I was wondering how the authors could use
 their algorithm to control the energy barrier between two target
@@ -303,7 +305,9 @@ the direct path barrier in this way (for producing decoys...)
 * It was not clear to me if the authors implemented dangling ends?
 
 >>>>> NO; if possible, reformulate the resepctive sentence
+CHECK
 
 Typos:
 * Eq 1: Z is a function of S but S is in the sum as well...
 * Sec. 2, start of paragraph 2: "Given is"?
+DONE
