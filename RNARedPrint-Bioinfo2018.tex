@@ -938,10 +938,10 @@ respectively specify 3,4,5, and 6 target structures for sequence
 length 100.  For each instance (100 instances per set), we generated a
 set of $k$ ($k=3,\dots,6$) compatible structures as follows
 \begin{itemize}
-\item generate a random sequence of length 100
-\item compute its minimum free energy structure (ViennaRNA package)
-\item add the new structure to the instances if the resulting compatibility graph is bipartite
-\item repeat until $k$ structures are collected
+\item Generate a random sequence of length 100;
+\item Compute its minimum free energy structure (ViennaRNA package);
+\item Add the new structure to the instances if the resulting compatibility graph is bipartite;
+\item Repeat until $k$ structures are collected.
 \end{itemize}
 For each instance, we generated the dependency graphs in the base pair
 model and in the stacking model. Then, we performed tree decomposition
