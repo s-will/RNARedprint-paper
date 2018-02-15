@@ -126,7 +126,7 @@
 \newcommand{\Ehp}[1]{E^{\textrm{hp}}(#1)}
 \newcommand{\Eint}[1]{E^{\textrm{int}}(#1)}
 
-\newcommand{\Def}[1]{{\it #1}}
+\newcommand{\Def}[1]{{\bfseries #1}}
 
 \newcommand{\TargetE}{E^{\star}}
 
@@ -392,16 +392,14 @@ Our algorithms will critically rely on a \Def{tree decomposition} of the depende
   that
 \begin{enumerate}
 \item each $x\in X$ occurs in at least one $\chi(v)$;
-\item for each $x\in X$, the set $\{ v \mid x \in \chi(v) \}$ induces a connected subtree of $T$.
-\item for every hyper-edge $e\in E$ of $G$, there is a node $v\in T$, such that $e\subseteq\chi(v)$.
+\item  $\forall x\in X$, $\{ v \mid x \in \chi(v) \}$ induces a connected subtree of $T$;
+\item $\forall e\in E$ of $G$, there is a node $v\in T$, such that $e\subseteq\chi(v)$.
 \end{enumerate}
 The \Def{width} of a tree decomposition $(T,\chi)$ is defined as
 $\width(T,\chi) = \min_{u\in T} |\chi(u)| - 1 $. The \Def{treewidth}
 of $G$ is the smallest width in any tree decomposition of $G$.
 \end{definition}
-
-
-\section{Counting designs for multiple structures is \#{\sf P}-hard}\label{sec:counting}
+\section{Counting valid designs is \#{\sf P}-hard}\label{sec:counting}
 
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
@@ -627,7 +625,7 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 \begin{algorithm}
  \KwData{Node $u$, partial assignment $\val\in\assignments(\separator{u}{v})$;\newline
  Cluster tree $(T,\chi,\phi)$ and partition functions $\Message{u'}{v'}[\val']$, $\forall (u'\to{}v')\in T$ and $\val'\in\assignments(\separator{u'}{v'})$.}
- \KwResult{Boltzmann-distributed random assignment for the subtree rooted at $u$, under the assumption of a partial assignment $\val$.}
+ \KwResult{Boltzmann-distributed random assignment for the subtree rooted at $u$, assuming a partial assignment $\val$.}
  \Fn{\Sample$(u,\val;T,\chi,\phi,m)$}{
    $r \gets \Random(\evalfor{\Message{u}{v}}{\val})$\;
    \For{$\val'\in\assignments(\difference{u}{v})$}{
@@ -678,7 +676,7 @@ Finally, we compute the sums of the partition functions for all possible combina
   $\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
 \end{theorem}
 
-\subsection{Encoding sequence features, constraints, and energy
+\subsection{Sequence features, constraints, and energy
   models.}\label{sec:energy_models}
 
 The functions in $\F$ allow expressing complex features of the
@@ -755,7 +753,7 @@ While heuristic in nature, this basic iteration was elected in our initial versi
 A further \Def{rejection step} is applied to the generated structures to retain only sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rationale for a rejection approach follows from: 
 i)\emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing Cupal \emph{et al}~\cite{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
 ii) \emph{Induced distributions are typically concentrated.} Intuitively, unless sequences are fully constrained individual energy terms are independent enough so that their sum is concentrated around its mean -- the targeted energy (cf Fig.~\ref{fig:energydist}). 
-%Indeed, as shown in Figure~\ref{fig:shifting_mean}, empirical joint distributions in the energies have good fits towards Normal multidimensional distributions with linear (co-)variances. 
+%Indeed, as shown in Fig.~\ref{fig:shifting_mean}, empirical joint distributions in the energies have good fits towards Normal multidimensional distributions with linear (co-)variances. 
 For base pair-based energy models and special compatibility graph
 (paths, cycles\ldots) this property rigorously follows from analytic
 combinatorics, see Bender-Richmond-Williamson~\cite{Bender1983} and
@@ -769,7 +767,7 @@ jointly and in a similar way, as done in
 
 \section{Results}\label{sec:results}
 
-\subsection{Implementation targeting Turner energies and GC-content}
+\subsection{Targeting Turner energies and GC-content}
 We implemented the Boltzmann sampling approach (Algorithms
 \ref{alg:pf} and \ref{alg:sampling}), performing sampling for given
 target structures and weights $\pi_1,\dots,\pi_n$; moreover on top,
@@ -791,11 +789,11 @@ To capture the realistic Turner model $E_{\mathcal{T}}$, we exploit its very goo
 To illustrate our above strategy, we sampled $n=1\,000$ sequences
 targeting ${\sf GC}_{target}=0.5$ and different Turner energies for
 the three structure targets of an example
-instance. Figure~\ref{fig:energydist}A illustrates how the Turner
+instance. Fig.~\ref{fig:energydist}A illustrates how the Turner
 energy distributions of the shown target structures can be accurately
 shifted to prescribed target energies; for comparison, we plot the
 respective energy distribution of uniformly and Boltzmann sampled
-sequences. Figure~\ref{fig:energydist}B summarizes the targeting accuracy for the single structure energies over a larger set of instances
+sequences. Fig.~\ref{fig:energydist}B summarizes the targeting accuracy for the single structure energies over a larger set of instances
 from the \texttt{Modena} benchmark. We emphasize that only the simple stacking energies
 are directly targeted (at $\pm$10\% tolerance, expect for a few hard
 instances). Due to our linear adjustment, we still achieve well
@@ -817,7 +815,6 @@ We empirically study the capacity of \ourprog{} to improve the generation of see
 For a multi-target design instance, individual reasonable target energies are estimated from averaging the energy over samples at relatively high weights $e^{\beta}$, controlling the \GCb-content at 50\%. For each instance of the \Software{Modena} benchmark~\cite{Taneda2015}, we estimated such target energies and subsequently generated $1\,000$ seed sequences at these energies.
 As its rationale, this procedure is tailored to produce sequences with similar Turner energy that favor the stability of the target structures having moderate \GCb-content; all these properties are desirable objectives for RNA design.
 All sampled sequences are evaluated under the multi-stable design objective function of \cite{Hammer2017}:
-\vspace{-12pt}
 % \begin{align}
 %   f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
 %    & +\ \xi \frac{2}{k(k-1)} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
@@ -893,7 +890,6 @@ Extensions:
 \end{enumerate}\label{lbl:theend}
 }
 
-\newpage 
 \section*{Acknowledgements}
 YP is supported 
 %jointly supported 
@@ -975,7 +971,7 @@ model and in the stacking model. Then, we performed tree decomposition
 graph. The obtained treewidths are reported in
 Fig.~\ref{fig:td-widths}, while Fig.~\ref{fig:td-times} shows the
 corresponding run-times of the tree decomposition.
-Figure~\ref{fig:td-example} shows the tree decompositions for an example
+Fig.~\ref{fig:td-example} shows the tree decompositions for an example
 instance from set RF3.
 
 
@@ -1151,7 +1147,7 @@ parameters are reported in Tables~\ref{tab:basepairmodel} and
 
 For validating the trained parameters, we generate a second
 independent test set of random RNA sequences in the same
-way. Figure~\ref{fig:training-cor} shows correlation plots for the
+way. Fig.~\ref{fig:training-cor} shows correlation plots for the
 trained parameters in the base pair and stacking models for predicting
 the Turner energies in the test set with respective correlations of
 $0.95$ an $0.94$.
