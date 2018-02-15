@@ -778,8 +778,8 @@ ii) \emph{Induced distributions are typically concentrated.} Intuitively, unless
 %Indeed, as shown in Fig.~\ref{fig:shifting_mean}, empirical joint distributions in the energies have good fits towards Normal multidimensional distributions with linear (co-)variances. 
 For base pair-based energy models and special compatibility graph
 (paths, cycles\ldots) this property rigorously follows from analytic
-combinatorics, see Bender-Richmond-Williamson~\citep{Bender1983} and
-Drmota~\citep{Drmota1997}. In such cases, the expected number of
+combinatorics, see \citet{Bender1983} and
+\citet{Drmota1997}. In such cases, the expected number of
 rejections before reaching the targeted energies remains constant when
 $\varepsilon\ge 1/\sqrt{n}$, and $\Theta(n^{k/2})$ when
 $\varepsilon=0$. The \GCb-content of designs can also be controlled,
@@ -809,7 +809,7 @@ were trained to approximate Turner energies
 To capture the realistic Turner model $E_{\mathcal{T}}$, we exploit its very good correlation (supp. Fig~\ref{fig:training-cor}) with our simple stacking-based model $E_{\mathcal{S}}$. Namely, we observe a structure-specific affine dependency between these Turner and stacking energy models, so that $E_{\mathcal{T}}(S_\ell;R_\ell) \approx \gamma_\ell\, E_{\mathcal{S};R_\ell}(S_\ell) + \delta_\ell$ for each structure $R_\ell$. We learn the $(\gamma_\ell,\delta_\ell)$ parameters from a set of sequences generated with homogenous weights $w=e^{\beta}$, tuning only the \GCb-content to a predetermined target frequency.  Finally, we adjust the targeted energy of our stacking model to $E_{\mathcal{S}}^{\star} = (E_{\mathcal{T}}^{\star}- \delta_\ell)/\gamma_\ell$.
 
 To illustrate our above strategy, we sampled $n=1\,000$ sequences
-targeting ${\sf GC}_{target}=0.5$ and different Turner energies for
+targeting ${\sf GC}\%=0.5$ and different Turner energies for
 the three structure targets of an example
 instance. Fig.~\ref{fig:energydist}A illustrates how the Turner
 energy distributions of the shown target structures can be accurately
@@ -913,8 +913,8 @@ Extensions:
 \section*{Acknowledgements}
 YP is supported 
 %jointly supported 
-by
-% the French 
+by the
+% French 
 {\em Agence
   Nationale de la Recherche} and the 
 %Austrian
@@ -923,16 +923,14 @@ German Federal Ministry of Education and Research (BMBF support code
 031A538B; de.NBI: German Network for Bioinformatics Infrastructure)
 and the
 % acknowledged by
-%financial support 
-of the Future and Emerging Technologies programme
+%financial support of the 
+Future and Emerging Technologies programme
 % within the Seventh Framework Programme for Research of the
 %European Commission, under 
 (FET-Open grant 323987; project RiboNets).
 %
-We thank Leonid Chindelevitch for pointing out the potential for
-complexity reductions due to the bipartiteness of the compatibility
-graph; moreover, Arie Koster for discussing the practical computation
-of the tree decomposition.
+We thank Leonid Chindelevitch for suggesting using the stable sets analogy to optimize our FPT algorithm, and Arie Koster for practical recommendations 
+for computing tree decompositions.
 
 
 \bibliographystyle{natbib}
