@@ -253,10 +253,24 @@ Specifically, for multi-target design, virtually all available methods~\cite{Lyn
 %
 Facing the complex sequence constraints induced by multiple targets, early methods such as \Software{Frnakenstein}~\cite{Lyngsoe2012} and \Software{Modena}~\cite{Taneda2015} did not attempt to solve sequence generation systematically, but rely on \emph{ad-hoc} sampling strategies. 
 %
-Recently, the \Software{RNAdesign} approach~\cite{HoenerzuSiederdissen2013}, coupled with powerful local search within \Software{RNAblueprint}~\cite{Hammer2017}, solved the problem of sampling seeds from the uniform distribution for multiple targets. These methods adopt a graph coloring perspective, initially decomposing the graph hierarchically using various decomposition algorithms, and \Def{precomputing} the number of valid sequences within each subgraph. The decomposition is then reinterpreted as a decision tree to perform a \Def{stochastic backtrack}, inspired by Ding and Lawrence~\cite{Ding2003}, where individual assignments are chosen with probabilities derived from the subsolution counts, leading to uniform sampling. The overall complexity of \Software{RNAdesign} grows like $\Theta(4^{\gamma})$, where $\gamma$ is a parameter whose value is bounded only by the length of the designed RNA. 
+Recently, the \Software{RNAdesign}
+approach~\cite{HoenerzuSiederdissen2013}, coupled with powerful local
+search within \Software{RNAblueprint}~\cite{Hammer2017}, solved the
+problem of sampling seeds from the uniform distribution for multiple
+targets. These methods adopt a graph coloring perspective, initially
+decomposing the graph hierarchically using various decomposition
+algorithms, and \Def{precomputing} the number of valid sequences
+within each subgraph. The decomposition is then reinterpreted as a
+decision tree to perform a \Def{stochastic backtrack}, inspired by
+Ding and Lawrence~\cite{Ding2003}. Uniform sampling is achieved by
+choosing individual assignments with probabilities derived from the
+subsolution counts. The overall complexity of \Software{RNAdesign}
+grows like $\Theta(4^{\gamma})$, where the parameter $\gamma$ is
+bounded by the length of the designed RNA; typically $\gamma$ is kept
+much lower by the decomposition.
 
 \parHead{Motivation.} The exponential time and space requirements of the \Software{RNAdesign} method already raise the question of the \Def{complexity of (uniform) sampling for multi-target design}. Since stochastic backtrack can be performed in linear time per sample, the method is dominated by the precomputation step, which requires counting valid designs. Thus, we focus on the question: \emph{Is there a polynomial-time algorithm to count valid multi-target designs?} In Section~\ref{sec:counting}, we answer in the negative, showing that there exists no such algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences  and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\cite{Bulatov2013,Cai2016}.
-The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, in a principled way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as the \GCb-content, complex sequence constraints, or the energy of individual structures?} 
+The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, generically, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as the \GCb-content, complex sequence constraints, or the energy of individual structures?} 
 
 
 \begin{figure*}[t]
@@ -334,24 +348,32 @@ target structures and the \GCb-content%
 
 An \Def{RNA sequence $S$} is a word over the \Def{nucleotides
   alphabet} $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$; let $\S_n$ denote the set of
-sequences of length $n$. An \Def{RNA (secondary) structure of length
-  $n$} is a set of \Def{base pairs} $(i,j)$, where $1\leq i<j\leq
-n$. We call an RNA structure $R$ \Def{non-crossing}, iff it does not
-contain any two different base pairs $(i,j)$ and $(i',j')$ such that
-$i\leq i'\leq j \leq j'.$ \Def{Valid base pair} must pair bases from
-the $\B:=\left\{\{\Ab,\Cb\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}.$
-Consequently, $S$ is \Def{valid} for $R$, iff
-$(S_i,S_j)\in \B$ for all $(i,j)\in R$.
+sequences of length $n$. An \Def{RNA (secondary) structure $R$ of
+  length $n$} is a set of \Def{base pairs} $(i,j)$, where
+$1\leq i<j\leq n$, where for $(i,j), (i',j')\in R$: $i\neq j'$ and ($i=i'$ iff
+$j=j'$) (``degree $\leq$ 1''). We call an RNA structure $R$ \Def{non-crossing}, iff it does
+not contain any two different base pairs $(i,j)$ and $(i',j')$ such
+that $i\leq i'\leq j \leq j'.$ \Def{Valid base pair} must pair bases
+from the $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}.$
+Consequently, $S$ is \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
+all $(i,j)\in R$.
 %
-%\TODO{Also, we need to decide whether base-pairs are oriented or not ($(x,y)$ versus $\{x,y\}$). Right now, we are inconsistent in the definitions above. SW: i would prefer $(i,j)$ with $i<j$; } %% where is this inconsistent?
+% \TODO{Also, we need to decide whether base-pairs are oriented or not
+% ($(x,y)$ versus $\{x,y\}$). Right now, we are inconsistent in the
+% definitions above. SW: i would prefer $(i,j)$ with $i<j$;
+% } %% where is this inconsistent?
 
 We consider a fixed set of target RNA structures
 $\R:=\{R_1, \dots, R_k\}$ for sequences of length $n$. $\R$ induces a
-\Def{compatibility graph}
-$G_{\R}$ with nodes $\{1,\dots,n\}$ and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Valid
-sequences for $\R$ can then be seen as specific colorings of $G_{\R}$,
-using the four colors in $\Sigma$, such that the colors assigned to
-adjacent vertices of $G_{\R}$ constitute valid base pairs.
+\Def{compatibility graph} $G_{\R}$ with nodes $\{1,\dots,n\}$ and
+edges $S\bigcup_{\ell\in[1,k]} R_\ell$. While we typically consider
+additional dependencies (in the dependency graph), the edges in the
+compatibility graph pose constraints on the possible bases due to
+canonical base pairing, which are present in all considered settings.
+
+Valid sequences for $\R$ can then be seen as specific colorings of
+$G_{\R}$, using the four colors in $\Sigma$, such that the colors
+assigned to adjacent vertices of $G_{\R}$ constitute valid base pairs.
 %
 We define the energy of a sequence $S$ based on the set of structures
 $\R$ as $E_\R(S) \in \mathbb{R}\cup\{\infty\}$. In
@@ -427,8 +449,8 @@ and we conclude that $\Psi(f)$ differs from $\Psi(f')$ at least with respect to 
 
 We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $S\in \IS{G}$. Let us consider the function $f$ defined as
 \begin{align}
- \forall v_1\in V_1, f(v_1)&= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases}& 
- \forall v_2\in V_2, f(v_2)&= \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S\end{cases}
+ &\forall v_1\in V_1,v_2\in V_2:\notag\\& f(v_1) = \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} \text{\quad and\quad} 
+ f(v_2) = \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S\end{cases}
 \end{align}
 One easily verifies that $\Psi(f) = S$. 
 

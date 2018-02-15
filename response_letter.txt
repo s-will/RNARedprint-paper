@@ -137,33 +137,38 @@ worst-case gamma can be the length of the sequence? But this is also true
 for the treewidth making this remark maybe a bit unfair. I suggest to be
 more precise and explain roughly what gamma is.
 
->>>>> TODO: Elaborate that gamma=n is worst case and in practice much
-      smaller due to ear decomp (similar to tree width)
-
+CHANGED (DONE).
 
 -Page 2 "in a principled way" Could you provide some further explanation
 what "principled" means here?
 
->>>>> TODO --> YANN; something like 'generic'?
+CHANGED: "How to sample, generically, from a Boltzmann distribution..."
 
 -Page 3 The definition of RNA structure allows that one position i takes
 part in more than one base pair (e.g. {(1,2),(1,3)} is a set of base pairs
 and thus a secondary structure according to the definition).
 
->>>>> TODO add this restriction (we do not need degree>1, even if it does not harm)
+DONE (in a formal way)
 
 -Page 3 "{A,C}" -> "{A,U}"
+DONE
 
 -Page 3 "(Si,Sj)" -> "{Si,Sj}"
+DONE
 
 -Page 3 Please highlight a bit better when the compatability graph is of
 interest and when the dependency graph is of interest. It seems that the
 compatability graph is only interesting in Section 3?
 
+DONE: added explanation "While we typically consider
+additional dependencies (in the dependency graph), the edges in the
+compatibility graph pose constraints on the possible bases due to
+canonical base pairing, which are present in all considered settings."
+
 -Page 3 It seems strange that the partition function depends on S while S
 is used in the sum. Should it be "Z_E_R(n)" or "Z_E_R(S_n)"?
 
->>>> DONE. Embarassing typo
+DONE.
 
 -Page 3 "as the minimal set" Is it necessarily unique? If not, "as a
 minimal set".
@@ -197,7 +202,7 @@ DONE
 
 -Page 6 In Line 6 of the algorithm, I don't see how m_w->u has an entry
 for "[a|a']" as "a" may contain some new variables.
-TODO
+TODO: the point is that those new variables are ignored when evaluating the message, since the message does not depend on them. This is likely to confuse many readers:(
 
 -Page 6 "Its correctness" -> "The correctness of the algorithm"
 DONE
@@ -219,6 +224,8 @@ maximum number of components per bag is crucial?
 TODO: obviously, we confused the reviewer---
 MOREOVER: strategy should be optimized. Instead of fixing all polarities in the beginning,
 it suffices to fix the polarities simultaneously in one bag....
+
+REWRITE and present a better optimization strategy due to the base pairing constraints (compatibility)
 
 -Page 7 "we encode the network energy ..." I was a bit confused here. What
 is w_l? Is it possible to give the formula?
