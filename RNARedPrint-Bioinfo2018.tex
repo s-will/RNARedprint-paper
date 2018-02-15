@@ -715,14 +715,16 @@ framework.
 %   \label{eq:nussinov-network-energy}
 %   \energy{\network}(S) = \sum_{\ell\in[1,k]} w_\ell E(S;R_\ell)
 % \end{equation}
-In simple \Def{base pair-based energy models}, energy is defined as the sum of base pair (pseudo)energies. If base pair energies $\Ebp{k}{i,j,x,y}$ (where
-$i$ and $j$ are sequence positions, $x$ and $y$ are bases in $\Sigma$)
-are given for each target structure $\ell$, s.t.
-$ E(S;R_\ell) := \sum_{(i,j)\in R_\ell} \Ebp{k}{i,j,S_i,S_j}$, we
-encode the network energy by the set of functions
-$f$ for each base pair $(i,j)\in R_\ell$ of each input structure
-$R_\ell$ that evaluate to $w_\ell \Ebp{k}{i,j,\val(x_i),\val(x_j)}$
-under assignment $\val$.
+In simple \Def{base pair-based energy models}, energy is defined as
+the sum of base pair (pseudo-)energies. If base pair energies
+$\Ebp{k}{i,j,x,y}$ (where $i$ and $j$ are sequence positions, $x$ and
+$y$ are bases in $\Sigma$) are given for each target structure $\ell$,
+s.t.  $ E(S;R_\ell) := \sum_{(i,j)\in R_\ell} \Ebp{k}{i,j,S_i,S_j}$,
+we encode the network energy by the set of functions $f$ for each base
+pair $(i,j)\in R_\ell$ of each input structure $R_\ell$ that evaluate
+to $\ln(\pi_\ell) \Ebp{k}{i,j,\val(x_i),\val(x_j)}$ under assignment $\val$;
+here, $\pi_\ell>0$ is a weight that controls the
+influence of structure $\ell$ on the sampling (as elaborated later).
 
 % \paragraph{Nearest-neighbor model.}
 % Let us now consider a simplified version of the nearest-neighbor model, where the free energy contribution  $\Ehp{x,y,s}$ of a hairpin only depends on the closing base pair $(x,y)$, and the contribution $\Eint{x,y,x',y',s}$ of an interior loop depends on its opening/closing bases pairs $(x,y)/(x',y)$, and its length $s$. Moreover, the energy of a multi loops with $s$ inner base pairs and $t$ unpaired base pairs is approximated as $a+b\,s+c\,t$, where $a,b,c$ are predefined constants.
@@ -1172,8 +1174,8 @@ $0.95$ an $0.94$.
 
 \begin{figure}
   \centering
-  A)%\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/basepaircor}
-  B)%\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor}
+  A)\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/basepaircor}
+  B)\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor}
   \caption{Validation of the trained parameters for the A) base pair
     model B) stacking model for predicting energies of the
     independently sampled sequences in the test set. We show
