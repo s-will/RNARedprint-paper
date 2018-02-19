@@ -6,13 +6,6 @@ MAJOR open issues:
 
 * improve optimization by connected components of the compatibility graph
 
-* simplify
-   -- (sequence) positions/nucleotides instead of variables/values
-   -- (partial) sequences instead of (partial) assignments
-   -- evaluation of functions under assignments; maybe provide example---rethink if
-      the abstraction is necessary (especially if separator to parent is always size 1)
-   -- potentially simplify since separator to parent is always size 1
-
 * TODO discuss (for the question of artificial vs. natural / reviewer 3):
   -- Adenin-Riboswitch (Schwalbe). Details aus Stefans Diss: 3-state/4-state riboswitch.
      Experimentally verified designs were done only for 2-state.
