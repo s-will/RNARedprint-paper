@@ -275,7 +275,7 @@ The hardness of counting (and conjectured hardness of sampling) does not preclud
 
 \begin{figure*}[t]
 {\centering\includegraphics[width=.8\textwidth]{Figs/Workflow}\\}
-\caption{General outline of \ourprog{} for base pair-based energy models. From a set of target secondary structures (i), base-pairs are merged (ii) into a compatibility graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb-content, leading to the production of suitable designs (vi).}
+\caption{General outline of \ourprog{} for base pair-based energy models. From a set of target secondary structures (i), base-pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb-content, leading to the production of suitable designs (vi).}
 \label{fig:workflow}
 \end{figure*}
 
@@ -365,11 +365,10 @@ all $(i,j)\in R$.
 
 We consider a fixed set of target RNA structures
 $\R:=\{R_1, \dots, R_k\}$ for sequences of length $n$. $\R$ induces a
-\Def{compatibility graph} $G_{\R}$ with nodes $\{1,\dots,n\}$ and
-edges $S\bigcup_{\ell\in[1,k]} R_\ell$. While we typically consider
-additional dependencies (in the dependency graph), the edges in the
-compatibility graph pose constraints on the possible bases due to
-canonical base pairing, which are present in all considered settings.
+\Def{base pair dependency graph} $G_{\R}$ with nodes $\{1,\dots,n\}$
+and edges $S\bigcup_{\ell\in[1,k]} R_\ell$, which describe the minimal
+dependencies present in all relevant settings due to the requirement
+of canonical base pairing.
 
 Valid sequences for $\R$ can then be seen as specific colorings of
 $G_{\R}$, using the four colors in $\Sigma$, such that the colors
@@ -425,7 +424,7 @@ of $G$ is the smallest width in any tree decomposition of $G$.
 
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-Now we turn to the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that this problem corresponds to the partition function problem in a simple $(0/\infty)$-valued base pair model, with $\beta\neq 1$. As previously noted~\citep{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
+Now we turn to the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given base pair dependency graph $G=(V,E)$. Note that this problem corresponds to the partition function problem in a simple $(0/\infty)$-valued base pair model, with $\beta\neq 1$. As previously noted~\citep{Flamm2001}, a set of target structures admits a valid design iff its base pair dependency graph is bipartite, which can be tested in linear time.
 Moreover, without $\{\Gb, \Ub\}$ base pairs, any connected component  $C\in {\rm CC}(G)$ is entirely determined by the assignment of a single of its nucleotides. The number of valid designs is thus simply $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of connected components}.
 
 The introduction of $\{\Gb, \Ub\}$ base pairs radically changes this picture, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. The latter equality would, in particular, imply the classic ${\sf P}={\sf NP}$, and solving $\NumDesign(G)$ is polynomial time is therefore probably difficult. 
@@ -666,7 +665,7 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
   	  \If{$r<0$}{
   	    $a_{\rm res} \gets \substitute{\val}{\val'}$\;
   	  \For{$(v\to{}w)\in T$}{
-  	      $a_{\rm res} \gets a_{\rm res} \mid \Sample(v,\substitute{\val}{\val'};T,\chi,\phi,m)$\; 
+  	      $a_{\rm res} \gets \substitute{a_{\rm res}}{\Sample(v,\substitute{\val}{\val'};T,\chi,\phi,m)}$\; 
      }
   	  \Return {$a_{\rm res}$}
   	  \;}
@@ -678,7 +677,7 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 
 As already noted by \citet{Flamm2001}, the
 requirement of canonical base pairing induces a bi-partition of each connected
-component of the compatibility graph, such that the variables of one
+component of the base pair dependency graph, such that the variables of one
 partition are restricted to values $\{\Ab,\Gb\}$, but for other
 partition, to values $\{\Cb,\Ub\}$. This suggests a strong
 optimization of our algorithms, which reduces the basis in the
@@ -692,7 +691,7 @@ Finally, we compute the sums of the partition functions for all possible combina
 
 \begin{theorem}[Complexities]
   For sequence length $n$, $k$ target structures, treewidth $w$ and
-  a compatibility graph having $c$ connected components, $t$ sequences
+  a base pair dependency graph having $c$ connected components, $t$ sequences
   are sampled from the Boltzmann distribution  in
   %$O( n\, k \min(2^{w+c+1},4^{w+1}) + t\, n\, k )$ time.
   $\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
@@ -778,7 +777,7 @@ A further \Def{rejection step} is applied to the generated structures to retain 
 i) \emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing~\citet{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
 ii) \emph{Induced distributions are typically concentrated.} Intuitively, unless sequences are fully constrained individual energy terms are independent enough so that their sum is concentrated around its mean -- the targeted energy (cf Fig.~\ref{fig:energydist}). 
 %Indeed, as shown in Fig.~\ref{fig:shifting_mean}, empirical joint distributions in the energies have good fits towards Normal multidimensional distributions with linear (co-)variances. 
-For base pair-based energy models and special compatibility graph
+For base pair-based energy models and special base pair dependency graph
 (paths, cycles\ldots) this property rigorously follows from analytic
 combinatorics, see \citet{Bender1983} and
 \citet{Drmota1997}. In such cases, the expected number of
@@ -861,7 +860,7 @@ with better values ($\sim\! 69\%$ improvement on average), compared to
 uniform seeds for \emph{all instances} of our benchmark
 (Supp. Mat.~\ref{sec:validity}).
 
-Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps. At each step, we resampled (uniformly at random) the positions of a randomly selected component in the compatibility graph, and accepted the modification only if it resulted in a gain, as described in \Software{RNAblueprint}~\citep{Hammer2017}.
+Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps. At each step, we resampled (uniformly at random) the positions of a randomly selected component in the base pair dependency graph, and accepted the modification only if it resulted in a gain, as described in \Software{RNAblueprint}~\citep{Hammer2017}.
 %
 Once again, for all instances, we observe a positive improvement of the quality of Boltzmann designs over uniform ones, suggesting a superior potential for optimization ($\sim 32\%$ avg improvement, Table~\ref{tab:benchmark-results}, optimized). This improvement is however more modest than in the absence of optimization, but we attribute this relative decay to the uniform nature of the resampling strategy, which somehow ends up canceling the benefits of the initial Boltzmann distribution, by uniformizing the sequence over longer runs. This suggests an alternative resampling strategy based on Boltzmann-distributed steps.
 
@@ -982,7 +981,7 @@ set of $k$ ($k=3,\dots,6$) compatible structures as follows
 \begin{itemize}
 \item Generate a random sequence of length 100;
 \item Compute its minimum free energy structure (ViennaRNA package);
-\item Add the new structure to the instances if the resulting compatibility graph is bipartite;
+\item Add the new structure to the instances if the resulting base pair dependency graph is bipartite;
 \item Repeat until $k$ structures are collected.
 \end{itemize}
 For each instance, we generated the dependency graphs in the base pair
