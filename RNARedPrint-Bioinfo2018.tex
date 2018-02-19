@@ -82,9 +82,7 @@
 
 %%% macros for notation in DP framework
 \newcommand{\network}{\mathcal{N}}
-\newcommand{\dom}{\operatorname{dom}} %domain
-\newcommand{\val}{a} % valuation aka assignment
-\newcommand{\vars}{\operatorname{vars}}
+\newcommand{\val}{\bar S} % valuation aka assignment
 \newcommand{\dep}{\operatorname{dep}}
 \newcommand{\energy}[1]{\operatorname{e}_{#1}}
 \newcommand{\numberof}{\operatorname{\#}}
@@ -104,8 +102,7 @@
 \newcommand{\argmin}{\operatorname*{arg\,min}}
 \newcommand{\objective}{{\mathbb{F}}}
 
-%\newcommand{\assignments}{\operatorname{as}}
-\newcommand{\assignments}{\mathcal{A}}
+\newcommand{\partseqs}{\mathcal{P\!S}}
 \newcommand{\B}{\mathcal{B}}
 \newcommand{\F}{\mathcal{F}}
 \newcommand{\I}{\mathcal{I}}
@@ -154,7 +151,7 @@
 \newcommand{\ourprog}{\Software{RNARedPrint}}
 
 \newcommand{\evalfor}[2]{#1\llbracket{}#2\rrbracket{}}
-\newcommand{\substitute}[2]{#1\!\mid\!\mid\! #2}
+\newcommand{\substitute}[2]{#1\!\oplus\!#2}
 
 \renewcommand{\gets}{:=}
 
@@ -263,11 +260,11 @@ algorithms, and \Def{precomputing} the number of valid sequences
 within each subgraph. The decomposition is then reinterpreted as a
 decision tree to perform a \Def{stochastic backtrack}, inspired by
 Ding and Lawrence~\citep{Ding2003}. Uniform sampling is achieved by
-choosing individual assignments with probabilities derived from the
-subsolution counts. The overall complexity of \Software{RNAdesign}
-grows like $\Theta(4^{\gamma})$, where the parameter $\gamma$ is
-bounded by the length of the designed RNA; typically $\gamma$ is kept
-much lower by the decomposition.
+choosing individual nucleotide assignments with probabilities derived
+from the subsolution counts. The overall complexity of
+\Software{RNAdesign} grows like $\Theta(4^{\gamma})$, where the
+parameter $\gamma$ is bounded by the length of the designed RNA;
+typically $\gamma$ is kept much lower by the decomposition.
 
 \parHead{Motivation.} The exponential time and space requirements of the \Software{RNAdesign} method already raise the question of the \Def{complexity of (uniform) sampling for multi-target design}. Since stochastic backtrack can be performed in linear time per sample, the method is dominated by the precomputation step, which requires counting valid designs. Thus, we focus on the question: \emph{Is there a polynomial-time algorithm to count valid multi-target designs?} In Section~\ref{sec:counting}, we answer in the negative, showing that there exists no such algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences  and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
 The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, generically, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as the \GCb-content, complex sequence constraints, or the energy of individual structures?} 
@@ -286,7 +283,7 @@ To answer these questions, we introduce a generic framework (illustrated in~Fig.
 %
 ; in practice, we limit this parameter by using state-of-the-art tree decomposition algorithms. 
 %Uniform sampling is handled as a special case of Boltzmann sampling, where each valid sequence receives energy zero and---consequently---computing partition functions specializes to counting.
-By modeling sequences as variable assignments in a weighted constraint
+By evaluating (partial) sequences in a weighted constraint
 network, we support arbitrary multi-ary constraints and thus
 arbitrarily complex energy models,
 notably subsuming all commonly
@@ -334,7 +331,7 @@ target structures and the \GCb-content%
 %
 %These considerations motivate our sampling strategy, where we:
 %\begin{itemize}
-%\item Model RNA sequences as assignments over a constraint network. The network consists of one variable per sequence position; constraints and energy contributions are modeled as functions of arbitrary arity over the variables, such that the total energy is the sum of all function values;
+%\item Model RNA sequences as assignments over a constraint network. The network consists of one position per sequence position; constraints and energy contributions are modeled as functions of arbitrary arity over the positions, such that the total energy is the sum of all function values;
 %\item Translate the dependency hyper-graph into a binary dependency graph by inserting cliques (Appendix), such that a tree decomposition with small treewidth can be computed by a generic tree decomposition algorithm;
 %\item Compute the partition functions by specializing the generic ``Cluster Tree Elimination'' (CTE) dynamic programming algorithm, based on the cluster tree decomposition induced by the constraint network; 
 %
@@ -350,18 +347,14 @@ An \Def{RNA sequence $S$} is a word over the \Def{nucleotides
   alphabet} $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$; let $\S_n$ denote the set of
 sequences of length $n$. An \Def{RNA (secondary) structure $R$ of
   length $n$} is a set of \Def{base pairs} $(i,j)$, where
-$1\leq i<j\leq n$, where for $(i,j), (i',j')\in R$: $i\neq j'$ and ($i=i'$ iff
-$j=j'$) (``degree $\leq$ 1''). We call an RNA structure $R$ \Def{non-crossing}, iff it does
-not contain any two different base pairs $(i,j)$ and $(i',j')$ such
-that $i\leq i'\leq j \leq j'.$ \Def{Valid base pair} must pair bases
-from the $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}.$
+$1\leq i<j\leq n$, where for all different $(i,j), (i',j')\in R$:
+$\{i,j\}\cap\{i',j'\}=\emptyset$ (``degree $\leq$ 1''). We call an RNA
+structure $R$ \Def{non-crossing}, iff it does not contain any two
+different base pairs $(i,j)$ and $(i',j')$ such that
+$i\leq i'\leq j \leq j'.$ \Def{Valid base pair} must pair bases from
+the $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}.$
 Consequently, $S$ is \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
 all $(i,j)\in R$.
-%
-% \TODO{Also, we need to decide whether base-pairs are oriented or not
-% ($(x,y)$ versus $\{x,y\}$). Right now, we are inconsistent in the
-% definitions above. SW: i would prefer $(i,j)$ with $i<j$;
-% } %% where is this inconsistent?
 
 We consider a fixed set of target RNA structures
 $\R:=\{R_1, \dots, R_k\}$ for sequences of length $n$. $\R$ induces a
@@ -401,8 +394,8 @@ functions $f:\S_n\to\real$), s.t.~$E_\R(S)=\sum_{f\in\F} f(S)$. This
 captures realistic RNA energy models, while bounding the
 dependencies to sequence positions introduced by each single $f$. Formally, define the \Def{dependencies} $\dep(f)$ of $f$ as a minimal set of sequence positions $\I\subseteq\{1,\dots,n\}$, where $f(S)=f(S')$ for all sequences $S$ and $S'$ agreeing at all positions in $\I$.
 
-The \Def{dependency graph} of the set $\F$ of functions (on
-sequences of length $n$) is the \Def{hypergraph}
+The \Def{dependency graph} induced by the set $\F$ of functions (on
+sequences of length $n$) is the hypergraph
 $G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\})$. 
 Our algorithms will critically rely on a \Def{tree decomposition} of the dependency graph, which we define below.
 \begin{definition}[Tree decomposition and width]
@@ -474,28 +467,35 @@ specialized as RNA design network. This allows us to base our
 algorithm on cluster tree elimination (CTE) by Rina
 Dechter~\citep{Dechter2013}.
 %
-In the RNA design network, sequences $S\in\S_n$ are isomorphically
-modeled as assignments $\val_S$ of bases to $n$ variables, each associated to
-a sequence position. The functions $f\in\F$ of
-Section~\ref{sec:problem-statement}, are interpreted as functions on the network's variables.
+In the RNA design network, (partially determined) RNA sequences
+replace the more general concept of (partial) assignments in
+constraint networks. Partially determined RNA sequences, called
+\Def{partial sequences}, are words $\val$ over the alphabet
+$\Sigma\cup\{?\}$ equivalently representing the set ${\mathcal S}(\val)$
+of RNA sequences, where for positions $1\leq i\leq n$,
+$\val_i\in\Sigma$ implies $S_i=\val_i$ for all $S\in{\mathcal
+  S}(\val)$. The positions $1\leq i\leq n$, where $\val_i\in\Sigma$,
+are called \Def{determined} by $\val$ and form its \Def{domain}.
+%
+Since the functions $f\in\F$ of Section~\ref{sec:problem-statement}
+depend on only the subset $\dep(f)$ of sequence positions, one can
+evaluate them for partial sequences $\val$ that determine (at least)
+the nucleotides at all positions in $\dep(f)$. Thus for functions $f$
+and partial sequences $\val$ that determine $\dep(f)$, we write
+$\evalfor{f}{\val}$ to \Def{evaluate $f$ for $\val$}; i.e.{}
+$\evalfor{f}{\val} := f(S),$ for any sequence
+$S\in{\mathcal S}(\val)$.
 
-\begin{definition}[RNA design network]
-An \Def{RNA design network} is a tuple $\network=(\X,\F)$ such that:
+\begin{definition}
+An \Def{RNA design network} is a tuple $\network=(\X,\F)$, where
 \begin{itemize}
-\item $\X$ is a set of \Def{variables} $\{x_1,\dots,x_n\}$ associated with the sequence positions
-\item $\F$ is a set of \Def{functions} $f:\S_n\to\real$, each function $f\in \F$ being associated with the set $\vars(f)=\{x_i\mid i\in\dep(f) \}\subset X$ of variables.
+\item[--]\ $\X$ is the set of sequence positions $1,\dots,n$
+\item[--]\ $\F$ is a set of \Def{functions} $f:\S_n\to\real$
 \end{itemize}
 \end{definition}
 
-A \Def{(partial) assignment} is a function $\val: \X' \to \Sigma$
-that maps the variables $\X'\subseteq \X$ to bases; we call $\X'$ the \Def{domain of the assignment
-  $\val$}, written $\dom(\val)$; $\val$ is \Def{total} iff $\dom(\val)=\X.$
 %
-For assignments $\val$ and functions $f$, $\dep(f)\subseteq\dom(\val)$,
-we define the special notation $\evalfor{f}{\val}$ to \Def{evaluate
-  $f$ for $\val$}; i.e.{} $\evalfor{f}{\val} := f(S),$ for any
-sequence $S$ where $S_i=\val(i)$ for all $i\in\dep(f).$ Then, the
-\Def{energy $\energy{\network}(S)$ of a sequence} $S$ in a network
+The \Def{energy $\energy{\network}(S)$ of a sequence} $S$ in a network
 $\network$ is defined as sum of the values of all functions in
 $f\in\F$ evaluated for $\val_S$, i.e.
 $\energy{\network}(S) := \sum_{f\in F} \evalfor{f}{\val_S}.$
@@ -527,23 +527,30 @@ function. %Observe that counting is a special case of the partition function and
 %  \caption{Figure illustrating RNA network to hypergraph to tree decomposition}
 %\end{figure}
 
-Let us now introduce some definitions. A \Def{cluster tree} for the
+We require additional definitions: A \Def{cluster tree} for the
 network $\network=(\X,\F)$ is a tuple $(T,\chi,\phi)$, where
 $(T,\chi)$ is a tree decomposition of $G_\F$, and $\phi(v)$ represents
 a set of functions $f$, each uniquely assigned to a node $v\in T$;
-$\vars(f)\subseteq\chi(v)$ and $\phi(v)\cap \phi(v')=\varnothing$ for
+$\dep(f)\subseteq\chi(v)$ and $\phi(v)\cap \phi(v')=\varnothing$ for
 all $v\neq v'$.  For two nodes $v$ and $u$ of the cluster tree, define
 their \Def{separator} as $\separator{u}{v} := \chi(u)\cap\chi(v)$;
-moreover, we define the \Def{difference variables} from $u$ to an
+moreover, we define the \Def{difference positions} from $u$ to an
 adjacent $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
 
-For a set $Y$ of variables, denote the set of all assignments of the
-variables in $\Y$ by $\assignments(\Y)$; moreover, given
-non-overlapping assignments $\val'$ and $\val''$, we write
-$\substitute{\val'}{\val''}$ to denote the assignment defined as
-$\val'$ and $\val''$ respectively on $\dom(\val')$ and $\dom(\val'')$.
-Finally we assume, w.l.o.g., that all variable difference sets
-$\difference{u}{v}$ are restricted to a single variable: for any given
+For a set $\Y$ of sequence positions, write $\partseqs(\Y)$ to
+denote the set of all partial sequences that determine exactly the positions
+in $\Y$; moreover, given partial sequences $\val$ and
+$\val'$, we define the \Def{combined partial sequence $\substitute{\val'}{\val''}$} such that
+$$
+(\substitute{\val}{\val'})_i :=
+\begin{cases}
+  \val'_i & \text{if } \val'_i\in \Sigma\\
+  \val_i & \text{otherwise}
+\end{cases}
+$$
+
+Finally we assume, w.l.o.g., that all position difference sets
+$\difference{u}{v}$ are singleton: for any given
 cluster tree, an equivalent (in term of treewidth) cluster tree can
 always be obtained by inserting at most $\Theta(|\X|)$ additional
 clusters.
@@ -551,20 +558,22 @@ clusters.
 Let us now consider the \Def{computation of the partition function}.
 Given is the RNA design network $\network=(\X,\F)$ and its cluster
 tree decomposition $(T,\chi,\phi)$.  W.l.o.g, we assume that $T$ is
-connected and contains a dedicated node $r$, with $\chi(r)=\varnothing$
-and $\phi(r)=\varnothing$, added as a virtual root
-$r$ connected to a node in each connected
-component of $T$.  Now, we consider the set of directed edges
-$\edgesToR{}$ of $T$ oriented to $r$; define $T_r(u)$ as the induced
-subtree of $u$. Algorithm~\ref{alg:pf} computes the partition function by
-passing messages along these directed edges $u\to v$ (i.e. always from
-some child $u$ to its parent $v$). Each message is a function on
-variables $\vars(m)\subseteq \X$ to $\real\cup\{\infty\}$. The message
-from $u$ to $v$ represents the partition functions of the subtree of
-$u$ for all possible assignments to the variables
-$\vars(m)=\separator{u}{v}$. The correctness of the algorithm can be shown by induction over $T$ (Supp. Mat.~\ref{appsec:correctness}).
-After running Alg.~\ref{alg:pf}, 
-multiplying the 0-ary messages sent to the root $r$ yields the total partition function:
+connected and contains a dedicated node $r$, with
+$\chi(r)=\varnothing$ and $\phi(r)=\varnothing$, added as a virtual
+root $r$ connected to a node in each connected component of $T$.  Now,
+we consider the set of directed edges $\edgesToR{}$ of $T$ oriented to
+$r$; define $T_r(u)$ as the induced subtree of
+$u$. Algorithm~\ref{alg:pf} computes the partition function by passing
+messages along these directed edges $u\to v$ (i.e. always from some
+child $u$ to its parent $v$). Each message is a function that depends
+on the positions $\dep(m)\subseteq \X$ and yields a partition function
+in $\real\cup\{\infty\}$. The message from $u$ to $v$ represents the
+partition functions of the subtree of $u$ for all possible partial
+sequences in $\partseqs(\separator{u}{v})$. Induction over $T$ lets us show
+the correctness of the algorithm
+(Supp. Mat.~\ref{appsec:correctness}).  After running
+Alg.~\ref{alg:pf}, multiplying the 0-ary messages sent to the root $r$
+yields the total partition function:
 \begin{math}
   \partfun{\network} = \prod_{(u\to{}r)\in T} \evalfor{\Message{u}{r}}{\varnothing}.
 \end{math}
@@ -572,12 +581,14 @@ multiplying the 0-ary messages sent to the root $r$ yields the total partition f
 
 
 \begin{algorithm}[t]
- \KwData{Cluster tree $(T,\chi,\phi)$}
- \KwResult{Messages $\Message{u}{v}$ for all $(u\to{}v)\in T$; i.e.~partition functions of the subtrees of all $v$ for all possible assignments of variables $\separator{u}{v}$.}
+  \KwData{Cluster tree $(T,\chi,\phi)$} \KwResult{Messages
+    $\Message{u}{v}$ for all $(u\to{}v)\in T$; i.e.~partition
+    functions of the subtrees of all $v$ for all possible partial
+    sequences determining exactly the positions $\separator{u}{v}$.}
  \For{$u\to{}v\in T$ in postorder}{
-  \For{$\val\in\assignments(\separator{u}{v})$}{
+  \For{$\val\in\partseqs(\separator{u}{v})$}{
     $\evalfor{\Message{u}{v}}{\val} \gets 0$\;
-    \For{$\val'\in\assignments(\difference{u}{v})$}{
+    \For{$\val'\in\partseqs(\difference{u}{v})$}{
      $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\;
      $p \gets p\ \cdot\ $product( $\evalfor{\Message{w}{u}}{\substitute{\val}{\val'}}$ for $(w\to{}u)\in T$ )\;
      $\evalfor{\Message{u}{v}}{\val} \gets \evalfor{\Message{u}{v}}{\val} + p$\; 
@@ -598,17 +609,18 @@ multiplying the 0-ary messages sent to the root $r$ yields the total partition f
 
 The partition functions can then direct a \Def{stochastic backtrack} to achieve \Def{Boltzmann sampling of sequences}, such that one samples from the Boltzmann distribution of a given design network $\network$. The sampling algorithm assumes that the cluster tree was expanded and the messages $\Message{u}{v}$ for the edges in $\edgesToR{}$ are already generated by Algorithm \ref{alg:pf} for the expanded cluster tree.
 %
-Algorithm~\ref{alg:sampling} defines the recursive procedure $\sample(u,\val)$, which returns an  assignment of all variables in the subtree rooted at $u$ from the Boltzmann-distribution.
-Called on $r$ and the empty assignment, the procedure returns a total assignment corresponding to a Boltzmann-distributed random sequence. 
-
-
+Algorithm~\ref{alg:sampling} defines the recursive procedure
+$\sample(u,\val)$, which returns a partial sequence that determines
+the positions of the subtree rooted at $u$ from the
+Boltzmann-distribution.  Called on $r$ and the empty partial sequence,
+the procedure returns a Boltzmann-distributed random sequence.
 
 %\begin{algorithm}[Boltzmann weighted sampling]
 %\label{alg:sampling}
 % \ \\
 %  Define $\sample(u,\val)$:
 %  \begin{enumerate}[1)]
-%  \item Let $\Delta:=\chi(u)-\dom(\val)$ be the set of free variables for $u$.
+%  \item Let $\Delta:=\chi(u)-\dom(\val)$ be the set of free positions for $u$.
 %  \item For all assignments $\val'\in\assignments(\Delta)$, compute
 %  $$\partfun{\val'} := \prod_{f\in \phitotal(u)} \exp(-\beta \evalfor{f}{\substitute{val'}{\val}}).$$
 %  \item Choose one of the assignments $\val'\in\assignments(\Delta)$ with probability $\partfun{\val'}/\partfun{u}$, where $\partfun{u}$ is the sum of the $\partfun{\val'}$.
@@ -621,7 +633,7 @@ Called on $r$ and the empty assignment, the procedure returns a total assignment
 \subsection{Computational complexity of the multiple target sampling algorithm}\label{sec:complexity}
 
 %The complexity of the proposed sampling algorithm depends on the treewidth of the dependency graph $G_\F$.
-% The treewidth $w$ of a cluster tree $(T,\chi,\phi)$, $T=(V,E)$, is $\max_{v\in V} |\chi(v)| - 1$, i.e.~the maximum number of variables in any of its clusters minus 1.
+% The treewidth $w$ of a cluster tree $(T,\chi,\phi)$, $T=(V,E)$, is $\max_{v\in V} |\chi(v)| - 1$, i.e.~the maximum number of positions in any of its clusters minus 1.
 
 First, we observed that the computation time of tree decomposition
 (\Software{GreedyFillIn}, implemented in \Software{LibTW}~\citep{Dijk2006}) for multi-target
@@ -644,12 +656,12 @@ expressed by $\mathcal{O}(n\,k)$ functions. Finally, the number of cluster
 tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 
 \begin{algorithm}
- \KwData{Node $u$, partial assignment $\val\in\assignments(\separator{u}{v})$;\newline
- Cluster tree $(T,\chi,\phi)$ and partition functions $\Message{u'}{v'}[\val']$, $\forall (u'\to{}v')\in T$ and $\val'\in\assignments(\separator{u'}{v'})$.}
- \KwResult{Boltzmann-distributed random assignment for the subtree rooted at $u$, assuming a partial assignment $\val$.}
+ \KwData{Node $u$, partial sequence $\val\in\partseqs(\separator{u}{v})$;\newline
+ Cluster tree $(T,\chi,\phi)$ and partition functions $\Message{u'}{v'}[\val']$, $\forall (u'\to{}v')\in T$ and $\val'\in\partseqs(\separator{u'}{v'})$.}
+ \KwResult{Boltzmann-distributed random partial sequence for the subtree rooted at $u$, specializing a partial sequence $\val$.}
  \Fn{\Sample$(u,\val;T,\chi,\phi,m)$}{
    $r \gets \Random(\evalfor{\Message{u}{v}}{\val})$\;
-   \For{$\val'\in\assignments(\difference{u}{v})$}{
+   \For{$\val'\in\partseqs(\difference{u}{v})$}{
 
      $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\;
      $p \gets p\ \cdot\ $product( $\evalfor{\Message{w}{u}}{\substitute{\val}{\val'}}$ for $(w\to{}u)\in T$ )\;
@@ -671,15 +683,15 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
   	  \;}
  }
  }
- \caption{Stochastic backtrack algorithm for assignments in the Boltzmann distribution.}\label{alg:sampling}
+ \caption{Stochastic backtrack algorithm for partial sequences in the Boltzmann distribution.}\label{alg:sampling}
 \end{algorithm}
 %For example, for design to a single non-crossing target in the nearest neighbor energy model, the complexity of Algs.~\ref{alg:pf} and \ref{alg:sampling} degrades to linear time (as reported for IncaRNAtion), since there are only $O(n)$ many functions and nodes (in the sequence length $n$). Moreover, the dependencies are tree-like owing to the tree-like non-crossing structure; this implies a constantly bounded maximum treewidth.
 
 As already noted by \citet{Flamm2001}, the
 requirement of canonical base pairing induces a bi-partition of each connected
-component of the base pair dependency graph, such that the variables of one
-partition are restricted to values $\{\Ab,\Gb\}$, but for other
-partition, to values $\{\Cb,\Ub\}$. This suggests a strong
+component of the base pair dependency graph, such that the positions of one
+partition are restricted to nucleotides $\{\Ab,\Gb\}$, but for other
+partition, to nucleotides $\{\Cb,\Ub\}$. This suggests a strong
 optimization of our algorithms, which reduces the basis in the
 exponential factor from 4 to 2. The price for this reduction is a
 binary choice for each of $c$ connected component. For each of the
@@ -703,11 +715,10 @@ Finally, we compute the sums of the partition functions for all possible combina
 The functions in $\F$ allow expressing complex features of the
 sequences alone, e.g. rewarding or penalizing specific sequence
 motifs, as well as features depending on the target structures.
-Naturally, hard
-constraints, which enforce or forbid features, can also be expressed by functions that
-assign infinite penalties to invalid partial assignments. More concretely, we briefly 
-discuss the modeling of RNA energy models in our
-framework.
+Naturally, hard constraints, which enforce or forbid features, can
+also be expressed by functions that assign infinite penalties to
+invalid (partial) sequences. More concretely, we briefly discuss the
+modeling of RNA energy models in our framework.
 
 % To illustrate the expressivity of the framework, we outline the construction of function sets that express two different energy models for the energies $E(S;R_\ell)$ for encoding
 % \begin{equation}
@@ -721,7 +732,7 @@ $y$ are bases in $\Sigma$) are given for each target structure $\ell$,
 s.t.  $ E(S;R_\ell) := \sum_{(i,j)\in R_\ell} \Ebp{k}{i,j,S_i,S_j}$,
 we encode the network energy by the set of functions $f$ for each base
 pair $(i,j)\in R_\ell$ of each input structure $R_\ell$ that evaluate
-to $\ln(\pi_\ell) \Ebp{k}{i,j,\val(x_i),\val(x_j)}$ under assignment $\val$;
+to $\ln(\pi_\ell) \Ebp{k}{i,j,\val(x_i),\val(x_j)}$ under partial sequence $\val$;
 here, $\pi_\ell>0$ is a weight that controls the
 influence of structure $\ell$ on the sampling (as elaborated later).
 
@@ -1028,7 +1039,7 @@ instance from set RF3.
 
 Our implementation relies on external tools for the tree decomposition. Therefore it is not trivial that the weight functions (i.e. terms of the energy function) can be captured within the tree decompositions returned by a specific tool. In other words, it is not immediately clear how one can construct a cluster tree from an arbitrary tree decomposition for a given network. 
 
-Fortunately, we can show that, as long as the network the arguments $\vars(f)$ of a function $f$ are materialized by a clique within the network $\network$, then there exists at least one node in the tree decomposition that contains $\vars(f)$, thus allowing the evaluation of $f$.
+Crucially, one can show that, as long as the network the arguments $\dep(f)$ of a function $f$ are materialized by a clique within the network $\network$, then there exists at least one node in the tree decomposition that contains $\dep(f)$, thus allowing the evaluation of $f$.
 \begin{lemma}\label{lem:cliques}
 Let $G=(V,E)$ be an undirected graph, and  $T,\chi$ be a tree decomposition for $G$. For each clique $C\subset V$, there exists a node $n\in T$ such that $C\subset\chi(v)$.
 \end{lemma}
@@ -1055,14 +1066,13 @@ This result implies that classic tree decomposition algorithms and, more importa
   \label{the:pfalgo-correctness}
   As computed by Alg.~\ref{alg:pf} for cluster tree $(T,\chi,\phi)$,
   the messages $\Message{u}{v}$, for all edges $u\to{}v\in T$, yield
-  the partition functions of subtree of $u$ for the partial
-  assignments $\val\in\assignments(\separator{u}{v})$, i.e. the
-  messages satisfy
+  the partition functions of subtree of $u$ for the partial sequences
+  $\val\in\partseqs(\separator{u}{v})$, i.e. the messages satisfy
   \begin{equation}
-   \evalfor{\Message{u}{v}}{\val} = \sum_{\val'\in\assignments(\chi(T_r(u))-\separator{u}{v})} \quad
+   \evalfor{\Message{u}{v}}{\val} = \sum_{\val'\in\partseqs(\chi(T_r(u))-\separator{u}{v})} \quad
    \prod_{f\in\phi(T_r(u))} \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}}),\label{eq:pfalgo-correct}
  \end{equation}
- where $\chi(T_r(u))$ denotes all $\chi$-assigned variables of nodes in $T_r(u)$;
+ where $\chi(T_r(u))$ denotes all $\chi$-assigned positions of nodes in $T_r(u)$;
  respectively $\phi(T_r(u))$; all $\phi$-assigned functions.
 %
 \end{theorem}
@@ -1071,7 +1081,7 @@ This result implies that classic tree decomposition algorithms and, more importa
   Note that in more concise notation, Alg.~\ref{alg:pf} computes
   messages such that
 \begin{equation}
-  \evalfor{\Message{u}{v}}{\val} := \sum_{\val'\in\assignments(\difference{u}{v})}\quad
+  \evalfor{\Message{u}{v}}{\val} := \sum_{\val'\in\partseqs(\difference{u}{v})}\quad
   \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}}) \prod_{(w\to{}u) \in T} \evalfor{\Message{w}{u}}{\substitute{\val'}{\val}}.\label{eq:messages}
 \end{equation}
 
@@ -1080,25 +1090,25 @@ there are no messages sent to $u$, and $\phi(u) = \phi(T_r(u));$ implying
 Eq.~$(\ref{eq:pfalgo-correct}).$
 %
 Otherwise, since the algorithm traverses edges in postorder, $u$ received from its children
-$w_1,\dots,w_q$ the messages $\Message{w_1}{u}, \dots, \Message{w_q}{u}$, which satisfy Eq.~$(\ref{eq:pfalgo-correct})$ (induction hypothesis). Let $\val\in\assignments(\separator{u}{v})$; then, $\evalfor{\Message{u}{v}}{\val}$ is computed by the algorithm according to Eq.~$(\ref{eq:messages})$. We rewrite as follows
+$w_1,\dots,w_q$ the messages $\Message{w_1}{u}, \dots, \Message{w_q}{u}$, which satisfy Eq.~$(\ref{eq:pfalgo-correct})$ (induction hypothesis). Let $\val\in\partseqs(\separator{u}{v})$; then, $\evalfor{\Message{u}{v}}{\val}$ is computed by the algorithm according to Eq.~$(\ref{eq:messages})$. We rewrite as follows
 \begin{align*}
-  & \sum_{\val'\in\assignments(\difference{u}{v})}\quad
+  & \sum_{\val'\in\partseqs(\difference{u}{v})}\quad
     \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})
     \prod_{(w\to{}u) \in T} \evalfor{\Message{w}{u}}{\substitute{\val'}{\val}}\\
-  & = \sum_{\val'\in\assignments(\chi(u)-\separator{u}{v})}\quad
+  & = \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
     \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})
     \prod_{i=1}^q \evalfor{\Message{w_i}{u}}{\substitute{\val'}{\val}}\\
   & =_{IH}
-    \sum_{\val'\in\assignments(\chi(u)-\separator{u}{v})}\quad
+    \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
     \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})
-    \prod_{i=1}^q \sum_{\val''\in\assignments(\chi(T_r(w_i))-\separator{w_i}{u})} \quad
+    \prod_{i=1}^q \sum_{\val''\in\partseqs(\chi(T_r(w_i))-\separator{w_i}{u})} \quad
     \prod_{f\in\phi(T_r(w_i))} \exp(-\beta \evalfor{f}{\substitute{\val''}{\substitute{\val'}{\val}}}) \\
 & =_{*}
-    \sum_{\val'\in\assignments(\chi(u)-\separator{u}{v})}\quad
-  \sum_{\val''\in\assignments(\bigcup_{i=1}^q\chi(T_r(w_i))-\separator{w_i}{u})} \quad
+    \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
+  \sum_{\val''\in\partseqs(\bigcup_{i=1}^q\chi(T_r(w_i))-\separator{w_i}{u})} \quad
   \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})
   \prod_{f\in\phi(T_r(w_i))} \exp(-\beta \evalfor{f}{\substitute{\val''}{\val'} | \val}) \\
-  & =_{(**)} \sum_{\val'\in\assignments(\chi(T_r(u))-\separator{u}{v})}\quad
+  & =_{(**)} \sum_{\val'\in\partseqs(\chi(T_r(u))-\separator{u}{v})}\quad
     \prod_{f\in \phi(T_r(u)) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})\\
 \end{align*}
 To see (*) and (**), we observe:
@@ -1106,10 +1116,10 @@ To see (*) and (**), we observe:
 \item The sets $\chi(u)-\separator{u}{v}$ and
   $\chi(T_r(w_i))-\separator{w_i}{u}$ are all disjoint due to
   Def.~\ref{def:treedecomp}, property 2. First, this property implies
-  that any shared variable between the subtrees of $w_i$ and $w_j$
+  that any shared position between the subtrees of $w_i$ and $w_j$
   must be in $\chi(w_i)$, $\chi(w_j)$ and $\chi(u)$, thus the
-  variables of $\chi(T_r(w_i))-\separator{w_i}{u}$ are
-  disjoint. Second, if a variable $\chi(T_r(w_i))$ occurs in
+  positions of $\chi(T_r(w_i))-\separator{w_i}{u}$ are
+  disjoint. Second, if a position $\chi(T_r(w_i))$ occurs in
   $\chi(u)$, it must occur in $\chi(w_i)$ and consequently in $\separator{u}{v}$.
 \item The union of the sets $\chi(u)-\separator{u}{v}$ and
   $\chi(T_r(w_i))-\separator{w_i}{u}$ is $\chi(T_r(u))-\separator{u}{v}).$
