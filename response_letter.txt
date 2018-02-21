@@ -1,3 +1,27 @@
+########################################
+MAJOR open issues:
+
+* Emphasize: we can do pseudoknots (like Blueprint)!
+  already in abstract by now
+
+* improve optimization by connected components of the compatibility graph
+
+* TODO discuss (for the question of artificial vs. natural / reviewer 3):
+  -- Adenin-Riboswitch (Schwalbe). Details aus Stefans Diss: 3-state/4-state riboswitch.
+     Experimentally verified designs were done only for 2-state.
+
+* RESULTS
+    -- three additional pseudoknotsets (for Table 1). 
+    -- linear correlation plot for Turner-energies fitted to simple energies (stacking?) 
+         (additionally with PKs!?)
+    -- shifting of targets (Figure 2) with PKs
+    -- time benchmark; run time for 1000 instances
+
+
+########################################
+
+
+
 ----------------------- REVIEW 1 ---------------------
 PAPER: 139
 TITLE: Fixed-Parameter Tractable Sampling for RNA Design with Multiple
@@ -225,12 +249,11 @@ TODO: obviously, we confused the reviewer---
 MOREOVER: strategy should be optimized. Instead of fixing all polarities in the beginning,
 it suffices to fix the polarities simultaneously in one bag....
 
-REWRITE and present a better optimization strategy due to the base pairing constraints (compatibility)
+TODO: rewrite and present a better optimization strategy due to the base pairing constraints (compatibility)
 
 -Page 7 "we encode the network energy ..." I was a bit confused here. What
 is w_l? Is it possible to give the formula?
->>>>>> CHECK
-
+DONE
 
 -Page 8 Should it "ln" instead of "log"?
 DONE
@@ -311,8 +334,8 @@ the direct path barrier in this way (for producing decoys...)
 
 * It was not clear to me if the authors implemented dangling ends?
 
->>>>> NO; if possible, reformulate the resepctive sentence
-CHECK
+>>>>> NO, but it is covered by the framework; if possible, reformulate the
+resepctive sentence CHECK
 
 Typos:
 * Eq 1: Z is a function of S but S is in the sum as well...
