@@ -22,15 +22,33 @@
   \plparsep=1pt  
 \usepackage{hyperref} 
 \usepackage{xspace} 
+%\usepackage{geometry} 
 \usepackage{amsmath,amssymb} 
 \usepackage{bm}
 \usepackage{verbatim}
 \usepackage{longtable}
 \usepackage[vlined]{algorithm2e}
 
+\usepackage{xifthen}
 \usepackage{stmaryrd}
 
 \usepackage{xcolor}
+
+
+\hypersetup{
+    bookmarks=false,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=true,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=red!70!black,          % color of internal links (change box color with linkbordercolor)
+    citecolor=blue!50!black,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=green!50!black           % color of external links
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rolf's includegraphicstop
@@ -79,6 +97,7 @@
 %\newtheorem{algorithm}{Algorithm}
 \newtheorem{axiom}{Axiom}
 \newtheorem{hypothesis}{Working Hypothesis}
+\renewenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
 
 %%% macros for notation in DP framework
 \newcommand{\network}{\mathcal{N}}
@@ -421,50 +440,7 @@ The \Def{width} of a tree decomposition $(T,\chi)$ is defined as
 $\width(T,\chi) = \min_{u\in T} |\chi(u)| - 1 $. The \Def{treewidth}
 of $G$ is the smallest width in any tree decomposition of $G$.
 \end{definition}
-\section{Counting valid designs is \#{\sf P}-hard}\label{sec:counting}
 
-%%% reformulate later
-%We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-Now we turn to the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that this problem corresponds to the partition function problem in a simple $(0/\infty)$-valued base pair model, with $\beta\neq 1$. As previously noted~\citep{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
-Moreover, without $\{\Gb, \Ub\}$ base pairs, any connected component  $C\in {\rm CC}(G)$ is entirely determined by the assignment of a single of its nucleotides. The number of valid designs is thus simply $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of connected components}.
-
-The introduction of $\{\Gb, \Ub\}$ base pairs radically changes this picture, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. The latter equality would, in particular, imply the classic ${\sf P}={\sf NP}$, and solving $\NumDesign(G)$ is polynomial time is therefore probably difficult. 
-
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
-
-
-We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$. 
-
-\begin{proposition}
- $\Design{G}$ is in bijection with $\IS{G}$.
-\end{proposition}
-\begin{proof}
-Consider the function $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
-
-Let us establish the injectivity of  $\Psi$, i.e. that $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
-If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$. 
-Assume that $v\in V_1$, and remind that the only nucleotides allowed in $V_1$ are $\Ab$ and $\Gb$. Since $f(v)\neq f'(v)$, then we have $\{f(v),f'(v)\}=\{\Ab,\Gb\}$
-and we conclude that $\Psi(f)$ differs from $\Psi(f')$ at least with respect to its inclusion/exclusion of $v$.
-
-We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $S\in \IS{G}$. Let us consider the function $f$ defined as
-\begin{align}
- &\forall v_1\in V_1,v_2\in V_2:\notag\\& f(v_1) = \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} \text{\quad and\quad} 
- f(v_2) = \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S\end{cases}
-\end{align}
-One easily verifies that $\Psi(f) = S$. 
-
-We are then left to determine if $f$ is a valid design for $G$, i.e. if for each $(v, v') \in E$ one has  $\{f(v),f(v')\}\in \B.$ Since $G$ is bipartite, any edge in $E$ involves two nodes $v_1\in V_1$ and $v_2\in V_2$. Remark that, among all the possible assignments $f(v_1)$ and $f(v_2)$, the only invalid combination of nucleotides is $(f(v_1),f(v_2)) = (\Ab,\Cb)$. However, such nucleotides are assigned to positions that are in the independent set $S$, and therefore cannot be adjacent. We conclude that $\Psi$ is surjective, and thus bijective.
-\end{proof}
-
-Now we can build on the connection between the two problems to obtain complexity results for \NumDesign. Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is indeed a well-studied \#{\sf P}-hard problem~\citep{Ge2012}, from which we immediately conclude:
-\begin{corollary}
-  \NumDesign is $\#{\sf P}$-hard
-\end{corollary}
-\begin{proof}
-  Note that $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ is given by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. Thus any efficient algorithm for $\#{\sf BIS}$ on connected instances provides an efficient algorithm for general graphs.
-  
-  Let us now hypothesize the existence of a polynomial-time algorithm $\mathcal{A}$ for \NumDesign over strongly-connected graphs $G$. Now consider the polynomial-time algorithm $\mathcal{A}'$ that first executes $\mathcal{A}$ on $G$ to produce $\NumDesign(G)$, and returns $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$. We conclude that $\mathcal{A}'$ solves $\#{\sf BIS}$ in polynomial-time. This means that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
-\end{proof}
 
 \section{An FPT algorithm for the partition function and sampling of Boltzmann-weighted designs}
 \label{sec:FPT}
@@ -472,13 +448,12 @@ Now we can build on the connection between the two problems to obtain complexity
 For our algorithmic description, we translate the concepts of
 Section~\ref{sec:problem-statement} to the formalism of constraint networks, here
 specialized as RNA design network. This allows us to base our
-algorithm on cluster tree elimination (CTE) by Rina
-Dechter~\citep{Dechter2013}.
+algorithm on the cluster tree elimination (CTE) of~\citet{Dechter2013}.
 %
 In the RNA design network, sequences $S\in\S_n$ are isomorphically
 modeled as assignments $\val_S$ of bases to $n$ variables, each associated to
 a sequence position. The functions $f\in\F$ of
-Section~\ref{sec:problem-statement}, are interpreted as functions on the network's variables.
+Section~\ref{sec:problem-statement}, are interpreted as functions on the network variables.
 
 \begin{definition}[RNA design network]
 An \Def{RNA design network} is a tuple $\network=(\X,\F)$ such that:
@@ -676,27 +651,20 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 \end{algorithm}
 %For example, for design to a single non-crossing target in the nearest neighbor energy model, the complexity of Algs.~\ref{alg:pf} and \ref{alg:sampling} degrades to linear time (as reported for IncaRNAtion), since there are only $O(n)$ many functions and nodes (in the sequence length $n$). Moreover, the dependencies are tree-like owing to the tree-like non-crossing structure; this implies a constantly bounded maximum treewidth.
 
-As already noted by \citet{Flamm2001}, the
-requirement of canonical base pairing induces a bi-partition of each connected
-component of the compatibility graph, such that the variables of one
-partition are restricted to values $\{\Ab,\Gb\}$, but for other
-partition, to values $\{\Cb,\Ub\}$. This suggests a strong
-optimization of our algorithms, which reduces the basis in the
-exponential factor from 4 to 2. The price for this reduction is a
-binary choice for each of $c$ connected component. For each of the
-$2^c$ combinations, the partition functions can be computed separately
-in $O(n\,m\, 2^{w+1})$ time. This strategy is applied only if
-$c< w+1$. 
-%% SW: This could be optimized further by applying the strategy only to (optimally) selected components
-Finally, we compute the sums of the partition functions for all possible combinations.
 
-\begin{theorem}[Complexities]
+
+\begin{theorem}[Complexities]\label{th:complexities}
   For sequence length $n$, $k$ target structures, treewidth $w$ and
   a compatibility graph having $c$ connected components, $t$ sequences
-  are sampled from the Boltzmann distribution  in
+  are generated from the Boltzmann distribution  in
+  $O( n\, k \, 4^{w+1} + t\, n\, k )$ time.
   %$O( n\, k \min(2^{w+c+1},4^{w+1}) + t\, n\, k )$ time.
-  $\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
+  %$\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
 \end{theorem}
+As shown in Supp. Mat.~\ref{sec:improvedComplexity}, the complexity of the precomputation can be further improved to 
+$\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ is the maximum number of connected components represented in a node of the tree decomposition ($c\le w+1$).
+
+
 
 \subsection{Sequence features, constraints, and energy
   models.}\label{sec:energy_models}
@@ -770,7 +738,7 @@ One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average
 The expected value of $E_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp. Mat.~\ref{sec:weight_derivatives}). More generally, computing a suitable $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}. 
 In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ and, at each iteration, generates a sample $\mathcal{S}$ of sequences. The expected value of an energy $E_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}E_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$. 
 $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically to achieve effective optimization. 
-While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its reasonable empirical behavior (choosing $\gamma=1.2$).
+While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its reasonable empirical behavior (choosing $\gamma=1.2$). Now, consider Given an elected vertex $v$ of a connected component, say the first node encountered in a rooted 
 
 A further \Def{rejection step} is applied to the generated structures to retain only sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rationale for a rejection approach follows from: 
 i) \emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing~\citet{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
@@ -886,6 +854,51 @@ Once again, for all instances, we observe a positive improvement of the quality 
 \label{tab:benchmark-results}
 \end{table}
 
+\section{Counting valid designs is \#{\sf P}-hard}\label{sec:counting}
+
+%%% reformulate later
+%We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
+Now we turn to the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that this problem corresponds to the partition function problem in a simple $(0/\infty)$-valued base pair model, with $\beta\neq 1$. As previously noted~\citep{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
+Moreover, without $\{\Gb, \Ub\}$ base pairs, any connected component  $C\in {\rm CC}(G)$ is entirely determined by the assignment of a single of its nucleotides. The number of valid designs is thus simply $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of connected components}.
+
+The introduction of $\{\Gb, \Ub\}$ base pairs radically changes this picture, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. The latter equality would, in particular, imply the classic ${\sf P}={\sf NP}$, and solving $\NumDesign(G)$ is polynomial time is therefore probably difficult. 
+
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
+
+
+We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$. 
+
+\begin{proposition}
+ $\Design{G}$ is in bijection with $\IS{G}$.
+\end{proposition}
+\begin{proof}
+Consider the function $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
+
+Let us establish the injectivity of  $\Psi$, i.e. that $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
+If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$. 
+Assume that $v\in V_1$, and remind that the only nucleotides allowed in $V_1$ are $\Ab$ and $\Gb$. Since $f(v)\neq f'(v)$, then we have $\{f(v),f'(v)\}=\{\Ab,\Gb\}$
+and we conclude that $\Psi(f)$ differs from $\Psi(f')$ at least with respect to its inclusion/exclusion of $v$.
+
+We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $S\in \IS{G}$. Let us consider the function $f$ defined as
+\begin{align}
+ &\forall v_1\in V_1,v_2\in V_2:\notag\\& f(v_1) = \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} \text{\quad and\quad} 
+ f(v_2) = \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S\end{cases}
+\end{align}
+One easily verifies that $\Psi(f) = S$. 
+
+We are then left to determine if $f$ is a valid design for $G$, i.e. if for each $(v, v') \in E$ one has  $\{f(v),f(v')\}\in \B.$ Since $G$ is bipartite, any edge in $E$ involves two nodes $v_1\in V_1$ and $v_2\in V_2$. Remark that, among all the possible assignments $f(v_1)$ and $f(v_2)$, the only invalid combination of nucleotides is $(f(v_1),f(v_2)) = (\Ab,\Cb)$. However, such nucleotides are assigned to positions that are in the independent set $S$, and therefore cannot be adjacent. We conclude that $\Psi$ is surjective, and thus bijective.
+\end{proof}
+
+Now we can build on the connection between the two problems to obtain complexity results for \NumDesign. Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is indeed a well-studied \#{\sf P}-hard problem~\citep{Ge2012}, from which we immediately conclude:
+\begin{corollary}
+  \NumDesign is $\#{\sf P}$-hard
+\end{corollary}
+\begin{proof}
+  Note that $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ is given by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. Thus any efficient algorithm for $\#{\sf BIS}$ on connected instances provides an efficient algorithm for general graphs.
+  
+  Let us now hypothesize the existence of a polynomial-time algorithm $\mathcal{A}$ for \NumDesign over strongly-connected graphs $G$. Consider the (polynomial-time) algorithm $\mathcal{A}'$ that first executes $\mathcal{A}$ on $G$ to produce $\NumDesign(G)$, and returns $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$. Clearly $\mathcal{A}'$ solves $\#{\sf BIS}$ in polynomial-time. This means that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
+\end{proof}
+
 \section{Conclusion}
 Motivated by the---here established---hardness of the problem, we introduced a general framework and efficient algorithms for design of RNA sequences to multiple target structures with fine-tuned properties. Our method combines an FPT stochastic sampling algorithm with multi-dimensional Boltzmann sampling over distributions controlled by expressive RNA energy models.
 Compared to the previously best available sampling method (uniform sampling), this approach generated significantly better seed sequences for instances of a common multi-target design benchmark.
@@ -945,6 +958,7 @@ for computing tree decompositions.
 
 
 \newpage
+%\newgeometry{margin=2cm}
 \onecolumn
 
 \appendix
@@ -1128,6 +1142,26 @@ Given a cluster tree $(T,\chi,\phi)$, $T=(V,E)$ of the RNA design network $\netw
 Let $d_u$ denote the degree of node $u$ in $T$, $s_u$ is the size of the separator between 
 $u$ and its parent in $T$ rooted at $r$. For each node in the cluster tree, Alg.~\ref{alg:pf} computes one message by combining $(|\phi(u)|+d_u-1)$ functions, each time enumerating $4^{|\chi(u)|}$ combinations; Alg.~\ref{alg:sampling} computes $4^{|\chi{u}|-s_u}$ partition functions each time combining $(|\phi(u)|+d_u-1)$ functions.  $4^{|\chi(u)|}$ is bound by $4^{w+1}$ and $4^{|\chi{u}|-s_u}$ by $4^D$; moreover $\sum_{u\in V} (|\phi(u)|+d_u-1) = |F|+|V|-1$.
 \end{proof}
+
+\section{Exploiting the bipartite nature of compatibility graphs to reduce the complexity}\label{sec:improvedComplexity}
+
+As already noted by \citet{Flamm2001}, the
+requirement of canonical base pairing induces a bi-partition of each connected
+component within the compatibility graph, such that the nucleotides assigned to the two set of nodes in the partition are 
+restricted to values $\{\Ab,\Gb\}$ and $\{\Cb,\Ub\}$ respectively. It follows that, within each connected component of the compatibility graph, the assignment of any position drastically restricts the domain of the remaining positions, \emph{i.e.} they may now be assigned to only 2 out of the original 4 nucleotides.
+\newcommand{\Parity}[1]{p_{#1}}
+To exploit this property, and further reduce the exponential factor of the complexity, we introduce the notion of \Def{parity} of a vertex/position, whereby vertices of \Def{even} (resp. \Def{odd}) polarities may only be assigned values in $\{\Ab,\Gb\}$ (resp. $\{\Cb,\Ub\}$). Neighbors of an odd vertex must be even and vice versa, so the choice of a parity for any single vertex caracterizes the parity of all vertices in a bipartite connected subgraph. 
+
+Let $CC=\{cc_1,cc_2,\ldots\}$ denote the connected components of the compatibility graph, we consider a modified version of the cluster tree, obtained by:
+\begin{enumerate}
+\item Electing, in each connected component $cc_i$, the first position $v_i^\star$ from the component encountered from the root in a pre-order traversal of the cluster tree;\label{step:election}
+\item Introducing new variables $\mathcal{P}=\{\Parity{1},\ldots,\Parity{|CC|}\}$, representing the parity of elected vertices;
+\item Adding, to each node $x$ in the tree decomposition, the parity variables of connected components that are represented in the node, \emph{i.e.} such that at least one of the positions in the connected component is in $\vars(x)$; \label{step:addparities}
+\item Introducing, in the tree decomposition, a chain of intermediate nodes to fix cases where more than a single (parity) variable is introduced between a parent and its child.\label{step:intermediates}
+\end{enumerate}
+Note that, since connected components correspond to connected subtrees in the tree decomposition, then adding those variables preserves the properties of a tree decomposition. Also, each node in the former cluster tree introduces at most one new variable compared to its parent, so the elected node is uniquely defined by the rule stated in Step~\ref{step:election}. Finally, we note thatthe parity of a variable $v\in cc_i$ is entirely characterized by the parity $\Parity{i}$ of $v_i^\star$, and the parity of the distance between $v$ and $v_i^\star$ in the compatibility graph. Namely, the parity of $v$ is $\Parity{i}$ if the distance between $v$ and $v^{\star}_i$ is even, and opposite to $\Parity{i}$ if odd. It follows that, thanks to the new variables introduced in Step~\ref{step:addparities}, the domain of each of the original variables can be reduced to two alternatives instead of the original four.
+
+The computation of Alg.~\ref{alg:pf} on the new cluster tree, considering reduced assignments for position variables and additional odd/even assignments for parity variables, has complexity in $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $n$ is the RNA length, $k$ is the number of structures, $w$ is the tree-width of the unmodified cluster tree, and $c$ is the maximum number of connected components represented in a node. It should be noted that $c\le \min(|CC|,w+1)$, so that the new complexity cannot be larger than the one stated in Th.~\ref{th:complexities}. Also, note that the number of nodes introduced by Step~\ref{step:intermediates} is bounded by $|CC|$, so that the introduction of these intermediate nodes does not impact the worst-case complexity. For the same reason, the complexity of the stochastic backtrack remains unchanged.
 
 \section{Parameters for the base pair and the stacking energy model}
 \label{appsec:modelparameters}
