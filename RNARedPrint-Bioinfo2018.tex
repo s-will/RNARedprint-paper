@@ -110,7 +110,7 @@
 \newcommand{\dep}{\operatorname{dep}}
 \newcommand{\energy}[1]{\operatorname{e}_{#1}}
 \newcommand{\numberof}{\operatorname{\#}}
-\newcommand{\partfun}[1]{\mathcal{Z}_{#1}}
+\newcommand{\partfun}[1]{Z_{#1}}
 \newcommand{\separator}[2]{\operatorname{sep}(#1,#2)}
 \newcommand{\difference}[2]{\operatorname{diff}(#1 \rightarrow #2)}
 \newcommand{\real}{\mathbb{R}}
@@ -512,13 +512,13 @@ An \Def{RNA design network} (for sequences of length $n$) is a tuple $\network=(
 The \Def{energy $\energy{\network}(S)$ of a sequence} $S$ in a network
 $\network$ is defined as sum of the values of all functions in
 $f\in\F$ evaluated for $S$, i.e.
-$\energy{\network}(S) := \sum_{f\in F} \evalfor{f}{S}.$
+$\energy{\network}(S) := \sum_{f\in\F} \evalfor{f}{S}.$
 
 The network energy $\energy{\network}(S)$ corresponds to the energy in
 Eq.~$(\ref{eq:mainproblem}),$ where this energy is modeled as sum of
 the functions in $\F$. Consequently, $\partfun{\R}$ of
 Eq.~$(\ref{eq:mainproblem})$ is modeled as network partition function
-$\partfun{\network} := \sum_{S}\exp(-\beta\energy{\network}(S)) = \sum_{S}\prod_{f\in F} \exp( -\beta\cdot
+$\partfun{\network} := \sum_{S}\exp(-\beta\energy{\network}(S)) = \sum_{S}\prod_{f\in\F} \exp( -\beta\cdot
 \evalfor{f}{S} ).$
 
 % For a given RNA design network, one is typically interested in the \Def{minimum free energy sequence} $\energy{\network}:=\min_{S}\energy{\network}(S)$, the \Def{enumeration of valid sequences} $\numberof{\network}$ and the \Def{partition function} of the network $\network$ as \begin{equation}
@@ -601,12 +601,13 @@ yields the total partition function:
     sequences determining exactly the positions $\separator{u}{v}$.}
  \For{$u\to{}v\in T$ in postorder}{
   \For{$\val\in\partseqs(\separator{u}{v})$}{
-    $\evalfor{\Message{u}{v}}{\val} \gets 0$\;
+    $x\gets 0$\;
     \For{$\val'\in\partseqs(\difference{u}{v})$}{
-     $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\;
-     $p \gets p\ \cdot\ $product( $\evalfor{\Message{w}{u}}{\substitute{\val}{\val'}}$ for $(w\to{}u)\in T$ )\;
-     $\evalfor{\Message{u}{v}}{\val} \gets \evalfor{\Message{u}{v}}{\val} + p$\;
+     $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
+     ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{w}{u}}{\substitute{\val}{\val'}}$ for $(w\to{}u)\in T$ )\;
+     $x \gets x + p$\;
    }
+   $\evalfor{\Message{u}{v}}{\val} \gets x$\;
   }
   \Return {$m$}\;
   }
@@ -685,8 +686,8 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
    $r \gets \Random(\evalfor{\Message{u}{v}}{\val})$\;
    \For{$\val'\in\partseqs(\difference{u}{v})$}{
 
-     $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\;
-     $p \gets p\ \cdot\ $product( $\evalfor{\Message{w}{u}}{\substitute{\val}{\val'}}$ for $(w\to{}u)\in T$ )\;
+     $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$\\
+     ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{w}{u}}{\substitute{\val}{\val'}}$ for $(w\to{}u)\in T$ )\;
 %
 %     $p \gets 1$\;
 %     \For{$f\in \phi(v)$}{
@@ -697,11 +698,11 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 %     }
   	  $r \gets r - p$\;
   	  \If{$r<0$}{
-  	    $a_{\rm res} \gets \substitute{\val}{\val'}$\;
+  	    $\val_{\rm res} \gets \substitute{\val}{\val'}$\;
   	  \For{$(v\to{}w)\in T$}{
-  	      $a_{\rm res} \gets \substitute{a_{\rm res}}{\Sample(v,\substitute{\val}{\val'};T,\chi,\phi,m)}$\;
+  	      $\val_{\rm res} \gets \substitute{\val_{\rm res}}{\Sample(v,\substitute{\val}{\val'};T,\chi,\phi,m)}$\;
      }
-  	  \Return {$a_{\rm res}$}
+  	  \Return {$\val_{\rm res}$}
   	  \;}
  }
  }
