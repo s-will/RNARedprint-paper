@@ -1,12 +1,17 @@
-DOCUMENT="RNARedPrint-Bioinfo2018"
+DOCUMENTS=RNARedPrint-Bioinfo2018 supplement
 
-all: thesis
+all: $(DOCUMENTS:=.pdf)
 
-thesis:
-	pdflatex --interaction=nonstopmode ${DOCUMENT}
-	bibtex ${DOCUMENT}
-	pdflatex --interaction=nonstopmode ${DOCUMENT}
-	pdflatex --interaction=nonstopmode ${DOCUMENT}
+RNARedPrint-Bioinfo2018.pdf: RNARedPrint-Bioinfo2018.aux supplement.aux
+supplement.pdf: RNARedPrint-Bioinfo2018.aux supplement.aux
+
+%.pdf: %.tex %.aux
+	pdflatex --interaction=nonstopmode $<
+	pdflatex --interaction=nonstopmode $<
+
+%.aux: %.tex
+	pdflatex --interaction=nonstopmode $<
+	bibtex ${<:.tex=}
 
 watch:
 	while [ "`command -v inotifywait | wc -c`" != "0" ]; do \
@@ -17,6 +22,4 @@ watch:
 	done
 
 clean:
-	rm -f *.dvi *.aux *.log *.lof *.lot *.toc *.bbl *.blg *.out *.run.xml *blx.bib ${DOCUMENT}.pdf
-
-.PHONY: thesis
+	rm -f *.dvi *.aux *.log *.lof *.lot *.toc *.bbl *.blg *.out *.run.xml *blx.bib ${DOCUMENTS:=.pdf}
