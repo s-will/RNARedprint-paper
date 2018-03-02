@@ -442,13 +442,14 @@ node $v$ are thus computed in time
 $\Theta(2^{c(v)+|\chi(v)|})$. Consequently, the total time complexity
 of the modified algorithm is $$O(nk2^{\hat w}),$$ where $n$ is the RNA
 length, $k$ is the number of structures, and
-$\hat w := \max_{v\in T} c(v)+|\chi(v)|$. Notably, $\hat w$ can not
-exceed $2(w+1)$ such that the modified algorithm does not increase the
-original complexity.
+$\hat w := \max_{v\in T} c(v)+|\chi(v)|$.
 %
-As useful corollary, one obtains the (looser) complexity
-bound $$O(nk2^{w+1}2^{cc})$$ in terms of treewidth $w$ and connected
-components $cc$.
+From this directly follows the slightly looser complexity
+bound $$O(nk2^{w+1}2^{c})$$ in terms of treewidth $w$ and the maximum
+number $c$ of connected components represented in a node of the tree
+decomposition.  Notably, $\hat w$, as well as $w+1+c$, can not exceed
+$2(w+1)$, since $c\leq w+1$. Consequently the modified algorithm does
+never increase the original complexity.
 
 Finally, we remark that even stronger time savings could be possible
 in practice, since cc-valid partial sequences can still violate
