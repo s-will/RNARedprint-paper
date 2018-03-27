@@ -382,57 +382,63 @@ $u$ and its parent in $T$ rooted at $r$. For each node in the cluster tree, Alg.
     networks.}}
 
 While Alg.~\ref{alg:pf} computes messages values for
-\emph{all} possible combinations of nucleotides for the positions in
-the separator set, we observe here that this is \emph{not} required for computing all relevant
+\emph{all} possible combinations of nucleotides for the positions 
+% in the separator set, 
+% yp: for all the positions in a node, right?
+in a node, 
+we observe here that many such combinations are \emph{not} required for computing all relevant
 partition functions. In particular, the algorithm can be restricted to
-consider only \emph{valid} combinations, which satisfy the (hard)
-constraints on the nucleotides.
+consider only \Def{valid} combinations, satisfying the (hard)
+constraints induced by valid base pairs.
 
 RNA design introduces constraints due to the requirement of canonical
-(aka complemenentary) base pairing, which can be exploited in a
-particularly simple and effective way.  As already noted by
-\citet{Flamm2001}, the base pair complementarity induces a
+(aka complementary) base pairing, which can be exploited in a
+particularly simple and effective way to reduce the complexity.  
+As previously noted by \citet{Flamm2001}, the base pair complementarity induces a
 bi-partition of each connected component within the base pair
 dependency graph, such that the nucleotides assigned to the two set of
-nodes in the partition are restricted to values $\{\Ab,\Gb\}$ and
-$\{\Cb,\Ub\}$ respectively; we call a partitial sequence
-\emph{cc-valid}, iff its determined positions satisfy this separation
+nodes in the partition are restricted to values in $\{\Ab,\Gb\}$ and
+$\{\Cb,\Ub\}$ respectively. We call a partial sequence
+\Def{cc-valid}, iff its determined positions are consistent with such a separation
 for all determined positions of the same connected component.
 
 % Let $CC=\{cc_1$, $cc_2, \dots\}$ denote the vertex sets of the
 % connected components of the base pair dependency graph. In this graph,
 % let each component have the bi-partition $cc_i=cc^0_i\cup cc^1_i$.
 
-One can now modify Alg.~\ref{alg:pf}, on tree decomposition
+One can now modify Alg.~\ref{alg:pf}, on a tree decomposition
 $(T,\chi)$, such that the message values
-$\evalfor{\Message{u}{v}}{\val}$ are computed only for cc-valid
+$\evalfor{\Message{u}{v}}{\val}$ are only computed for cc-valid
 partial sequences $\val\in\partseqs(\separator{u}{v})$. Moreover, the
 loop over $\val'\in\partseqs(\difference{u}{v})$ is restricted, such
-that $\substitute{\val}{\val'}$ are cc-valid. (The analogous change is
-made to the sampling algorithm Alg.~\ref{alg:sampling}.)
+that $\substitute{\val}{\val'}$ are cc-valid. Analogous restrictions are 
+then implemented in the sampling algorithm Alg.~\ref{alg:sampling}.
 
 The correctness of the modified algorithm still follows from an
-induction argument: in this way, the message computation of one node
+induction argument: in this way, the message computation over one node
 evaluates messages from its children only at cc-valid partial
-sequences. The result of this computation is a message, which is
-defined at all cc-valid partial sequences.
+sequences. The result of this computation is a message, which corresponds 
+to the partition function, restricted to cc-valid partial sequences. 
+Since invalid sequences have infinite energy, they do not contribute to 
+the partition function, and the restricted partition function coincides 
+with the initial one.
 
-Remarkably, this strongly improves the algorithm's time
-complexity. Where the original algorithm enumerates all partial
-sequences $\substitute{\val}{\val'}$, where
+
+
+Remarkably, this restriction drastically improves the time
+complexity. While the original algorithm enumerates all partial
+sequences $\chi(v):=\substitute{\val}{\val'}$ such that
 $\val\in\partseqs(\separator{u}{v})$ and
 $\val'\in\partseqs(\difference{u}{v})$, the modified algorithm
-enumerates in two stages:
-\begin{enumerate}
-\item for each connected component of the base pair dependency graph
-  that involves any position in
-  $\separator{u}{v}\cup\difference{u}{v} = \chi(v)$, it first
-  enumerates all possibilities how the positions from the partition
-  sets are assigned to either $\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$
-\item it enumerates the possible partial sequences from the (according
-  to the decisions of the first stage) restricted domains of the
-  position in $\chi(v)$.
-\end{enumerate}
+only considers cc-valid sequences for $\chi(v)$ the nodes of $v$.
+Namely, 
+
+For each connected component having at least a position $i$ in $\chi(v)$, 
+the algorithm considers assigning any possible nucleotide $x\in \Sigma$ to $i$ and restricts
+ the assignment of  for 
+any remaining position $j$ of the same connected component, it restricts the domain of $j$ to base-pairs that are consistent with the parity . 
+
+
 Let $c(v)$ be the number of connected components involving positions
 in $\chi(v)$; then, the first stage enumerates $2^{c(v)}$
 combinations. For each such combination, the second stage enumerates
@@ -464,39 +470,39 @@ overhead in an implementation and does not straightforwardly improve
 the theoretical bound.
 
 
-\section{Exploiting the bipartite nature of base pair dependency
-  graphs to reduce the complexity}\label{sec:first-improvedComplexity}
-\textcolor{red}{\textbf{TODO: discuss and merge with/replace by previous Section}}
-
-As already noted by \citet{Flamm2001}, the requirement of canonical
-base pairing induces a bi-partition of each connected component within
-the base pair dependency graph, such that the nucleotides assigned to
-the two set of nodes in the partition are restricted to values
-$\{\Ab,\Gb\}$ and $\{\Cb,\Ub\}$ respectively.
+%\section{Exploiting the bipartite nature of base pair dependency
+%  graphs to reduce the complexity}\label{sec:first-improvedComplexity}
+%\textcolor{red}{\textbf{TODO: discuss and merge with/replace by previous Section}}
 %
-It follows that, within each connected component of the base pair
-dependency graph, the assignment of any position drastically restricts
-the domain of the remaining positions, \emph{i.e.} they may now be
-assigned to only 2 out of the original 4 nucleotides.
-\newcommand{\Parity}[1]{p_{#1}} To exploit this property, and further
-reduce the exponential factor of the complexity, we introduce the
-notion of \Def{parity} of a vertex/position, whereby vertices of
-\Def{even} (resp. \Def{odd}) polarities may only be assigned values in
-$\{\Ab,\Gb\}$ (resp. $\{\Cb,\Ub\}$). Neighbors of an odd vertex must
-be even and vice versa, so the choice of a parity for any single
-vertex caracterizes the parity of all vertices in a bipartite
-connected subgraph.
-
-Let $CC=\{cc_1,cc_2,\ldots\}$ denote the connected components of the base pair dependency graph, we consider a modified version of the cluster tree, obtained by:
-\begin{enumerate}
-\item Electing, in each connected component $cc_i$, the first position $v_i^\star$ from the component encountered from the root in a pre-order traversal of the cluster tree;\label{step:election}
-\item Introducing new variables $\mathcal{P}=\{\Parity{1},\ldots,\Parity{|CC|}\}$, representing the parity of elected vertices;
-\item Adding, to each node $x$ in the tree decomposition, the parity variables of connected components that are represented in the node, \emph{i.e.} such that at least one of the positions in the connected component is in $\chi(x)$; \label{step:addparities}
-\item Introducing, in the tree decomposition, a chain of intermediate nodes to fix cases where more than a single (parity) variable is introduced between a parent and its child.\label{step:intermediates}
-\end{enumerate}
-Note that, since connected components correspond to connected subtrees in the tree decomposition, then adding those variables preserves the properties of a tree decomposition. Also, each node in the former cluster tree introduces at most one new variable compared to its parent, so the elected node is uniquely defined by the rule stated in Step~\ref{step:election}. Finally, we note that the parity of a variable $v\in cc_i$ is entirely characterized by the parity $\Parity{i}$ of $v_i^\star$, and the parity of the distance between $v$ and $v_i^\star$ in the base pair dependency graph. Namely, the parity of $v$ is $\Parity{i}$ if the distance between $v$ and $v^{\star}_i$ is even, and opposite to $\Parity{i}$ if odd. It follows that, thanks to the new variables introduced in Step~\ref{step:addparities}, the domain of each of the original variables can be reduced to two alternatives instead of the original four.
-
-The computation of Alg.~\ref{alg:pf} on the new cluster tree, considering reduced assignments for position variables and additional odd/even assignments for parity variables, has complexity in $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $n$ is the RNA length, $k$ is the number of structures, $w$ is the tree-width of the unmodified cluster tree, and $c$ is the maximum number of connected components represented in a node. It should be noted that $c\le \min(|CC|,w+1)$, so that the new complexity cannot be larger than the one stated in Th.~\ref{th:complexities}. Also, note that the number of nodes introduced by Step~\ref{step:intermediates} is bounded by $|CC|$, so that the introduction of these intermediate nodes does not impact the worst-case complexity. For the same reason, the complexity of the stochastic backtrack remains unchanged.
+%As already noted by \citet{Flamm2001}, the requirement of canonical
+%base pairing induces a bi-partition of each connected component within
+%the base pair dependency graph, such that the nucleotides assigned to
+%the two set of nodes in the partition are restricted to values
+%$\{\Ab,\Gb\}$ and $\{\Cb,\Ub\}$ respectively.
+%%
+%It follows that, within each connected component of the base pair
+%dependency graph, the assignment of any position drastically restricts
+%the domain of the remaining positions, \emph{i.e.} they may now be
+%assigned to only 2 out of the original 4 nucleotides.
+%\newcommand{\Parity}[1]{p_{#1}} To exploit this property, and further
+%reduce the exponential factor of the complexity, we introduce the
+%notion of \Def{parity} of a vertex/position, whereby vertices of
+%\Def{even} (resp. \Def{odd}) polarities may only be assigned values in
+%$\{\Ab,\Gb\}$ (resp. $\{\Cb,\Ub\}$). Neighbors of an odd vertex must
+%be even and vice versa, so the choice of a parity for any single
+%vertex caracterizes the parity of all vertices in a bipartite
+%connected subgraph.
+%
+%Let $CC=\{cc_1,cc_2,\ldots\}$ denote the connected components of the base pair dependency graph, we consider a modified version of the cluster tree, obtained by:
+%\begin{enumerate}
+%\item Electing, in each connected component $cc_i$, the first position $v_i^\star$ from the component encountered from the root in a pre-order traversal of the cluster tree;\label{step:election}
+%\item Introducing new variables $\mathcal{P}=\{\Parity{1},\ldots,\Parity{|CC|}\}$, representing the parity of elected vertices;
+%\item Adding, to each node $x$ in the tree decomposition, the parity variables of connected components that are represented in the node, \emph{i.e.} such that at least one of the positions in the connected component is in $\chi(x)$; \label{step:addparities}
+%\item Introducing, in the tree decomposition, a chain of intermediate nodes to fix cases where more than a single (parity) variable is introduced between a parent and its child.\label{step:intermediates}
+%\end{enumerate}
+%Note that, since connected components correspond to connected subtrees in the tree decomposition, then adding those variables preserves the properties of a tree decomposition. Also, each node in the former cluster tree introduces at most one new variable compared to its parent, so the elected node is uniquely defined by the rule stated in Step~\ref{step:election}. Finally, we note that the parity of a variable $v\in cc_i$ is entirely characterized by the parity $\Parity{i}$ of $v_i^\star$, and the parity of the distance between $v$ and $v_i^\star$ in the base pair dependency graph. Namely, the parity of $v$ is $\Parity{i}$ if the distance between $v$ and $v^{\star}_i$ is even, and opposite to $\Parity{i}$ if odd. It follows that, thanks to the new variables introduced in Step~\ref{step:addparities}, the domain of each of the original variables can be reduced to two alternatives instead of the original four.
+%
+%The computation of Alg.~\ref{alg:pf} on the new cluster tree, considering reduced assignments for position variables and additional odd/even assignments for parity variables, has complexity in $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $n$ is the RNA length, $k$ is the number of structures, $w$ is the tree-width of the unmodified cluster tree, and $c$ is the maximum number of connected components represented in a node. It should be noted that $c\le \min(|CC|,w+1)$, so that the new complexity cannot be larger than the one stated in Th.~\ref{th:complexities}. Also, note that the number of nodes introduced by Step~\ref{step:intermediates} is bounded by $|CC|$, so that the introduction of these intermediate nodes does not impact the worst-case complexity. For the same reason, the complexity of the stochastic backtrack remains unchanged.
 
 \section{Parameters for the base pair and the stacking energy model}
 \label{appsec:modelparameters}
