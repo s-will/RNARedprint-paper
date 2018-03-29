@@ -375,11 +375,11 @@ $u$ and its parent in $T$ rooted at $r$. For each node in the cluster tree, Alg.
 
 \section{Exploiting constraint consistency to reduce the complexity}\label{sec:improvedComplexity}
 
-\textcolor{red}{\textbf{SW: Simpler alternative to
-    Sec.~\ref{sec:first-improvedComplexity}. Note also that the use of
-    variables in Sec.~\ref{sec:first-improvedComplexity} conflicts
-    with the (recent) specialization of constraint networks to RNA design
-    networks.}}
+%\textcolor{red}{\textbf{SW: Simpler alternative to
+%    Sec.~\ref{sec:first-improvedComplexity}. Note also that the use of
+%    variables in Sec.~\ref{sec:first-improvedComplexity} conflicts
+%    with the (recent) specialization of constraint networks to RNA design
+%    networks.}}
 
 While Alg.~\ref{alg:pf} computes messages values for
 \emph{all} possible combinations of nucleotides for the positions 
@@ -414,48 +414,51 @@ loop over $\val'\in\partseqs(\difference{u}{v})$ is restricted, such
 that $\substitute{\val}{\val'}$ are cc-valid. Analogous restrictions are 
 then implemented in the sampling algorithm Alg.~\ref{alg:sampling}.
 
-The correctness of the modified algorithm still follows from an
-induction argument: in this way, the message computation over one node
+The correctness of the modified algorithm follows from the same
+induction argument, where the message computation over one node
 evaluates messages from its children only at cc-valid partial
 sequences. The result of this computation is a message, which corresponds 
 to the partition function, restricted to cc-valid partial sequences. 
 Since invalid sequences have infinite energy, they do not contribute to 
-the partition function, and the restricted partition function coincides 
+the partition function, and the partition function restricted to cc-valid sequences coincides 
 with the initial one.
 
 
 
-Remarkably, this restriction drastically improves the time
-complexity. While the original algorithm enumerates all partial
-sequences $\chi(v):=\substitute{\val}{\val'}$ such that
+This restriction drastically improves the time
+complexity. Indeed, for any given node $v$, the original algorithm sends message for 
+ $\chi(v):=\substitute{\val}{\val'}$ such that
 $\val\in\partseqs(\separator{u}{v})$ and
-$\val'\in\partseqs(\difference{u}{v})$, the modified algorithm
-only considers cc-valid sequences for $\chi(v)$ the nodes of $v$.
-Namely, 
+$\val'\in\partseqs(\difference{u}{v})$, while the modified algorithm
+only considers cc-valid assignments for $\chi(v)$. Remark that, in any connected component $cc$, 
+assigning some nucleotide to a position reduces cc-valid assignments to (at most) 
+two alternatives for each of the $|cc|-1$ remaining positions. It follows that, for a node $v$ featuring positions from $\#cc(v)$ distinct connected components $\{cc_1,cc_2\ldots\}$ in the base pair dependency graph, the number of cc-valid assignments to positions in $\chi(v)$ is exactly
+$$4^{\#cc(v)}\prod_{i=1}^{\#cc(v)} 2^{|cc_i|-1} = 2^{\#cc(v)}\, 2^{|\chi(v)|} \in \Theta(2^{\#cc}\, 2^{w+1}),$$
+for a single node, where $\#cc$ is the total number of connected components in the base pair dependency graph, and $w$ is the tree-width of the tree decomposition $T$. Since the number of nodes in $T$ is in $\Theta(n)$, and the number of atomic energy contributions associated with $k$ structures is in $\mathcal{O}(k\,n)$, then the overall complexity grows like $\Theta(n\, k\, 2^{\#cc}\, 2^{w+1})$.
 
-For each connected component having at least a position $i$ in $\chi(v)$, 
-the algorithm considers assigning any possible nucleotide $x\in \Sigma$ to $i$ and restricts
- the assignment of  for 
-any remaining position $j$ of the same connected component, it restricts the domain of $j$ to base-pairs that are consistent with the parity . 
-
-
-Let $c(v)$ be the number of connected components involving positions
-in $\chi(v)$; then, the first stage enumerates $2^{c(v)}$
-combinations. For each such combination, the second stage enumerates
-only $2^{|\chi(v)|}$ partial sequences, since there remain only two
-possible nucleotide choices for each position. All message values for
-node $v$ are thus computed in time
-$\Theta(2^{c(v)+|\chi(v)|})$. Consequently, the total time complexity
-of the modified algorithm is $$O(nk2^{\hat w}),$$ where $n$ is the RNA
-length, $k$ is the number of structures, and
-$\hat w := \max_{v\in T} c(v)+|\chi(v)|$.
+%For each connected component having at least a position $i$ in $\chi(v)$, 
+%the algorithm considers assigning any possible nucleotide $x\in \Sigma$ to $i$ and restricts
+% the assignment of  for 
+%any remaining position $j$ of the same connected component, it restricts the domain of $j$ to base-pairs that are consistent with the parity . 
 %
-From this directly follows the slightly looser complexity
-bound $$O(nk2^{w+1}2^{c})$$ in terms of treewidth $w$ and the maximum
-number $c$ of connected components represented in a node of the tree
-decomposition.  Notably, $\hat w$, as well as $w+1+c$, can not exceed
-$2(w+1)$, since $c\leq w+1$. Consequently the modified algorithm does
-never increase the original complexity.
+%
+%Let $c(v)$ be the number of connected components involving positions
+%in $\chi(v)$; then, the first stage enumerates $2^{c(v)}$
+%combinations. For each such combination, the second stage enumerates
+%only $2^{|\chi(v)|}$ partial sequences, since there remain only two
+%possible nucleotide choices for each position. All message values for
+%node $v$ are thus computed in time
+%$\Theta(2^{c(v)+|\chi(v)|})$. Consequently, the total time complexity
+%of the modified algorithm is $$O(nk2^{\hat w}),$$ where $n$ is the RNA
+%length, $k$ is the number of structures, and
+%$\hat w := \max_{v\in T} c(v)+|\chi(v)|$.
+%%
+%From this directly follows the slightly looser complexity
+%bound $$O(nk2^{w+1}2^{c})$$ in terms of treewidth $w$ and the maximum
+%number $c$ of connected components represented in a node of the tree
+%decomposition.  Notably, $\hat w$, as well as $w+1+c$, can not exceed
+%$2(w+1)$, since $c\leq w+1$. Consequently the modified algorithm does
+%never increase the original complexity.
 
 Finally, we remark that even stronger time savings could be possible
 in practice, since cc-valid partial sequences can still violate
@@ -465,9 +468,9 @@ constraints, where the positions base pair directly, rendering the
 partial sequence invalid. Moreover, applications of the sampling
 framework, can introduce additional constraints that further reduce
 the number of valid partial subsequences. However, exploiting all such
-constraints, in a complete and general way, likely causes significant
-overhead in an implementation and does not straightforwardly improve
-the theoretical bound.
+constraints, in a complete and general way, would likely cause significant
+implementation overhead, while not significantly improving
+the asymptotic complexity.
 
 
 %\section{Exploiting the bipartite nature of base pair dependency
@@ -511,10 +514,10 @@ We trained parameters for two RNA energy models to approximate the
 Turner energy model, as implemented in the \Software{ViennaRNA}
 package.  In the \Def{base pair model}, the total energy of a sequence $S$
 for an RNA structure $R$ is given as sum of base pair energies, where
-we consider six types of base pairs distinguishing by the bases A-U,
-C-G or G-U (symmetrically) and between stacked and non-stacked base
-pairs; here, we consider base pairs $(i,j)\in R$ \emph{stacked} iff
-$(i+1,j-1)\in R$, otherwise \emph{non-stacked}. In the \Def{stacking model},
+we consider six types of base pairs distinguishing by the bases $\Ab$-$\Ub$,
+$\Cb$-$\Gb$ or $\Gb$-$\Ub$ (symmetrically) and between stacked and non-stacked base
+pairs; here, we consider base pairs $(i,j)\in R$ \Def{stacked} iff
+$(i+1,j-1)\in R$, otherwise \Def{non-stacked}. In the \Def{stacking model},
 our features are defined by the stacks, i.e. pairs $(i,j)$ and
 $(i+1,j-1)$ which both occur in $R$; we distinguish 18 types based on
 $S_i,S_j,S_{i+1},S_{j-1}$ (i.e. all combinations that allow canonical
