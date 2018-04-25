@@ -174,8 +174,6 @@
 
 \newcommand{\Software}[1]{{\ttfamily #1}}
 
-\newcommand{\ourprog}{\Software{RNARedPrint}}
-
 \newcommand{\evalfor}[2]{#1\llbracket{}#2\rrbracket{}}
 \newcommand{\substitute}[2]{#1\!\oplus\!#2}
 
@@ -183,7 +181,13 @@
 
 \setlength{\parskip}{.2em}
 
-\newcommand{\RNAblueprint}{{\tt \bfseries\color{blue}RNABlueprint}}
+\newcommand{\RNAblueprint}{{\tt \bfseries{} RNA\textcolor{blue!70!black}{Blue}print}}
+\newcommand{\ourprog}{{\tt \bfseries{}RNA\textcolor{red!70!black}{Red}Print}}
+
+\newcommand{\Energy}[2]{\textcolor{green!70!black}{E(#2;#1)}}
+
+\newcommand{\EnergyTurner}{E_{\text{T}}}
+\newcommand{\EnergyStacking}{E_{\text{st}}}
 
 %%% end macro defs
 
@@ -418,13 +422,21 @@ $G_{\R}$ in a slightly modified graph coloring variant, where the
 colors (from $\Sigma$) assigned to adjacent vertices of $G_{\R}$ must
 constitute valid base pairs.
 %
-We define the energy of a sequence $S$ based on the set of structures
-$\R$ as $E_\R(S) \in \mathbb{R}\cup\{\infty\}$. In
-our setting, the energy $E_\R(S)$ is additively composed of
-the energies of the single RNA structures in an RNA energy model, as
-well as sequence-dependent features like \GCb\%.  Furthermore note
-that $E_\R(S)$ is finite iff $S$ is valid for each structure
-$R_1,\dots,R_k$.
+The \Def{energy} of a sequence $S$ is defined by an \Def{energy
+  function} $E$---defined for set of structures $\R$ and mapping
+sequences to $\mathbb{R}\cup\{\infty\}$---as
+$\Energy{\R}{S} \in \mathbb{R}\cup\{\infty\}$. In our setting, the
+energy $\Energy{\R}{S}$ is typically chosen as a linear combination of
+the energies of the single RNA structures (in some RNA energy model
+that defines $E(S,R) \in \mathbb{R}\cup\{\infty\}$ for each
+sequence $S$ and structure
+$R$), as well as sequence-dependent features like \GCb\%. Formally, we
+will require that
+$\Energy{\R}{S}$ can be expressed as sum over functions values, where
+each function depends on the nucleotides at certain positions of
+$S$ (see below). Furthermore note that
+$\Energy{\R}{S}$ is finite iff
+$S$ is valid for each structure $R_1,\dots,R_k$.
 
 At the core of this work, we study the computation of partition
 functions over sequences.\smallskip\\
@@ -433,18 +445,18 @@ functions over sequences.\smallskip\\
   partition function
   \begin{equation}
     \label{eq:mainproblem}
-    \partfun{E_\R} = \sum_{S\in\S_n} \exp(-\beta E_\R(S)),
+    \partfun{E,\R} = \sum_{S\in\S_n} \exp(-\beta \Energy{\R}{S}),
   \end{equation}
   where $\beta$ denotes the inverse pseudo-temperature, and $\S_n$ the set of sequences of length $n$.
 
 %We solve the problem efficiently for any fixed parameter $w$, whose value reflects the intrinsic complexity of the structures and energy function $E_\R$.
 %
   As we elaborate in subsequent sections, our approach relies on
-  breaking down the energy function $E_\R(S)$ into additive
+  breaking down the energy function $\Energy{\R}{S}$ into additive
   components, each depending on only few sequence positions. Given
-  $\R$, we express $E_\R(S)$ as the sum of energy contributions $f(S)$
+  $\R$, we express $\Energy{\R}{S}$ as the sum of energy contributions $f(S)$
   over a set $\F$ (of functions $f:\S_n\to\real$),
-  s.t.~$E_\R(S)=\sum_{f\in\F} f(S)$. This captures realistic RNA
+  s.t.~$\Energy{\R}{S}=\sum_{f\in\F} f(S)$. This captures realistic RNA
   energy models---including nearest neighbor models,
   e.g.~\citet{Turner2009}, and even pseudoknot models,
   e.g. \citet{Andronescu2010}, while bounding the dependencies to
@@ -825,7 +837,7 @@ We implemented our Boltzmann sampling strategy (Algorithms
 \ref{alg:pf} and \ref{alg:sampling}), to sample valid sequences for given
 target structures and weights $\pi_1,\dots,\pi_n$.
 Moreover, we used multi-dimensional Boltzmann sampling, as described in Section~\ref{sec:multiBoltzmann}, to target specific energies and \GCb\%.  Our tool \ourprog{} evaluates energies according to the base
-pair energy model or a stacking energy model $E_{\mathcal{S}}$, whose parameters 
+pair energy model or a stacking energy model $\EnergyStacking$, whose parameters 
 were fitted to best approximate Turner energies (Supp. Mat.~\ref{appsec:modelparameters}).
 %
 %\paragraph{Implementation of multi-dimensional Boltzmann sampling}
@@ -834,10 +846,10 @@ were fitted to best approximate Turner energies (Supp. Mat.~\ref{appsec:modelpar
 %If $|P| > n$ or an maximum amount of iterations is reached, the sequences in $P$ are returned.
 %
 
-To capture the realistic Turner model $E_{\mathcal{T}}$ while keeping the computational cost in check, we exploited the excellent linear fit  of $E_{\mathcal{T}}$  with the fitted stacking model $E_{\mathcal{S}}$ (supp. Fig~\ref{fig:training-cor}). Namely, we observed a structure-specific affine dependency between the Turner and stacking energy models, so that $E_{\mathcal{T}}(S;R) \approx \gamma\cdot E_{\mathcal{S}}(S;R) + \delta$ for any structure $R$ and sequence $S$. We learned the $(\gamma,\delta)$ parameters from a set of sequences generated with homogenous weights $w=e^{\beta}$, tuning only the \GCb\% to a predetermined value.  Finally, we adjusted the targeted energies within our stacking model to $E_{\mathcal{S}}^{\star} = (E_{\mathcal{T}}^{\star}- \delta)/\gamma$ in order to reach, on average, the right targeted energy $E_{\mathcal{T}}^{\star}$ in the Turner model.
+To capture the realistic Turner model $\EnergyTurner$ while keeping the computational cost in check, we exploited the excellent linear fit  of $\EnergyTurner$  with the fitted stacking model $\EnergyStacking$ (supp. Fig~\ref{fig:training-cor}). Namely, we observed a structure-specific affine dependency between the Turner and stacking energy models, so that $\EnergyTurner(S;R) \approx \gamma\cdot \EnergyStacking(S;R) + \delta$ for any structure $R$ and sequence $S$. We learned the $(\gamma,\delta)$ parameters from a set of sequences generated with homogenous weights $w=e^{\beta}$, tuning only the \GCb\% to a predetermined value.  Finally, we adjusted the targeted energies within our stacking model to $\EnergyStacking^{\star} = (\EnergyTurner^{\star}- \delta)/\gamma$ in order to reach, on average, the right targeted energy $\EnergyTurner^{\star}$ in the Turner model.
 
 Fig.~\ref{fig:energydist} illustrates our above strategy. Fig.~\ref{fig:energydist}A
-shows the relative distance between $E_{\mathcal{T}}$  and $E_{\mathcal{S}}$, observed for instances of the \texttt{Modena} benchmark. For each structure, $n=1\,000$ sequences were sampled, while targeting a ${\sf GC}\%$ of $50\%$, and reported the difference between the expected and sampled energies for both the Turner model and its approximation using a stacking model. 
+shows the relative distance between $\EnergyTurner$  and $\EnergyStacking$, observed for instances of the \texttt{Modena} benchmark. For each structure, $n=1\,000$ sequences were sampled, while targeting a ${\sf GC}\%$ of $50\%$, and reported the difference between the expected and sampled energies for both the Turner model and its approximation using a stacking model. 
 Fig.~\ref{fig:energydist}B shows the Turner energy, for a single instance of the 3-structures \texttt{Modena}  benchmark, using different weights benchmark. These results demonstrate that our multidimensionnal Boltzmann sampling strategy can accurately and, to a large extent, independently shift the Turner energies of sampled sequences to prescribed targets.  
 
 %To reduce the cost of the precomputation, we used a stacking energy model 
@@ -1018,7 +1030,7 @@ Extensions:
   \item Structures can also be penalized, but they must be specified explicitly.\\
   However, any competing structure must consist of helices, and it is possible to penalize each of the $\Theta(n^2)$ helices of any given length $L$. What would be the impact on treewidth?
   \item More general energy  models $\to$ Turner. (Pseudoknots)
-  For this description, we assume that all input structures are non-crossing, while the framework would otherwise support crossing input structures as well as according energy models (e.g. the Hotknots model~\citep{Ren2005}) by considering special pseudoknot loops.
+  For this description, we assume that all input structures are non-crossing, while the framework would otherwise support crossing input structures as well as according energy models, e.g.{} the Hotknots model of~\citet{Ren2005}, by considering special pseudoknot loops.
 \end{enumerate}\label{lbl:theend}
 }
 
