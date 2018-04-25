@@ -34,6 +34,8 @@
 \usepackage{longtable}
 \usepackage[vlined]{algorithm2e}
 
+\usepackage[scale=.95]{inconsolata}
+
 \usepackage{xifthen}
 \usepackage{stmaryrd}
 
@@ -181,7 +183,7 @@
 
 \setlength{\parskip}{.2em}
 
-
+\newcommand{\RNAblueprint}{{\tt \bfseries\color{blue}RNABlueprint}}
 
 %%% end macro defs
 
@@ -217,7 +219,7 @@ and $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaisea
   the problem as a constraint network, \ourprog{} supports generic
   Boltzmann-weighted sampling for arbitrary additive RNA energy
   models; this enables the generation of RNA sequences meeting
-  specific goals like expected free energies or \GCb-content. Finally,
+  specific goals like expected free energies or \GCb\%. Finally,
   we empirically study general properties of the approach and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
   common design benchmark. Generating seed sequences with \ourprog{}, we demonstrate significant improvements over the previously best multi-target sampling strategy (uniform sampling).\\
@@ -259,7 +261,7 @@ structures is a relevant design objective for engineering kinetically
 controlled RNAs, finally targeting prescribed folding pathways. Thus,
 modern applications of RNA design often target multiple structures,
 additionally aiming at other features, such as specific
-\GCb-content~\citep{Reinharz2013} or the presence/absence of
+\GCb-content (\GCb\%) as previously done by~\citet{Reinharz2013} or the presence/absence of
 functionally relevant motifs (either anywhere or at specific
 positions)~\citep{Zhou2013}; these objectives motivate flexible
 computational design methods.
@@ -278,8 +280,8 @@ mainly by starting its local search from the minimum energy sequence
 for the target structure instead of (uniform) random sequences for the
 early \Software{RNAinverse} algorithm~\citep{Hofacker1994}. This
 strategy was later shown to result in unrealistically high
-\GCb-contents in designed sequences. To address this issue,
-\Software{IncaRNAtion}~\citep{Reinharz2013} controls the \GCb-content
+\GCb\% in designed sequences. To address this issue,
+\Software{IncaRNAtion}~\citep{Reinharz2013} controls the \GCb\%
 through an adaptive sampling strategy.
 
 \parHead{Specificities and similarities of multi-target design.}
@@ -289,7 +291,7 @@ Facing the complex sequence constraints induced by multiple targets, early metho
 %
 Recently, the \Software{RNAdesign}
 approach~\citep{HoenerzuSiederdissen2013}, coupled with powerful local
-search within \Software{RNAblueprint}~\citep{Hammer2017}, solved the
+search within \RNAblueprint{}~\citep{Hammer2017}, solved the
 problem of sampling seeds from the uniform distribution for multiple
 targets. These methods adopt a graph coloring perspective, initially
 decomposing the graph hierarchically using various decomposition
@@ -304,12 +306,12 @@ parameter $\gamma$ is bounded by the length of the designed RNA;
 typically, the decomposition strategy achieves much lower $\gamma$.
 
 \parHead{Motivation.} The exponential time and space requirements of the \Software{RNAdesign} method already raise the question of the \Def{complexity of (uniform) sampling for multi-target design}. Since stochastic backtrack can be performed in linear time per sample, the method is dominated by the precomputation step, which requires counting valid designs. Thus, we focus on the question: \emph{Is there a polynomial-time algorithm to count valid multi-target designs?} In Section~\ref{sec:counting}, we answer in the negative, showing that there exists no such algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences  and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
-The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, generally, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as the \GCb-content, complex sequence constraints, or the energy of individual structures?}
+The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, generally, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as the \GCb\%, complex sequence constraints, or the energy of individual structures?}
 
 
 \begin{figure*}[t]
 {\centering\includegraphics[width=.8\textwidth]{Figs/Workflow}\\}
-\caption{General outline of \ourprog{} for base pair-based energy models. From a set of target secondary structures (i), base-pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb-content, leading to the production of suitable designs (vi).}
+\caption{General outline of \ourprog{} for base pair-based energy models. From a set of target secondary structures (i), base-pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb\%, leading to the production of suitable designs (vi).}
 \label{fig:workflow}
 \end{figure*}
 
@@ -328,7 +330,7 @@ used RNA energy models%
 %(Subsection~\ref{sec:energy_models})
 .  Moreover, we describe an \Def{adaptive
   sampling} strategy to control the free energies of the individual
-target structures and the \GCb-content%
+target structures and the \GCb\%%
 % (SubSection~\ref{sec:multiBoltzmann})
 . %
 We observe that sampling based on less complex RNA energy models
@@ -420,7 +422,7 @@ We define the energy of a sequence $S$ based on the set of structures
 $\R$ as $E_\R(S) \in \mathbb{R}\cup\{\infty\}$. In
 our setting, the energy $E_\R(S)$ is additively composed of
 the energies of the single RNA structures in an RNA energy model, as
-well as sequence dependent features like \GCb-content.  Furthermore note
+well as sequence-dependent features like \GCb\%.  Furthermore note
 that $E_\R(S)$ is finite iff $S$ is valid for each structure
 $R_1,\dots,R_k$.
 
@@ -788,9 +790,9 @@ dangling ends) still depend on at most four bases of the sequence.
 
 \subsection{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
 The flexibility of our framework supports an advanced sampling technique, named multidimensional Boltzmann sampling~\citep{Bodini2010} to (probabilistically) enforce additional constraints.
-This technique was previously used to control the \GCb-content~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; it enables explicit control of the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets. %We use multidimensional Boltzmann sampling to generate sequences having predetermined targeted energies $(\TargetE_1,\ldots,\TargetE_k)$ for the $k$ structures.
+This technique was previously used to control the \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; it enables explicit control of the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets. %We use multidimensional Boltzmann sampling to generate sequences having predetermined targeted energies $(\TargetE_1,\ldots,\TargetE_k)$ for the $k$ structures.
 
-Multidimensional Boltzmann sampling requires the ability to \Def{sample from a weighted distribution} over the set of compatible sequences, where the probability of a sequence $S$ with free energies $(E_1,\ldots,E_k)$ for its target structures is
+Multidimensional Boltzmann sampling requires the ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ with free energies $(E_1,\ldots,E_k)$ for its target structures is
 $\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=1}^{k} \pi_i^{-E_i}}{\partfun{\pmb{\pi}}},$
 where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function. Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \ln(\pi_\ell)\, E(\val)/\beta$. The probability of a sequence $S$ is thus proportional to
 $ \prod_{\ell=1}^{k} e^{-\ln(\pi_\ell)\, E_i} = \prod_{\ell=1}^{k} \pi_i^{-E_i}. $
@@ -811,68 +813,65 @@ combinatorics, see \citet{Bender1983} and
 \citet{Drmota1997}. In such cases, the expected number of
 rejections before reaching the targeted energies remains constant when
 $\varepsilon\ge 1/\sqrt{n}$, and $\Theta(n^{k/2})$ when
-$\varepsilon=0$. The \GCb-content of designs can also be controlled,
+$\varepsilon=0$. The \GCb\% of designs can also be controlled,
 jointly and in a similar way, as done in
 \Software{IncaRNAtion}~\citep{Reinharz2013}.
 
 
 \section{Results}\label{sec:results}
 
-\subsection{Targeting Turner energies and GC-content}
-We implemented the Boltzmann sampling approach (Algorithms
-\ref{alg:pf} and \ref{alg:sampling}), performing sampling for given
-target structures and weights $\pi_1,\dots,\pi_n$; moreover on top,
-multi-dimensional Boltzmann sampling (see
-Section~\ref{sec:multiBoltzmann}) to target specific energies and
-\GCb-content.  Our tool \ourprog{} evaluates energies according to the base
-pair energy model or the stacking energy model, using parameters which
-were trained to approximate Turner energies
-(Supp. Mat.~\ref{appsec:modelparameters}).
+\subsection{Targeting Turner energies and \GCb\%}
+We implemented our Boltzmann sampling strategy (Algorithms
+\ref{alg:pf} and \ref{alg:sampling}), to sample valid sequences for given
+target structures and weights $\pi_1,\dots,\pi_n$.
+Moreover, we used multi-dimensional Boltzmann sampling, as described in Section~\ref{sec:multiBoltzmann}, to target specific energies and \GCb\%.  Our tool \ourprog{} evaluates energies according to the base
+pair energy model or a stacking energy model $E_{\mathcal{S}}$, whose parameters 
+were fitted to best approximate Turner energies (Supp. Mat.~\ref{appsec:modelparameters}).
 %
 %\paragraph{Implementation of multi-dimensional Boltzmann sampling}
-%As suggested in Section~\ref{sec:multiBoltzmann}, we heuristically optimize weights to target specific energies and GC content in an iterative procedure (based on the core sampling algorithm).
+%As suggested in Section~\ref{sec:multiBoltzmann}, we heuristically optimize weights to target specific energies and \GCb\% in an iterative procedure (based on the core sampling algorithm).
 %Specifically, energy weights are initialized as $w_\ell=e^{\frac{1}{RT}}$; the gc weight as $w_{gc}=1$. For each iteration, $\psi\cdot n$ sequences are sampled with the current weights. Then, we determine the mean energies $E(S;R_\ell)$ and the mean GC content over the sampled sequences. For the next iteration, the weights are updated by the rules $w_\ell = w_\ell \gamma^{mean(E(S;R_\ell))-E_\ell}$ and $w_{gc} = w_{gc}\frac{GC_{target}}{mean(GC)}$. During this procedure, we collect   in a set $P$ all the sequences exhibiting energies within $[E_1-\delta,E_1+\delta]\times [E_2-\delta,E_2+\delta]\ldots$ and and GC-content within $[GC_{target}-\idelta',GC_{target}+\delta']$.
 %If $|P| > n$ or an maximum amount of iterations is reached, the sequences in $P$ are returned.
 %
 
-To capture the realistic Turner model $E_{\mathcal{T}}$, we exploit its very good correlation (supp. Fig~\ref{fig:training-cor}) with our simple stacking-based model $E_{\mathcal{S}}$. Namely, we observe a structure-specific affine dependency between these Turner and stacking energy models, so that $E_{\mathcal{T}}(S_\ell;R_\ell) \approx \gamma_\ell\, E_{\mathcal{S};R_\ell}(S_\ell) + \delta_\ell$ for each structure $R_\ell$. We learn the $(\gamma_\ell,\delta_\ell)$ parameters from a set of sequences generated with homogenous weights $w=e^{\beta}$, tuning only the \GCb-content to a predetermined target frequency.  Finally, we adjust the targeted energy of our stacking model to $E_{\mathcal{S}}^{\star} = (E_{\mathcal{T}}^{\star}- \delta_\ell)/\gamma_\ell$.
+To capture the realistic Turner model $E_{\mathcal{T}}$ while keeping the computational cost in check, we exploited the excellent linear fit  of $E_{\mathcal{T}}$  with the fitted stacking model $E_{\mathcal{S}}$ (supp. Fig~\ref{fig:training-cor}). Namely, we observed a structure-specific affine dependency between the Turner and stacking energy models, so that $E_{\mathcal{T}}(S;R) \approx \gamma\cdot E_{\mathcal{S}}(S;R) + \delta$ for any structure $R$ and sequence $S$. We learned the $(\gamma,\delta)$ parameters from a set of sequences generated with homogenous weights $w=e^{\beta}$, tuning only the \GCb\% to a predetermined value.  Finally, we adjusted the targeted energies within our stacking model to $E_{\mathcal{S}}^{\star} = (E_{\mathcal{T}}^{\star}- \delta)/\gamma$ in order to reach, on average, the right targeted energy $E_{\mathcal{T}}^{\star}$ in the Turner model.
 
-To illustrate our above strategy, we sampled $n=1\,000$ sequences
-targeting ${\sf GC}\%=0.5$ and different Turner energies for the three
-structure targets of an example instance. Fig.~\ref{fig:energydist}A
-illustrates how the Turner energy distributions of the shown target
-structures can be accurately shifted to prescribed target energies;
-for comparison, we plot the respective energy distribution of
-uniformly and Boltzmann sampled sequences. Fig.~\ref{fig:energydist}B
-summarizes the targeting accuracy for the single structure energies
-over a larger set of instances from the \texttt{Modena} benchmark. We
-emphasize that only the simple stacking energies are directly targeted
-(at $\pm$10\% tolerance, expect for a few hard instances). Due to our
-linear adjustment, we finally achieve well-controlled energies in the
-realistic Turner energy model.
+Fig.~\ref{fig:energydist} illustrates our above strategy. Fig.~\ref{fig:energydist}A
+shows the relative distance between $E_{\mathcal{T}}$  and $E_{\mathcal{S}}$, observed for instances of the \texttt{Modena} benchmark. For each structure, $n=1\,000$ sequences were sampled, while targeting a ${\sf GC}\%$ of $50\%$, and reported the difference between the expected and sampled energies for both the Turner model and its approximation using a stacking model. 
+Fig.~\ref{fig:energydist}B shows the Turner energy, for a single instance of the 3-structures \texttt{Modena}  benchmark, using different weights benchmark. These results demonstrate that our multidimensionnal Boltzmann sampling strategy can accurately and, to a large extent, independently shift the Turner energies of sampled sequences to prescribed targets.  
+
+%To reduce the cost of the precomputation, we used a stacking energy model 
+%as a proxy for the Turner model. Indeed, we observed a strong linear 
+%dependency between the Turner energy and the 
+%emphasize that only the simple stacking energies are directly targeted
+%(at $\pm$10\% tolerance, except for a few hard instances). Due to our
+%linear adjustment, we finally achieve well-controlled energies in the
+%realistic Turner energy model.
 \begin{figure*}[t]
   \begin{center}
-    {\sf \bfseries A}\includegraphicstop[width=0.57\textwidth]{Figs/energy_distribution}
-    {\sf \bfseries B}\includegraphicstop[width=0.32\textwidth]{Figs/offset}
+    {\sf \bfseries A}\includegraphicstop[width=0.32\textwidth]{Figs/offset}\hspace{.5cm}
+    {\sf \bfseries B}\includegraphicstop[width=0.57\textwidth]{Figs/energy_distribution}
   \end{center}
   \caption{%
-  	Targeting specific energies using multi-dimensional Boltzmann sampling. (A) Turner energy distributions for three target structures (right) while targeting $(-40,-40,-20)$ and $(-20,-20,-20)$ free energy vectors. For comparison, we show the distribution of uniform and Boltzmann samples; respectively associated with homogenous weights $1$ and $e^\beta$. (B) Accuracy of targeting over all target structures of the \Software{Modena} benchmark instances \texttt{RNAtabupath} (2str), \texttt{3str} and \texttt{4str}. Shown is the relative deviation of targeted and achieved energies in the simple stacking model and the Turner model.
+  	Targeting specific energies using multi-dimensional Boltzmann sampling. 
+  	(A) Accuracy of targeting over all target structures of the \Software{Modena} benchmark instances \texttt{RNAtabupath} (2str), \texttt{3str} and \texttt{4str}. Shown is the relative deviation of targeted and achieved energies in the simple stacking model and the Turner model.
+  	(B) Turner energy distributions for three target structures (right) while targeting $(-40,-40,-20)$ and $(-20,-20,-20)$ free energy vectors. For comparison, we show the distribution of uniform and Boltzmann samples; respectively associated with homogenous weights $1$ (uniform) and $e^\beta$ (Boltzmann). 
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
 }
   \label{fig:energydist}
 \end{figure*}
 \subsection{Generating high-quality seeds for further optimization}
-We empirically study the capacity of \ourprog{} to improve the generation of seed sequences for subsequent local optimizations, showing an important application in biologically relevant scenario.
+We empirically study the capacity of \ourprog{} to improve the generation of seed sequences for subsequent local optimizations, showing an important application in biologically relevant scenarii.
 
 For a multi-target design instance, individual reasonable target
 energies are estimated from averaging the energy over samples at
-relatively high weights $e^{\beta}$, setting the targeted \GCb-content
+relatively high weights $e^{\beta}$, setting the targeted \GCb\%
 to 50\%. For each instance of the \Software{Modena}
 benchmark~\citep{Taneda2015}, we estimated such target energies and
 subsequently generated $1\,000$ seed sequences at these energies.
 Our procedure is tailored to produce sequences with similar Turner
 energy that favor the stability of the target structures having
-moderate \GCb-content; all these properties are desirable objectives
+moderate \GCb\%; all these properties are desirable objectives
 for RNA design.  All sampled sequences are evaluated under the
 multi-stable design objective function of \citet{Hammer2017}:
 % \begin{align}
@@ -890,21 +889,21 @@ the subsets \texttt{RNAtabupath} (2str), \texttt{3str}, and \texttt{4str}, of
 the \Software{Modena} benchmark set with 2,3, and 4 structures. The
 results are compared, in terms of their value for the objective
 function of Eq.~\eqref{eq:blueprintobjective}, to seed sequences
-uniformly sampled using \Software{RNAblueprint}~\citep{Hammer2017}
+uniformly sampled using \RNAblueprint{}~\citep{Hammer2017}
 (Table~\ref{tab:benchmark-results}, seeds). Our first analysis reveals
 that Boltzmann-sampled sequences constitute better seeds, associated
 with better values ($\sim\! 69\%$ improvement on average), compared to
 uniform seeds for \emph{all instances} of our benchmark
 (Supp. Mat.~\ref{sec:validity}).
 
-Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps. At each step, we resampled (uniformly random) the positions of a randomly selected component in the base pair dependency graph, and accepted the modification only if it resulted in a gain, as described in \Software{RNAblueprint}~\citep{Hammer2017}.
+Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps. At each step, we resampled (uniformly random) the positions of a randomly selected component in the base pair dependency graph, and accepted the modification only if it resulted in a gain, as described in \RNAblueprint{}.
 %
 Once again, for all instances, we observe a positive improvement of
 the quality of Boltzmann designs over uniform ones, suggesting a
 superior potential for optimization ($\sim 32\%$ avg improvement,
 Table~\ref{tab:benchmark-results}, optimized). Notably, our subsequent
-optimization runs, which are directly inherited from the uniformly
-sampling RNABlueprint software, partially level the advantages of
+optimization runs, which are directly inherited from the uniform
+sampling \RNAblueprint{} software, partially level the advantages of
 Boltzmann sampling. In future work, we hope to improve this aspect by
 exploiting Boltzmann sampling even during the optimization run.
 
@@ -956,11 +955,12 @@ If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$.
 Assume that $v\in V_1$, and remind that the only nucleotides allowed in $V_1$ are $\Ab$ and $\Gb$. Since $f(v)\neq f'(v)$, then we have $\{f(v),f'(v)\}=\{\Ab,\Gb\}$
 and we conclude that $\Psi(f)$ differs from $\Psi(f')$ at least with respect to its inclusion/exclusion of $v$.
 
-We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $S\in \IS{G}$. Let us consider the function $f$ defined as
-\begin{align}
- &\forall v_1\in V_1,v_2\in V_2:\notag\\& f(v_1) = \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} \text{\quad and\quad} 
- f(v_2) = \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S\end{cases}
-\end{align}
+We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $S\in \IS{G}$. Let us consider the function $f$ defined for any $(v_1,v_2)\in V_1\times V_2$ as
+\begin{align*}
+f(v_1) &= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} &
+\text{\quad and\quad}&& 
+ f(v_2) &= \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S.\end{cases}
+\end{align*}
 One easily verifies that $\Psi(f) = S$. 
 
 We are then left to determine if $f$ is a valid design for $G$, i.e. if for each $(v, v') \in E$ one has  $\{f(v),f(v')\}\in \B.$ Since $G$ is bipartite, any edge in $E$ involves two nodes $v_1\in V_1$ and $v_2\in V_2$. Remark that, among all the possible assignments $f(v_1)$ and $f(v_2)$, the only invalid combination of nucleotides is $(f(v_1),f(v_2)) = (\Ab,\Cb)$. However, such nucleotides are assigned to positions that are in the independent set $S$, and therefore cannot be adjacent. We conclude that $\Psi$ is surjective, and thus bijective.
@@ -989,7 +989,7 @@ of a common multi-target design benchmark.
 
 The presented method enables new possibilities for sequence generation
 in the field of RNA sequence design by enforcing additional
-constraints, like the \GCb-content, while controlling the energy of
+constraints, like the \GCb\%, while controlling the energy of
 multiple target structures. Thus it presents a major advance over
 previously applied ad-hoc sampling and even efficient uniform sampling
 strategies. We have shown the practicality of such controlled sequence
@@ -1041,8 +1041,7 @@ Future and Emerging Technologies programme
 %European Commission, under
 (FET-Open grant 323987; project RiboNets).
 %
-We thank Leonid Chindelevitch for suggesting using the stable sets analogy to optimize our FPT algorithm, and Arie Koster for practical recommendations
-for computing tree decompositions.
+We thank Leonid Chindelevitch for suggesting a drastic optimization of our FPT algorithm based on stable sets combinatorics, and Arie Koster for practical recommendations on tree decompositions.
 
 
 \bibliographystyle{natbib}
