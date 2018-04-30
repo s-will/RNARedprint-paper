@@ -41,6 +41,8 @@
 
 \usepackage{xcolor}
 
+\usepackage{todonotes}
+
 
 \hypersetup{
     bookmarks=false,         % show bookmarks bar?
@@ -55,7 +57,6 @@
     filecolor=magenta,      % color of file links
     urlcolor=red!70!black           % color of external links
 }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rolf's includegraphicstop
@@ -834,11 +835,16 @@ jointly and in a similar way, as done in
 
 \subsection{Targeting Turner energies and \GCb\%}
 We implemented our Boltzmann sampling strategy (Algorithms
-\ref{alg:pf} and \ref{alg:sampling}), to sample valid sequences for given
-target structures and weights $\pi_1,\dots,\pi_n$.
-Moreover, we used multi-dimensional Boltzmann sampling, as described in Section~\ref{sec:multiBoltzmann}, to target specific energies and \GCb\%.  Our tool \ourprog{} evaluates energies according to the base
-pair energy model or a stacking energy model $\EnergyStacking$, whose parameters 
-were fitted to best approximate Turner energies (Supp. Mat.~\ref{appsec:modelparameters}).
+\ref{alg:pf} and \ref{alg:sampling}), to sample valid sequences for
+given target structures and weights $\pi_1,\dots,\pi_n$.  Moreover, we
+used multi-dimensional Boltzmann sampling, as described in
+Section~\ref{sec:multiBoltzmann}, to target specific energies and
+\GCb\%.  Our tool \ourprog{} evaluates energies according to the
+stacking energy model $\EnergyStacking$, whose parameters were fitted
+to best approximate Turner energies. As well, we implemented and
+fitted a base pair energy model for \ourprog{}, which was not studied
+for its targeting performance (both models:
+Supp. Mat.~\ref{appsec:modelparameters}).
 %
 %\paragraph{Implementation of multi-dimensional Boltzmann sampling}
 %As suggested in Section~\ref{sec:multiBoltzmann}, we heuristically optimize weights to target specific energies and \GCb\% in an iterative procedure (based on the core sampling algorithm).
@@ -846,11 +852,37 @@ were fitted to best approximate Turner energies (Supp. Mat.~\ref{appsec:modelpar
 %If $|P| > n$ or an maximum amount of iterations is reached, the sequences in $P$ are returned.
 %
 
-To capture the realistic Turner model $\EnergyTurner$ while keeping the computational cost in check, we exploited the excellent linear fit  of $\EnergyTurner$  with the fitted stacking model $\EnergyStacking$ (supp. Fig~\ref{fig:training-cor}). Namely, we observed a structure-specific affine dependency between the Turner and stacking energy models, so that $\EnergyTurner(S;R) \approx \gamma\cdot \EnergyStacking(S;R) + \delta$ for any structure $R$ and sequence $S$. We learned the $(\gamma,\delta)$ parameters from a set of sequences generated with homogenous weights $w=e^{\beta}$, tuning only the \GCb\% to a predetermined value.  Finally, we adjusted the targeted energies within our stacking model to $\EnergyStacking^{\star} = (\EnergyTurner^{\star}- \delta)/\gamma$ in order to reach, on average, the right targeted energy $\EnergyTurner^{\star}$ in the Turner model.
+To capture the realistic Turner model $\EnergyTurner$ while keeping
+the computational cost in check, we exploited the close correlation of
+$\EnergyTurner$ and the fitted stacking model $\EnergyStacking$
+(Supp. Fig~\ref{fig:training-cor}). More precisely, we observed a
+structure-specific affine dependency between the Turner and stacking
+energy models, so that
+$\EnergyTurner(S;R) \approx \gamma\cdot \EnergyStacking(S;R) + \delta$
+for any structure $R$ and sequence $S$. We learned the
+$(\gamma,\delta)$ parameters from a set of sequences generated with
+homogenous weights $w=e^{\beta}$, tuning only the \GCb\% to a
+predetermined value.  Finally, we adjusted the targeted energies
+within our stacking model to
+$\EnergyStacking^{\star} = (\EnergyTurner^{\star}- \delta)/\gamma$ in
+order to reach, on average, the targeted energy
+$\EnergyTurner^{\star}$ in the Turner model.
 
-Fig.~\ref{fig:energydist} illustrates our above strategy. Fig.~\ref{fig:energydist}A
-shows the relative distance between $\EnergyTurner$  and $\EnergyStacking$, observed for instances of the \texttt{Modena} benchmark. For each structure, $n=1\,000$ sequences were sampled, while targeting a ${\sf GC}\%$ of $50\%$, and reported the difference between the expected and sampled energies for both the Turner model and its approximation using a stacking model. 
-Fig.~\ref{fig:energydist}B shows the Turner energy, for a single instance of the 3-structures \texttt{Modena}  benchmark, using different weights benchmark. These results demonstrate that our multidimensionnal Boltzmann sampling strategy can accurately and, to a large extent, independently shift the Turner energies of sampled sequences to prescribed targets.  
+Fig.~\ref{fig:energydist} illustrates the described
+strategy. \todo{Update Figure 2A}Fig.~\ref{fig:energydist}A
+illustrates our capability to target Turner energies based on the
+stacking energy model. It shows the relative distance between
+$\EnergyTurner$ and $\EnergyStacking$, observed for instances of the
+\texttt{Modena} benchmark. For each structure, $n=1\,000$ sequences
+were sampled, while targeting a ${\sf GC}\%$ of $50\%$, and reported
+the difference between the expected and sampled energies for both the
+Turner model and its approximation using a stacking model.  For an
+example instance of the \texttt{Modena} benchmark \texttt{3str},
+Fig.~\ref{fig:energydist}B shows the Turner energy distributions of
+the single structures as they result from sampling with different weight
+parameters. The figure illustrates how our multidimensionnal Boltzmann
+sampling strategy can accurately and, to a large extent, independently
+shift the Turner energies of sampled sequences to prescribed targets.
 
 %To reduce the cost of the precomputation, we used a stacking energy model 
 %as a proxy for the Turner model. Indeed, we observed a strong linear 
