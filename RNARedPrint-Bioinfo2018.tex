@@ -869,9 +869,9 @@ order to reach, on average, the targeted energy
 $\EnergyTurner^{\star}$ in the Turner model.
 
 Fig.~\ref{fig:energydist} illustrates the described
-strategy. \todo{Update Figure 2A}Fig.~\ref{fig:energydist}A
+strategy. Fig.~\ref{fig:energydist}A
 illustrates our capability to target Turner energies based on the
-stacking energy model. It shows the relative distance between
+stacking energy model. It shows the deviation between
 $\EnergyTurner$ and $\EnergyStacking$, observed for instances of the
 \texttt{Modena} benchmark. For each structure, $n=1\,000$ sequences
 were sampled, while targeting a ${\sf GC}\%$ of $50\%$, and reported
@@ -893,16 +893,17 @@ shift the Turner energies of sampled sequences to prescribed targets.
 %realistic Turner energy model.
 \begin{figure*}[t]
   \begin{center}
-    {\sf \bfseries A}\includegraphicstop[width=0.32\textwidth]{Figs/offset}\hspace{.5cm}
+    {\sf \bfseries A}\includegraphicstop[width=0.32\textwidth]{Figs/offset2}\hspace{.5cm}
     {\sf \bfseries B}\includegraphicstop[width=0.57\textwidth]{Figs/energy_distribution}
   \end{center}
   \caption{%
     Targeting specific energies using multi-dimensional Boltzmann
     sampling.  (A) Accuracy of targeting over all target structures of
     the \Software{Modena} benchmark instances \texttt{RNAtabupath}
-    (2str), \texttt{3str} and \texttt{4str}. Shown is the relative
-    deviation of targeted and achieved energies in the simple stacking
-    model and the Turner model.  (B) Turner energy distributions for
+    (2str), \texttt{3str} and \texttt{4str}. 
+    For the stacking and the Turner energy model, the relative offsets between the targeted and 
+    achieved energies were determined. We show the deviations of these offsets between both models.
+    (B) Turner energy distributions for
     three target structures S1, S2 and S3. We show the results of
     targeting the respective free energies $(-40,-40,-20)$ and
     $(-20,-20,-20)$ for the target structures (annotated in red and
@@ -912,7 +913,7 @@ shift the Turner energies of sampled sequences to prescribed targets.
     (U) and Boltzmann (B) samples---respectively associated with
     homogenous weights $1$ and $e^\beta$.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
-      }
+  }
   \label{fig:energydist}
 \end{figure*}
 \subsection{Generating high-quality seeds for further optimization}
@@ -940,16 +941,15 @@ multi-stable design objective function of \citet{Hammer2017}:
 \end{align}
 
 Using our strategy, we generated at least 1\,000 seeds per instance of
-the subsets \texttt{RNAtabupath} (2str), \texttt{3str}, and \texttt{4str}, of
-the \Software{Modena} benchmark set with 2,3, and 4 structures. The
-results are compared, in terms of their value for the objective
-function of Eq.~\eqref{eq:blueprintobjective}, to seed sequences
-uniformly sampled using \RNAblueprint{}~\citep{Hammer2017}
+the subsets \texttt{RNAtabupath} (2str), \texttt{3str}, and
+\texttt{4str}, of the \Software{Modena} benchmark set with 2,3, and 4
+structures. The results are compared, in terms of their value for the
+objective function of Eq.~\eqref{eq:blueprintobjective}, to seed
+sequences uniformly sampled using \RNAblueprint{}~\citep{Hammer2017}
 (Table~\ref{tab:benchmark-results}, seeds). Our first analysis reveals
-that Boltzmann-sampled sequences constitute better seeds, associated
-with better values ($\sim\! 69\%$ improvement on average), compared to
-uniform seeds for \emph{all instances} of our benchmark
-(Supp. Mat.~\ref{sec:validity}).
+that Boltzmann-sampled sequences constitute better seeds
+($\sim\! 69\%$ improvement on average) compared to uniform seeds for
+\emph{all instances} of our benchmark (Supp. Mat.~\ref{sec:validity}).
 
 Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps. At each step, we resampled (uniformly random) the positions of a randomly selected component in the base pair dependency graph, and accepted the modification only if it resulted in a gain, as described in \RNAblueprint{}.
 %
