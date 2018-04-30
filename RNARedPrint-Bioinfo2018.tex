@@ -865,11 +865,22 @@ Fig.~\ref{fig:energydist}B shows the Turner energy, for a single instance of the
     {\sf \bfseries B}\includegraphicstop[width=0.57\textwidth]{Figs/energy_distribution}
   \end{center}
   \caption{%
-  	Targeting specific energies using multi-dimensional Boltzmann sampling. 
-  	(A) Accuracy of targeting over all target structures of the \Software{Modena} benchmark instances \texttt{RNAtabupath} (2str), \texttt{3str} and \texttt{4str}. Shown is the relative deviation of targeted and achieved energies in the simple stacking model and the Turner model.
-  	(B) Turner energy distributions for three target structures (right) while targeting $(-40,-40,-20)$ and $(-20,-20,-20)$ free energy vectors. For comparison, we show the distribution of uniform and Boltzmann samples; respectively associated with homogenous weights $1$ (uniform) and $e^\beta$ (Boltzmann). 
+    Targeting specific energies using multi-dimensional Boltzmann
+    sampling.  (A) Accuracy of targeting over all target structures of
+    the \Software{Modena} benchmark instances \texttt{RNAtabupath}
+    (2str), \texttt{3str} and \texttt{4str}. Shown is the relative
+    deviation of targeted and achieved energies in the simple stacking
+    model and the Turner model.  (B) Turner energy distributions for
+    three target structures S1, S2 and S3. We show the results of
+    targeting the respective free energies $(-40,-40,-20)$ and
+    $(-20,-20,-20)$ for the target structures (annotated in red and
+    blue, resepectively)---this demonstrates the
+    effectivity of our adaptive multi-dimensional Boltzmann sampling
+    procedure; moreover, for comparison, the distributions for uniform
+    (U) and Boltzmann (B) samples---respectively associated with
+    homogenous weights $1$ and $e^\beta$.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
-}
+      }
   \label{fig:energydist}
 \end{figure*}
 \subsection{Generating high-quality seeds for further optimization}
