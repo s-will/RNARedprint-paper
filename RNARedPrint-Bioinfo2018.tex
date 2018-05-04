@@ -224,7 +224,7 @@ and $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaisea
   the problem as a constraint network, \ourprog{} supports generic
   Boltzmann-weighted sampling for arbitrary additive RNA energy
   models; this enables the generation of RNA sequences meeting
-  specific goals like expected free energies or \GCb\%. Finally,
+  specific goals like expected free energies or \GCb-content. Finally,
   we empirically study general properties of the approach and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
   common design benchmark. Generating seed sequences with \ourprog{}, we demonstrate significant improvements over the previously best multi-target sampling strategy (uniform sampling).\\
@@ -286,7 +286,7 @@ for the target structure instead of (uniform) random sequences for the
 early \Software{RNAinverse} algorithm~\citep{Hofacker1994}. This
 strategy was later shown to result in unrealistically high
 \GCb\% in designed sequences. To address this issue,
-\Software{IncaRNAtion}~\citep{Reinharz2013} controls the \GCb\%
+\Software{IncaRNAtion}~\citep{Reinharz2013} controls \GCb\%
 through an adaptive sampling strategy.
 
 \parHead{Specificities and similarities of multi-target design.}
@@ -311,7 +311,7 @@ parameter $\gamma$ is bounded by the length of the designed RNA;
 typically, the decomposition strategy achieves much lower $\gamma$.
 
 \parHead{Motivation.} The exponential time and space requirements of the \Software{RNAdesign} method already raise the question of the \Def{complexity of (uniform) sampling for multi-target design}. Since stochastic backtrack can be performed in linear time per sample, the method is dominated by the precomputation step, which requires counting valid designs. Thus, we focus on the question: \emph{Is there a polynomial-time algorithm to count valid multi-target designs?} In Section~\ref{sec:counting}, we answer in the negative, showing that there exists no such algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences  and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
-The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, generally, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as the \GCb\%, complex sequence constraints, or the energy of individual structures?}
+The hardness of counting (and conjectured hardness of sampling) does not preclude, however, practically applicable algorithms for counting and sampling. In particular, we wish to extend the flexibility of multi-structure design, leading to the following questions: \emph{How to sample, generally, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as \GCb\%, complex sequence constraints, or the energy of individual structures?}
 
 
 \begin{figure*}[t]
@@ -335,7 +335,7 @@ used RNA energy models%
 %(Subsection~\ref{sec:energy_models})
 .  Moreover, we describe an \Def{adaptive
   sampling} strategy to control the free energies of the individual
-target structures and the \GCb\%%
+target structures and \GCb\%%
 % (SubSection~\ref{sec:multiBoltzmann})
 . %
 We observe that sampling based on less complex RNA energy models
@@ -803,7 +803,7 @@ dangling ends) still depend on at most four bases of the sequence.
 
 \subsection{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
 The flexibility of our framework supports an advanced sampling technique, named multidimensional Boltzmann sampling~\citep{Bodini2010} to (probabilistically) enforce additional constraints.
-This technique was previously used to control the \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; it enables explicit control of the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets. %We use multidimensional Boltzmann sampling to generate sequences having predetermined targeted energies $(\TargetE_1,\ldots,\TargetE_k)$ for the $k$ structures.
+This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; it enables explicit control of the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets. %We use multidimensional Boltzmann sampling to generate sequences having predetermined targeted energies $(\TargetE_1,\ldots,\TargetE_k)$ for the $k$ structures.
 
 Multidimensional Boltzmann sampling requires the ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ with free energies $(E_1,\ldots,E_k)$ for its target structures is
 $\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=1}^{k} \pi_i^{-E_i}}{\partfun{\pmb{\pi}}},$
@@ -861,7 +861,7 @@ energy models, so that
 $\EnergyTurner(S;R) \approx \gamma\cdot \EnergyStacking(S;R) + \delta$
 for any structure $R$ and sequence $S$. We learned the
 $(\gamma,\delta)$ parameters from a set of sequences generated with
-homogenous weights $w=e^{\beta}$, tuning only the \GCb\% to a
+homogenous weights $w=e^{\beta}$, tuning only \GCb\% to a
 predetermined value.  Finally, we adjusted the targeted energies
 within our stacking model to
 $\EnergyStacking^{\star} = (\EnergyTurner^{\star}- \delta)/\gamma$ in
@@ -1044,7 +1044,7 @@ of a common multi-target design benchmark.
 
 The presented method enables new possibilities for sequence generation
 in the field of RNA sequence design by enforcing additional
-constraints, like the \GCb\%, while controlling the energy of
+constraints, like \GCb\%, while controlling the energy of
 multiple target structures. Thus it presents a major advance over
 previously applied ad-hoc sampling and even efficient uniform sampling
 strategies. We have shown the practicality of such controlled sequence
