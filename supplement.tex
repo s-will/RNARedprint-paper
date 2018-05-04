@@ -192,10 +192,15 @@
 \onecolumn
 
 \appendix
-{\centering \relsize{+4}Supplementary material\\%
+{\centering \relsize{+4}\textbf{Supplementary Material}\\ Fixed-Parameter Tractable Sampling\\ for RNA Design with Multiple Target Structures\\%
 %{\relsize{-1}\BackupTitle}\\
 }
 \relsize{+1}
+
+\medskip
+\begin{center}
+\large Stefan Hammer, Yann Ponty, Wei Wang and Sebastian Will
+\end{center}
 \section{Approximate counting and random generation}
 In fact, not only is $\#{\sf BIS}$ a reference problem in counting complexity, but it is also a landmark problem with respect to the complexity of approximate counting problems. In this context, it is the representative for a class of $\#{\sf BIS}$-hard problems~\citep{Bulatov2013} that are easier to approximate than $\# {\sf SAT}$, yet are widely believed not to admit any Fully Polynomial-time Randomized Approximation Scheme. Recent results reveal a surprising dichotomy in the behavior of $\#{\sf BIS}$: it admits a Fully Polynomial-Time Approximation Scheme (FPTAS) for graphs of max degree $\le 5$~\citep{Weitz2006}, but is as hard to approximate as the general $\#{\sf BIS}$ problem on graphs of degree $\ge 6$~\citep{Cai2016}. In other words, there is a clear threshold, in term of the max degree, separating (relatively) easy instances from really hard ones.
 
@@ -506,6 +511,40 @@ the asymptotic complexity.
 %Note that, since connected components correspond to connected subtrees in the tree decomposition, then adding those variables preserves the properties of a tree decomposition. Also, each node in the former cluster tree introduces at most one new variable compared to its parent, so the elected node is uniquely defined by the rule stated in Step~\ref{step:election}. Finally, we note that the parity of a variable $v\in cc_i$ is entirely characterized by the parity $\Parity{i}$ of $v_i^\star$, and the parity of the distance between $v$ and $v_i^\star$ in the base pair dependency graph. Namely, the parity of $v$ is $\Parity{i}$ if the distance between $v$ and $v^{\star}_i$ is even, and opposite to $\Parity{i}$ if odd. It follows that, thanks to the new variables introduced in Step~\ref{step:addparities}, the domain of each of the original variables can be reduced to two alternatives instead of the original four.
 %
 %The computation of Alg.~\ref{alg:pf} on the new cluster tree, considering reduced assignments for position variables and additional odd/even assignments for parity variables, has complexity in $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $n$ is the RNA length, $k$ is the number of structures, $w$ is the tree-width of the unmodified cluster tree, and $c$ is the maximum number of connected components represented in a node. It should be noted that $c\le \min(|CC|,w+1)$, so that the new complexity cannot be larger than the one stated in Th.~\ref{th:complexities}. Also, note that the number of nodes introduced by Step~\ref{step:intermediates} is bounded by $|CC|$, so that the introduction of these intermediate nodes does not impact the worst-case complexity. For the same reason, the complexity of the stochastic backtrack remains unchanged.
+
+\section{Illustrating multi-dimensional Boltzmann sampling for three pseudoknot-free target structures}
+
+In analogy to Fig.~\ref{fig:energydist-pk} of the main text,
+Fig.~\ref{fig:energydist} illustrates our multi-dimensional sampling
+strategy for three pseudoknot-free target structures (example instance
+from the \texttt{Modena} benchmark). The figure shows Turner energy
+distributions of single structures from sampling with different weight
+parameters, where weights are trained to target specific energies. For
+comparison, the figure shows distributions from uniform and Boltzmann
+sampling at respective homogenous weights $1$ and $e^\beta$.
+
+\begin{figure*}[t]
+  \begin{center}
+    %{\sf \bfseries A}\includegraphicstop[width=0.32\textwidth]{Figs/offset2}\hspace{.5cm}
+    %{\sf \bfseries B}
+    \includegraphicstop[width=0.8\textwidth]{Figs/energy_distribution}
+  \end{center}
+  \caption{%
+    Targeting specific energies using multi-dimensional Boltzmann
+    sampling. We show the Turner energy distributions for
+    three target structures S1, S2 and S3. By
+    targeting the respective free energies $(-40,-40,-20)$ and
+    $(-20,-20,-20)$ for the target structures (annotated in red and
+    blue, resepectively), we demonstrate the
+    effectivity of our adaptive multi-dimensional Boltzmann sampling
+    procedure; moreover, for comparison, the distributions for uniform
+    (U) and Boltzmann (B) samples---respectively associated with
+    homogenous weights $1$ and $e^\beta$.
+%    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
+  }
+  \label{fig:energydist}
+\end{figure*}
+
 
 \section{Parameters for the base pair and the stacking energy model}
 \label{appsec:modelparameters}

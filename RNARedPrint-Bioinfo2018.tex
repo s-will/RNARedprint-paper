@@ -818,7 +818,7 @@ While heuristic in nature, this basic iteration was elected in our initial versi
 
 A further \Def{rejection step} is applied to the generated structures to retain only sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rejection approach is justified by the following considerations:
 i) \emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing~\citet{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
-ii) \emph{Induced distributions are typically concentrated.} Intuitively, unless sequences are fully constrained individual energy terms are independent enough so that their sum is concentrated around its mean -- the targeted energy (cf Fig.~\ref{fig:energydist}).
+ii) \emph{Induced distributions are typically concentrated.} Intuitively, unless sequences are fully constrained individual energy terms are independent enough so that their sum is concentrated around its mean -- the targeted energy (cf Fig.~\ref{fig:energydist-pk}).
 %Indeed, as shown in Fig.~\ref{fig:shifting_mean}, empirical joint distributions in the energies have good fits towards Normal multidimensional distributions with linear (co-)variances.
 For base pair-based energy models and special base pair dependency graph
 (paths, cycles\ldots) this property rigorously follows from analytic
@@ -868,21 +868,22 @@ $\EnergyStacking^{\star} = (\EnergyTurner^{\star}- \delta)/\gamma$ in
 order to reach, on average, the targeted energy
 $\EnergyTurner^{\star}$ in the Turner model.
 
-Fig.~\ref{fig:energydist} illustrates the described
-strategy. Fig.~\ref{fig:energydist}A
-illustrates our capability to target Turner energies based on the
-stacking energy model. It shows the deviation between
-$\EnergyTurner$ and $\EnergyStacking$, observed for instances of the
-\texttt{Modena} benchmark. For each structure, $n=1\,000$ sequences
-were sampled, while targeting a ${\sf GC}\%$ of $50\%$, and reported
-the difference between the expected and sampled energies for both the
-Turner model and its approximation using a stacking model.  For an
-example instance of the \texttt{Modena} benchmark \texttt{3str},
-Fig.~\ref{fig:energydist}B shows the Turner energy distributions of
-the single structures as they result from sampling with different weight
-parameters. The figure illustrates how our multidimensionnal Boltzmann
-sampling strategy can accurately and, to a large extent, independently
-shift the Turner energies of sampled sequences to prescribed targets.
+Fig.~\ref{fig:energydist-pk} illustrates the described strategy. For
+the two target structures of Fig.~\ref{fig:energydist-pk}B,
+Fig.~\ref{fig:energydist-pk}A shows the good fit between Turner
+energies based and energies in the stacking energy model. For the
+shown fits we sampled $n=1\,000$ sequences, targeting a ${\sf GC}\%$
+of $50\%$.
+%
+For an example instance of the \texttt{Modena} benchmark with two
+pseudoknotted target structures, Fig.~\ref{fig:energydist-pk}B shows
+the Turner energy distributions of the single structures as they
+result from sampling with different weight parameters. The figure
+illustrates how our multidimensionnal Boltzmann sampling strategy can,
+to a large extent, independently shift the Turner energies of sampled
+sequences towards prescribed targets. See Supp. Mat.,
+Fig.~\ref{fig:energydist} for a further example with three
+pseudoknot-free target structures.
 
 %To reduce the cost of the precomputation, we used a stacking energy model 
 %as a proxy for the Turner model. Indeed, we observed a strong linear 
@@ -893,28 +894,27 @@ shift the Turner energies of sampled sequences to prescribed targets.
 %realistic Turner energy model.
 \begin{figure*}[t]
   \begin{center}
-    {\sf \bfseries A}\includegraphicstop[width=0.32\textwidth]{Figs/offset2}\hspace{.5cm}
-    {\sf \bfseries B}\includegraphicstop[width=0.57\textwidth]{Figs/energy_distribution}
+    {\sf \bfseries A}\ \includegraphicstop[width=0.38\textwidth]{Figs/regression-pk}\hfill
+    {\sf \bfseries B}\ \includegraphicstop[width=0.55\textwidth]{Figs/energy_distribution-pk}
   \end{center}
   \caption{%
-    Targeting specific energies using multi-dimensional Boltzmann
-    sampling.  (A) Accuracy of targeting over all target structures of
-    the \Software{Modena} benchmark instances \texttt{RNAtabupath}
-    (2str), \texttt{3str} and \texttt{4str}. 
-    For the stacking and the Turner energy model, the relative offsets between the targeted and 
-    achieved energies were determined. We show the deviations of these offsets between both models.
+    Targeting specific energies for pseudoknotted structures using multi-dimensional Boltzmann
+    sampling.  (A) Linear fits between the energies in the stacking model to the Turner model for
+    sampled sequences; the good match enables more efficient targeting of Turner energies based on
+    targeting stacking model energies.
+    We show the fits for both target structures S1 and S2 of subfigure B.
     (B) Turner energy distributions for
-    three target structures S1, S2 and S3. We show the results of
-    targeting the respective free energies $(-40,-40,-20)$ and
-    $(-20,-20,-20)$ for the target structures (annotated in red and
-    blue, resepectively)---this demonstrates the
+    two target structures S1 and S2. We show the results of
+    targeting the respective free energies $(-20,-10)$, $(-10,-20)$, and $(-15,-15)$
+    for the target structures (annotated in red,
+    yellow, and blue resepectively)---this demonstrates the
     effectivity of our adaptive multi-dimensional Boltzmann sampling
     procedure; moreover, for comparison, the distributions for uniform
     (U) and Boltzmann (B) samples---respectively associated with
     homogenous weights $1$ and $e^\beta$.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
   }
-  \label{fig:energydist}
+  \label{fig:energydist-pk}
 \end{figure*}
 \subsection{Generating high-quality seeds for further optimization}
 We empirically study the capacity of \ourprog{} to improve the generation of seed sequences for subsequent local optimizations, showing an important application in biologically relevant scenarii.
