@@ -52,8 +52,10 @@
     pdffitwindow=true,     % window fit to page when opened
     pdfstartview={FitH},    % fits the width of the page to the window
     colorlinks=true,       % false: boxed links; true: colored links
-    linkcolor=red!70!black,          % color of internal links (change box color with linkbordercolor)
-    citecolor=red!70!black,        % color of links to bibliography
+%    linkcolor=red!70!black,          % color of internal links (change box color with linkbordercolor)
+%    citecolor=red!70!black,        % color of links to bibliography
+    linkcolor=black,          % color of internal links (change box color with linkbordercolor)
+    citecolor=black,        % color of links to bibliography
     filecolor=magenta,      % color of file links
     urlcolor=red!70!black           % color of external links
 }
@@ -160,7 +162,7 @@
 
 \newcommand{\Final}[1]{#1}
 %% Uncomment the line below for ``Final'' version
-%\renewcommand{\Final}[1]{}
+\renewcommand{\Final}[1]{}
 
 \newcommand{\Design}[1]{{\sf Designs}^{\star}(#1)}
 \newcommand{\NumDesign}{\ensuremath{\#}{\sf Designs}\xspace}
@@ -182,8 +184,8 @@
 
 \setlength{\parskip}{.2em}
 
-\newcommand{\RNAblueprint}{{\tt \bfseries{} RNA\textcolor{blue!70!black}{Blue}print}}
-\newcommand{\ourprog}{{\tt \bfseries{}RNA\textcolor{red!70!black}{Red}Print}}
+\newcommand{\RNAblueprint}{{\tt \bfseries{}\color{black!75} RNA\textcolor{blue!70!black}{Blue}Print}}
+\newcommand{\ourprog}{{\tt \bfseries{}\color{black!75}RNA\textcolor{red!70!black}{Red}Print}}
 
 \newcommand{\Energy}[2]{\textcolor{green!70!black}{E(#2;#1)}}
 
@@ -853,13 +855,13 @@ Supp. Mat.~\ref{appsec:modelparameters}).
 %
 
 To capture the realistic Turner model $\EnergyTurner$ while keeping
-the computational cost in check, we exploited the close correlation of
+a reasonable computational cost, we exploit a tight correlation between
 $\EnergyTurner$ and the fitted stacking model $\EnergyStacking$
 (Supp. Fig~\ref{fig:training-cor}). More precisely, we observed a
 structure-specific affine dependency between the Turner and stacking
 energy models, so that
 $\EnergyTurner(S;R) \approx \gamma\cdot \EnergyStacking(S;R) + \delta$
-for any structure $R$ and sequence $S$. We learned the
+for any structure $R$ and sequence $S$. We inferred the
 $(\gamma,\delta)$ parameters from a set of sequences generated with
 homogenous weights $w=e^{\beta}$, tuning only the \GCb\% to a
 predetermined value.  Finally, we adjusted the targeted energies
@@ -989,12 +991,12 @@ exploiting Boltzmann sampling even during the optimization run.
 
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-Finally, we turn to the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that this problem corresponds to the partition function problem in a simple $(0/\infty)$-valued base pair model, with $\beta\neq 1$. As previously noted~\citep{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
+We now establish the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that $\NumDesign(G)$ is equivalent to computing the partition function problem in a simple $(0/\infty)$-valued base pair model, with $\beta\neq 1$. As previously noted~\citep{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
 Moreover, without $\{\Gb, \Ub\}$ base pairs, any connected component  $C\in {\rm CC}(G)$ is entirely determined by the assignment of a single of its nucleotides. The number of valid designs is thus simply $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of connected components}.
 
-The introduction of $\{\Gb, \Ub\}$ base pairs radically changes this picture, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. The latter equality would, in particular, imply the classic ${\sf P}={\sf NP}$, and solving $\NumDesign(G)$ is polynomial time is therefore probably difficult. 
+The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$. 
 
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
 
 
 We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$. 
