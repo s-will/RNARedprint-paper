@@ -975,6 +975,7 @@ exploiting Boltzmann sampling even during the optimization run.
   Seeds      & 2str & 21.69 ($\pm$4.37) & 37.74 ($\pm$6.45) & 74\%\\
              & 3str & 18.10 ($\pm$3.98) & 30.49 ($\pm$5.41) & 71\%\\
              & 4str & 20.15 ($\pm$3.83) & 32.32 ($\pm$5.23) & 62\%\\
+             \midrule
              & PK60 & 12.12 ($\pm$3.04) & 19.81 ($\pm$4.24) & 68\%\\
              & PK80 & 13.81 ($\pm$3.63) & 24.05 ($\pm$4.93) & 82\%\\
              & LE80 & 10.54 ($\pm$2.77) & 17.80 ($\pm$4.17) & 78\%\\
@@ -983,9 +984,10 @@ exploiting Boltzmann sampling even during the optimization run.
   Optimized  & 2str & 5.42 ($\pm$1.27) & 7.95 ($\pm$1.75) & 35\%\\
              & 3str & 5.10 ($\pm$1.10) & 7.04 ($\pm$1.52) & 31\%\\
              & 4str & 9.17($\pm$1.51) & 13.25 ($\pm$2.13) & 38\% \\
-             & PK60 & 3.75 ($\pm$1.19) & 6.45 ($\pm$1.84) & 125\%\\
-             & PK80 & 3.52 ($\pm$1.58) & 7.99 ($\pm$2.35) & 107\%\\
-             & LE80 & 3.59 ($\pm$1.11) & 5.88 ($\pm$1.59) & 215\%\\
+             \midrule
+             & PK60* & 3.75 ($\pm$1.19) & 6.45 ($\pm$1.84) & 125\%\\
+             & PK80* & 3.52 ($\pm$1.58) & 7.99 ($\pm$2.35) & 107\%\\
+             & LE80* & 3.59 ($\pm$1.11) & 5.88 ($\pm$1.59) & 215\%\\
              \bottomrule
 \end{tabular}\\[1em]
 
@@ -994,7 +996,7 @@ exploiting Boltzmann sampling even during the optimization run.
   vs.\ uniform samples for three benchmark sets; before (seeds) and
   after optimization (optimized). We report the average scores with
   standard deviations. Smaller scores are better; the final column
-  reports the mean of our improvements over uniform sampling. \TODO{PK datasets ensemble free energy was}}
+  reports the mean of our improvements over uniform sampling. \TODO{PK datasets ensemble free energy was not available thus approximated with mfe energy. Mention negative scores somewhere! Asterisk benchmarks are not complete yet.}}
 \label{tab:benchmark-results}
 \end{table}
 
