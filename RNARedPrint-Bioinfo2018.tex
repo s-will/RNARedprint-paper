@@ -872,10 +872,11 @@ $\EnergyTurner^{\star}$ in the Turner model.
 
 Fig.~\ref{fig:energydist-pk} illustrates the described strategy. For
 the two target structures of Fig.~\ref{fig:energydist-pk}B,
-Fig.~\ref{fig:energydist-pk}A shows the good fit between Turner
-energies based and energies in the stacking energy model. For the
-shown fits we sampled $n=1\,000$ sequences, targeting a ${\sf GC}\%$
-of $50\%$.
+Fig.~\ref{fig:energydist-pk}A shows the good fit between realistic
+energies in the full-fledged Dirks and Pierce energy model for
+pseudoknots (D\&P model) and energies in the stacking energy
+model. For the shown fits we sampled $n=1\,000$ sequences, targeting a
+${\sf GC}\%$ of $60\%$.
 %
 For an example instance of the \texttt{Modena} benchmark with two
 pseudoknotted target structures, Fig.~\ref{fig:energydist-pk}B shows
@@ -896,24 +897,26 @@ pseudoknot-free target structures.
 %realistic Turner energy model.
 \begin{figure*}[t]
   \begin{center}
-    {\sf \bfseries A}\ \includegraphicstop[width=0.38\textwidth]{Figs/regression-pk}\hfill
-    {\sf \bfseries B}\ \includegraphicstop[width=0.55\textwidth]{Figs/energy_distribution-pk}
+    {\sf \bfseries A}\ \includegraphicstop[width=0.38\textwidth]{Figs/PKB00211_PKB00239_0_regression}\hfill
+    {\sf \bfseries B}\ \includegraphicstop[width=0.55\textwidth]{Figs/PKB00211_PKB00239_0_energy_distribution}
   \end{center}
   \caption{%
-    Targeting specific energies for pseudoknotted structures using multi-dimensional Boltzmann
-    sampling.  (A) Linear fits between the energies in the stacking model to the Turner model for
-    sampled sequences; the good match enables more efficient targeting of Turner energies based on
-    targeting stacking model energies.
-    We show the fits for both target structures S1 and S2 of subfigure B.
-    (B) Turner energy distributions for
-    two target structures S1 and S2. We show the results of
-    targeting the respective free energies $(-20,-10)$, $(-10,-20)$, and $(-15,-15)$
-    for the target structures (annotated in red,
-    yellow, and blue resepectively)---this demonstrates the
-    effectivity of our adaptive multi-dimensional Boltzmann sampling
-    procedure; moreover, for comparison, the distributions for uniform
-    (U) and Boltzmann (B) samples---respectively associated with
-    homogenous weights $1$ and $e^\beta$.
+    Targeting specific energies for pseudoknotted structures using
+    multi-dimensional Boltzmann sampling.  (A) Linear fits between the
+    energies in the stacking model to the realistic pseudoknot energy
+    model by Dirks and Pierce (D\&P) for sampled sequences; the good
+    match enables more efficient targeting of Turner energies based on
+    targeting stacking model energies.  We show the fits for both
+    target structures S1 and S2 of subfigure B.  (B) D\&P energy
+    distributions for two target structures S1 and S2. We show the
+    results of targeting the respective free energies $(-30,-20)$,
+    $(-30,-30)$, $(-25,-25)$, and $(-20,-30)$ for the target
+    structures (annotated in red, yellow, and blue
+    resepectively)---this demonstrates the effectivity of our adaptive
+    multi-dimensional Boltzmann sampling procedure; moreover, for
+    comparison, the distributions for uniform and Boltzmann
+    samples---respectively associated with homogenous weights $1$ and
+    $e^\beta$.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
   }
   \label{fig:energydist-pk}
@@ -924,7 +927,7 @@ We empirically study the capacity of \ourprog{} to improve the generation of see
 For a multi-target design instance, individual reasonable target
 energies are estimated from averaging the energy over samples at
 relatively high weights $e^{\beta}$, setting the targeted \GCb\%
-to 50\%. For each instance of the \Software{Modena}
+to 60\%. For each instance of the \Software{Modena}
 benchmark~\citep{Taneda2015}, we estimated such target energies and
 subsequently generated $1\,000$ seed sequences at these energies.
 Our procedure is tailored to produce sequences with similar Turner
@@ -953,11 +956,11 @@ that Boltzmann-sampled sequences constitute better seeds
 ($\sim\! 69\%$ improvement on average) compared to uniform seeds for
 \emph{all instances} of our benchmark (Supp. Mat.~\ref{sec:validity}).
 
-Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps. At each step, we resampled (uniformly random) the positions of a randomly selected component in the base pair dependency graph, and accepted the modification only if it resulted in a gain, as described in \RNAblueprint{}.
+Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps \todo{(200 for PK benchmarksets)}. At each step, we resampled (uniformly random) the positions of a randomly selected component in the base pair dependency graph, and accepted the modification only if it resulted in a gain, as described in \RNAblueprint{}.
 %
 Once again, for all instances, we observe a positive improvement of
 the quality of Boltzmann designs over uniform ones, suggesting a
-superior potential for optimization ($\sim 32\%$ avg improvement,
+superior potential for optimization ($\sim 32\%$ avg improvement, \todo{improvement not in percent}
 Table~\ref{tab:benchmark-results}, optimized). Notably, our subsequent
 optimization runs, which are directly inherited from the uniform
 sampling \RNAblueprint{} software, partially level the advantages of
