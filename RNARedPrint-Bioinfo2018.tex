@@ -956,19 +956,27 @@ objective function of Eq.~\eqref{eq:blueprintobjective}, to seed
 sequences uniformly sampled using \RNAblueprint{}~\citep{Hammer2017}
 (Table~\ref{tab:benchmark-results}, seeds). Our first analysis reveals
 that Boltzmann-sampled sequences constitute better seeds
-($\sim\! 69\%$ improvement on average) compared to uniform seeds for
+(10.97 improvement of mean scores) compared to uniform seeds for
 \emph{all instances} of our benchmark (Supp. Mat.~\ref{sec:validity}).
 
-Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps \todo{(200 for PK benchmarksets)}. At each step, we resampled (uniformly random) the positions of a randomly selected component in the base pair dependency graph, and accepted the modification only if it resulted in a gain, as described in \RNAblueprint{}.
+Moreover, for each generated seed sequence, we optimized the objective
+function $(\ref{eq:blueprintobjective})$ through an adaptive greedy
+walk (500 steps for the pseudoknot free benchmark sets 2str, 3str, and
+4str; 200 for the pseudoknot benchmarksets PK60, PK80, and LE80). At
+each step, we resampled (uniformly random) the positions of a randomly
+selected component in the base pair dependency graph, and accepted the
+modification only if it resulted in a gain, as described in
+\RNAblueprint{}.
 %
 Once again, for all instances, we observe a positive improvement of
 the quality of Boltzmann designs over uniform ones, suggesting a
-superior potential for optimization ($\sim 32\%$ avg improvement, \todo{improvement not in percent}
-Table~\ref{tab:benchmark-results}, optimized). Notably, our subsequent
-optimization runs, which are directly inherited from the uniform
-sampling \RNAblueprint{} software, partially level the advantages of
-Boltzmann sampling. In future work, we hope to improve this aspect by
-exploiting Boltzmann sampling even during the optimization run.
+superior potential for optimization (2.97 improvement of mean
+scores, Table~\ref{tab:benchmark-results}, ``Optimized''). Notably,
+our subsequent optimization runs, which are directly inherited from
+the uniform sampling \RNAblueprint{} software, partially level the
+advantages of Boltzmann sampling. In future work, we hope to improve
+this aspect by exploiting Boltzmann sampling even during the
+optimization run.
 
 \begin{table}[t]
 \centering
@@ -994,13 +1002,13 @@ exploiting Boltzmann sampling even during the optimization run.
              \bottomrule
 \end{tabular}\\[1em]
 
-\caption{Comparison of the multi-stable design objective function (
-  Eq.~(\ref{eq:blueprintobjective}) of sequences sampled by \ourprog{}
-  vs.\ uniform samples for three benchmark sets; before (seeds) and
-  after optimization (optimized). We report the average scores with
-  standard deviations. Smaller scores are better; the final column
-  reports our improvements due to Boltzmann sampling over uniform
-  sampling (as difference of mean scores).}
+\caption{Comparison of the multi-stable design objective function
+  (Eq.~(\ref{eq:blueprintobjective}) of sequences sampled by
+  \ourprog{} vs.\ uniform samples for three benchmark sets; before
+  (seeds) and after optimization (optimized). We report the average
+  scores with standard deviations; smaller scores are better. The
+  final column reports our improvements due to Boltzmann sampling over
+  uniform sampling (as difference of mean scores).}
 \label{tab:benchmark-results}
 \end{table}
 
