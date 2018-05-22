@@ -24,11 +24,11 @@
 %   \let\enddescription\endcompactdesc
 %   \pltopsep=1pt
 %   \plitemsep=1pt
-%   \plparsep=1pt  
-\usepackage{hyperref} 
-\usepackage{xspace} 
-%\usepackage{geometry} 
-\usepackage{amsmath,amssymb} 
+%   \plparsep=1pt
+\usepackage{hyperref}
+\usepackage{xspace}
+%\usepackage{geometry}
+\usepackage{amsmath,amssymb}
 \usepackage{bm}
 \usepackage{verbatim}
 \usepackage{longtable}
@@ -405,12 +405,12 @@ sequences of length $n$. An \Def{RNA (secondary) structure $R$ of
   length $n$} is a set of \Def{base pairs} $(i,j)$, where
 $1\leq i<j\leq n$, where for all different $(i,j), (i',j')\in R$:
 $\{i,j\}\cap\{i',j'\}=\emptyset$ (``degree $\leq$ 1'').
-% 
+%
 % We call an RNA structure $R$ \Def{non-crossing}, iff it does not
 % contain any two different base pairs $(i,j)$ and $(i',j')$ such that
 % $i\leq i'\leq j \leq j'.$
-% 
-\Def{Valid base pair} must pair bases from 
+%
+\Def{Valid base pair} must pair bases from
 $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}.$
 Consequently, $S$ is \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
 all $(i,j)\in R$.
@@ -739,7 +739,7 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
   %$O( n\, k \min(2^{w+c+1},4^{w+1}) + t\, n\, k )$ time.
   %$\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
 \end{theorem}
-As shown in Supp. Mat.~\ref{sec:improvedComplexity}, the complexity of the precomputation can be further improved to 
+As shown in Supp. Mat.~\ref{sec:improvedComplexity}, the complexity of the precomputation can be further improved to
 $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ is the maximum number of connected components represented in a node of the tree decomposition ($c\le w+1$).
 
 
@@ -818,7 +818,7 @@ One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average
 The expected value of $E_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp. Mat.~\ref{sec:weight_derivatives}). More generally, computing a suitable $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
 In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ and, at each iteration, generates a sample $\mathcal{S}$ of sequences. The expected value of an energy $E_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}E_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$.
 $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically to achieve effective optimization.
-While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its reasonable empirical behavior (choosing $\gamma=1.2$). 
+While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its reasonable empirical behavior (choosing $\gamma=1.2$).
 
 A further \Def{rejection step} is applied to the generated structures to retain only sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rejection approach is justified by the following considerations:
 i) \emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing~\citet{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
@@ -890,9 +890,9 @@ sequences towards prescribed targets. See Supp. Mat.,
 Fig.~\ref{fig:energydist} for a further example with three
 pseudoknot-free target structures.
 
-%To reduce the cost of the precomputation, we used a stacking energy model 
-%as a proxy for the Turner model. Indeed, we observed a strong linear 
-%dependency between the Turner energy and the 
+%To reduce the cost of the precomputation, we used a stacking energy model
+%as a proxy for the Turner model. Indeed, we observed a strong linear
+%dependency between the Turner energy and the
 %emphasize that only the simple stacking energies are directly targeted
 %(at $\pm$10\% tolerance, except for a few hard instances). Due to our
 %linear adjustment, we finally achieve well-controlled energies in the
@@ -973,23 +973,22 @@ exploiting Boltzmann sampling even during the optimization run.
 \centering
 \medskip
 \begin{tabular}{@{}>{\bf}l@{\quad}>{\tt}l@{\quad}@{\quad}c@{\quad}c@{\quad}c@{}}
-             &   \textbf{\textrm{Dataset}}   & {\bfseries\ourprog{}} & \textbf{Uniform} & \textbf{$\Delta_f$}\\\toprule
-  Seeds      & 2str & 21.69 ($\pm$4.37) & 37.74 ($\pm$6.45) & 74\%\\
-             & 3str & 18.10 ($\pm$3.98) & 30.49 ($\pm$5.41) & 71\%\\
-             & 4str & 20.15 ($\pm$3.83) & 32.32 ($\pm$5.23) & 62\%\\ %\cline{2-5}
+  Seeds      & 2str & 21.69 ($\pm$4.37) & 37.74 ($\pm$6.45) & 16.05\\
+             & 3str & 18.10 ($\pm$3.98) & 30.49 ($\pm$5.41) & 12.39\\
+             & 4str & 20.15 ($\pm$3.83) & 32.32 ($\pm$5.23) & 12.17\\
              \midrule
-             & PK60 & 12.12 ($\pm$3.04) & 19.81 ($\pm$4.24) & 68\%\\
-             & PK80 & 13.81 ($\pm$3.63) & 24.05 ($\pm$4.93) & 82\%\\ %\cline{2-5}
-             & LE80 & 10.54 ($\pm$2.77) & 17.80 ($\pm$4.17) & 78\%\\
+             & PK60 & 12.12 ($\pm$3.04) & 19.81 ($\pm$4.24) & 7.69\\
+             & PK80 & 13.81 ($\pm$3.63) & 24.05 ($\pm$4.93) & 10.24\\
+             & LE80 & 10.54 ($\pm$2.77) & 17.80 ($\pm$4.17) & 7.26\\
              \midrule
 
-  Optimized  & 2str & 5.42 ($\pm$1.27) & 7.95 ($\pm$1.75) & 35\%\\
-             & 3str & 5.10 ($\pm$1.10) & 7.04 ($\pm$1.52) & 31\%\\
-             & 4str & 9.17($\pm$1.51) & 13.25 ($\pm$2.13) & 38\%\\ %\cline{2-5}
+  Optimized  & 2str & 5.42 ($\pm$1.27) & 7.95 ($\pm$1.75) & 2.52\\
+             & 3str & 5.10 ($\pm$1.10) & 7.04 ($\pm$1.52) & 1.94\\
+             & 4str & 9.17($\pm$1.51) & 13.25 ($\pm$2.13) & 4.17\\
              \midrule
-             & PK60* & 3.75 ($\pm$1.19) & 6.45 ($\pm$1.84) & 125\%\\
-             & PK80* & 3.52 ($\pm$1.58) & 7.99 ($\pm$2.35) & 107\%\\
-             & LE80* & 3.59 ($\pm$1.11) & 5.88 ($\pm$1.59) & 215\%\\
+             & PK60* & 3.75 ($\pm$1.19) & 6.45 ($\pm$1.84) & 2.58\\
+             & PK80* & 3.52 ($\pm$1.58) & 7.99 ($\pm$2.35) & 4.34\\
+             & LE80  & 3.59 ($\pm$1.11) & 5.88 ($\pm$1.59) & 2.28\\
              \bottomrule
 \end{tabular}\\[1em]
 
@@ -1024,9 +1023,10 @@ $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
 The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$. 
 
 To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
 
 
-We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$. 
+We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$.
 
 \begin{proposition}
  $\Design{G}$ is in bijection with $\IS{G}$.
@@ -1035,17 +1035,17 @@ We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$
 Consider the function $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
 
 Let us establish the injectivity of  $\Psi$, i.e. that $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
-If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$. 
+If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$.
 Assume that $v\in V_1$, and remind that the only nucleotides allowed in $V_1$ are $\Ab$ and $\Gb$. Since $f(v)\neq f'(v)$, then we have $\{f(v),f'(v)\}=\{\Ab,\Gb\}$
 and we conclude that $\Psi(f)$ differs from $\Psi(f')$ at least with respect to its inclusion/exclusion of $v$.
 
 We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $S\in \IS{G}$. Let us consider the function $f$ defined for any $(v_1,v_2)\in V_1\times V_2$ as
 \begin{align*}
 f(v_1) &= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} &
-\text{\quad and\quad}&& 
+\text{\quad and\quad}&&
  f(v_2) &= \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S.\end{cases}
 \end{align*}
-One easily verifies that $\Psi(f) = S$. 
+One easily verifies that $\Psi(f) = S$.
 
 We are then left to determine if $f$ is a valid design for $G$, i.e. if for each $(v, v') \in E$ one has  $\{f(v),f(v')\}\in \B.$ Since $G$ is bipartite, any edge in $E$ involves two nodes $v_1\in V_1$ and $v_2\in V_2$. Remark that, among all the possible assignments $f(v_1)$ and $f(v_2)$, the only invalid combination of nucleotides is $(f(v_1),f(v_2)) = (\Ab,\Cb)$. However, such nucleotides are assigned to positions that are in the independent set $S$, and therefore cannot be adjacent. We conclude that $\Psi$ is surjective, and thus bijective.
 \end{proof}
@@ -1056,7 +1056,7 @@ Now we can build on the connection between the two problems to obtain complexity
 \end{corollary}
 \begin{proof}
   Note that $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ is given by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. Thus any efficient algorithm for $\#{\sf BIS}$ on connected instances provides an efficient algorithm for general graphs.
-  
+
   Let us now hypothesize the existence of a polynomial-time algorithm $\mathcal{A}$ for \NumDesign over strongly-connected graphs $G$. Consider the (polynomial-time) algorithm $\mathcal{A}'$ that first executes $\mathcal{A}$ on $G$ to produce $\NumDesign(G)$, and returns $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$. Clearly $\mathcal{A}'$ solves $\#{\sf BIS}$ in polynomial-time. This means that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
 \end{proof}
 
