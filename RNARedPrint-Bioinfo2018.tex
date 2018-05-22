@@ -973,6 +973,7 @@ exploiting Boltzmann sampling even during the optimization run.
 \centering
 \medskip
 \begin{tabular}{@{}>{\bf}l@{\quad}>{\tt}l@{\quad}@{\quad}c@{\quad}c@{\quad}c@{}}
+  &   \textbf{\textrm{Dataset}}   & {\bfseries\ourprog{}} & \textbf{Uniform} & \textbf{$\Delta$-Improvement}\\
   Seeds      & 2str & 21.69 ($\pm$4.37) & 37.74 ($\pm$6.45) & 16.05\\
              & 3str & 18.10 ($\pm$3.98) & 30.49 ($\pm$5.41) & 12.39\\
              & 4str & 20.15 ($\pm$3.83) & 32.32 ($\pm$5.23) & 12.17\\
@@ -997,7 +998,8 @@ exploiting Boltzmann sampling even during the optimization run.
   vs.\ uniform samples for three benchmark sets; before (seeds) and
   after optimization (optimized). We report the average scores with
   standard deviations. Smaller scores are better; the final column
-  reports the mean of our improvements over uniform sampling. \TODO{PK datasets ensemble free energy was not available thus approximated with mfe energy. Mention negative scores somewhere! Asterisk benchmarks are not complete yet.}}
+  reports our improvements due to Boltzmann sampling over uniform
+  sampling (as difference of mean scores).}
 \label{tab:benchmark-results}
 \end{table}
 
