@@ -902,8 +902,9 @@ pseudoknot-free target structures.
 %realistic Turner energy model.
 \begin{figure*}[t]
   \begin{center}
-    {\sf \bfseries A}\ \includegraphicstop[width=0.38\textwidth]{Figs/PKB00211_PKB00239_0_regression}\hfill
-    {\sf \bfseries B}\ \includegraphicstop[width=0.55\textwidth]{Figs/PKB00211_PKB00239_0_energy_distribution}
+    %{\sf \bfseries A}\
+    \includegraphicstop[width=0.99\textwidth]{Figs/energy_shift.pdf}\hfill
+    %{\sf \bfseries B}\ \includegraphicstop[width=0.55\textwidth]{Figs/PKB00211_PKB00239_0_energy_distribution}
   \end{center}
   \caption{%
     Targeting specific energies for pseudoknotted structures using
@@ -958,24 +959,33 @@ objective function of Eq.~\eqref{eq:blueprintobjective}, to seed
 sequences uniformly sampled using \RNAblueprint{}~\citep{Hammer2017}
 (Table~\ref{tab:benchmark-results}, seeds). Our first analysis reveals
 that Boltzmann-sampled sequences constitute better seeds
-($\sim\! 69\%$ improvement on average) compared to uniform seeds for
+(10.97 improvement of mean scores) compared to uniform seeds for
 \emph{all instances} of our benchmark (Supp. Mat.~\ref{sec:validity}).
 
-Moreover, for each generated seed sequence, we optimized the objective function $(\ref{eq:blueprintobjective})$ through an adaptive  greedy walk consisting of 500 steps \todo{(200 for PK benchmarksets)}. At each step, we resampled (uniformly random) the positions of a randomly selected component in the base pair dependency graph, and accepted the modification only if it resulted in a gain, as described in \RNAblueprint{}.
+Moreover, for each generated seed sequence, we optimized the objective
+function $(\ref{eq:blueprintobjective})$ through an adaptive greedy
+walk (500 steps for the pseudoknot free benchmark sets 2str, 3str, and
+4str; 200 for the pseudoknot benchmarksets PK60, PK80, and LE80). At
+each step, we resampled (uniformly random) the positions of a randomly
+selected component in the base pair dependency graph, and accepted the
+modification only if it resulted in a gain, as described in
+\RNAblueprint{}.
 %
 Once again, for all instances, we observe a positive improvement of
 the quality of Boltzmann designs over uniform ones, suggesting a
-superior potential for optimization ($\sim 32\%$ avg improvement, \todo{improvement not in percent}
-Table~\ref{tab:benchmark-results}, optimized). Notably, our subsequent
-optimization runs, which are directly inherited from the uniform
-sampling \RNAblueprint{} software, partially level the advantages of
-Boltzmann sampling. In future work, we hope to improve this aspect by
-exploiting Boltzmann sampling even during the optimization run.
+superior potential for optimization (2.97 improvement of mean
+scores, Table~\ref{tab:benchmark-results}, ``Optimized''). Notably,
+our subsequent optimization runs, which are directly inherited from
+the uniform sampling \RNAblueprint{} software, partially level the
+advantages of Boltzmann sampling. In future work, we hope to improve
+this aspect by exploiting Boltzmann sampling even during the
+optimization run.
 
 \begin{table}[t]
 \centering
 \medskip
 \begin{tabular}{@{}>{\bf}l@{\quad}>{\tt}l@{\quad}@{\quad}c@{\quad}c@{\quad}c@{}}
+  &   \textbf{\textrm{Dataset}}   & {\bfseries\ourprog{}} & \textbf{Uniform} & \textbf{$\Delta$-Improvement}\\
   Seeds      & 2str & 21.69 ($\pm$4.37) & 37.74 ($\pm$6.45) & 16.05\\
              & 3str & 18.10 ($\pm$3.98) & 30.49 ($\pm$5.41) & 12.39\\
              & 4str & 20.15 ($\pm$3.83) & 32.32 ($\pm$5.23) & 12.17\\
@@ -995,12 +1005,13 @@ exploiting Boltzmann sampling even during the optimization run.
              \bottomrule
 \end{tabular}\\[1em]
 
-\caption{Comparison of the multi-stable design objective function (
-  Eq.~(\ref{eq:blueprintobjective}) of sequences sampled by \ourprog{}
-  vs.\ uniform samples for three benchmark sets; before (seeds) and
-  after optimization (optimized). We report the average scores with
-  standard deviations. Smaller scores are better; the final column
-  reports the mean of our improvements over uniform sampling. \TODO{PK datasets ensemble free energy was not available thus approximated with mfe energy. Mention negative scores somewhere! Asterisk benchmarks are not complete yet.}}
+\caption{Comparison of the multi-stable design objective function
+  (Eq.~(\ref{eq:blueprintobjective}) of sequences sampled by
+  \ourprog{} vs.\ uniform samples for three benchmark sets; before
+  (seeds) and after optimization (optimized). We report the average
+  scores with standard deviations; smaller scores are better. The
+  final column reports our improvements due to Boltzmann sampling over
+  uniform sampling (as difference of mean scores).}
 \label{tab:benchmark-results}
 \end{table}
 
@@ -1023,10 +1034,9 @@ its nucleotides. The number of valid designs is thus simply
 $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
   connected components}.
 
-The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$. 
+The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
 
 To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
 
 
 We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$.
