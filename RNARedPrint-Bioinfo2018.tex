@@ -1006,8 +1006,20 @@ exploiting Boltzmann sampling even during the optimization run.
 
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-We now establish the complexity of $\NumDesign(G)$, the problem of computing the number of valid sequences for a given compatibility graph $G=(V,E)$. Note that $\NumDesign(G)$ is equivalent to computing the partition function problem in a simple $(0/\infty)$-valued base pair model, with $\beta\neq 1$. As previously noted~\citep{Flamm2001}, a set of target structures admits a valid design iff its compatibility graph is bipartite, which can be tested in linear time.
-Moreover, without $\{\Gb, \Ub\}$ base pairs, any connected component  $C\in {\rm CC}(G)$ is entirely determined by the assignment of a single of its nucleotides. The number of valid designs is thus simply $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of connected components}.
+Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
+computing the number of valid sequences for a given compatibility
+graph $G=(V,E)$. Note that this problem corresponds to the partition
+function problem in a simple base pair model, assigning $0$ to
+canonical and $\infty$ to non-canonical base pairs and setting 
+$\beta<0$, so that any valid structure counts as $1$ in the partition 
+function. As previously noted~\citep{Flamm2001}, a set of target
+structures admits a valid design iff its compatibility graph is
+bipartite, which can be tested in linear time.  Moreover, without
+$\{\Gb, \Ub\}$ base pairs, the design of any connected component $C$
+of $G$ would be entirely determined by the assignment of a single of
+its nucleotides. The number of valid designs is thus simply
+$4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
+  connected components}.
 
 The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$. 
 
