@@ -107,7 +107,7 @@
 %\newtheorem{algorithm}{Algorithm}
 \newtheorem{axiom}{Axiom}
 \newtheorem{hypothesis}{Working Hypothesis}
-\renewenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
+%\renewenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
 
 %%% macros for notation in DP framework
 \newcommand{\network}{\mathcal{N}}
@@ -162,7 +162,7 @@
 
 \newcommand{\Final}[1]{\begingroup\color{red!70!black}#1\endgroup}
 %% Uncomment the line below for ``Final'' version
-%\renewcommand{\Final}[1]{}
+\renewcommand{\Final}[1]{}
 
 \newcommand{\Design}[1]{{\sf Designs}^{\star}(#1)}
 \newcommand{\NumDesign}{\ensuremath{\#}{\sf Designs}\xspace}
@@ -172,6 +172,9 @@
 \newcommand{\Cb}{\Nuc{C}}
 \newcommand{\Gb}{\Nuc{G}}
 \newcommand{\Ub}{\Nuc{U}}
+
+\newcommand{\Objectiv}{\Nuc{U}}
+
 
 \newcommand{\GCb}{\Gb\Cb}
 
@@ -1010,7 +1013,7 @@ computing the number of valid sequences for a given compatibility
 graph $G=(V,E)$. Note that this problem corresponds to the partition
 function problem in a simple base pair model, assigning $0$ to
 canonical and $\infty$ to non-canonical base pairs and setting 
-$\beta<0$, so that any valid structure counts as $1$ in the partition 
+$\beta>0$, so that any valid structure counts as $1$ in the partition 
 function. As previously noted~\citep{Flamm2001}, a set of target
 structures admits a valid design iff its compatibility graph is
 bipartite, which can be tested in linear time.  Moreover, without
@@ -1022,7 +1025,7 @@ $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
 
 The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$. 
 
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
 To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$ symmetry, by constraining the positions in $V_{1}$ (resp. $V_2$) to only $\Ab$ and $\Gb$ (resp. $\Cb$ and $\Ub$). Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
 
 
@@ -1039,12 +1042,14 @@ If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$.
 Assume that $v\in V_1$, and remind that the only nucleotides allowed in $V_1$ are $\Ab$ and $\Gb$. Since $f(v)\neq f'(v)$, then we have $\{f(v),f'(v)\}=\{\Ab,\Gb\}$
 and we conclude that $\Psi(f)$ differs from $\Psi(f')$ at least with respect to its inclusion/exclusion of $v$.
 
-We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $S\in \IS{G}$. Let us consider the function $f$ defined for any $(v_1,v_2)\in V_1\times V_2$ as
-\begin{align*}
-f(v_1) &= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} &
-\text{\quad and\quad}&&
- f(v_2) &= \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S.\end{cases}
-\end{align*}
+We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $I\in \IS{G}$. Let us consider the function $f$ defined as $f(v) = \Ab$ (resp. $\Gb$, $\Cb$ or $\Ub$) if $v\in V_1$ and $v\in S$ (resp. $v\in V_1$ and $v\notin S$, $v\in V_2$ and $v\in S$, or $v\in V_2$ and $v\notin S$).
+%
+%for any $(v_1,v_2)\in V_1\times V_2$ by 
+%\begin{align*}
+%f(v_1) &= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} &
+%\text{\quad and\quad}&&
+% f(v_2) &= \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S.\end{cases}
+%\end{align*}
 One easily verifies that $\Psi(f) = S$.
 
 We are then left to determine if $f$ is a valid design for $G$, i.e. if for each $(v, v') \in E$ one has  $\{f(v),f(v')\}\in \B.$ Since $G$ is bipartite, any edge in $E$ involves two nodes $v_1\in V_1$ and $v_2\in V_2$. Remark that, among all the possible assignments $f(v_1)$ and $f(v_2)$, the only invalid combination of nucleotides is $(f(v_1),f(v_2)) = (\Ab,\Cb)$. However, such nucleotides are assigned to positions that are in the independent set $S$, and therefore cannot be adjacent. We conclude that $\Psi$ is surjective, and thus bijective.
