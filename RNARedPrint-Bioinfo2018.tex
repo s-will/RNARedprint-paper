@@ -155,8 +155,9 @@
 \newcommand{\Def}[1]{{\bfseries #1}}
 
 \newcommand{\TargetE}{E^{\star}}
+\newcommand{\MFE}{\text{\rm MFE}}
 
-\newcommand{\Obj}{\text{\sf \relsize{-1}MultiDefect}}
+\newcommand{\Obj}{\text{\rm MultiDefect}}
 
 \newcommand{\TODO}[1]{\textcolor{red!70!black}{\textbf{TODO: #1}}}
 
@@ -234,7 +235,7 @@ and $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaisea
   specific goals like expected free energies or \GCb-content. Finally,
   we empirically study general properties of the approach and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
-  common design benchmark. Generating seed sequences with \ourprog{}, we demonstrate significant improvements over the previously best multi-target sampling strategy (uniform sampling).\\
+  common design benchmark, including pseudoknots. Generating seed sequences with \ourprog{}, we demonstrate significant improvements over the previously best multi-target sampling strategy.\\
   \textbf{Availability:} Our software is freely available at: \url{https://github.com/yannponty/RNARedPrint}\\
   \textbf{Contact:} \href{yann.ponty@lix.polytechnique.fr}{yann.ponty@lix.polytechnique.fr}\\
   \textbf{Supplementary information:} Supplementary data are available
@@ -243,20 +244,20 @@ and $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaisea
 \maketitle
 
 
-
+\enlargethispage{35.1pt}
 \section{Introduction}
 \parHead{Design, applications and motivation for multiple design.}Synthetic biology endeavors the engineering of artificial biological
 systems, promising broad applications in biology, biotechnology and
 medicine. Centrally, this requires the design of biological
 macromolecules with highly specific properties and programmable functions.
-In particular, RNAs present themselves as well-suited tools for
+RNA present itself as a well-suited tool for a
 rational design targeting specific functions~\citep{Kushwaha2016}. RNA function is tightly
 coupled to the formation of secondary structure, as well as changes in
-base pairing propensities and the accessibility of regions, e.g. by
+base pairing propensities and the accessibility of regions, \emph{eg} by
 burying or exposing interaction sites~\citep{Rodrigo2014}. At the same time, the
 thermodynamics of RNA secondary structure is well understood and its prediction is
 computationally tractable~\citep{McCaskill1990}. Thus,  structure can serve as effective
-proxy within rational design approaches, ultimately targeting catalytic~\citep{Zhang2013} or regulatory~\citep{Rodrigo2014} functions.
+proxy for rational design approaches, ultimately targeting catalytic~\citep{Zhang2013} or regulatory functions.
 
 \parHead{Motivating multiple RNA design.} The function of many RNAs
 depends on their selective folding into one or several alternative
@@ -930,93 +931,113 @@ pseudoknot-free target structures.
   \label{fig:energydist-pk}
 \end{figure*}
 \subsection{Generating high-quality seeds for further optimization}
-We empirically study the capacity of \ourprog{} to improve the generation of seed sequences for subsequent local optimizations, showing an important application in biologically relevant scenarii.
-
-To that purpose, we rely on a multi-stable design objective function introduced by \citet{Hammer2017}, named \Obj in the following:
+Next, we empirically evaluated the capacity of \ourprog{} to generate seed sequences for multiple (pseudoknotted) target structures, possibly followed by subsequent local optimizations. As a baseline for comparison, we considered \RNAblueprint~\citep{Hammer2017}, the current leading tool for multiple design. 
+As a quality measure, we used the multi-stable design objective function introduced by~\citet{Hammer2017}, defined as:
 % \begin{align}
 %   f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
 %    & +\ \xi \frac{2}{k(k-1)} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
 % \end{align}
 \begin{align}
   \label{eq:blueprintobjective}
-    \Obj(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
-   & +\ 0.5\frac{1}{\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
+    \Obj(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \MFE(S))\notag\\
+   & +\frac{1}{2\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
 \end{align}
+where $\MFE(S)$ is the Minimum Free-Energy of $S$, computed by {\tt RNAfold}~\citep{Hofacker1994} or approximated by {\tt HotKnots}~\citep{Ren2005} for pseudoknotted targets.
+Intuitively, the first term of \Obj{} captures how distant from the $\MFE$ the targets are, while the second term penalizes the dispersion of targets. \Obj{} is best (minimized) when all targets simultaneously achieve the $\MFE$ of the sequence.
 
-For a multi-target design instance, individual reasonable target
-energies are estimated from averaging the energy over samples at
-relatively high weights $e^{\beta}$, setting the targeted \GCb\%
-to 60\%. For each instance of the \Software{Modena}
-benchmark~\citep{Taneda2015}, we estimated such target energies and
-subsequently generated $1\,000$ seed sequences at these energies.
-Our procedure is tailored to produce sequences with similar Turner
-energy that favor the stability of the target structures having
-moderate \GCb\%; all these properties are desirable objectives
-for RNA design. 
+We considered a benchmark of six sets of target structures described in \citet{Taneda2015}: {\sf 2str}, {\sf 3str}, and {\sf 4str} consist of non-pseudoknotted structures, while {\sf PK60}, {\sf PK80}, and {\sf LE80} contain pseudoknotted structures.
+%%For each instance of the \Software{Modena}
+%benchmark~\citep{Taneda2015}, we generated $1\,000$ seed sequences at these energies.
+%Our procedure is tailored to produce sequences with similar Turner
+%energy that favor the stability of the target structures having
+%moderate \GCb\%; all these properties are desirable objectives
+%for RNA design. 
+Using \ourprog{}, we generated at least 1\,000 seeds per instance for each instance 
+of the benchmark. We used target energies that were computed by averaging the energy over samples at
+higher weights $e^{\beta}$, and set the targeted \GCb\%
+to 60\%.
+ We compared the \Obj{} value of 
+these sequences against that of seed sequences, uniformly sampled 
+using \RNAblueprint{}.
+Moreover, for both sets, we used an adaptive greedy
+walk~\citep{Hammer2017} to \Def{optimize} the \Obj{} function. At
+each step, the local search resamples (uniformly at random) the positions 
+of a randomly selected component in the base pair dependency graph, 
+accepting the modification only if it results in a gain. The greedy descent
+was run for 500 steps in the case of pseudoknot-free datasets {\sf 2str}, {\sf 3str}, and
+{\sf 4str}; and 200 steps for the pseudoknotted ones {\sf PK60}, {\sf PK80}, and {\sf LE80}. 
 
-Using our strategy, we generated at least 1\,000 seeds per instance of
-the subsets \texttt{RNAtabupath} (2str), \texttt{3str}, and
-\texttt{4str}, of the \Software{Modena} benchmark set with 2,3, and 4
-structures. The results are compared, in terms of their value for the
-objective function of Eq.~\eqref{eq:blueprintobjective}, to seed
-sequences uniformly sampled using \RNAblueprint{}~\citep{Hammer2017}
-(Table~\ref{tab:benchmark-results}, seeds). Our first analysis reveals
-that Boltzmann-sampled sequences constitute better seeds
-(10.97 improvement of mean scores) compared to uniform seeds for
-\emph{all instances} of our benchmark (Supp. Mat.~\ref{sec:validity}).
 
-Moreover, for each generated seed sequence, we optimized the objective
-function $(\ref{eq:blueprintobjective})$ through an adaptive greedy
-walk (500 steps for the pseudoknot free benchmark sets 2str, 3str, and
-4str; 200 for the pseudoknot benchmarksets PK60, PK80, and LE80). At
-each step, we resampled (uniformly random) the positions of a randomly
-selected component in the base pair dependency graph, and accepted the
-modification only if it resulted in a gain, as described in
-\RNAblueprint{}.
+The results, shown in Fig.~\ref{fig:benchmark-results}, confirm 
+that Boltzmann-sampled sequences outperform uniform seeds on every dataset, 
+leading to average improvements in \Obj{} values ranging from $7.26$ 
+({\sf LE80}) to $16.05$  ({\sf 2str}) units. Remarkably, this improvement is
+be observed for both of the terms in \Obj{} (see Supp. Mat.~\ref{sec:improvements}). 
+This means that \ourprog{} produces sequences whose targets are both substantially closer to their MFE, and more 
+similarly stable across targets. 
+In fact, for every sequence in our benchmark, consisting of  332 sets of 
+target structures in total, we observed better \Obj{} for Boltzmann-weighted sampling 
+than for uniform sampling (see Supp. Mat.~\ref{sec:validity}). 
+Notably, \ourprog{} remains 
+unfazed by the presence of pseudoknots, the main problem being the computation 
+of the \Obj{} function, which requires a costly free-energy minimization 
+in the presence of pseudoknots~\citep{Sheikh2012}. 
+
 %
-Once again, for all instances, we observe a positive improvement of
-the quality of Boltzmann designs over uniform ones, suggesting a
-superior potential for optimization (2.97 improvement of mean
-scores, Table~\ref{tab:benchmark-results}, ``Optimized''). Notably,
-our subsequent optimization runs, which are directly inherited from
-the uniform sampling \RNAblueprint{} software, partially level the
+Moreover, for all instances as well, the superiority of Boltzmann designs 
+remains unchallenged even after local optimizations, as shown by 
+Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{sec:improvements} 
+and \ref{sec:validity}. This observation is consistent with a 
+superior quality of the starting point for the greedy walk, probably leading 
+to better local minima of the \Obj{} function. However, it should be noted
+that the greedy walk is based on the uniform sampling of
+\RNAblueprint{}, and thus can be expected to partially level the 
 advantages of Boltzmann sampling. In future work, we hope to improve
-this aspect by exploiting Boltzmann sampling even during the
+this aspect by exploiting Boltzmann sampling during the
 optimization run.
 
-\begin{table}[t]
-\centering
-\medskip
-\begin{tabular}{@{}>{\bf}l@{\quad}>{\tt}l@{\quad}@{\quad}c@{\quad}c@{\quad}c@{}}
-  &   \textbf{\textrm{Dataset}}   & {\bfseries\ourprog{}} & \textbf{\RNAblueprint} & \textbf{$\Delta$-Improvement}\\ \toprule
-  Seeds      & 2str & 21.69 ($\pm$4.37) & 37.74 ($\pm$6.45) & 16.05\\
-             & 3str & 18.10 ($\pm$3.98) & 30.49 ($\pm$5.41) & 12.39\\
-             & 4str & 20.15 ($\pm$3.83) & 32.32 ($\pm$5.23) & 12.17\\
-             \cline{2-5}
-             & PK60 & 12.12 ($\pm$3.04) & 19.81 ($\pm$4.24) & 7.69\\
-             & PK80 & 13.81 ($\pm$3.63) & 24.05 ($\pm$4.93) & 10.24\\
-             & LE80 & 10.54 ($\pm$2.77) & 17.80 ($\pm$4.17) & 7.26\\
-             \midrule
+%\begin{table}[t]
+%\centering
+%\medskip
+%\begin{tabular}{@{}>{\bf}l@{\quad}>{\tt}l@{\quad}@{\quad}c@{\quad}c@{\quad}c@{}}
+%  &   \textbf{\textrm{Dataset}}   & {\bfseries\ourprog{}} & \textbf{\RNAblueprint} & \textbf{$\Delta$-Improvement}\\ \toprule
+%  Seeds      & 2str & 21.69 ($\pm$4.37) & 37.74 ($\pm$6.45) & 16.05\\
+%             & 3str & 18.10 ($\pm$3.98) & 30.49 ($\pm$5.41) & 12.39\\
+%             & 4str & 20.15 ($\pm$3.83) & 32.32 ($\pm$5.23) & 12.17\\
+%             \cline{2-5}
+%             & PK60 & 12.12 ($\pm$3.04) & 19.81 ($\pm$4.24) & 7.69\\
+%             & PK80 & 13.81 ($\pm$3.63) & 24.05 ($\pm$4.93) & 10.24\\
+%             & LE80 & 10.54 ($\pm$2.77) & 17.80 ($\pm$4.17) & 7.26\\
+%             \midrule
+%
+%  Optimized  & 2str & 5.42 ($\pm$1.27) & 7.95 ($\pm$1.75) & 2.52\\
+%             & 3str & 5.10 ($\pm$1.10) & 7.04 ($\pm$1.52) & 1.94\\
+%             & 4str & 9.17($\pm$1.51) & 13.25 ($\pm$2.13) & 4.17\\
+%             \cline{2-5}
+%             & PK60  & 3.84 ($\pm$1.22) & 6.45 ($\pm$1.84) & 2.60\\
+%             & PK80* & 3.41 ($\pm$1.59) & 7.99 ($\pm$2.35) & 4.42\\
+%             & LE80  & 3.59 ($\pm$1.11) & 5.88 ($\pm$1.59) & 2.28\\
+%             \bottomrule
+%\end{tabular}\\[1em]
+%
+%\caption{Comparison of the multi-stable design objective function
+%  (Eq.~(\ref{eq:blueprintobjective}) of sequences sampled by
+%  \ourprog{} vs.\ uniform samples for three benchmark sets; before
+%  (seeds) and after optimization (optimized). We report the average
+%  scores with standard deviations; smaller scores are better. The
+%  final column reports our improvements due to Boltzmann sampling over
+%  uniform sampling (as difference of mean scores).}
+%\label{tab:benchmark-results}
+%\end{table}
 
-  Optimized  & 2str & 5.42 ($\pm$1.27) & 7.95 ($\pm$1.75) & 2.52\\
-             & 3str & 5.10 ($\pm$1.10) & 7.04 ($\pm$1.52) & 1.94\\
-             & 4str & 9.17($\pm$1.51) & 13.25 ($\pm$2.13) & 4.17\\
-             \cline{2-5}
-             & PK60  & 3.84 ($\pm$1.22) & 6.45 ($\pm$1.84) & 2.60\\
-             & PK80* & 3.41 ($\pm$1.59) & 7.99 ($\pm$2.35) & 4.42\\
-             & LE80  & 3.59 ($\pm$1.11) & 5.88 ($\pm$1.59) & 2.28\\
-             \bottomrule
-\end{tabular}\\[1em]
 
-\caption{Comparison of the multi-stable design objective function
-  (Eq.~(\ref{eq:blueprintobjective}) of sequences sampled by
-  \ourprog{} vs.\ uniform samples for three benchmark sets; before
-  (seeds) and after optimization (optimized). We report the average
-  scores with standard deviations; smaller scores are better. The
-  final column reports our improvements due to Boltzmann sampling over
-  uniform sampling (as difference of mean scores).}
-\label{tab:benchmark-results}
-\end{table}
+\begin{figure}
+  {\includegraphics[width=\linewidth,trim={.2cm .3cm .2cm 5cm},clip]{Figs/statistics-overall}}
+  \caption{Comparison of the \Obj{}
+  (see Eq.~\eqref{eq:blueprintobjective}; smaller values $\to$ better designs) for sequences sampled by
+  \ourprog{} and uniform sampling (\RNAblueprint) for six benchmark sets. For both sampling scheme, resulting sequences are either directly reported, or futher optimized using a local search heuristics.}
+\label{fig:benchmark-results}
+\end{figure}
 
 \section{Counting valid designs is \#{\sf P}-hard}\label{sec:counting}
 
@@ -1080,49 +1101,47 @@ Now we can build on the connection between the two problems to obtain complexity
 
 \section{Conclusion}
 Motivated by the---here established---hardness of the problem, we
-introduced a general framework and efficient algorithms for design of
-RNA sequences to multiple target structures with fine-tuned
+introduced a general framework, and efficient algorithms to design RNA 
+sequences that may adopt multiple target structures with fine-tuned
 properties. Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
 controlled by expressive RNA energy models.  Compared to the
 previously best available sampling method (uniform sampling), this
 approach generated significantly better seed sequences for instances
-of a common multi-target design benchmark.
+of an extensive multi-target design benchmark, including pseudoknots.
 
-The presented method enables new possibilities for sequence generation
-in the field of RNA sequence design by enforcing additional
+The presented method enables new possibilities for the sequence generation
+in the field of RNA sequence design, allowing to enforce additional
 constraints, like \GCb\%, while controlling the energy of
 multiple target structures. Thus it presents a major advance over
 previously applied ad-hoc sampling and even efficient uniform sampling
 strategies. We have shown the practicality of such controlled sequence
-generation and studied its use for multi-target RNA design. Moreover,
-our framework is equipped to include more complex sequence
+generation, including the case of pseudoknotted structures, and studied its use for multi-target RNA design. Moreover,
+our framework is amenable to extensions, to include more complex sequence
 constraints, including mandatory/forbidden motifs at specific
-positions or anywhere in the designed sequences. Furthermore, the
-method can support even negative design principles, for instance by
-penalizing a set of alternative helices/structures. Based on this
-generality, we envision our framework---in extensions, which still
-require delicate elaboration---to support various complex RNA design
-scenarios far beyond the sketched applications.
+positions, or anywhere in the designed sequences, by adapting formal language constructs 
+introduced by \citet{Zhou2013}. Negative design principles could also 
+be explicitly supported at the generation stage, for instance by
+penalizing a set of alternative helices/structures. 
 
 
-\Final{
-Extensions:
-\begin{enumerate}
-  \item What if the input graph is not bipartite? \\
-  Extract a minimal subset of edges such that new graph is bipartite!\\
-  $\to{}$ Graph bipartization (cf implementation by Hüffner, JGAA 2009)
-  \item Is the optimization version in the \emph{weighted base-pair model} already {\sf NP}-hard?
-  \item Does it help to know that there are cliques of size $k$ during the tree decomposition?\\
-  If anything, it provides a lower bound on tree decomposition (helps branch and bound algorithms)
-  \item What if some degree of freedom is allowed in the structure definition?\\ Can we still use tree decomposition?\\
-  This looks like a very reasonable first step towards the definition of an {\em optimal} DP decomposition for RNA folding (with Pseudoknots) or RNA-RNA interactions\ldots
-  \item Structures can also be penalized, but they must be specified explicitly.\\
-  However, any competing structure must consist of helices, and it is possible to penalize each of the $\Theta(n^2)$ helices of any given length $L$. What would be the impact on treewidth?
-  \item More general energy  models $\to$ Turner. (Pseudoknots)
-  For this description, we assume that all input structures are non-crossing, while the framework would otherwise support crossing input structures as well as according energy models, e.g.{} the Hotknots model of~\citet{Ren2005}, by considering special pseudoknot loops.
-\end{enumerate}\label{lbl:theend}
-}
+%\Final{
+%Extensions:
+%\begin{enumerate}
+%  \item What if the input graph is not bipartite? \\
+%  Extract a minimal subset of edges such that new graph is bipartite!\\
+%  $\to{}$ Graph bipartization (cf implementation by Hüffner, JGAA 2009)
+%  \item Is the optimization version in the \emph{weighted base-pair model} already {\sf NP}-hard?
+%  \item Does it help to know that there are cliques of size $k$ during the tree decomposition?\\
+%  If anything, it provides a lower bound on tree decomposition (helps branch and bound algorithms)
+%  \item What if some degree of freedom is allowed in the structure definition?\\ Can we still use tree decomposition?\\
+%  This looks like a very reasonable first step towards the definition of an {\em optimal} DP decomposition for RNA folding (with Pseudoknots) or RNA-RNA interactions\ldots
+%  \item Structures can also be penalized, but they must be specified explicitly.\\
+%  However, any competing structure must consist of helices, and it is possible to penalize each of the $\Theta(n^2)$ helices of any given length $L$. What would be the impact on treewidth?
+%  \item More general energy  models $\to$ Turner. (Pseudoknots)
+%  For this description, we assume that all input structures are non-crossing, while the framework would otherwise support crossing input structures as well as according energy models, e.g.{} the Hotknots model of~\citet{Ren2005}, by considering special pseudoknot loops.
+%\end{enumerate}\label{lbl:theend}
+%}
 
 \section*{Acknowledgements}
 YP is supported

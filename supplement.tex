@@ -1,5 +1,5 @@
 \PassOptionsToPackage{utf8}{inputenc}
-\documentclass{bioinfo}
+\documentclass[12pt]{bioinfo}
 \copyrightyear{2015} \pubyear{2015}
 
 \access{Advance Access Publication Date: Day Month Year}
@@ -685,9 +685,17 @@ In the numerator of the above expression, one recognizes the variance of the dis
 Remark that a variance is always non-negative and, in our case, also strictly positive for $\pmb{\pi}$, $\pi_\ell>0$, as soon as there exist at least two distinct sequences $S$ and $S'$ such that $E_\ell(S)\neq E_\ell(S')$.
 Moreover, weights are always positive so the partial derivative in $\pi_\ell$ is always positive. Ultimately, it is always possible to increase (resp. decrease) the expected free energy of a structure by simply decreasing (resp. increasing) its weight, supporting our weight optimization procedure.
 \newpage
-\section{Detailed result of quality analysis}\label{sec:validity}
+\section{Detailed result of MultiDefect analysis}\label{sec:validity}
 N/A values correspond to data that could not be obtained by the time of this submission for two main reasons: In the case of the initial sampling (left columns), they correspond to instances which, in conjunction with an expressive energy model, resulted in very high tree-width, leading to unreasonable memory requirements incompatible with our available computing resources; The case of missing values after optimization  (right columns), they indicate situations where the initial optimization took too long ($\approx$ 1 day) and was killed.
 \input{table}
+
+\section{Contribution of MultiDefect terms to the improvement}
+\label{sec:improvements}
+\begin{figure}[h!]
+\includegraphics[width=.48\textwidth]{Figs/statistics-Term1}
+\includegraphics[width=.48\textwidth]{Figs/statistics-Term2}
+\caption{Break down of average MultiDefect values into their two components.}
+\end{figure}
 
 \bibliographystyle{natbib}
 %\bibliographystyle{achemnat}
