@@ -156,6 +156,8 @@
 
 \newcommand{\TargetE}{E^{\star}}
 
+\newcommand{\Obj}{\text{\sf \relsize{-1}MultiDefect}}
+
 \newcommand{\TODO}[1]{\textcolor{red!70!black}{\textbf{TODO: #1}}}
 
 \newcommand{\parHead}[1]{\Final{\paragraph{#1}}}
@@ -930,6 +932,17 @@ pseudoknot-free target structures.
 \subsection{Generating high-quality seeds for further optimization}
 We empirically study the capacity of \ourprog{} to improve the generation of seed sequences for subsequent local optimizations, showing an important application in biologically relevant scenarii.
 
+To that purpose, we rely on a multi-stable design objective function introduced by \citet{Hammer2017}, named \Obj in the following:
+% \begin{align}
+%   f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
+%    & +\ \xi \frac{2}{k(k-1)} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
+% \end{align}
+\begin{align}
+  \label{eq:blueprintobjective}
+    \Obj(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
+   & +\ 0.5\frac{1}{\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
+\end{align}
+
 For a multi-target design instance, individual reasonable target
 energies are estimated from averaging the energy over samples at
 relatively high weights $e^{\beta}$, setting the targeted \GCb\%
@@ -939,17 +952,7 @@ subsequently generated $1\,000$ seed sequences at these energies.
 Our procedure is tailored to produce sequences with similar Turner
 energy that favor the stability of the target structures having
 moderate \GCb\%; all these properties are desirable objectives
-for RNA design.  All sampled sequences are evaluated under the
-multi-stable design objective function of \citet{Hammer2017}:
-% \begin{align}
-%   f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
-%    & +\ \xi \frac{2}{k(k-1)} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
-% \end{align}
-\begin{align}
-  \label{eq:blueprintobjective}
-    f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
-   & +\ 0.5\frac{1}{\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
-\end{align}
+for RNA design. 
 
 Using our strategy, we generated at least 1\,000 seeds per instance of
 the subsets \texttt{RNAtabupath} (2str), \texttt{3str}, and
@@ -985,7 +988,7 @@ optimization run.
 \centering
 \medskip
 \begin{tabular}{@{}>{\bf}l@{\quad}>{\tt}l@{\quad}@{\quad}c@{\quad}c@{\quad}c@{}}
-  &   \textbf{\textrm{Dataset}}   & {\bfseries\ourprog{}} & \textbf{Uniform} & \textbf{$\Delta$-Improvement}\\
+  &   \textbf{\textrm{Dataset}}   & {\bfseries\ourprog{}} & \textbf{\RNAblueprint} & \textbf{$\Delta$-Improvement}\\ \toprule
   Seeds      & 2str & 21.69 ($\pm$4.37) & 37.74 ($\pm$6.45) & 16.05\\
              & 3str & 18.10 ($\pm$3.98) & 30.49 ($\pm$5.41) & 12.39\\
              & 4str & 20.15 ($\pm$3.83) & 32.32 ($\pm$5.23) & 12.17\\
