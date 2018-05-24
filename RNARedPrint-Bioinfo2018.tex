@@ -191,8 +191,8 @@
 
 \setlength{\parskip}{.2em}
 
-\newcommand{\RNAblueprint}{{\tt \bfseries{}\color{black!75} RNA\textcolor{blue!70!black}{Blue}Print}}
-\newcommand{\ourprog}{{\tt \bfseries{}\color{black!75}RNA\textcolor{red!70!black}{Red}Print}}
+\newcommand{\RNAblueprint}{{\tt \bfseries{}\color{black!85} RNA\textcolor{blue!70!black}{Blue}Print}}
+\newcommand{\ourprog}{{\tt \bfseries{}\color{black!85}RNA\textcolor{red!70!black}{Red}Print}}
 
 \newcommand{\Energy}[2]{E(#2;#1)}
 
@@ -830,8 +830,8 @@ $ \prod_{\ell=1}^{k} e^{-\ln(\pi_\ell)\, E_i} = \prod_{\ell=1}^{k} \pi_i^{-E_i}.
 One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution, \emph{i.e.} such that  $\mathbb{E}(E_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$.
 The expected value of $E_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp. Mat.~\ref{sec:weight_derivatives}). More generally, computing a suitable $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
 In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ and, at each iteration, generates a sample $\mathcal{S}$ of sequences. The expected value of an energy $E_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}E_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$.
-$\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically to achieve effective optimization.
-While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its reasonable empirical behavior (choosing $\gamma=1.2$).
+$\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically  ($\gamma=1.2$) to achieve effective optimization.
+While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its good empirical behavior.
 
 A further \Def{rejection step} is applied to the generated structures to retain only sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rejection approach is justified by the following considerations:
 i) \emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing~\citet{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
@@ -946,13 +946,13 @@ As a quality measure, we used the multi-stable design objective function introdu
 % \end{align}
 \begin{align}
   \label{eq:blueprintobjective}
-    \Obj(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \EnsE(S))\notag\\
+    \Obj(S) &= \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \EnsE(S))\notag\\
    & +\frac{1}{2\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
 \end{align}
-where $\EnsE(S)$, the \emph{ensemble free energy} of $S$, is computed
+where $\EnsE(S)$, the \Def{ensemble free energy} of $S$, is computed
 by {\tt RNAfold}~\citep{Hofacker1994} in the pseudoknot-free case; for
-pseudoknotted targets, $\EnsE(S)$ is approximated by the \emph{minimum
-  free energy} of S as estimated by {\tt HotKnots} in the energy model
+pseudoknotted targets, $\EnsE(S)$ is approximated by the \Def{minimum
+  free energy} (MFE) of S as estimated by {\tt HotKnots} in the energy model
 of~\citet{dirks-pierce-03}.  Intuitively, the first term of \Obj{}
 captures the distance of the targets from the ensemble free energy,
 while the second term penalizes the dispersion of targets; \Obj{} is
@@ -982,14 +982,14 @@ pseudoknot-free datasets {\sf 2str}, {\sf 3str}, and {\sf 4str}; and
   LE80}.
 
 
-The results, shown in Fig.~\ref{fig:benchmark-results}, confirm that
+The results, shown in Fig.~\ref{fig:benchmark-results}, reveal that
 Boltzmann-sampled sequences outperform uniform seeds on every dataset,
 leading to average improvements in \Obj{} values ranging from $7.26$
 ({\sf LE80}) to $16.05$ ({\sf 2str}) units. Remarkably, this
 improvement is be observed for both of the terms in \Obj{} (see
 Supp. Mat.~\ref{sec:improvements}).  This means that \ourprog{}
 produces sequences whose targets are both substantially closer to
-their MFE, and more similarly stable across targets.  In fact, for
+the sequence ensemble/minimal free energy, and more similarly stable across targets.  In fact, for
 every sequence in our benchmark, consisting of 332 sets of target
 structures, we observed better \Obj{} for Boltzmann sampling than for
 uniform sampling (see Supp. Mat.~\ref{sec:validity}).  Notably,
@@ -1047,7 +1047,7 @@ optimization run.
 
 
 \begin{figure}
-  {\includegraphics[width=\linewidth,trim={.2cm .3cm .2cm 5cm},clip]{Figs/statistics-overall}}
+  {\includegraphics[width=.9\linewidth,trim={.2cm .3cm .2cm 5cm},clip]{Figs/statistics-overall}}
   \caption{Comparison of the \Obj{} (see
     Eq.~\eqref{eq:blueprintobjective}; smaller values $\to$ better
     designs) for sequences sampled by \ourprog{} and uniform sampling
@@ -1057,8 +1057,7 @@ optimization run.
 \label{fig:benchmark-results}
 \end{figure}
 
-\section{Counting valid designs is \#{\sf P}-hard}\label{sec:counting}
-
+\section{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
 Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
