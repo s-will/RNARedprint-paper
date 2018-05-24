@@ -938,7 +938,7 @@ pseudoknot-free target structures.
   \label{fig:energydist-pk}
 \end{figure*}
 \subsection{Generating high-quality seeds for further optimization}
-Next, we empirically evaluated the capacity of \ourprog{} to generate seed sequences for multiple (pseudoknotted) target structures, possibly followed by subsequent local optimizations. As a baseline for comparison, we considered \RNAblueprint~\citep{Hammer2017}, the current leading tool for multiple design. 
+Next, we empirically evaluated the capacity of \ourprog{} to generate seed sequences for multiple (pseudoknotted) target structures, possibly followed by subsequent local optimizations. As a baseline for comparison, we considered \RNAblueprint~\citep{Hammer2017}, the current leading tool for multiple design.
 As a quality measure, we used the multi-stable design objective function introduced by~\citet{Hammer2017}, defined as:
 % \begin{align}
 %   f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
@@ -949,8 +949,9 @@ As a quality measure, we used the multi-stable design objective function introdu
     \Obj(S) &= \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \EnsE(S))\notag\\
    & +\frac{1}{2\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
 \end{align}
+
 where $\EnsE(S)$, the \Def{ensemble free energy} of $S$, is computed
-by {\tt RNAfold}~\citep{Hofacker1994} in the pseudoknot-free case; for
+by {\tt RNAfold}~\citep{Lorenz2011} in the pseudoknot-free case; for
 pseudoknotted targets, $\EnsE(S)$ is approximated by the \Def{minimum
   free energy} (MFE) of S as estimated by {\tt HotKnots} in the energy model
 of~\citet{dirks-pierce-03}.  Intuitively, the first term of \Obj{}
@@ -965,7 +966,7 @@ We considered a benchmark of six sets of target structures described in \citet{T
 %Our procedure is tailored to produce sequences with similar Turner
 %energy that favor the stability of the target structures having
 %moderate \GCb\%; all these properties are desirable objectives
-%for RNA design. 
+%for RNA design.
 Using \ourprog{}, we generated at least 1\,000 seeds per instance for
 each instance of the benchmark. We used target energies that were
 computed by averaging the energy over samples at higher weights
@@ -999,14 +1000,14 @@ free-energy minimization is costly in the presence of
 pseudoknots~\citep{Sheikh2012} and good implementations are scarce.
 
 %
-Moreover, for all instances as well, the superiority of Boltzmann designs 
-remains unchallenged even after local optimizations, as shown by 
-Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{sec:improvements} 
-and \ref{sec:validity}. This observation is consistent with a 
-superior quality of the starting point for the greedy walk, probably leading 
+Moreover, for all instances as well, the superiority of Boltzmann designs
+remains unchallenged even after local optimizations, as shown by
+Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{sec:improvements}
+and \ref{sec:validity}. This observation is consistent with a
+superior quality of the starting point for the greedy walk, probably leading
 to better local minima of the \Obj{} function. However, it should be noted
 that the greedy walk is based on the uniform sampling of
-\RNAblueprint{}, and thus can be expected to partially level the 
+\RNAblueprint{}, and thus can be expected to partially level the
 advantages of Boltzmann sampling. In future work, we hope to improve
 this aspect by exploiting Boltzmann sampling during the
 optimization run.
@@ -1064,8 +1065,8 @@ Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
 computing the number of valid sequences for a given compatibility
 graph $G=(V,E)$. Note that this problem corresponds to the partition
 function problem in a simple base pair model, assigning $0$ to
-canonical and $\infty$ to non-canonical base pairs and setting 
-$\beta>0$, so that any valid structure counts as $1$ in the partition 
+canonical and $\infty$ to non-canonical base pairs and setting
+$\beta>0$, so that any valid structure counts as $1$ in the partition
 function. As previously noted~\citep{Flamm2001}, a set of target
 structures admits a valid design iff its compatibility graph is
 bipartite, which can be tested in linear time.  Moreover, without
@@ -1077,7 +1078,7 @@ $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
 
 The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
 
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$. 
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
 
 
 We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$.
@@ -1095,7 +1096,7 @@ and we conclude that $\Psi(f)$ differs from $\Psi(f')$ at least with respect to 
 
 We turn to the surjectivity of $\Psi$, i.e. the existence of a preimage for each element $I\in \IS{G}$. Let us consider the function $f$ defined as $f(v) = \Ab$ (resp. $\Gb$, $\Cb$ or $\Ub$) if $v\in V_1$ and $v\in S$ (resp. $v\in V_1$ and $v\notin S$, $v\in V_2$ and $v\in S$, or $v\in V_2$ and $v\notin S$).
 %
-%for any $(v_1,v_2)\in V_1\times V_2$ by 
+%for any $(v_1,v_2)\in V_1\times V_2$ by
 %\begin{align*}
 %f(v_1) &= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} &
 %\text{\quad and\quad}&&
@@ -1118,7 +1119,7 @@ Now we can build on the connection between the two problems to obtain complexity
 
 \section{Conclusion}
 Motivated by the---here established---hardness of the problem, we
-introduced a general framework, and efficient algorithms to design RNA 
+introduced a general framework, and efficient algorithms to design RNA
 sequences that may adopt multiple target structures with fine-tuned
 properties. Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
@@ -1136,10 +1137,10 @@ strategies. We have shown the practicality of such controlled sequence
 generation, including the case of pseudoknotted structures, and studied its use for multi-target RNA design. Moreover,
 our framework is amenable to extensions, to include more complex sequence
 constraints, including mandatory/forbidden motifs at specific
-positions, or anywhere in the designed sequences, by adapting formal language constructs 
-introduced by \citet{Zhou2013}. Negative design principles could also 
+positions, or anywhere in the designed sequences, by adapting formal language constructs
+introduced by \citet{Zhou2013}. Negative design principles could also
 be explicitly supported at the generation stage, for instance by
-penalizing a set of alternative helices/structures. 
+penalizing a set of alternative helices/structures.
 
 
 %\Final{
