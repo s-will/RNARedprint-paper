@@ -1,6 +1,6 @@
 \PassOptionsToPackage{utf8}{inputenc}
 \documentclass{bioinfo}
-\copyrightyear{2015} \pubyear{2015}
+\copyrightyear{2018} \pubyear{2018}
 
 \access{Advance Access Publication Date: Day Month Year}
 \appnotes{Manuscript Category}
@@ -41,7 +41,7 @@
 
 \usepackage{xcolor}
 
-\usepackage{todonotes}
+%\usepackage{todonotes}
 
 
 \hypersetup{
@@ -155,7 +155,8 @@
 \newcommand{\Def}[1]{{\bfseries #1}}
 
 \newcommand{\TargetE}{E^{\star}}
-\newcommand{\MFE}{\text{\rm MFE}}
+%\newcommand{\MFE}{\text{\rm MFE}}
+\newcommand{\EnsE}{\text{\rm G}} %ensemble energy
 
 \newcommand{\Obj}{\text{\rm MultiDefect}}
 
@@ -198,9 +199,15 @@
 \newcommand{\EnergyTurner}{E_{\text{T}}}
 \newcommand{\EnergyStacking}{E_{\text{st}}}
 
+
+
+
 %%% end macro defs
 
-
+%% fix some weirdness of the bioinfo class (footer overlapping text on page 1)
+\makeatletter
+\setlength\footskip{30\p@}          % space above footer line
+\makeatother
 
 \begin{document}
 \firstpage{1}
@@ -911,12 +918,12 @@ pseudoknot-free target structures.
   \end{center}
   \caption{%
     Targeting specific energies for pseudoknotted structures using
-    multi-dimensional Boltzmann sampling.  (A) Linear fits between the
+    multi-dimensional Boltzmann sampling.  A) Linear fits between the
     energies in the stacking model to the realistic pseudoknot energy
     model by Dirks and Pierce (D\&P) for sampled sequences; the good
     match enables more efficient targeting of Turner energies based on
     targeting stacking model energies.  We show the fits for both
-    target structures S1 and S2 of subfigure B.  (B) D\&P energy
+    target structures S1 and S2 of subfigure B.  B) D\&P energy
     distributions for two target structures S1 and S2. We show the
     results of targeting the respective free energies $(-30,-20)$,
     $(-30,-30)$, $(-25,-25)$, and $(-20,-30)$ for the target
@@ -939,11 +946,18 @@ As a quality measure, we used the multi-stable design objective function introdu
 % \end{align}
 \begin{align}
   \label{eq:blueprintobjective}
-    \Obj(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \MFE(S))\notag\\
+    \Obj(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \EnsE(S))\notag\\
    & +\frac{1}{2\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
 \end{align}
-where $\MFE(S)$ is the Minimum Free-Energy of $S$, computed by {\tt RNAfold}~\citep{Hofacker1994} or approximated by {\tt HotKnots}~\citep{Ren2005} for pseudoknotted targets.
-Intuitively, the first term of \Obj{} captures how distant from the $\MFE$ the targets are, while the second term penalizes the dispersion of targets. \Obj{} is best (minimized) when all targets simultaneously achieve the $\MFE$ of the sequence.
+where $\EnsE(S)$, the \emph{ensemble free energy} of $S$, is computed
+by {\tt RNAfold}~\citep{Hofacker1994} in the pseudoknot-free case; for
+pseudoknotted targets, $\EnsE(S)$ is approximated by the \emph{minimum
+  free energy} of S as estimated by {\tt HotKnots} in the energy model
+of~\citet{dirks-pierce-03}.  Intuitively, the first term of \Obj{}
+captures the distance of the targets from the ensemble free energy,
+while the second term penalizes the dispersion of targets; \Obj{} is
+best (minimal) when all targets simultaneously achieve the minimum
+free energy of the sequence.
 
 We considered a benchmark of six sets of target structures described in \citet{Taneda2015}: {\sf 2str}, {\sf 3str}, and {\sf 4str} consist of non-pseudoknotted structures, while {\sf PK60}, {\sf PK80}, and {\sf LE80} contain pseudoknotted structures.
 %%For each instance of the \Software{Modena}
@@ -952,36 +966,37 @@ We considered a benchmark of six sets of target structures described in \citet{T
 %energy that favor the stability of the target structures having
 %moderate \GCb\%; all these properties are desirable objectives
 %for RNA design. 
-Using \ourprog{}, we generated at least 1\,000 seeds per instance for each instance 
-of the benchmark. We used target energies that were computed by averaging the energy over samples at
-higher weights $e^{\beta}$, and set the targeted \GCb\%
-to 60\%.
- We compared the \Obj{} value of 
-these sequences against that of seed sequences, uniformly sampled 
-using \RNAblueprint{}.
-Moreover, for both sets, we used an adaptive greedy
-walk~\citep{Hammer2017} to \Def{optimize} the \Obj{} function. At
-each step, the local search resamples (uniformly at random) the positions 
-of a randomly selected component in the base pair dependency graph, 
-accepting the modification only if it results in a gain. The greedy descent
-was run for 500 steps in the case of pseudoknot-free datasets {\sf 2str}, {\sf 3str}, and
-{\sf 4str}; and 200 steps for the pseudoknotted ones {\sf PK60}, {\sf PK80}, and {\sf LE80}. 
+Using \ourprog{}, we generated at least 1\,000 seeds per instance for
+each instance of the benchmark. We used target energies that were
+computed by averaging the energy over samples at higher weights
+$e^{\beta}$, and set the targeted \GCb\% to 60\%.  We compared the
+\Obj{} value of these sequences against that of seed sequences,
+uniformly sampled using \RNAblueprint{}.  Moreover, for both sets, we
+used an adaptive greedy walk~\citep{Hammer2017} to \Def{minimize} the
+\Obj{} function. At each step, the local search resamples (uniformly
+at random) the positions of a randomly selected component in the base
+pair dependency graph, accepting the modification only if it results
+in a gain. We performed 500 greedy descent steps in the case of
+pseudoknot-free datasets {\sf 2str}, {\sf 3str}, and {\sf 4str}; and
+200 steps for the pseudoknotted ones {\sf PK60}, {\sf PK80}, and {\sf
+  LE80}.
 
 
-The results, shown in Fig.~\ref{fig:benchmark-results}, confirm 
-that Boltzmann-sampled sequences outperform uniform seeds on every dataset, 
-leading to average improvements in \Obj{} values ranging from $7.26$ 
-({\sf LE80}) to $16.05$  ({\sf 2str}) units. Remarkably, this improvement is
-be observed for both of the terms in \Obj{} (see Supp. Mat.~\ref{sec:improvements}). 
-This means that \ourprog{} produces sequences whose targets are both substantially closer to their MFE, and more 
-similarly stable across targets. 
-In fact, for every sequence in our benchmark, consisting of  332 sets of 
-target structures in total, we observed better \Obj{} for Boltzmann-weighted sampling 
-than for uniform sampling (see Supp. Mat.~\ref{sec:validity}). 
-Notably, \ourprog{} remains 
-unfazed by the presence of pseudoknots, the main problem being the computation 
-of the \Obj{} function, which requires a costly free-energy minimization 
-in the presence of pseudoknots~\citep{Sheikh2012}. 
+The results, shown in Fig.~\ref{fig:benchmark-results}, confirm that
+Boltzmann-sampled sequences outperform uniform seeds on every dataset,
+leading to average improvements in \Obj{} values ranging from $7.26$
+({\sf LE80}) to $16.05$ ({\sf 2str}) units. Remarkably, this
+improvement is be observed for both of the terms in \Obj{} (see
+Supp. Mat.~\ref{sec:improvements}).  This means that \ourprog{}
+produces sequences whose targets are both substantially closer to
+their MFE, and more similarly stable across targets.  In fact, for
+every sequence in our benchmark, consisting of 332 sets of target
+structures, we observed better \Obj{} for Boltzmann sampling than for
+uniform sampling (see Supp. Mat.~\ref{sec:validity}).  Notably,
+\ourprog{} performs equally well in the presence of pseudoknots;
+the difficulty rather lies in the computation of the \Obj{} function, since
+free-energy minimization is costly in the presence of
+pseudoknots~\citep{Sheikh2012} and good implementations are scarce.
 
 %
 Moreover, for all instances as well, the superiority of Boltzmann designs 
