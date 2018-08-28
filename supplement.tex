@@ -39,6 +39,8 @@
 
 \usepackage{xcolor}
 
+\usepackage{todonotes}
+
 
 \hypersetup{
     bookmarks=false,         % show bookmarks bar?
@@ -147,7 +149,7 @@
 \newcommand{\Ehp}[1]{E^{\textrm{hp}}(#1)}
 \newcommand{\Eint}[1]{E^{\textrm{int}}(#1)}
 
-\newcommand{\Def}[1]{{\bfseries #1}}
+\newcommand{\Def}[1]{\emph{#1}}
 
 \newcommand{\TargetE}{E^{\star}}
 
@@ -276,9 +278,10 @@ instance from set RF3.
 
 Our implementation relies on external tools for the tree decomposition. Therefore it is not trivial that the weight functions (i.e. terms of the energy function) can be captured within the tree decompositions returned by a specific tool. In other words, it is not immediately clear how one can construct a cluster tree from an arbitrary tree decomposition for a given network.
 
-Crucially, one can show that, as long as the network the arguments $\dep(f)$ of a function $f$ are materialized by a clique within the network $\network$, then there exists at least one node in the tree decomposition that contains $\dep(f)$, thus allowing the evaluation of $f$.
+Crucially, one can show that, as long as the arguments $\dep(f)$ of a function $f$ form a clique within the network $\network$, then there exists at least one node in the tree decomposition that contains $\dep(f)$, thus allowing the evaluation of $f$.
 \begin{lemma}\label{lem:cliques}
-Let $G=(V,E)$ be an undirected graph, and  $T,\chi$ be a tree decomposition for $G$. For each clique $C\subset V$, there exists a node $n\in T$ such that $C\subset\chi(v)$.
+\todo[inline]{R1: guess it should read "node v" instead of "n"!? please update the proof accordingly!}
+Let $G=(V,E)$ be an undirected graph, and  $(T,\chi)$ be a tree decomposition for $G$. For each clique $C\subset V$, there exists a node $n\in T$ such that $C\subset\chi(v)$.
 \end{lemma}
 \begin{proof}
   \newcommand{\TransVars}[1]{{\rm tverts}(#1)}
@@ -396,24 +399,25 @@ partition functions. In particular, the algorithm can be restricted to
 consider only \Def{valid} combinations, satisfying the (hard)
 constraints induced by valid base pairs.
 
-RNA design introduces constraints due to the requirement of canonical
-(aka complementary) base pairing, which can be exploited in a
-particularly simple and effective way to reduce the complexity.  
-As previously noted by \citet{Flamm2001}, the base pair complementarity induces a
+The given structures in the RNA design problem impose constraints on
+the sequences for ensuring canonical (aka complementary)
+base pairing. These constraints can be exploited in a particularly
+simple and effective way to reduce the complexity.  As previously
+noted by \citet{Flamm2001}, the base pair complementarity induces a
 bi-partition of each connected component within the base pair
 dependency graph, such that the nucleotides assigned to the two set of
 nodes in the partition are restricted to values in $\{\Ab,\Gb\}$ and
-$\{\Cb,\Ub\}$ respectively. We call a partial sequence
-\Def{cc-valid}, iff its determined positions are consistent with such a separation
-for all determined positions of the same connected component.
+$\{\Cb,\Ub\}$ respectively. We call a partial sequence \Def{cc-valid},
+iff its determined positions are consistent with such a separation for
+all determined positions of the same connected component.
 
 % Let $CC=\{cc_1$, $cc_2, \dots\}$ denote the vertex sets of the
 % connected components of the base pair dependency graph. In this graph,
 % let each component have the bi-partition $cc_i=cc^0_i\cup cc^1_i$.
 
 One can now modify Alg.~\ref{alg:pf}, on a tree decomposition
-$(T,\chi)$, such that the message values
-$\evalfor{\Message{u}{v}}{\val}$ are only computed for cc-valid
+$(T,\chi)$, such that the values of messages
+$\Message{u}{v}}$ are computed only for cc-valid
 partial sequences $\val\in\partseqs(\separator{u}{v})$. Moreover, the
 loop over $\val'\in\partseqs(\difference{u}{v})$ is restricted, such
 that $\substitute{\val}{\val'}$ are cc-valid. Analogous restrictions are 
@@ -471,7 +475,7 @@ complementarity constraints, e.g. by assigning C and A to positions in
 different sets of a partition, thus satisfying the bi-partition
 constraints, where the positions base pair directly, rendering the
 partial sequence invalid. Moreover, applications of the sampling
-framework, can introduce additional constraints that further reduce
+framework can introduce additional constraints that further reduce
 the number of valid partial subsequences. However, exploiting all such
 constraints, in a complete and general way, would likely cause significant
 implementation overhead, while not significantly improving

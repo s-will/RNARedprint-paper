@@ -5,13 +5,10 @@
 \access{Advance Access Publication Date: Day Month Year}
 \appnotes{Manuscript Category}
 
-
-
 %%% PACKAGES
 
 \usepackage{xr}
 \externaldocument{supplement}
-
 
 \usepackage{booktabs} % for much better looking tables
 \usepackage{array} % for better arrays (eg matrices) in maths
@@ -41,7 +38,7 @@
 
 \usepackage{xcolor}
 
-%\usepackage{todonotes}
+\usepackage{todonotes}
 
 
 \hypersetup{
@@ -152,7 +149,7 @@
 \newcommand{\Ehp}[1]{E^{\textrm{hp}}(#1)}
 \newcommand{\Eint}[1]{E^{\textrm{int}}(#1)}
 
-\newcommand{\Def}[1]{{\bfseries #1}}
+\newcommand{\Def}[1]{\emph{#1}}
 
 \newcommand{\TargetE}{E^{\star}}
 %\newcommand{\MFE}{\text{\rm MFE}}
@@ -260,7 +257,7 @@ macromolecules with highly specific properties and programmable functions.
 RNA present itself as a well-suited tool for a
 rational design targeting specific functions~\citep{Kushwaha2016}. RNA function is tightly
 coupled to the formation of secondary structure, as well as changes in
-base pairing propensities and the accessibility of regions, \emph{eg} by
+base pairing propensities and the accessibility of regions, e.g.\ by
 burying or exposing interaction sites~\citep{Rodrigo2014}. At the same time, the
 thermodynamics of RNA secondary structure is well understood and its prediction is
 computationally tractable~\citep{McCaskill1990}. Thus,  structure can serve as effective
@@ -301,13 +298,12 @@ for the target structure instead of (uniform) random sequences for the
 early \Software{RNAinverse} algorithm~\citep{Hofacker1994}. This
 strategy was later shown to result in unrealistically high
 \GCb\% in designed sequences. To address this issue,
-\Software{IncaRNAtion}~\citep{Reinharz2013} controls \GCb\%
-through an adaptive sampling strategy.
+tools like \Software{antaRNA}~\citep{Kleinkauf2015} and \Software{IncaRNAtion}~\citep{Reinharz2013} control \GCb\%; the latter based on adaptive sampling.
 
 \parHead{Specificities and similarities of multi-target design.}
-Specifically, for multi-target design, virtually all available methods~\citep{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} follow the same overall generation/optimization scheme.
+Specifically, for multi-target design, virtually all available methods~\citep{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} follow the same overall generate-and-optimize strategy.
 %
-Facing the complex sequence constraints induced by multiple targets, early methods such as \Software{Frnakenstein}~\citep{Lyngsoe2012} and \Software{Modena}~\citep{Taneda2015} did not attempt to solve sequence generation systematically, but rely on \emph{ad-hoc} sampling strategies.
+Facing the complex sequence constraints induced by multiple targets, early methods such as \Software{Frnakenstein}~\citep{Lyngsoe2012} and \Software{Modena}~\citep{Taneda2015} did not attempt to solve sequence generation systematically, but rely on ad-hoc sampling strategies.
 %
 Recently, the \Software{RNAdesign}
 approach~\citep{HoenerzuSiederdissen2013}, coupled with powerful local
@@ -337,7 +333,7 @@ The hardness of counting (and conjectured hardness of sampling) does not preclud
 \label{fig:workflow}
 \end{figure*}
 
-To answer these questions, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures (Section~\ref{sec:FPT}). Guided by a \Def{tree decomposition} of the network, we devise dynamic programming to compute partition functions and sample sequences from the Boltzmann distribution%
+To answer these questions, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures (Section~\ref{sec:FPT}). Guided by a \Def{tree decomposition}, we devise dynamic programming to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
 . We show that these algorithms are \Def{fixed-parameter tractable} for the \Def{treewidth}%
 % Subsection~\ref{sec:complexity}
@@ -362,7 +358,7 @@ Turner RNA energy model. The resulting combination of efficiency and
 high accuracy finally enables generating biologically relevant
 multi-target designs in our final application of our overall strategy
 to a large set of multi-target RNA design instances from a
-representative benchmark Section~\ref{sec:results}).
+representative benchmark (Section~\ref{sec:results}).
 
 %In this work, we present a generic approach to multi-target sequence sampling that enables Boltzmann-weighted sampling (subsuming uniform sampling) for a wide class of objective functions that can even make use of the commonly used ``full-featured'' RNA energy models (like the Turner model~\citep{turner}). Due to its high expressivity the same framework allows combining objective functions with various hard and soft constraints, which can accommodate various desirable multi-target design scenarios.
 
@@ -476,12 +472,12 @@ functions over sequences.\smallskip\\
   over a set $\F$ (of functions $f:\S_n\to\real$),
   s.t.~$\Energy{\R}{S}=\sum_{f\in\F} f(S)$. This captures realistic RNA
   energy models---including nearest neighbor models,
-  e.g.~\citet{Turner2009}, and even pseudoknot models,
-  e.g. \citet{Andronescu2010}, while bounding the dependencies to
+  e.g.~\citep{Turner2009}, and even pseudoknot models,
+  e.g. \citep{Andronescu2010}, while bounding the dependencies to
   sequence positions introduced by each single $f$. Formally, define
   the \Def{dependencies} $\dep(f)$ of $f$ as the minimum set of sequence
   positions $\I\subseteq\{1,\dots,n\}$, where $f(S)=f(S')$ for all
-  sequences $S$ and $S'$ that agree at the positions in $\I$.
+  sequences $S$ and $S'$ that have equal nucleotides at the positions in $\I$.
 
   Each set $\F$ of functions (on sequences of length $n$) induces a
   \Def{dependency graph} on sequence positions, namely the hypergraph
@@ -493,7 +489,7 @@ functions over sequences.\smallskip\\
   Let $G=(X, E)$ be a hypergraph. A \Def{tree decomposition} of $G$ is
   a pair $(T,\chi)$, where $T$ is an unrooted tree/forest, and (for
   each $v\in T$) $\chi(v)\subseteq X$ is a set of vertices assigned to
-  the node tree $v\in T$, such that
+  the node $v\in T$, such that
 \begin{enumerate}
 \item each $x\in X$ occurs in at least one $\chi(v)$;
 \item for all $x\in X$, $\{ v \mid x \in \chi(v) \}$ induces a connected subtree of $T$;
@@ -505,7 +501,8 @@ of $G$ is the smallest width of any tree decomposition of $G$.
 \end{definition}
 
 
-\section{An FPT algorithm for the partition function and sampling of Boltzmann-weighted designs}
+\section{An fixed-parameter tractable (FPT) algorithm for the
+  partition function and sampling of Boltzmann-weighted designs}
 \label{sec:FPT}
 
 For our algorithmic description, we translate the concepts of
@@ -560,7 +557,7 @@ $\partfun{\network} := \sum_{S}\exp(-\beta\energy{\network}(S)) = \sum_{S}\prod_
 
 \subsection{Partition function and Boltzmann sampling through stochastic backtrack}\label{sec:PF}
 The minimum energy, counting, and partition function
-over RNA design network can be computed by dynamic programming based
+over an RNA design network can be computed by dynamic programming based
 on a tree decomposition of the network's dependency graph
 (i.e. cluster tree elimination).
 %This yields fixed parameter tractable (FPT) algorithms, based on the treewidth.
@@ -586,7 +583,7 @@ adjacent $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
 For a set $\Y$ of sequence positions, write $\partseqs(\Y)$ to
 denote the set of all partial sequences that determine exactly the positions
 in $\Y$; furthermore, given partial sequences $\val$ and
-$\val'$, we define the \Def{combined partial sequence $\substitute{\val'}{\val''}$} such that
+$\val'$, we define the \Def{combined partial sequence $\substitute{\val}{\val'}$} such that
 $$
 (\substitute{\val}{\val'})_i :=
 \begin{cases}
@@ -601,7 +598,7 @@ cluster tree, an equivalent (in term of treewidth) cluster tree can
 always be obtained by inserting at most $\Theta(|\X|)$ additional
 clusters.
 
-Let us now consider the \Def{computation of the partition function}.
+Let us now consider the computation of the partition function.
 Given is the RNA design network $\network=(\X,\F)$ and its cluster
 tree decomposition $(T,\chi,\phi)$.  W.l.o.g., we assume that $T$ is
 connected and contains a dedicated node $r$, with
@@ -611,7 +608,7 @@ we consider the set of directed edges $\edgesToR{}$ of $T$ oriented to
 $r$; define $T_r(u)$ as the induced subtree of
 $u$. Algorithm~\ref{alg:pf} computes the partition function by passing
 messages along these directed edges $u\to v$ (i.e. always from some
-child $u$ to its parent $v$). Each message is a function that depends
+child $u$ to its parent $v$). Each message $m$ is a function that depends
 on the positions $\dep(m)\subseteq \X$ and yields a partition function
 in $\real\cup\{\infty\}$. The message from $u$ to $v$ represents the
 partition functions of the subtree of $u$ for all possible partial
@@ -631,38 +628,31 @@ yields the total partition function:
     $\Message{u}{v}$ for all $(u\to{}v)\in T$; i.e.~partition
     functions of the subtrees of all $v$ for all possible partial
     sequences determining exactly the positions $\separator{u}{v}$.}
- \For{$u\to{}v\in T$ in postorder}{
-  \For{$\val\in\partseqs(\separator{u}{v})$}{
-    $x\gets 0$\;
-    \For{$\val'\in\partseqs(\difference{u}{v})$}{
-     $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
-     ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{w}{u}}{\substitute{\val}{\val'}}$ for $(w\to{}u)\in T$ )\;
-     $x \gets x + p$\;
-   }
-   $\evalfor{\Message{u}{v}}{\val} \gets x$\;
+  \For{$u\to{}v\in T$ in postorder}{
+    \For{$\val\in\partseqs(\separator{u}{v})$}{
+      $x\gets 0$\;
+      \For{$\val'\in\partseqs(\difference{u}{v})$}{
+        $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
+        ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{u'}{u}}{\substitute{\val}{\val'}}$ for $(u'\to{}u)\in T$ )\;
+        $x \gets x + p$\;
+      }
+      $\evalfor{\Message{u}{v}}{\val} \gets x$\;
+    }
+    \Return {$m$}\;
   }
-  \Return {$m$}\;
-  }
- \caption{FPT computation of the partition function using
-   dynamic programming (CTE). }\label{alg:pf}
+  \caption{FPT computation of the partition function using dynamic
+    programming, i.e.~cluster tree elimination
+    \citep[CTE]{Dechter2013}. The postorder traversal guarantees that
+    when processing edge $u\to{}v$, all messages
+    $\Message{u'}{u}$, corresponding to DP matrices, have been computed before. }\label{alg:pf}
 \end{algorithm}
 
-
-
-\SetKwProg{Fn}{Function}{}{}
- \SetKwFunction{Sample}{$\sample$}
- \SetKwFunction{Random}{UnifRand}
-
-
-The partition functions can then direct a \Def{stochastic backtrack} to achieve \Def{Boltzmann sampling of sequences}, such that one samples from the Boltzmann distribution of a given design network $\network$. The sampling algorithm assumes that the cluster tree was expanded and the messages $\Message{u}{v}$ for the edges in $\edgesToR{}$ are already generated by Algorithm \ref{alg:pf} for the expanded cluster tree.
+The partition functions can then direct a stochastic backtracking procedure to sample sequences from the Boltzmann distribution based on the given design network $\network$.
 %
-Algorithm~\ref{alg:sampling} defines the recursive procedure
-$\sample(u,\val)$, which returns---randomly drawn from the
-Boltzmann distribution---a partial sequence that determines all
-sequence positions in the subtree rooted at $u$.  Called on $r$ and
-the empty partial sequence, which does not determine any positions,
-the procedure samples a random sequence from the Boltzmann
-distribution.
+For an expanded cluster tree, after the messages $\Message{u}{v}$ for
+the edges in $\edgesToR{}$ are generated by Algorithm \ref{alg:pf},
+one can repeatedly call Algorithm~\ref{alg:sampling}, each time
+randomly drawing another sequence from the Boltzmann distribution.
 
 %\begin{algorithm}[Boltzmann weighted sampling]
 %\label{alg:sampling}
@@ -701,7 +691,7 @@ $\mathcal{O}(|V|\cdot4^s)$ space
 (Supp. Mat.~\ref{appsec:algcomplexity}); Alg.~\ref{alg:sampling} would
 require $\mathcal{O}((|\F|+|V|)\cdot 4^D)$ per sample on arbitrary
 tree decompositions
-(Supp. Mat.~\ref{appsec:algcomplexity}). W.l.o.g. we assume that
+(Supp. Mat.~\ref{appsec:algcomplexity}). W.l.o.g.\ we assume that
 $D=1$; note that tree decompositions can generally be transformed,
 such that $\difference{u}{v}\leq 1$.
 %
@@ -710,58 +700,78 @@ input structures for sequences of length $n$, the energy function is
 expressed by $\mathcal{O}(n\,k)$ functions. Finally, the number of cluster
 tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 
+% \begin{algorithm}
+%  \KwData{Node $u$, partial sequence $\val\in\partseqs(\separator{u}{v})$;\newline
+%  Cluster tree $(T,\chi,\phi)$ and partition functions $\Message{u'}{v'}[\val']$, $\forall (u'\to{}v')\in T$ and $\val'\in\partseqs(\separator{u'}{v'})$.}
+%  \KwResult{Boltzmann-distributed random partial sequence for the subtree rooted at $u$, specializing a partial sequence $\val$.}
+%  \Fn{\Sample$(u,\val)$}{
+%    $r \gets \Random(\evalfor{\Message{u}{v}}{\val})$\;
+%    \For{$\val'\in\partseqs(\difference{u}{v})$}{
+
+%      $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
+%      ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{u'}{u}}{\substitute{\val}{\val'}}$ for $(u'\to{}u)\in T$ )\;
+%   	  $r \gets r - p$\;
+%   	  \If{$r<0$}{
+%   	    $\val_{\rm res} \gets \substitute{\val}{\val'}$\;
+%   	  \For{$(u'\to{}u)\in T$}{
+%   	      $\val_{\rm res} \gets \substitute{\val_{\rm res}}{\Sample(u',\substitute{\val}{\val'})}$\;
+%      }
+%   	  \Return {$\val_{\rm res}$}
+%   	  \;}
+%  }
+%  }
+%  \caption{Stochastic backtrack algorithm for partial sequences in the Boltzmann distribution.}\label{alg:sampling}
+% \end{algorithm}
+
 \begin{algorithm}
- \KwData{Node $u$, partial sequence $\val\in\partseqs(\separator{u}{v})$;\newline
- Cluster tree $(T,\chi,\phi)$ and partition functions $\Message{u'}{v'}[\val']$, $\forall (u'\to{}v')\in T$ and $\val'\in\partseqs(\separator{u'}{v'})$.}
- \KwResult{Boltzmann-distributed random partial sequence for the subtree rooted at $u$, specializing a partial sequence $\val$.}
- \Fn{\Sample$(u,\val;T,\chi,\phi,m)$}{
-   $r \gets \Random(\evalfor{\Message{u}{v}}{\val})$\;
+ \KwData{Cluster tree $(T,\chi,\phi)$ and partition functions $\Message{u'}{v'}$ for all $(u'\to{}v')\in T$.}
+ \KwResult{Boltzmann-distributed random sequence $\val$.}
+ $\val$ \gets $\varnothing$\;
+ \For{$u\to{}v\in T$ in preorder}{
+   $r \gets \text{uniform random number between $0$ and $\evalfor{\Message{u}{v}}{\val}$}$\;
    \For{$\val'\in\partseqs(\difference{u}{v})$}{
 
-     $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$\\
-     ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{w}{u}}{\substitute{\val}{\val'}}$ for $(w\to{}u)\in T$ )\;
-%
-%     $p \gets 1$\;
-%     \For{$f\in \phi(v)$}{
-%  	      $p \gets p \cdot \exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$\;
-%     }
-%     \For{$v\to{}w\in T$}{
-%  	      $p \gets p \cdot \evalfor{\Message{v}{w}}{\substitute{\val}{\val'}}$\;
-%     }
-  	  $r \gets r - p$\;
-  	  \If{$r<0$}{
-  	    $\val_{\rm res} \gets \substitute{\val}{\val'}$\;
-  	  \For{$(v\to{}w)\in T$}{
-  	      $\val_{\rm res} \gets \substitute{\val_{\rm res}}{\Sample(v,\substitute{\val}{\val'};T,\chi,\phi,m)}$\;
+     $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
+     ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{u'}{u}}{\substitute{\val}{\val'}}$ for $(u'\to{}u)\in T$ )\;
+     $r \gets r - p$\;
+     \If{$r<0$}{
+       $\val \gets \substitute{\val}{\val'}$\;
      }
-  	  \Return {$\val_{\rm res}$}
-  	  \;}
+   }
  }
- }
- \caption{Stochastic backtrack algorithm for partial sequences in the Boltzmann distribution.}\label{alg:sampling}
+ \Return {$\val$}\;
+
+ \caption{Stochastic backtrack algorithm for partial sequences in the
+   Boltzmann distribution. Processing the edges $u\to{}v\in T$ in
+   preorder ensures that $\val$ invariantly determines all positions
+   of $v$ outside the subtree of $u$.}\label{alg:sampling}
 \end{algorithm}
+
+
 %For example, for design to a single non-crossing target in the nearest neighbor energy model, the complexity of Algs.~\ref{alg:pf} and \ref{alg:sampling} degrades to linear time (as reported for IncaRNAtion), since there are only $O(n)$ many functions and nodes (in the sequence length $n$). Moreover, the dependencies are tree-like owing to the tree-like non-crossing structure; this implies a constantly bounded maximum treewidth.
 
 
-
 \begin{theorem}[Complexities]\label{th:complexities}
-  For sequence length $n$, $k$ target structures, treewidth $w$ and
-  a base pair dependency graph having $c$ connected components, $t$ sequences
+  For sequence length $n$, $k$ target structures and treewidth $w$
+  % and a base pair dependency graph having $c$ connected components%
+  , $t$ sequences
   are generated from the Boltzmann distribution  in
   $O( n\, k \, 4^{w+1} + t\, n\, k )$ time.
   %$O( n\, k \min(2^{w+c+1},4^{w+1}) + t\, n\, k )$ time.
   %$\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
 \end{theorem}
+
+By this theorem, Boltzmann sampling in our setting is fixed parameter tractable (FPT) in the tree width $w$ (since the complexity is polynomial for fixed $w$).
+%
 As shown in Supp. Mat.~\ref{sec:improvedComplexity}, the complexity of the precomputation can be further improved to
 $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ is the maximum number of connected components represented in a node of the tree decomposition ($c\le w+1$).
 
-
-
 \subsection{Sequence features, constraints, and energy
   models.}\label{sec:energy_models}
-
+\todo[inline]{Better motivate why we want different energy functions etc}
+%
 The functions in $\F$ allow expressing complex features of the
-sequences alone, e.g. rewarding or penalizing specific sequence
+sequences alone, e.g.\ rewarding or penalizing specific sequence
 motifs, as well as features depending on the target structures.
 Furthermore, constraints, which enforce or forbid features, are
 naturally expressed by assigning infinite penalties to invalid
@@ -769,21 +779,16 @@ naturally expressed by assigning infinite penalties to invalid
 captures various RNA energy models with bounded dependencies, which we
 describe briefly.
 
-% To illustrate the expressivity of the framework, we outline the construction of function sets that express two different energy models for the energies $E(S;R_\ell)$ for encoding
-% \begin{equation}
-%   \label{eq:nussinov-network-energy}
-%   \energy{\network}(S) = \sum_{\ell\in[1,k]} w_\ell E(S;R_\ell)
-% \end{equation}
 In simple \Def{base pair-based energy models}, energy is defined as
 the sum of base pair (pseudo-)energies. If base pair energies
-$\Ebp{k}{i,j,x,y}$ (where $i$ and $j$ are sequence positions, $x$ and
-$y$ are bases in $\Sigma$) are given for each target structure $\ell$,
-s.t.  $ E(S;R_\ell) := \sum_{(i,j)\in R_\ell} \Ebp{k}{i,j,S_i,S_j}$,
+$\Ebp{\ell}{i,j,x,y}$ (where $i$ and $j$ are sequence positions, $x$ and
+$y$ are bases in $\Sigma$) are given for each target structure $R_\ell$,
+s.t.  $ E(S;R_\ell) := \sum_{(i,j)\in R_\ell} \Ebp{\ell}{i,j,S_i,S_j}$,
 we encode the network energy by the set of functions $f$ for each base
 pair $(i,j)\in R_\ell$ of each input structure $R_\ell$ that evaluate
-to $\ln(\pi_\ell) \Ebp{k}{i,j,\val(x_i),\val(x_j)}$ under partial sequence $\val$;
+to $\ln(\pi_\ell) \Ebp{\ell}{i,j,\val_i,\val_j}$ under partial sequence $\val$;
 here, $\pi_\ell>0$ is a weight that controls the
-influence of structure $\ell$ on the sampling (as elaborated later).
+influence of the $\ell$-th structure on the sampling (as elaborated later).
 
 % \paragraph{Nearest-neighbor model.}
 % Let us now consider a simplified version of the nearest-neighbor model, where the free energy contribution  $\Ehp{x,y,s}$ of a hairpin only depends on the closing base pair $(x,y)$, and the contribution $\Eint{x,y,x',y',s}$ of an interior loop depends on its opening/closing bases pairs $(x,y)/(x',y)$, and its length $s$. Moreover, the energy of a multi loops with $s$ inner base pairs and $t$ unpaired base pairs is approximated as $a+b\,s+c\,t$, where $a,b,c$ are predefined constants.
@@ -799,7 +804,7 @@ influence of structure $\ell$ on the sampling (as elaborated later).
 % Finally add for each $R_\ell$ and unpaired base $i$ in a multi loop of $R_\ell$, the function $f$, $\evalfor{f}{\val_S}=c$.
 
 More complex \Def{loop-based}
- energy models ---e.g.~the Turner model,
+ energy models---e.g.~the Turner model,
 which among others includes energy terms for special loops and dangling
 ends---can also be encoded as straightforward extensions. An interesting
 stripped-down variant of the nearest neighbor model is the
@@ -824,23 +829,23 @@ This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Rein
 
 Multidimensional Boltzmann sampling requires the ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ with free energies $(E_1,\ldots,E_k)$ for its target structures is
 $\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=1}^{k} \pi_i^{-E_i}}{\partfun{\pmb{\pi}}},$
-where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function. Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \ln(\pi_\ell)\, E(\val)/\beta$. The probability of a sequence $S$ is thus proportional to
+where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function. Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \ln(\pi_\ell)\, E(\val)/\beta$\todo{is $/\beta$ necessary?}. The probability of a sequence $S$ is thus proportional to
 $ \prod_{\ell=1}^{k} e^{-\ln(\pi_\ell)\, E_i} = \prod_{\ell=1}^{k} \pi_i^{-E_i}. $
 
-One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution, \emph{i.e.} such that  $\mathbb{E}(E_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$.
+One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution, i.e.\ such that  $\mathbb{E}(E_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$.
 The expected value of $E_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp. Mat.~\ref{sec:weight_derivatives}). More generally, computing a suitable $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
 In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ and, at each iteration, generates a sample $\mathcal{S}$ of sequences. The expected value of an energy $E_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}E_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$.
 $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically  ($\gamma=1.2$) to achieve effective optimization.
 While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its good empirical behavior.
 
-A further \Def{rejection step} is applied to the generated structures to retain only sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rejection approach is justified by the following considerations:
-i) \emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing~\citet{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
+A further \Def{rejection step} is applied to retain only those sequences whose energy for each structure $R_\ell$ belongs to $[\TargetE_\ell\cdot(1-\varepsilon),\TargetE_\ell\cdot(1+\varepsilon)]$, for $\varepsilon\ge 0$ some predefined \Def{tolerance}. The rejection approach is justified by the following considerations:
+i) \emph{Enacting an exact control over the energies would  be technically hard and costly.} Indeed, controlling the energies through dynamic programming would require explicit convolution products, generalizing~\citep{Cupal1996}, inducing additional $\Theta(n^{2k})$ time and $\Theta(n^k)$ space overheads;
 ii) \emph{Induced distributions are typically concentrated.} Intuitively, unless sequences are fully constrained individual energy terms are independent enough so that their sum is concentrated around its mean -- the targeted energy (cf Fig.~\ref{fig:energydist-pk}).
 %Indeed, as shown in Fig.~\ref{fig:shifting_mean}, empirical joint distributions in the energies have good fits towards Normal multidimensional distributions with linear (co-)variances.
-For base pair-based energy models and special base pair dependency graph
+For base pair-based energy models and special base pair dependency graphs
 (paths, cycles\ldots) this property rigorously follows from analytic
-combinatorics, see \citet{Bender1983} and
-\citet{Drmota1997}. In such cases, the expected number of
+combinatorics, see \citep{Bender1983} and
+\citep{Drmota1997}. In such cases, the expected number of
 rejections before reaching the targeted energies remains constant when
 $\varepsilon\ge 1/\sqrt{n}$, and $\Theta(n^{k/2})$ when
 $\varepsilon=0$. The \GCb\% of designs can also be controlled,
@@ -853,7 +858,7 @@ jointly and in a similar way, as done in
 \subsection{Targeting Turner energies and \GCb\%}
 We implemented our Boltzmann sampling strategy (Algorithms
 \ref{alg:pf} and \ref{alg:sampling}), to sample valid sequences for
-given target structures and weights $\pi_1,\dots,\pi_n$.  Moreover, we
+given target structures and weights $\pi_1,\dots,\pi_k$.  Moreover, we
 used multi-dimensional Boltzmann sampling, as described in
 Section~\ref{sec:multiBoltzmann}, to target specific energies and
 \GCb\%.  Our tool \ourprog{} evaluates energies according to the
@@ -891,7 +896,7 @@ Fig.~\ref{fig:energydist-pk}A shows the good fit between realistic
 energies in the full-fledged Dirks and Pierce energy model for
 pseudoknots (D\&P model) and energies in the stacking energy
 model. For the shown fits we sampled $n=1\,000$ sequences, targeting a
-${\sf GC}\%$ of $60\%$.
+\GCb\% of $60\%$.
 %
 For an example instance of the \texttt{Modena} benchmark with two
 pseudoknotted target structures, Fig.~\ref{fig:energydist-pk}B shows
@@ -918,17 +923,16 @@ pseudoknot-free target structures.
   \end{center}
   \caption{%
     Targeting specific energies for pseudoknotted structures using
-    multi-dimensional Boltzmann sampling.  A) Linear fits between the
+    multi-dimensional Boltzmann sampling. \textbf{(A)} Linear fits between the
     energies in the stacking model to the realistic pseudoknot energy
     model by Dirks and Pierce (D\&P) for sampled sequences; the good
     match enables more efficient targeting of Turner energies based on
     targeting stacking model energies.  We show the fits for both
-    target structures S1 and S2 of subfigure B.  B) D\&P energy
+    target structures S1 and S2 of subfigure B.  \textbf{(B)} D\&P energy
     distributions for two target structures S1 and S2. We show the
     results of targeting the respective free energies $(-30,-20)$,
     $(-30,-30)$, $(-25,-25)$, and $(-20,-30)$ for the target
-    structures (annotated in red, yellow, and blue
-    resepectively)---this demonstrates the effectivity of our adaptive
+    structures---this demonstrates the effectivity of our adaptive
     multi-dimensional Boltzmann sampling procedure; moreover, for
     comparison, the distributions for uniform and Boltzmann
     samples---respectively associated with homogenous weights $1$ and
@@ -936,7 +940,9 @@ pseudoknot-free target structures.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
   }
   \label{fig:energydist-pk}
+  \todo[inline]{Rename S1,S2 to R1 R2. Discuss R2 values. Add legend to subfig A or explain colors}
 \end{figure*}
+
 \subsection{Generating high-quality seeds for further optimization}
 Next, we empirically evaluated the capacity of \ourprog{} to generate seed sequences for multiple (pseudoknotted) target structures, possibly followed by subsequent local optimizations. As a baseline for comparison, we considered \RNAblueprint~\citep{Hammer2017}, the current leading tool for multiple design.
 As a quality measure, we used the multi-stable design objective function introduced by~\citet{Hammer2017}, defined as:
@@ -953,21 +959,21 @@ As a quality measure, we used the multi-stable design objective function introdu
 where $\EnsE(S)$, the \Def{ensemble free energy} of $S$, is computed
 by {\tt RNAfold}~\citep{Lorenz2011} in the pseudoknot-free case; for
 pseudoknotted targets, $\EnsE(S)$ is approximated by the \Def{minimum
-  free energy} (MFE) of S as estimated by {\tt HotKnots} in the energy model
+  free energy} (MFE) of $S$ as estimated by {\tt HotKnots}~\citep{Ren2005} in the energy model
 of~\citet{dirks-pierce-03}.  Intuitively, the first term of \Obj{}
 captures the distance of the targets from the ensemble free energy,
 while the second term penalizes the dispersion of targets; \Obj{} is
 best (minimal) when all targets simultaneously achieve the minimum
 free energy of the sequence.
 
-We considered a benchmark of six sets of target structures described in \citet{Taneda2015}: {\sf 2str}, {\sf 3str}, and {\sf 4str} consist of non-pseudoknotted structures, while {\sf PK60}, {\sf PK80}, and {\sf LE80} contain pseudoknotted structures.
+We considered a benchmark of six sets of target structures described in \citep{Taneda2015}: {\sf 2str}, {\sf 3str}, and {\sf 4str} consist of non-pseudoknotted structures, while {\sf PK60}, {\sf PK80}, and {\sf LE80} contain pseudoknotted structures.
 %%For each instance of the \Software{Modena}
 %benchmark~\citep{Taneda2015}, we generated $1\,000$ seed sequences at these energies.
 %Our procedure is tailored to produce sequences with similar Turner
 %energy that favor the stability of the target structures having
 %moderate \GCb\%; all these properties are desirable objectives
 %for RNA design.
-Using \ourprog{}, we generated at least 1\,000 seeds per instance for
+Using \ourprog{}, we generated at least 1\,000 seeds for
 each instance of the benchmark. We used target energies that were
 computed by averaging the energy over samples at higher weights
 $e^{\beta}$, and set the targeted \GCb\% to 60\%.  We compared the
@@ -1078,8 +1084,18 @@ $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
 
 The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
 
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover remark that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
+\todo[inline]{R1: I am sure your "bipartite" definition is wrong (or your proof is broken), ie. is the bipartition not about V1 and V2, ie there is no edge WITHIN each vertex set but only BETWEEN the sets? Right now, your definition says that the intersection of all possible inter-set-edges (V1xV2) with the present edges E is empty.. But the proof says in line 7-1-35 that any edge "in E involves two nodes $v1 \in V1$ and $v2 \in V2$". So you might correct the bipartite definition to something like "$(V1xV1)\cap E = \emptyset = (V2xV2)\cap E$"  }
 
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($(V_1\times V_2) \cap E = \varnothing$), noting that hardness over restricted instances implies hardness of the general problem. Moreover note that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
+
+\todo[inline]{
+R1:
+7-1-16-18: do you identify the (maximal) independent set for each connected component or do you consider also subsets of the overall independent set to get the "set of all indepedent sets in G"? Please clearify!
+%
+7-1-29-39: You are using "S" instead of the defined independent set "I". Please correct!
+%
+7-1-34: The use of "B" comes quite surprisingly since its last occurrence was several pages back. Please add a helping statement like "one has a valid base pair (...) $\in$ B".
+}
 
 We remind that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. Let $\IS{G}$ denote the set of all independent sets in $G$.
 
