@@ -1,6 +1,9 @@
 DOCUMENTS=RNARedPrint-Bioinfo2018 supplement
 
-all: $(DOCUMENTS:=.pdf)
+all: figs $(DOCUMENTS:=.pdf)
+
+figs:
+	make -C Figs
 
 RNARedPrint-Bioinfo2018.pdf: RNARedPrint-Bioinfo2018.aux supplement.aux
 supplement.pdf: RNARedPrint-Bioinfo2018.aux supplement.aux
