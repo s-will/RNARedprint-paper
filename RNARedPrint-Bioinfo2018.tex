@@ -141,7 +141,6 @@
 
 \newcommand{\sample}{\texttt{Sample}}
 \newcommand{\elim}[2]{\operatorname{elim}(#1,#2)}
-\newcommand{\edgesToR}{E^r_T}
 
 %\newcommand{\Ehp}[1]{E^{\textrm{hp}}(#1)}
 %\newcommand{\Eint}[1]{E^{\textrm{int}}(#1)}
@@ -412,16 +411,17 @@ For weights $\pi_0,\dots,\pi_k$  compute the partition function
   \end{equation}
 
 To stress the analogy to, in the RNA context more familiar, Boltzmann distributions over the structure ensemble of a sequence $S$, we emphasize the equivalence
-$$
+\begin{equation}
+\label{eq:feature-energy-transformation}
 \prod_{0\leq \ell \leq k} \pi_\ell^{-F_\ell(S)} = exp(-\beta E(S)),
-$$
+\end{equation}
 where $\beta$ denotes inverse temperature and $E(S)$ is defined as linear combination of energies $E(S)=\sum_{1\leq \ell \leq k} \ln(\pi_\ell)/\beta E(S,R_\ell)$,
 where the energy $E(S,R_\ell)$ is treated as feature $F_\ell(S) = \EbpSym(S,R_\ell);$ as elaborated later, one could even Turner energies or pseudoknot energies can be expressed as features based on their additive nature. 
+
 
 \paragraph{Foundations on the complexity of the central problem} 
 
 The complexity of the central problem depends fundamentally on the dependency structure due to the entire set of feature functions.
-
 
 For the base pair energy model, the dependencies are immediately derived from the set of target structures 
 $\R$. It induces the
@@ -467,18 +467,22 @@ Section~\ref{sec:problem-statement} to the formalism of constraint networks, her
 specialized as RNA design network. This allows us to base our
 algorithm on the cluster tree elimination (CTE) of~\citet{Dechter2013}.
 %
+
+
 In the RNA design network, (partially determined) RNA sequences
 replace the more general concept of (partial) assignments in
 constraint networks. Partially determined RNA sequences, for short
-\Def{partial sequences}, are words $\val$ over the alphabet
-$\Sigma\cup\{?\}$ equivalently representing the set ${\mathcal S}(\val)$
-of RNA sequences, where for positions $1\leq i\leq n$,
-$\val_i\in\Sigma$ implies $S_i=\val_i$ for all $S\in{\mathcal
-  S}(\val)$. The positions $1\leq i\leq n$, where $\val_i\in\Sigma$,
+\Def{partial sequences}, are words $\val$ in
+$(\Sigma\cup\{?\})^n$.
+
+The positions $1\leq i\leq n$, where $\val_i\in\Sigma$,
 are called \Def{determined} by $\val$ and form its \Def{domain}.
+Note that
+$\val$ equivalently represents the set 
+of all RNA sequences in $\Sigma^n$ that are identical to $\val$ at the determined positions $i$.
 %
-Since the functions $f\in\F$ of Section~\ref{sec:problem-statement}
-depend on only the subset $\dep(f)$ of sequence positions, one can
+Since each feature function $f\in\F$ (cf.~Section~\ref{sec:problem-statement})
+depends on only the subset $\dep(f)$ of sequence positions, one can
 evaluate them for partial sequences $\val$ that determine (at least)
 the nucleotides at all positions in $\dep(f)$. Thus for functions $f$
 and partial sequences $\val$ that determine $\dep(f)$, we write
@@ -490,36 +494,31 @@ $S\in{\mathcal S}(\val)$.
 An \Def{RNA design network} (for sequences of length $n$) is a tuple $\network=(\X,\F)$, where\vspace{-6pt}
 \begin{itemize}
 \item $\X$ is the set of sequence positions $1,\dots,n$
-\item $\F$ is a set of \Def{functions} $f:\S_n\to\real$
+\item $\F$ is a set of \Def{functions} $f:\Sigma^n\to\real$
 \end{itemize}
 \end{definition}
 
 %
-The \Def{energy $\energy{\network}(S)$ of a sequence} $S$ in a network
-$\network$ is defined as sum of the values of all functions in
+The network has the natural interpretation of assigning energy to sequences. 
+The \Def{network energy of a sequence} $S$ for the network
+$\network$ is the sum of the values of all functions in
 $f\in\F$ evaluated for $S$, i.e.
-$\energy{\network}(S) := \sum_{f\in\F} \evalfor{f}{S}.$
+$\sum_{f\in\F} \evalfor{f}{S}.$
 
-The network energy $\energy{\network}(S)$ corresponds to the energy in
-Eq.~$(\ref{eq:mainproblem}),$ where this energy is modeled as sum of
-the functions in $\F$. Consequently, $\partfun{\R}$ of
-Eq.~$(\ref{eq:mainproblem})$ is modeled as network partition function
-$\partfun{\network} := \sum_{S}\exp(-\beta\energy{\network}(S)) = \sum_{S}\prod_{f\in\F} \exp( -\beta\cdot
-\evalfor{f}{S} ).$
+A further trick lets us handle the feature functions uniformly by `moving' the parameter $\pi_\ell$ of feature $F_\ell$ into each feature function $f$ of this feature, defining a new feature function $f'(S) = 1/\ln(\pi)f(S).$ Then, $exp(-f'(S))=\pi_\ell^{f(S)}.$ While all feature functions belong to a specific feature and therefore need to be weighted accordingly, by assuming that all feature functions are transformed in this way, they can be handled uniformly.
 
-% For a given RNA design network, one is typically interested in the \Def{minimum free energy sequence} $\energy{\network}:=\min_{S}\energy{\network}(S)$, the \Def{enumeration of valid sequences} $\numberof{\network}$ and the \Def{partition function} of the network $\network$ as \begin{equation}
-%  \partfun{\network;\beta} := \sum_{S}\prod_{f\in F} \exp( -\beta\cdot \evalfor{f}{\val_S} ).
-%  \end{equation}
-
+Then, the network energy of $S$ in $\network$ corresponds to the energy in
+Eq.~$(\ref{eq:mainproblem}),$ considering the transformation of Eq.~(\ref{eq:feature-energy-transformation}). 
+Consequently, the network encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}) and can be used to (now efficiently, as explained in the next section) compute it.
 
 \subsection{Partition function and Boltzmann sampling through stochastic backtrack}\label{sec:PF}
 The minimum energy, counting, and partition function
 over an RNA design network can be computed by dynamic programming based
-on a tree decomposition of the network's dependency graph
-(i.e. cluster tree elimination).
+on a tree decomposition of the network's dependency graph,
+i.e.~essentially cluster tree eliminationi (CTE) \citep{Dechter2013}.
 %This yields fixed parameter tractable (FPT) algorithms, based on the treewidth.
 We focus on the efficient computation of the partition
-function. %Observe that counting is a special case of the partition function and can be obtained by setting $\beta =0$.%; moreover, efficient energy minimization can be obtained by a simple $(+,\times)\to (\min,+)$ algebraic substitution and dropping the transformation of energy contributions to Boltzmann weights.
+function. 
 
 %\begin{figure}[t]
 %{\centering\scalebox{11}{\fbox{$\phantom{5689}$}}\\}
@@ -559,11 +558,13 @@ Let us now consider the computation of the partition function.
 Given is the RNA design network $\network=(\X,\F)$ and its cluster
 tree decomposition $(T,\chi,\phi)$.  W.l.o.g., we assume that $T$ is
 connected and contains a dedicated node $r$, with
-$\chi(r)=\varnothing$ and $\phi(r)=\varnothing$, added as a virtual
-root $r$ connected to a node in each connected component of $T$.  Now,
-we consider the set of directed edges $\edgesToR{}$ of $T$ oriented to
-$r$; define $T_r(u)$ as the induced subtree of
-$u$. Algorithm~\ref{alg:pf} computes the partition function by passing
+$\chi(r)=\varnothing$ and $\phi(r)=\varnothing$. If such a root does not exist, it can be easily added to the tree decomposition and connected to one node in each connected component of $T$.
+
+Moreover, we assume that all edges in the tree decompostion are oriented towards this root.
+%and 
+%define $T_r(u)$ as the induced subtree of
+%$u$ (following this orientation). 
+Algorithm~\ref{alg:pf} computes the partition function by passing
 messages along these directed edges $u\to v$ (i.e. always from some
 child $u$ to its parent $v$). Each message $m$ is a function that depends
 on the positions $\dep(m)\subseteq \X$ and yields a partition function
@@ -573,11 +574,10 @@ sequences in $\partseqs(\separator{u}{v})$. Induction over $T$ lets us show
 the correctness of the algorithm
 (Supp. Mat.~\ref{appsec:correctness}).  After running
 Alg.~\ref{alg:pf}, multiplying the 0-ary messages sent to the root $r$
-yields the total partition function:
+yields the total partition function of the network (i.e.~due to proper encoding the partition function of our design problem)
 \begin{math}
-  \partfun{\network} = \prod_{(u\to{}r)\in T} \evalfor{\Message{u}{r}}{\varnothing}.
+  \prod_{(u\to{}r)\in T} \evalfor{\Message{u}{r}}{\varnothing}.
 \end{math}
-
 
 
 \begin{algorithm}[t]
@@ -589,7 +589,7 @@ yields the total partition function:
     \For{$\val\in\partseqs(\separator{u}{v})$}{
       $x\gets 0$\;
       \For{$\val'\in\partseqs(\difference{u}{v})$}{
-        $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
+        $p \gets$ product( $exp(-\evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
         ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{u'}{u}}{\substitute{\val}{\val'}}$ for $(u'\to{}u)\in T$ )\;
         $x \gets x + p$\;
       }
@@ -598,8 +598,7 @@ yields the total partition function:
     \Return {$m$}\;
   }
   \caption{FPT computation of the partition function using dynamic
-    programming, i.e.~cluster tree elimination
-    \citep[CTE]{Dechter2013}. The postorder traversal guarantees that
+    programming, i.e.~cluster tree elimination (CTE). The postorder traversal guarantees that
     when processing edge $u\to{}v$, all messages
     $\Message{u'}{u}$, corresponding to DP matrices, have been computed before. }\label{alg:pf}
 \end{algorithm}
@@ -607,7 +606,7 @@ yields the total partition function:
 The partition functions can then direct a stochastic backtracking procedure to sample sequences from the Boltzmann distribution based on the given design network $\network$.
 %
 For an expanded cluster tree, after the messages $\Message{u}{v}$ for
-the edges in $\edgesToR{}$ are generated by Algorithm \ref{alg:pf},
+the edges in the tree decomposition are generated by Algorithm \ref{alg:pf},
 one can repeatedly call Algorithm~\ref{alg:sampling}, each time
 randomly drawing another sequence from the Boltzmann distribution.
 
@@ -650,7 +649,7 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 %    $r \gets \Random(\evalfor{\Message{u}{v}}{\val})$\;
 %    \For{$\val'\in\partseqs(\difference{u}{v})$}{
 
-%      $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
+%      $p \gets$ product( $exp(-\evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
 %      ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{u'}{u}}{\substitute{\val}{\val'}}$ for $(u'\to{}u)\in T$ )\;
 %   	  $r \gets r - p$\;
 %   	  \If{$r<0$}{
@@ -673,7 +672,7 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
    $r \gets \text{uniform random number between $0$ and $\evalfor{\Message{u}{v}}{\val}$}$\;
    \For{$\val'\in\partseqs(\difference{u}{v})$}{
 
-     $p \gets$ product( $exp(-\beta \evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
+     $p \gets$ product( $exp(-\evalfor{f}{\substitute{\val}{\val'}})$ for $f\in \phi(u)$ )\\
      ${}\quad\qquad \cdot\ $product( $\evalfor{\Message{u'}{u}}{\substitute{\val}{\val'}}$ for $(u'\to{}u)\in T$ )\;
      $r \gets r - p$\;
      \If{$r<0$}{
@@ -710,27 +709,14 @@ $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ is the maximum number of connecte
 
 \subsection{Sequence features, constraints, and energy
   models.}\label{sec:energy_models}
-\todo[inline]{Better motivate why we want different energy functions etc}
-%
-The functions in $\F$ allow expressing complex features of the
+
+Going beyond our encoding of the base pair model energy features and the \GCb\% feature, the feature functions provide more generality and allow expressing complex features of the
 sequences alone, e.g.\ rewarding or penalizing specific sequence
 motifs, as well as features depending on the target structures.
 Furthermore, constraints, which enforce or forbid features, are
 naturally expressed by assigning infinite penalties to invalid
-(partial) sequences. Finally, but less obviously, the framework
-captures various RNA energy models with bounded dependencies, which we
-describe briefly.
-
-In simple \Def{base pair-based energy models}, energy is defined as
-the sum of base pair (pseudo-)energies. If base pair energies
-$\Ebp{\ell}{i,j,x,y}$ (where $i$ and $j$ are sequence positions, $x$ and
-$y$ are bases in $\Sigma$) are given for each target structure $R_\ell$,
-s.t.  $ E(S;R_\ell) := \sum_{(i,j)\in R_\ell} \Ebp{\ell}{i,j,S_i,S_j}$,
-we encode the network energy by the set of functions $f$ for each base
-pair $(i,j)\in R_\ell$ of each input structure $R_\ell$ that evaluate
-to $\ln(\pi_\ell) \Ebp{\ell}{i,j,\val_i,\val_j}$ under partial sequence $\val$;
-here, $\pi_\ell>0$ is a weight that controls the
-influence of the $\ell$-th structure on the sampling (as elaborated later).
+(partial) sequences (even if in implementations, explicit handling of constraints is advantageous). In particular, the framework
+captures various RNA energy models, they can be handled efficiently (in the sense of FPT), as long as the dependencies of their additive energy contributions are bounded.
 
 % \paragraph{Nearest-neighbor model.}
 % Let us now consider a simplified version of the nearest-neighbor model, where the free energy contribution  $\Ehp{x,y,s}$ of a hairpin only depends on the closing base pair $(x,y)$, and the contribution $\Eint{x,y,x',y',s}$ of an interior loop depends on its opening/closing bases pairs $(x,y)/(x',y)$, and its length $s$. Moreover, the energy of a multi loops with $s$ inner base pairs and $t$ unpaired base pairs is approximated as $a+b\,s+c\,t$, where $a,b,c$ are predefined constants.
@@ -745,11 +731,14 @@ influence of the $\ell$-th structure on the sampling (as elaborated later).
 % \end{itemize}
 % Finally add for each $R_\ell$ and unpaired base $i$ in a multi loop of $R_\ell$, the function $f$, $\evalfor{f}{\val_S}=c$.
 
-More complex \Def{loop-based}
+Complex \Def{loop-based}
  energy models---e.g.~the Turner model,
 which among others includes energy terms for special loops and dangling
-ends---can also be encoded as straightforward extensions. An interesting
-stripped-down variant of the nearest neighbor model is the
+ends---can be encoded as straightforward extension of our outline of the base pair energy model.
+
+In practice, the energy model has a strong influence on the computational complexity of our approach. Therefore, it is interesting to consider, in addition to the base pair model, other
+stripped-down variants of the nearest neighbor model, which could offer a compromise between the low-complexity base pair energy model and the high-accuracy Turner model. 
+Such a model, which is particularly promising for this purpose, is the
 \Def{stacking energy model}. This model assigns non-zero energy
 contributions only to stacks, i.e. interior loops with closing base
 pair $(i,j)$ and inner base pair $(i+1,j-1)$.
@@ -766,12 +755,15 @@ nine bases for the interior loops with a total of 5 unpaired bases
 dangling ends) still depend on at most four bases of the sequence.
 
 \subsection{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
+\todo[inline]{This is now better prepared due to the formulation of the main problem in terms of features with weights. Consequently, the text needs adaptions! Note that the energies E_1,\dots,E_k$ are still features $F_1,\dots,F_k$; there is also a feature $F_0$ for the GC content. }
 The flexibility of our framework supports the advanced sampling technique "multidimensional Boltzmann sampling"~\citep{Bodini2010}, which allows to (probabilistically) enforce additional, complex properties of the samples.
 This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; here, we additionally use it to control the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets. %We use multidimensional Boltzmann sampling to generate sequences having predetermined targeted energies $(\TargetE_1,\ldots,\TargetE_k)$ for the $k$ structures.
 
 Multidimensional Boltzmann sampling requires the ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ with free energies $(E_1,\ldots,E_k)$ for its target structures is
 $\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=1}^{k} \pi_i^{-E_i}}{\partfun{\pmb{\pi}}},$
-where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function. Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \ln(\pi_\ell)\, E(\val)/\beta$\todo{is $/\beta$ necessary?}. The probability of a sequence $S$ is thus proportional to
+where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function.
+%Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \ln(\pi_\ell)\, E(\val)/\beta.$ 
+The probability of a sequence $S$ is thus proportional to
 $ \prod_{\ell=1}^{k} e^{-\ln(\pi_\ell)\, E_i} = \prod_{\ell=1}^{k} \pi_i^{-E_i}. $
 
 One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution, i.e.\ such that  $\mathbb{E}(E_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$.
