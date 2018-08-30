@@ -408,7 +408,7 @@ We emphasize that our approach is designed to profit (in terms of computational 
 Let us consider the $k$ energy features $F_1,\dots F_k$ together with the negative $\GCb\%$ as feature $F_0$ to target all of them simultaneously. We base our strategy for targeting the $k+1$ features $F_0,\dots,F_k$ on generating samples from a Boltzmann distribution parametrized by weights $\pi_0,\dots,\pi_k$, one for each feature. These weights will essentially allow us to shift the sample distributions towards specific targets. Sampling from this distribution requires to compute corresponding partition functions, such that we can draw sequences with probabilities proportional to their Boltzmann weight:
 \begin{equation}
 \label{eq:sample-distribution}
-\Pr[S;  \pi_0,\dots,\pi_k] \propto \prod_{0\leq \ell\leq k} \pi_\ell^{-F_\ell(S)}.
+\Pr(S|\pi_0,\dots,\pi_k) \propto \prod_{0\leq \ell\leq k} \pi_\ell^{-F_\ell(S)}.
 \end{equation}
 
 The workhorse of our approach is the efficient (i.e.~fixed-parameter tractable) computation of feature-dependent partition functions over sequences.
@@ -469,21 +469,19 @@ of $G$ is the smallest width of any tree decomposition of $G$.
   partition function and sampling of Boltzmann-weighted designs}
 \label{sec:FPT}
 
-\todo[inline]{Plan: make the RNA design network more specific, i.e. define the set of feature functions to containt the GC and energy features (in the specific form with internalized weights).}
-
 For our algorithmic description, we translate the concepts of
 Section~\ref{sec:problem-statement} to the formalism of constraint networks, here
-specialized as RNA design network. This allows us to base our
+specialized as RNA design network. This abstraction allows us to base our
 algorithm on the cluster tree elimination (CTE) of~\citet{Dechter2013}.
-%
 
-In the RNA design network, (partially determined) RNA sequences
-replace the more general concept of (partial) assignments in
-constraint networks. Partially determined RNA sequences, for short
-\Def{partial sequences}, are words $\val$ in
-$(\Sigma\cup\{?\})^n$, where '?' is the dummy-value of undetermined positions, which allows representing only partially determined sequences.
-Consequently, the positions $1\leq i\leq n$, where $\val_i\in\Sigma$,
-are called \Def{determined} by $\val$.
+The RNA design network describes how to evaluate RNA sequences and, in particular, partial RNA sequences, which is required by our algorithms that construct results for the full sequence by combining partial information.
+%
+\Def{Partial RNA sequences} are words $\val$ in
+$(\Sigma\cup\{?\})^n$, where the symbol '?' represents not yet determined nucleotides; consequently, the positions, where $\val_i\in\Sigma$,
+are called \Def{determined} by $\val$ ($1\leq i\leq n$).
+%
+We remark that (partial) sequences correspond to the more general concept of (partial) assignments in
+constraint networks.
 
 Since each feature function $f\in\F$ (cf.~Section~\ref{sec:problem-statement})
 depends on only the subset $\dep(f)$ of sequence positions, one can
@@ -498,28 +496,37 @@ An \Def{RNA design network} (for sequences of length $n$) is a tuple $\network=(
 \item $\F$ is a set of \Def{feature functions} $f:\Sigma^n\to\real$
 \end{itemize}
 \end{definition}
-
 %
-The network has the natural interpretation of assigning energy to sequences. 
-The \Def{network energy of a sequence} $S$ for the network
-$\network$ is the sum of the values of all functions in
-$f\in\F$ evaluated for $S$, i.e.
-$\sum_{f\in\F} f(S).$
+Note that we call this object a `network', since $\X$ could be interpreted as nodes, where $\F$ defines the (hyper-)edges between those nodes. In this way, it encodes a dependency structure (i.e. a graph or `network'). 
+%The network has the natural interpretation of assigning an energy to sequences. 
+%The \Def{network energy of a sequence} $S$ for the network
+%$\network$ is the sum of the values of all functions in
+%$f\in\F$ evaluated for $S$, i.e.
+%$\sum_{f\in\F} f(S).$
 
-A further trick lets us handle the feature functions uniformly by `moving' the parameter $\pi_\ell$ of feature $F_\ell$ into each feature function $f$ of this feature, defining a new feature function $f'(S) = 1/\ln(\pi)f(S).$ Then, $exp(-f'(S))=\pi_\ell^{f(S)}.$ While all feature functions belong to a specific feature and therefore need to be weighted accordingly, by assuming that all feature functions are transformed in this way, they can be handled uniformly.
+\newcommand{\weighttransform}[2]{{#1}_{||{#2}}}
 
-Then, the network energy of $S$ in $\network$ corresponds to the energy in
-Eq.~$(\ref{eq:mainproblem}),$ considering the transformation of Eq.~(\ref{eq:feature-energy-transformation}). 
-Consequently, the network encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}) and can be used to (now efficiently, as explained in the next section) compute it.
+Note that one can encode the weight $\pi$ of a features in its feature functions, such that all feature functions can be handled uniformly by our algorithms. For this purpose, we define the \Def{transformed feature function} 
+$$\weighttransform{f}{\pi}(S) := ln(\pi)f(S),$$
+such that $exp(-\weighttransform{f}{\pi}(S))=\pi^{-f(S)}.$ 
+
+Concretely, for the design in the base pair model targeting \GCb\% and structures $\R$ with weights $\pi_0,\dots,\pi_k$, we construct the set $\F$ of the network as the collection of
+\begin{itemize}
+\item the transformed feature functions $\weighttransform{f^{GC}_i}{\pi_0}$ for our feature $F_0$, i.e.~$GC\%$ ($i=1,\dots,n$)
+\item the transformed feature functions $\weighttransform{f^{R_\ell}_{ij}}{\pi_\ell}$for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
+\end{itemize}
+
+By this choice of $\F$, the sum $\sum_f\in\F f(S)$ (for any $S\in\Sigma^n$) corresponds to the energy in
+Eq.~$(\ref{eq:mainproblem}),$ using the equivalence of Eq.~(\ref{eq:feature-energy-transformation}). 
+Consequently, the network encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}). Subsequently, we show how to efficiently compute this partition function based on the network.
 
 \subsection{Partition function and Boltzmann sampling through stochastic backtrack}\label{sec:PF}
-The minimum energy, counting, and partition function
+
+The partition function
 over an RNA design network can be computed by dynamic programming based
 on a tree decomposition of the network's dependency graph,
-i.e.~essentially cluster tree eliminationi (CTE) \citep{Dechter2013}.
+i.e.~essentially cluster tree elimination (CTE) \citep{Dechter2013}. Note that analogous algorithms could be constructed to count valid sequences or minimize energy.
 %This yields fixed parameter tractable (FPT) algorithms, based on the treewidth.
-We focus on the efficient computation of the partition
-function. 
 
 %\begin{figure}[t]
 %{\centering\scalebox{11}{\fbox{$\phantom{5689}$}}\\}
@@ -527,19 +534,21 @@ function.
 %  \caption{Figure illustrating RNA network to hypergraph to tree decomposition}
 %\end{figure}
 
-We require additional definitions: A \Def{cluster tree} for the
-network $\network=(\X,\F)$ is a tuple $(T,\chi,\phi)$, where
+Our algorithms are formulated to process a \Def{cluster tree} of the
+RNA design network, which is a tuple $(T,\chi,\phi)$, where
 $(T,\chi)$ is a tree decomposition of $G_\F$, and $\phi(v)$ represents
 a set of functions $f$, each uniquely assigned to a node $v\in T$;
 $\dep(f)\subseteq\chi(v)$ and $\phi(v)\cap \phi(v')=\varnothing$ for
-all $v\neq v'$.  For two nodes $v$ and $u$ of the cluster tree, define
+all $v\neq v'$. 
+
+Two further notions are essential for our algorithms: for two nodes $v$ and $u$ of the cluster tree, define
 their \Def{separator} as $\separator{u}{v} := \chi(u)\cap\chi(v)$;
 moreover, we define the \Def{difference positions} from $u$ to an
 adjacent $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
 
-For a set $\Y$ of sequence positions, write $\partseqs(\Y)$ to
-denote the set of all partial sequences that determine exactly the positions
-in $\Y$; furthermore, given partial sequences $\val$ and
+Our algorithms need to iterate over sets of partial sequences that determine specific sequence positions
+from a set $\Y$; we denote the set of all partial sequences that exactly determine the positions in $\Y$ by $\partseqs(\Y)$.
+Furthermore, given partial sequences $\val$ and
 $\val'$, we define the \Def{combined partial sequence $\substitute{\val}{\val'}$} such that
 $$
 (\substitute{\val}{\val'})_i :=
@@ -549,24 +558,28 @@ $$
 \end{cases}
 $$
 
-Finally we assume, w.l.o.g., that all position difference sets
-$\difference{u}{v}$ are singleton: for any given
+
+\paragraph{FPT Computation of the partition function}
+Given is the RNA design network $\network=(\X,\F)$ and its cluster
+tree $(T,\chi,\phi)$.  
+%
+We assume several properties of this cluster tree, which otherwise could be easily obtained:
+\begin{itemize}
+\item
+$T$ is
+connected and contains a dedicated node $r$, with
+$\chi(r)=\varnothing$ and $\phi(r)=\varnothing$. If such a root does not exist, it can be added to the tree decomposition and connected to one node in each connected component of $T$.
+\item
+all edges in the tree decompostion are oriented towards this root.
+\item
+all sets $\difference{u}{v}$ are singleton: for any given
 cluster tree, an equivalent (in term of treewidth) cluster tree can
 always be obtained by inserting at most $\Theta(|\X|)$ additional
 clusters.
+\end{itemize}
 
-Let us now consider the computation of the partition function.
-Given is the RNA design network $\network=(\X,\F)$ and its cluster
-tree decomposition $(T,\chi,\phi)$.  W.l.o.g., we assume that $T$ is
-connected and contains a dedicated node $r$, with
-$\chi(r)=\varnothing$ and $\phi(r)=\varnothing$. If such a root does not exist, it can be easily added to the tree decomposition and connected to one node in each connected component of $T$.
-
-Moreover, we assume that all edges in the tree decompostion are oriented towards this root.
-%and 
-%define $T_r(u)$ as the induced subtree of
-%$u$ (following this orientation). 
 Algorithm~\ref{alg:pf} computes the partition function by passing
-messages along these directed edges $u\to v$ (i.e. always from some
+messages along the directed edges $u\to v$ (which point from 
 child $u$ to its parent $v$). Each message $m$ is a function that depends
 on the positions $\dep(m)\subseteq \X$ and yields a partition function
 in $\real\cup\{\infty\}$. The message from $u$ to $v$ represents the
@@ -626,7 +639,7 @@ negligible compared to Alg.~\ref{alg:pf}
 
 We define the \emph{maximum separator size} $s$ as
 $\max_{u,v\in V} | \separator{u}{v} |$ and denote by  $D$ the maximum size of
-$\difference{u}{v}$ over $(u,v)\in\edgesToR{}$.  In the absence
+$\difference{u}{v}$ over $(u,v)\in E$.  In the absence
 of specific optimizations, running Alg.~\ref{alg:pf} requires
 $\mathcal{O}((|\F|+|V|)\cdot 4^{w+1})$ time and
 $\mathcal{O}(|V|\cdot4^s)$ space
@@ -756,20 +769,21 @@ nine bases for the interior loops with a total of 5 unpaired bases
 dangling ends) still depend on at most four bases of the sequence.
 
 \subsection{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
-\todo[inline]{This is now better prepared due to the formulation of the main problem in terms of features with weights. Consequently, the text needs adaptions! Note that the energies E_1,\dots,E_k$ are still features $F_1,\dots,F_k$; there is also a feature $F_0$ for the GC content. }
 The flexibility of our framework supports the advanced sampling technique "multidimensional Boltzmann sampling"~\citep{Bodini2010}, which allows to (probabilistically) enforce additional, complex properties of the samples.
-This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; here, we additionally use it to control the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets. %We use multidimensional Boltzmann sampling to generate sequences having predetermined targeted energies $(\TargetE_1,\ldots,\TargetE_k)$ for the $k$ structures.
+This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; here, in addition to controlling \GCb\% (our feature $F_0$) we use it to target the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets (features $F_1,\dots,F_k$).
 
-Multidimensional Boltzmann sampling requires the ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ with free energies $(E_1,\ldots,E_k)$ for its target structures is
-$\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=1}^{k} \pi_i^{-E_i}}{\partfun{\pmb{\pi}}},$
-where $\pmb{\pi}:=(\pi_1\cdots\pi_k)$ is a vector of positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function.
+For the multidimensional Boltzmann sampling, we require the already established ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ is
+$\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=0}^{k} \pi_i^{-F_i(S)}}{\partfun{\pmb{\pi}}},$
+where $\pmb{\pi}:=(\pi_0\cdots\pi_k)$ is the vector of the positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function.
+
 %Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \ln(\pi_\ell)\, E(\val)/\beta.$ 
-The probability of a sequence $S$ is thus proportional to
-$ \prod_{\ell=1}^{k} e^{-\ln(\pi_\ell)\, E_i} = \prod_{\ell=1}^{k} \pi_i^{-E_i}. $
+Due to the construction of $\F$ of our RNA design network,
+the probability of a sequence $S$ is thus proportional to
+$\prod_{\ell=0}^{k} \pi_i^{-F_i(S)} = \prod_{f\in\F} f(S).$
 
-One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution, i.e.\ such that  $\mathbb{E}(E_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$.
-The expected value of $E_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp. Mat.~\ref{sec:weight_derivatives}). More generally, computing a suitable $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
-In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ and, at each iteration, generates a sample $\mathcal{S}$ of sequences. The expected value of an energy $E_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}E_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$.
+One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution, i.e.\ such that  $\mathbb{E}(F_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$ and, analogously, the expectation of $F_0(S)$ is the targeted GC content.
+The expected value of $F_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp. Mat.~\ref{sec:weight_derivatives}). More generally, computing a suitable $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
+In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ for $\beta=1/(RT)$, T=$37^\circ$, and gas constant $R$. Then, at each iteration, it generates samples $\mathcal{S}$ of sequences. The expected value of an energy $F_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}F_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$.
 $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically  ($\gamma=1.2$) to achieve effective optimization.
 While heuristic in nature, this basic iteration was elected in our initial version of \ourprog{} because of its good empirical behavior.
 
@@ -783,9 +797,10 @@ combinatorics, see \citep{Bender1983} and
 \citep{Drmota1997}. In such cases, the expected number of
 rejections before reaching the targeted energies remains constant when
 $\varepsilon\ge 1/\sqrt{n}$, and $\Theta(n^{k/2})$ when
-$\varepsilon=0$. The \GCb\% of designs can also be controlled,
-jointly and in a similar way, as done in
-\Software{IncaRNAtion}~\citep{Reinharz2013}.
+$\varepsilon=0$. 
+%The \GCb\% of designs can also be controlled,
+%jointly and in a similar way, as done in
+%\Software{IncaRNAtion}~\citep{Reinharz2013}.
 
 
 \section{Results}\label{sec:results}
