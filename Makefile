@@ -1,12 +1,12 @@
-DOCUMENTS=RNARedPrint-Bioinfo2018 supplement
+DOCUMENTS=RNARedPrint supplement
 
 all: figs $(DOCUMENTS:=.pdf)
 
 figs:
 	make -C Figs
 
-RNARedPrint-Bioinfo2018.pdf: RNARedPrint-Bioinfo2018.aux supplement.aux
-supplement.pdf: RNARedPrint-Bioinfo2018.aux supplement.aux
+RNARedPrint.pdf: RNARedPrint.aux supplement.aux
+supplement.pdf: RNARedPrint.aux supplement.aux
 
 %.pdf: %.tex %.aux
 	pdflatex --interaction=nonstopmode $<
