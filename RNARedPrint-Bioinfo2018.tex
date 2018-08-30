@@ -1,9 +1,50 @@
-\PassOptionsToPackage{utf8}{inputenc}
-\documentclass{bioinfo}
-\copyrightyear{2018} \pubyear{2018}
+%% BioMed_Central_Tex_Template_v1.06
+%%                                      %
+%  bmc_article.tex            ver: 1.06 %
+%                                       %
 
-\access{Advance Access Publication Date: Day Month Year}
-\appnotes{Manuscript Category}
+%%IMPORTANT: do not delete the first line of this template
+%%It must be present to enable the BMC Submission system to
+%%recognise this template!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                     %%
+%%  LaTeX template for BioMed Central  %%
+%%     journal article submissions     %%
+%%                                     %%
+%%          <8 June 2012>              %%
+%%                                     %%
+%%                                     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% For instructions on how to fill out this Tex template           %%
+%% document please refer to Readme.html and the instructions for   %%
+%% authors page on the biomed central website                      %%
+%% http://www.biomedcentral.com/info/authors/                      %%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%% BioMed Central currently use the MikTex distribution of         %%
+%% TeX for Windows) of TeX and LaTeX.  This is available from      %%
+%% http://www.miktex.org                                           %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% additional documentclass options:
+%  [doublespacing]
+%  [linenumbers]   - put the line numbers on margins
+
+%%% loading packages, author definitions
+
+%\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
+\documentclass{bmcart}
 
 %%% PACKAGES
 
@@ -57,6 +98,31 @@
     urlcolor=red!70!black           % color of external links
 }
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                             %%
+%%  If you wish to display your graphics for   %%
+%%  your own use using includegraphic or       %%
+%%  includegraphics, then comment out the      %%
+%%  following two lines of code.               %%
+%%  NB: These line *must* be included when     %%
+%%  submitting to BMC.                         %%
+%%  All figure files must be submitted as      %%
+%%  separate graphics through the BMC          %%
+%%  submission process, not included in the    %%
+%%  submitted article.                         %%
+%%                                             %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%TODO uncomment
+%\def\includegraphic{}
+%\def\includegraphics{}
+
+
+
+%%% Put your definitions there:
+\startlocaldefs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rolf's includegraphicstop
 \makeatletter
@@ -104,7 +170,7 @@
 %\newtheorem{algorithm}{Algorithm}
 \newtheorem{axiom}{Axiom}
 \newtheorem{hypothesis}{Working Hypothesis}
-%\renewenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
+\newenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
 
 %%% macros for notation in DP framework
 \newcommand{\network}{\mathcal{N}}
@@ -196,8 +262,8 @@
 \newcommand{\EnergyTurner}{E_{\text{T}}}
 \newcommand{\EnergyStacking}{E_{\text{st}}}
 
-
-
+\newcommand{\citep}[1]{\cite{#1}}
+\newcommand{\citet}[1]{\cite{#1}}
 
 %%% end macro defs
 
@@ -206,28 +272,157 @@
 \setlength\footskip{30\p@}          % space above footer line
 \makeatother
 
+\endlocaldefs
+
+%%% Begin ...
 \begin{document}
-\firstpage{1}
 
-\subtitle{Research Article}
 
-\title[Efficient Sampling for Multi-Target RNA Design]{Fixed-Parameter Tractable Sampling for RNA Design with Multiple Target Structures}
-\author[Hammer, Ponty, Wang and Will]{Stefan Hammer\,$^{\text{\sfb 1,2,3}}$, Yann Ponty\,$^{\text{\sfb 4,5,}\star}$, Wei Wang\,$^{\text{\sfb 4}}$ and Sebastian Will\,$^{\text{\sfb 2}}$}
-\address{$^{\text{\sf 1}}$University Leipzig, Department of Computer Science and Interdisciplinary Center for Bioinformatics, 04107 Leipzig, Germany;
-$^{\text{\sf 2}}$University of Vienna, Faculty of Chemistry, Department of Theoretical Chemistry, 1090 Vienna, Austria;
-$^{\text{\sf 3}}$University of Vienna, Faculty of Computer Science, Research Group Bioinformatics and
-Computational Biology, 1090 Vienna, Austria;
-$^{\text{\sf 4}}$CNRS UMR 7161 LIX, Ecole Polytechnique, Bat. Turing, 91120 Palaiseau, France;
-and $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaiseau, France}
+%%% Start of article front matter
+\begin{frontmatter}
 
-\corresp{$^\ast$To whom correspondence should be addressed.}
+\begin{fmbox}
+\dochead{Research}
 
-\history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the title of your article here     %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\editor{Associate Editor: XXXXXXX}
+%[Efficient Sampling for Multi-Target RNA Design]
+\title{Fixed-Parameter Tractable Sampling for RNA Design with Multiple Target Structures}
 
-\abstract{\textbf{Motivation:} The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, which can tremendously impact their cost and feasibility. \\
-  \textbf{Results:} We revisit a central ingredient of most in-silico
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the authors here                   %%
+%%                                          %%
+%% Specify information, if available,       %%
+%% in the form:                             %%
+%%   <key>={<id1>,<id2>}                    %%
+%%   <key>=                                 %%
+%% Comment or delete the keys which are     %%
+%% not used. Repeat \author command as much %%
+%% as required.                             %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \author[Hammer, Ponty, Wang and Will]{Stefan Hammer\,$^{\text{\sfb 1,2,3}}$, Yann Ponty\,$^{\text{\sfb 4,5,}\star}$, Wei Wang\,$^{\text{\sfb 4}}$ and Sebastian Will\,$^{\text{\sfb 2}}$}
+
+\author[
+    addressref={aff1,aff2,aff3},
+    email={stefan.hammer@uni-leipzig.de}
+]{\inits{F}\fnm{Stefan} \snm{Hammer}}
+%
+\author[
+    addressref={aff4,aff5},
+    corref={aff4},                       % id of corresponding address, if any
+    email={yann.ponty@lix.polytechnique.fr}
+]{\inits{F}\fnm{Yann} \snm{Ponty}}
+%
+\author[
+    addressref={aff4},
+    email={wei.wang@lix.polytechnique.fr}
+]{\inits{F}\fnm{Wei} \snm{Wang}}
+%
+\author[
+    addressref={aff2,aff3},
+    %corref={aff2},                       % id of corresponding address, if any
+    email={will@tbi.univie.ac.at}
+]{\inits{S}\fnm{Sebastian} \snm{Will}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the authors' addresses here        %%
+%%                                          %%
+%% Repeat \address commands as much as      %%
+%% required.                                %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% \address{$^{\text{\sf 1}}$University Leipzig, Department of Computer Science and Interdisciplinary Center for Bioinformatics, 04107 Leipzig, Germany;
+\address[id=aff1]{%                           % unique id
+  \orgname{Dept.\ Computer Science, and Interdisciplinary Center
+      for Bioinformatics, Univ.\ Leipzig}, 
+  \street{H{\"a}rtelstr.\ 16-18},                     
+  \postcode{D-04107},   
+  \city{Leipzig}, 
+  \cny{Germany}  
+}
+
+% $^{\text{\sf 2}}$University of Vienna, Faculty of Chemistry, Department of Theoretical Chemistry, 1090 Vienna, Austria;
+\address[id=aff2]{%
+    \orgname{Dept.\ Theoretical Chemistry, Univ.\ Vienna},
+    \street{W{\"a}hringerstr.\ 17},
+    \postcode{A-1090}
+    \city{Wien},
+    \cny{Austria}
+}
+
+% $^{\text{\sf 3}}$University of Vienna, Faculty of Computer Science, Research Group Bioinformatics and
+% Computational Biology, 1090 Vienna, Austria;
+\address[id=aff3]{%
+    \orgname{Bioinformatics and Computational Biology Research Group, Univ.\ Vienna},
+    \street{W{\"a}hringerstr.\ 17},
+    \postcode{A-1090}
+    \city{Wien},
+    \cny{Austria}
+}
+
+% $^{\text{\sf 4}}$CNRS UMR 7161 LIX, Ecole Polytechnique, Bat. Turing, 91120 Palaiseau, France;
+\address[id=aff4]{%
+    \orgname{CNRS UMR 7161 LIX, Ecole Polytechnique},
+    \street{Bat. Alan Turing},
+    \postcode{91120}
+    \city{Palaiseau},
+    \cny{France}
+}
+
+% $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaiseau, France}
+\address[id=aff5]{%
+    \orgname{AMIBio team, Inria Saclay},
+    \street{Bat. Alan Turing},
+    \postcode{91120}
+    \city{Palaiseau},
+    \cny{France}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter short notes here                   %%
+%%                                          %%
+%% Short notes will be after addresses      %%
+%% on first page.                           %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{artnotes}
+%\note{Sample of title note}     % note to the article
+%\note[id=n1]{Equal contributor} % note, connected to author
+\end{artnotes}
+
+\end{fmbox}% comment this for two column layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The Abstract begins here                 %%
+%%                                          %%
+%% Please refer to the Instructions for     %%
+%% authors on http://www.biomedcentral.com  %%
+%% and include the section headings         %%
+%% accordingly for your article type.       %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstractbox}
+\begin{abstract}
+  \parttitle{Background}
+  The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, which can tremendously impact their cost and feasibility. \\
+  \parttitle{Results} We revisit a central ingredient of most in-silico
   design methods: the sampling of sequences for the design of
   multi-target structures, possibly including pseudoknots. For this
   task, we present the efficient, tree decomposition-based algorithm
@@ -240,16 +435,69 @@ and $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaisea
   we empirically study general properties of the approach and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
   common design benchmark, including pseudoknots. Generating seed sequences with \ourprog{}, we demonstrate significant improvements over the previously best multi-target sampling strategy.\\
-  \textbf{Availability:} Our software is freely available at: \url{https://github.com/yannponty/RNARedPrint}\\
-  \textbf{Contact:} \href{yann.ponty@lix.polytechnique.fr}{yann.ponty@lix.polytechnique.fr}\\
-  \textbf{Supplementary information:} Supplementary data are available
-  at \textit{Bioinformatics} online.}
+  
 
-\maketitle
+  \smallskip
+  \noindent
+  Our free software is available at: \url{https://github.com/yannponty/RNARedPrint}\\
+  Supplementary data are available online.
+\end{abstract}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The keywords begin here                  %%
+%%                                          %%
+%% Put each keyword in separate \kwd{}.     %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\enlargethispage{35.1pt}
-\section{Introduction}
+\begin{keyword}
+  \kwd{RNA multi-target design}
+  \kwd{RNA secondary structure}
+  \kwd{Multi-dimensional Boltzmann sampling}
+  \kwd{{$\#$}{\sf P}-hardness of RNA design}
+\end{keyword}
+
+% MSC classifications codes, if any
+%\begin{keyword}[class=AMS]
+%\kwd[Primary ]{}
+%\kwd{}
+%\kwd[; secondary ]{}
+%\end{keyword}
+
+\end{abstractbox}
+%
+%\end{fmbox}% uncomment this for twcolumn layout
+
+\end{frontmatter}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The Main Body begins here                %%
+%%                                          %%
+%% Please refer to the instructions for     %%
+%% authors on:                              %%
+%% http://www.biomedcentral.com/info/authors%%
+%% and include the section headings         %%
+%% accordingly for your article type.       %%
+%%                                          %%
+%% See the Results and Discussion section   %%
+%% for details on how to create sub-sections%%
+%%                                          %%
+%% use \cite{...} to cite references        %%
+%%  \cite{koon} and                         %%
+%%  \cite{oreg,khar,zvai,xjon,schn,pond}    %%
+%%  \nocite{smith,marg,hunn,advi,koha,mouse}%%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% start of article main body
+% <put your article body there>
+
+%%%%%%%%%%%%%%%%
+%% Background %%
+%%
+\section*{Background}
 \parHead{Design, applications and motivation for multiple design.}Synthetic biology endeavors the engineering of artificial biological
 systems, promising broad applications in biology, biotechnology and
 medicine. Centrally, this requires the design of biological
@@ -1108,23 +1356,21 @@ be explicitly supported at the generation stage, for instance by
 penalizing a set of alternative helices/structures.
 
 
-%\Final{
-%Extensions:
-%\begin{enumerate}
-%  \item What if the input graph is not bipartite? \\
-%  Extract a minimal subset of edges such that new graph is bipartite!\\
-%  $\to{}$ Graph bipartization (cf implementation by Hüffner, JGAA 2009)
-%  \item Is the optimization version in the \emph{weighted base-pair model} already {\sf NP}-hard?
-%  \item Does it help to know that there are cliques of size $k$ during the tree decomposition?\\
-%  If anything, it provides a lower bound on tree decomposition (helps branch and bound algorithms)
-%  \item What if some degree of freedom is allowed in the structure definition?\\ Can we still use tree decomposition?\\
-%  This looks like a very reasonable first step towards the definition of an {\em optimal} DP decomposition for RNA folding (with Pseudoknots) or RNA-RNA interactions\ldots
-%  \item Structures can also be penalized, but they must be specified explicitly.\\
-%  However, any competing structure must consist of helices, and it is possible to penalize each of the $\Theta(n^2)$ helices of any given length $L$. What would be the impact on treewidth?
-%  \item More general energy  models $\to$ Turner. (Pseudoknots)
-%  For this description, we assume that all input structures are non-crossing, while the framework would otherwise support crossing input structures as well as according energy models, e.g.{} the Hotknots model of~\citet{Ren2005}, by considering special pseudoknot loops.
-%\end{enumerate}\label{lbl:theend}
-%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Backmatter begins here                   %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{backmatter}
+
+\section*{Competing interests}
+  The authors declare that they have no competing interests.
+
+\section*{Author's contributions}
+  All authors wrote the manuscript.
+    % Text for this section \ldots
+    % http://www.biomedcentral.com/submissions/editorial-policies\#authorship
 
 \section*{Acknowledgements}
 YP is supported
@@ -1147,15 +1393,96 @@ Future and Emerging Technologies programme
 %
 We thank Leonid Chindelevitch for suggesting a drastic optimization of our FPT algorithm based on stable sets combinatorics, and Arie Koster for practical recommendations on tree decompositions.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                  The Bibliography                       %%
+%%                                                         %%
+%%  Bmc_mathpys.bst  will be used to                       %%
+%%  create a .BBL file for submission.                     %%
+%%  After submission of the .TEX file,                     %%
+%%  you will be prompted to submit your .BBL file.         %%
+%%                                                         %%
+%%                                                         %%
+%%  Note that the displayed Bibliography will not          %%
+%%  necessarily be rendered by Latex exactly as specified  %%
+%%  in the online Instructions for Authors.                %%
+%%                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\bibliographystyle{natbib}
-%\bibliographystyle{achemnat}
-%\bibliographystyle{plainnat}
-%\bibliographystyle{abbrv}
-%\bibliographystyle{bioinformatics}
-%
-%\bibliographystyle{plain}
-%
-\bibliography{biblio}
+% if your bibliography is in bibtex format, use those commands:
+\bibliographystyle{bmc-mathphys} % Style BST file (bmc-mathphys, vancouver, spbasic).
+\bibliography{biblio}      % Bibliography file (usually '*.bib' )
+% for author-year bibliography (bmc-mathphys or spbasic)
+% a) write to bib file (bmc-mathphys only)
+% @settings{label, options="nameyear"}
+% b) uncomment next line
+%\nocite{label}
 
+% or include bibliography directly:
+% \begin{thebibliography}
+% \bibitem{b1}
+% \end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Figures                       %%
+%%                               %%
+%% NB: this is for captions and  %%
+%% Titles. All graphics must be  %%
+%% submitted separately and NOT  %%
+%% included in the Tex document  %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%
+%% Do not use \listoffigures as most will included as separate files
+
+ \section*{Figures}
+%   \begin{figure}[h!]
+%   \caption{\csentence{Sample figure title.}
+%       A short description of the figure content
+%       should go here.}
+%       \end{figure}
+% 
+% \begin{figure}[h!]
+%   \caption{\csentence{Sample figure title.}
+%       Figure legend text.}
+%       \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Tables                        %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Use of \listoftables is discouraged.
+%%
+% \section*{Tables}
+% \begin{table}[h!]
+% \caption{Sample table title. This is where the description of the table should go.}
+%       \begin{tabular}{cccc}
+%         \hline
+%            & B1  &B2   & B3\\ \hline
+%         A1 & 0.1 & 0.2 & 0.3\\
+%         A2 & ... & ..  & .\\
+%         A3 & ..  & .   & .\\ \hline
+%       \end{tabular}
+% \end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Additional Files              %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \section*{Additional Files}
+%   \subsection*{Additional file 1 --- Sample additional file title}
+%     Additional file descriptions text (including details of how to
+%     view the file, if it is in a non-standard format or the file extension).  This might
+%     refer to a multi-page table or a figure.
+%
+%  \subsection*{Additional file 2 --- Sample additional file title}
+%    Additional file descriptions text.
+
+
+\end{backmatter}
 \end{document}

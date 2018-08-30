@@ -1,11 +1,4 @@
-\PassOptionsToPackage{utf8}{inputenc}
-\documentclass[12pt]{bioinfo}
-\copyrightyear{2015} \pubyear{2015}
-
-\access{Advance Access Publication Date: Day Month Year}
-\appnotes{Manuscript Category}
-
-
+\documentclass[10pt]{article}
 
 %%% PACKAGES
 
@@ -27,7 +20,9 @@
 %   \plparsep=1pt  
 \usepackage{hyperref} 
 \usepackage{xspace} 
-%\usepackage{geometry} 
+
+\usepackage[margin=1in]{geometry} 
+
 \usepackage{amsmath,amssymb} 
 \usepackage{bm}
 \usepackage{verbatim}
@@ -104,7 +99,8 @@
 %\newtheorem{algorithm}{Algorithm}
 \newtheorem{axiom}{Axiom}
 \newtheorem{hypothesis}{Working Hypothesis}
-\renewenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
+\newenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
+
 
 %%% macros for notation in DP framework
 \newcommand{\network}{\mathcal{N}}
@@ -184,20 +180,20 @@
 \setlength{\parskip}{.2em}
 
 
+\newcommand{\citep}[1]{\cite{#1}}
+\newcommand{\citet}[1]{\cite{#1}}
+
 
 %%% end macro defs
 
 
 
 \begin{document}
-%\newgeometry{margin=2cm}
 \onecolumn
 
 \appendix
-{\centering \relsize{+4}\textbf{Supplementary Material}\\[1em] Fixed-Parameter Tractable Sampling\\ for RNA Design with Multiple Target Structures\\%
-%{\relsize{-1}\BackupTitle}\\
+{\centering \Large \textbf{Supplementary Material}\\[1em] Fixed-Parameter Tractable Sampling\\ for RNA Design with Multiple Target Structures\\%
 }
-\relsize{+1}
 
 \medskip
 \begin{center}
@@ -701,7 +697,7 @@ N/A values correspond to data that could not be obtained by the time of this sub
 \caption{Break-down of average MultiDefect values into their two components.}
 \end{figure}
 
-\bibliographystyle{natbib}
+\bibliographystyle{plain}
 %\bibliographystyle{achemnat}
 %\bibliographystyle{plainnat}
 %\bibliographystyle{abbrv}
