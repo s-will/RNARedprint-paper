@@ -3,7 +3,7 @@
 %%% PACKAGES
 
 \usepackage{xr}
-\externaldocument{RNARedPrint-Bioinfo2018}
+\externaldocument{RNARedPrint}
 
 
 \usepackage{booktabs} % for much better looking tables
@@ -17,13 +17,13 @@
 %   \let\enddescription\endcompactdesc
 %   \pltopsep=1pt
 %   \plitemsep=1pt
-%   \plparsep=1pt  
-\usepackage{hyperref} 
-\usepackage{xspace} 
+%   \plparsep=1pt
+\usepackage{hyperref}
+\usepackage{xspace}
 
-\usepackage[margin=1in]{geometry} 
+\usepackage[margin=1in]{geometry}
 
-\usepackage{amsmath,amssymb} 
+\usepackage{amsmath,amssymb}
 \usepackage{bm}
 \usepackage{verbatim}
 \usepackage{longtable}
@@ -99,7 +99,7 @@
 %\newtheorem{algorithm}{Algorithm}
 \newtheorem{axiom}{Axiom}
 \newtheorem{hypothesis}{Working Hypothesis}
-\newenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
+\newenvironment{proof}[1][]{\noindent \emph{Proof}\ifthenelse{\equal{#1}{}}{}{ (#1)}.~}{\hfill$\Box$}
 
 
 %%% macros for notation in DP framework
@@ -275,22 +275,48 @@ instance from set RF3.
 Our implementation relies on external tools for the tree decomposition. Therefore it is not trivial that the weight functions (i.e. terms of the energy function) can be captured within the tree decompositions returned by a specific tool. In other words, it is not immediately clear how one can construct a cluster tree from an arbitrary tree decomposition for a given network.
 
 Crucially, one can show that, as long as the arguments $\dep(f)$ of a function $f$ form a clique within the network $\network$, then there exists at least one node in the tree decomposition that contains $\dep(f)$, thus allowing the evaluation of $f$.
+%
+While this result is certainly part of folklore, we emphasize the importance for the generality of this work and present a brief direct proof for convenience.
+
 \begin{lemma}\label{lem:cliques}
-\todo[inline]{R1: guess it should read "node v" instead of "n"!? please update the proof accordingly!}
-Let $G=(V,E)$ be an undirected graph, and  $(T,\chi)$ be a tree decomposition for $G$. For each clique $C\subset V$, there exists a node $n\in T$ such that $C\subset\chi(v)$.
+Let $G=(V,E)$ be an undirected graph, and  $(T,\chi)$ be a tree decomposition for $G$. For each clique $C\subseteq V$, there exists a node $u \in T$ such that $C\subseteq\chi(u)$.
 \end{lemma}
+
+%\begin{proof}
+% \newcommand{\tn}{v_{\rm T}} %% node in tree
+% \newcommand{\TransVars}[1]{{\rm tverts}(#1)}
+% \newcommand{\Children}[1]{{\rm Children}(#1)}
+%  For the sake of simplicity, let us consider $T$ as rooted on an arbitrary node, inducing an orientation, and denote by $\TransVars{\tn}\in V$ the set of vertices found in the node $\tn$ or its descendants, namely
+%    $$\TransVars{\tn} = \chi(\tn) \cup \bigcup_{\tn'\in\Children{\tn}} \TransVars{\tn'}.$$
+%
+%  Now consider (one of) the deepest node(s) $\tn\in T$, such that $C\subseteq\TransVars{\tn}$. We are going to prove that $C\subseteq\chi(\tn)$, using contradiction, by showing that $C\not\subseteq\chi(\tn)$ implies that $T$ is not a tree decomposition.
+%
+%  Assume that $C\not\subseteq\chi(\tn)$, then there exists a node $v'\notin\chi(\tn)$ whose presence in $\TransVars{\tn}$ stems from its presence in some descendant of $\tn$. Let us denote by $\tn'\neq \tn$ the closest descendant of $\tn$ such that $v'\in\chi(\tn')$. Now, consider a node $v\in C$ such that $v\in \TransVars{\tn'}$ and $v\notin \TransVars{\tn'}$. Such a node always exists, otherwise $\tn'$, and not $\tn$, would be the deepest node such that $C\subseteq \TransVars{\tn'}$. From the definition of the tree decomposition, we know that neither $\tn'$ nor its descendants may contain $v$. On the other hand, none of the parents or siblings of $\tn'$ may contain $v'$. It follows that is no node $\tn''\in T$ whose vertex set $\chi(\tn'')$ includes, at the same time, $v$ and $v'$. Since both $v$ and $v'$ belong to a clique, one has $\{v,v'\}\in E$. The absence of a node in $T$ capturing an edge in $E$ contradicts our initial assumption that $T$ is tree decomposition for $G$.
+%
+%  We conclude that $\tn$ is such that $C\not\subseteq\chi(\tn)$.
+%\end{proof}
+
 \begin{proof}
-  \newcommand{\TransVars}[1]{{\rm tverts}(#1)}
-  \newcommand{\Children}[1]{{\rm Children}(#1)}
-  For the sake of simplicity, let us consider $T$ as rooted on an arbitrary node, inducing an orientation, and denote by $\TransVars{n}\in V$ the set of vertices found in a node $n$ or its descendants, namely
-    $$\TransVars{n} = \chi(n) \bigcup_{n'\in\Children{n}} \TransVars{n'}.$$
+  \newcommand{\TransVars}[1]{{\rm tverts}(#1)}%
+  Root $T$ at an arbitrary tree node $r\in T$, which induces a parent/child relation between tree nodes.
+  We say a tree node $u$ \emph{represents} the node $v\in V$ (respectively, the set of nodes $X\subseteq V$) iff $v\in\chi(u)$ ($X\subseteq\chi(u)$).
+  Moreover, denote by $\TransVars{u}\subseteq V$ the vertices
+  represented by the nodes of the subtree of $u$, i.e.
+  $$\TransVars{u} := \chi(u) \cup \bigcup_{\text{children $u'$ of u}} \TransVars{u'}.$$
 
-  Now consider (one of) the deepest node(s) $n\in T$, such that $C\subset\TransVars{v}$. We are going to prove that $C\subset\chi(n)$, using contradiction, by showing that $C\not\subset\chi(n)$ implies that $T$ is not a tree decomposition.
-
-  Indeed, let us assume that $C\not\subset\chi(n)$, then there exists a node $v'\notin\chi(n)$ whose presence in $\TransVars{n}$ stems from its presence in some descendant of $n$. Let us denote by $n'\neq n$ the closest descendant of $n$ such that $v'\in\chi(n')$. Now, consider a node $v\in C$ such that $v\in \TransVars{v'}$ and $v\notin \TransVars{v'}$. Such a node always exists, otherwise $n'$, and not $n$, would be the deepest node such that $C\subset \TransVars{v'}$. From the definition of the tree decomposition, we know that neither $n'$ nor its descendants may contain $v$. On the other hand, none of the parents or siblings of $n'$ may contain $v'$. It follows that is no node $n''\in T$ whose vertex set $\chi(v'')$ includes, at the same time, $v$ and $v'$. Since both $v$ and $v'$ belong to a clique, one has $\{v,v'\}\in E$. The absence of a node in $T$ capturing an edge in $E$ contradicts our initial assumption that $T$ is tree decomposition for $G$.
-
-  We conclude that $n$ is such that $C\not\subset\chi(n)$.
+  Let $u$ denote the node in $T$ with maximal distance to the root $r$,
+  such that still $C\subseteq\TransVars{u}$.
+  Let $C'$ be $C-\chi(u)$.
+  If $C'$ is empty than $u$ represents $C$---nothing remains to be shown;
+  thus assume, $C' \neq \emptyset$.
+  For exactly one of the children $u'$ of $u$,
+  $C'\subseteq\TransVars{u'}$, since otherwise for
+  some node $v'\in C'$, the subtree of the nodes representing $v'$ would be disconnected (property 2 of Def.~\ref{def:treedecomp}). Now, pick some $v'\in C'$ and some
+  $v''\in C-C'$, which must be represented by $u$ or some child $u''$ of $u$. In both cases, there cannot
+  be any node in T that represents the edge $\{v',v''\}\subseteq C$, since $v'$ can only be represented 
+  by nodes in the subtree of $u'$.
 \end{proof}
+
 
 This result implies that classic tree decomposition algorithms and, more importantly, implementations can be directly re-used to produce decompositions that capture energy models of arbitrary complexity, functions of arbitrary arity. Indeed, it suffices to add a clique, involving the parameters of the function, and Lemma~\ref{lem:cliques} guarantees that the tree decomposition will feature one node to which the function can be associated.
 
@@ -386,10 +412,10 @@ $u$ and its parent in $T$ rooted at $r$. For each node in the cluster tree, Alg.
 %    networks.}}
 
 While Alg.~\ref{alg:pf} computes messages values for
-\emph{all} possible combinations of nucleotides for the positions 
-% in the separator set, 
+\emph{all} possible combinations of nucleotides for the positions
+% in the separator set,
 % yp: for all the positions in a node, right?
-in a node, 
+in a node,
 we observe here that many such combinations are \emph{not} required for computing all relevant
 partition functions. In particular, the algorithm can be restricted to
 consider only \Def{valid} combinations, satisfying the (hard)
@@ -416,35 +442,35 @@ $(T,\chi)$, such that the values of messages
 $\Message{u}{v}$ are computed only for cc-valid
 partial sequences $\val\in\partseqs(\separator{u}{v})$. Moreover, the
 loop over $\val'\in\partseqs(\difference{u}{v})$ is restricted, such
-that $\substitute{\val}{\val'}$ are cc-valid. Analogous restrictions are 
+that $\substitute{\val}{\val'}$ are cc-valid. Analogous restrictions are
 then implemented in the sampling algorithm Alg.~\ref{alg:sampling}.
 
 The correctness of the modified algorithm follows from the same
 induction argument, where the message computation over one node
 evaluates messages from its children only at cc-valid partial
-sequences. The result of this computation is a message, which corresponds 
-to the partition function, restricted to cc-valid partial sequences. 
-Since invalid sequences have infinite energy, they do not contribute to 
-the partition function, and the partition function restricted to cc-valid sequences coincides 
+sequences. The result of this computation is a message, which corresponds
+to the partition function, restricted to cc-valid partial sequences.
+Since invalid sequences have infinite energy, they do not contribute to
+the partition function, and the partition function restricted to cc-valid sequences coincides
 with the initial one.
 
 
 
 This restriction drastically improves the time
-complexity. Indeed, for any given node $v$, the original algorithm sends message for 
+complexity. Indeed, for any given node $v$, the original algorithm sends message for
  $\chi(v):=\substitute{\val}{\val'}$ such that
 $\val\in\partseqs(\separator{u}{v})$ and
 $\val'\in\partseqs(\difference{u}{v})$, while the modified algorithm
-only considers cc-valid assignments for $\chi(v)$. Remark that, in any connected component $cc$, 
-assigning some nucleotide to a position reduces cc-valid assignments to (at most) 
+only considers cc-valid assignments for $\chi(v)$. Remark that, in any connected component $cc$,
+assigning some nucleotide to a position reduces cc-valid assignments to (at most)
 two alternatives for each of the $|cc|-1$ remaining positions. It follows that, for a node $v$ featuring positions from $\#cc(v)$ distinct connected components $\{cc_1,cc_2\ldots\}$ in the base pair dependency graph, the number of cc-valid assignments to positions in $\chi(v)$ is exactly
 $$4^{\#cc(v)}\prod_{i=1}^{\#cc(v)} 2^{|cc_i|-1} = 2^{\#cc(v)}\, 2^{|\chi(v)|} \in \Theta(2^{\#cc}\, 2^{w+1}),$$
 for a single node, where $\#cc$ is the total number of connected components in the base pair dependency graph, and $w$ is the tree-width of the tree decomposition $T$. Since the number of nodes in $T$ is in $\Theta(n)$, and the number of atomic energy contributions associated with $k$ structures is in $\mathcal{O}(k\,n)$, then the overall complexity grows like $\Theta(n\, k\, 2^{\#cc}\, 2^{w+1})$.
 
-%For each connected component having at least a position $i$ in $\chi(v)$, 
+%For each connected component having at least a position $i$ in $\chi(v)$,
 %the algorithm considers assigning any possible nucleotide $x\in \Sigma$ to $i$ and restricts
-% the assignment of  for 
-%any remaining position $j$ of the same connected component, it restricts the domain of $j$ to base-pairs that are consistent with the parity . 
+% the assignment of  for
+%any remaining position $j$ of the same connected component, it restricts the domain of $j$ to base-pairs that are consistent with the parity .
 %
 %
 %Let $c(v)$ be the number of connected components involving positions
@@ -697,7 +723,7 @@ N/A values correspond to data that could not be obtained by the time of this sub
 \caption{Break-down of average MultiDefect values into their two components.}
 \end{figure}
 
-\bibliographystyle{plain}
+\bibliographystyle{vancouver}
 %\bibliographystyle{achemnat}
 %\bibliographystyle{plainnat}
 %\bibliographystyle{abbrv}
