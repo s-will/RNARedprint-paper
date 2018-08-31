@@ -1,7 +1,7 @@
 SVGS=$(wildcard *.svg)
 SVGZS=$(wildcard *.svgz)
 
-all: $(SVGS:.svg=.pdf) $(SVGZS:.svgz=.pdf) $(FIGURE_TARGETS)
+all: $(SVGS:.svg=.pdf) $(SVGZS:.svgz=.pdf) $(FIGURE_TARGETS) # $(SVGS:.svg=.ps) $(SVGZS:.svgz=.ps)
 
 %.pdf: %.R
 	Rscript $<
@@ -17,6 +17,12 @@ all: $(SVGS:.svg=.pdf) $(SVGZS:.svgz=.pdf) $(FIGURE_TARGETS)
 
 %.pdf: %.svgz
 	inkscape --export-pdf $@ $<
+
+%.ps: %.svg
+	inkscape --export-ps $@ $<
+
+%.ps: %.svgz
+	inkscape --export-ps $@ $<
 
 clean:
 	$(RM) $(SVGS:.svg=.pdf) $(SVGZS:.svgz=.pdf)
