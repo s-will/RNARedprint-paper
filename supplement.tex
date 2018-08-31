@@ -304,17 +304,21 @@ Let $G=(V,E)$ be an undirected graph, and  $(T,\chi)$ be a tree decomposition fo
   represented by the nodes of the subtree of $u$, i.e.
   $$\TransVars{u} := \chi(u) \cup \bigcup_{\text{children $u'$ of u}} \TransVars{u'}.$$
 
+  Assume there is no node in T that represents $C$.
+
   Let $u$ denote the node in $T$ with maximal distance to the root $r$,
   such that still $C\subseteq\TransVars{u}$.
+  Since there is no single node $u$ that represents $C$, this maximal node is unique, since
+  if a node $u$, $C\subseteq\TransVars{u}$, has two subtrees that cover $C$, then $u$ must represent $C$ due to property 2 of Def.~\ref{def:treedecomp}. 
+
   Let $C'$ be $C-\chi(u)$.
-  If $C'$ is empty than $u$ represents $C$---nothing remains to be shown;
-  thus assume, $C' \neq \emptyset$.
+  $C'$ cannot be empty, since otherwise $u$ represents $C$i.
   For exactly one of the children $u'$ of $u$,
   $C'\subseteq\TransVars{u'}$, since otherwise for
   some node $v'\in C'$, the subtree of the nodes representing $v'$ would be disconnected (property 2 of Def.~\ref{def:treedecomp}). Now, pick some $v'\in C'$ and some
   $v''\in C-C'$, which must be represented by $u$ or some child $u''$ of $u$. In both cases, there cannot
   be any node in T that represents the edge $\{v',v''\}\subseteq C$, since $v'$ can only be represented 
-  by nodes in the subtree of $u'$.
+  by nodes in the subtree of $u'$. Contradiction.
 \end{proof}
 
 
