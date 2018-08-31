@@ -573,7 +573,7 @@ the work on these tools gave no definitive answer on the \emph{complexity of uni
 the decomposition strategy seems to allow practical applications.
 Better understanding of the true complexity bounds is still highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still bounded by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step (since stochastic backtrack can be performed in linear time per sample).
 
-Consequently, for elucidating the theoretical fundament of RNA design sampling, we first need to clarify, whether efficient approaches for counting could exist. In Section~\ref{sec:counting}, we show that there can not exists any efficient, polynomial time algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
+Consequently, for elucidating the theoretical fundament of RNA design sampling, we first need to clarify, whether efficient approaches for counting could exist. In this work, we show that there can not exists any efficient, polynomial time algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
 
 As already indicated by \Software{RNAdesign}, the hardness of counting (and conjectured hardness of sampling), does still not rule out practically applicable algorithms for counting and sampling.
 Addressing the following questions in more detail and generality led to the practical advances in this work, which extend the expressivity, flexibility, and performance of multi-structure design: \emph{How to sample, in a general way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as \GCb\%, complex sequence constraints, or the energy of individual structures?}
@@ -586,7 +586,7 @@ Addressing the following questions in more detail and generality led to the prac
 \label{fig:workflow}
 \end{figure*}
 
-To answer these questions, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures (Section~\ref{sec:FPT}). As main algorithmic contribution of this work, we devise a dynamic programming algorithm, based on a tree decomposition, to compute partition functions and sample sequences from the Boltzmann distribution%
+To answer these questions, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. As main algorithmic contribution of this work, we devise a dynamic programming algorithm, based on a tree decomposition, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
 . We show that these algorithms are \Def{fixed-parameter tractable (FPT)} for the \Def{treewidth},
 in other words: they have polynomial time and space complexity for a fixed treewidth%
@@ -614,9 +614,9 @@ works well by performing sampling based on less complex RNA energy models, which
 Eventually this strategy allows generating biologically relevant
 multi-target designs, as we demonstrate in our application 
 to a large set of multi-target RNA design instances from a
-representative benchmark (Section~\ref{sec:results}).
+representative benchmark.
 
-\section{Methods}
+\section*{Methods}
 \subsection*{Definitions and problem statement}
 \label{sec:problem-statement}
 
@@ -718,12 +718,14 @@ of $G$ is the smallest width of any tree decomposition of $G$.
   partition function and sampling of Boltzmann-weighted designs}
 \label{sec:FPT}
 
-For our algorithmic description, we translate the concepts of
-Section~\ref{sec:problem-statement} to the formalism of constraint networks, here
+We are going to express our algorithms in the formalism of constraint networks, here
 specialized as RNA design network. This abstraction allows us to base our
 algorithm on the cluster tree elimination (CTE) of~\citet{Dechter2013}.
 
-The RNA design network describes how to evaluate RNA sequences and, in particular, partial RNA sequences, which is required by our algorithms that construct results for the full sequence by combining partial information.
+The RNA design network describes how to evaluate RNA sequences and, in
+particular, partial RNA sequences, which is required by our algorithms
+that construct results for the full sequence by combining partial
+information.
 %
 \Def{Partial RNA sequences} are words $\val$ in
 $(\Sigma\cup\{?\})^n$, where the symbol '?' represents not yet determined nucleotides; consequently, the positions, where $\val_i\in\Sigma$,
@@ -732,7 +734,7 @@ are called \Def{determined} by $\val$ ($1\leq i\leq n$).
 We remark that (partial) sequences correspond to the more general concept of (partial) assignments in
 constraint networks.
 
-Since each feature function $f\in\F$ (cf.~Section~\ref{sec:problem-statement})
+Since each feature function $f\in\F$ (as previously introduced)
 depends on only the subset $\dep(f)$ of sequence positions, one can
 evaluate them for partial sequences $\val$ that determine (at least)
 the nucleotides at all positions in $\dep(f)$. Thus for any such function $f$
@@ -769,7 +771,7 @@ By this choice of $\F$, the sum $\sum_f\in\F f(S)$ (for any $S\in\Sigma^n$) corr
 Eq.~$(\ref{eq:mainproblem}),$ using the equivalence of Eq.~(\ref{eq:feature-energy-transformation}). 
 Consequently, the network encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}). Subsequently, we show how to efficiently compute this partition function based on the network.
 
-\subsection{Partition function and Boltzmann sampling through stochastic backtrack}\label{sec:PF}
+\subsection*{Partition function and Boltzmann sampling through stochastic backtrack}\label{sec:PF}
 
 The partition function
 over an RNA design network can be computed by dynamic programming based
@@ -873,7 +875,7 @@ the edges in the tree decomposition are generated by Algorithm \ref{alg:pf},
 one can repeatedly call Algorithm~\ref{alg:sampling}, each time
 randomly drawing another sequence from the Boltzmann distribution.
 
-\subsection{Computational complexity of the multiple target sampling algorithm}\label{sec:complexity}
+\subsection*{Computational complexity of the multiple target sampling algorithm}\label{sec:complexity}
 
 %The complexity of the proposed sampling algorithm depends on the treewidth of the dependency graph $G_\F$.
 % The treewidth $w$ of a cluster tree $(T,\chi,\phi)$, $T=(V,E)$, is $\max_{v\in V} |\chi(v)| - 1$, i.e.~the maximum number of positions in any of its clusters minus 1.
@@ -886,8 +888,7 @@ negligible compared to Alg.~\ref{alg:pf}
 (Supp. Mat.~\ref{appsec:treedecomp} and
 \ref{appsec:dependency-cliques}).
 
-We define the \emph{maximum separator size} $s$ as
-$\max_{u,v\in V} | \separator{u}{v} |$ and denote by  $D$ the maximum size of
+Let $s$ denote the maximum size of any separator set $\separator{u}{v}$ and $D$ denote the maximum size of
 $\difference{u}{v}$ over $(u,v)\in E$.  In the absence
 of specific optimizations, running Alg.~\ref{alg:pf} requires
 $\mathcal{O}((|\F|+|V|)\cdot 4^{w+1})$ time and
@@ -970,7 +971,7 @@ By this theorem, Boltzmann sampling in our setting is fixed parameter tractable 
 As shown in Supp. Mat.~\ref{sec:improvedComplexity}, the complexity of the precomputation can be further improved to
 $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ is the maximum number of connected components represented in a node of the tree decomposition ($c\le w+1$).
 
-\subsection{Sequence features, constraints, and energy
+\subsection*{Sequence features, constraints, and energy
   models.}\label{sec:energy_models}
 
 Going beyond our encoding of the base pair model energy features and the \GCb\% feature, the feature functions provide more generality and allow expressing complex features of the
@@ -1017,7 +1018,7 @@ nine bases for the interior loops with a total of 5 unpaired bases
 (``2x3'' interior loops)---all other energy contributions (like
 dangling ends) still depend on at most four bases of the sequence.
 
-\subsection{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
+\subsection*{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
 The flexibility of our framework supports the advanced sampling technique "multidimensional Boltzmann sampling"~\citep{Bodini2010}, which allows to (probabilistically) enforce additional, complex properties of the samples.
 This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; here, in addition to controlling \GCb\% (our feature $F_0$) we use it to target the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the single targets (features $F_1,\dots,F_k$).
 
@@ -1054,12 +1055,11 @@ $\varepsilon=0$.
 
 \section*{Results}\label{sec:results}
 
-\subsection{Targeting Turner energies and \GCb\%}
+\subsection*{Targeting Turner energies and \GCb\%}
 We implemented our Boltzmann sampling strategy (Algorithms
 \ref{alg:pf} and \ref{alg:sampling}), to sample valid sequences for
 given target structures and weights $\pi_1,\dots,\pi_k$.  Moreover, we
-used multi-dimensional Boltzmann sampling, as described in
-Section~\ref{sec:multiBoltzmann}, to target specific energies and
+used multi-dimensional Boltzmann sampling to target specific energies and
 \GCb\%.  Our tool \ourprog{} evaluates energies according to the
 stacking energy model $\EnergyStacking$, whose parameters were fitted
 to best approximate Turner energies. As well, we implemented and
@@ -1141,7 +1141,7 @@ pseudoknot-free target structures.
   \label{fig:energydist-pk}
 \end{figure*}
 
-\subsection{Generating high-quality seeds for further optimization}
+\subsection*{Generating high-quality seeds for further optimization}
 Next, we empirically evaluated the capacity of \ourprog{} to generate seed sequences for multiple (pseudoknotted) target structures, possibly followed by subsequent local optimizations. As a baseline for comparison, we considered \RNAblueprint~\citep{Hammer2017}, the current leading tool for multiple design.
 As a quality measure, we used the multi-stable design objective function introduced by~\citet{Hammer2017}, defined as:
 % \begin{align}
@@ -1262,7 +1262,7 @@ optimization run.
 \label{fig:benchmark-results}
 \end{figure}
 
-\section*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
+\subsection*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
 Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
@@ -1282,7 +1282,7 @@ $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
 
 The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
 
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($E \cap (V_1\times V_2) = E$), noting that hardness over restricted instances implies hardness of the general problem. Moreover note that, as observed in Subsec.~\ref{sec:complexity}, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($E \cap (V_1\times V_2) = E$), noting that hardness over restricted instances implies hardness of the general problem. Moreover note that, as we explained before, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
 
 Let $\IS{G}$ denote the set of all independent sets in the connected graph $G$; recall that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. 
 
@@ -1299,10 +1299,10 @@ If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$.
 We discuss only the case $v\in V_1$, where we restricted the nucleotides to $\Ab$ and $\Gb$. Then, $\{f(v),f'(v)\}$ must equal $\{\Ab,\Gb\}$, such that either $v\in\Psi(f)$ or $v\in\Psi(f')$.
 %
 \item $\Psi$ is surjective, i.e. there is a preimage for each element $I\in \IS{G}$. Define $f\in\Design{G}$ as\begin{displaymath}
-f(v) = \left\{\begin{array}{ll@{\qquad}ll}
-\Ab{} & \text{if $v\in V_1$ and $v\in I$} &
-\Cb{} & \text{if $v\in V_2$ and $v\in I$}\\
-\Gb{} & \text{if $v\in V_1$ and $v\not\in I$} &
+f(v) = \left\{\begin{array}{ll} % @{\qquad}ll
+\Ab{} & \text{if $v\in V_1$ and $v\in I$} \\ %&
+\Cb{} & \text{if $v\in V_2$ and $v\in I$} \\
+\Gb{} & \text{if $v\in V_1$ and $v\not\in I$} \\ %&
 \Ub{} & \text{if $v\in V_2$ and $v\not\in I$}
 \end{array}\right.
 \end{displaymath}
