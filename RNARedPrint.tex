@@ -616,7 +616,8 @@ multi-target designs, as we demonstrate in our application
 to a large set of multi-target RNA design instances from a
 representative benchmark (Section~\ref{sec:results}).
 
-\section{Definitions and problem statement}
+\section{Methods}
+\subsection*{Definitions and problem statement}
 \label{sec:problem-statement}
 
 An \Def{RNA sequence $S$} is a word over the \Def{nucleotides
@@ -713,7 +714,7 @@ of $G$ is the smallest width of any tree decomposition of $G$.
 \end{definition}
 %Recall the essential role of the treewidth as fixed parameter in our FPT appraoch.
 
-\section{A fixed-parameter tractable (FPT) algorithm for the
+\subsection*{A fixed-parameter tractable (FPT) algorithm for the
   partition function and sampling of Boltzmann-weighted designs}
 \label{sec:FPT}
 
@@ -1051,7 +1052,7 @@ $\varepsilon=0$.
 %\Software{IncaRNAtion}~\citep{Reinharz2013}.
 
 
-\section{Results}\label{sec:results}
+\section*{Results}\label{sec:results}
 
 \subsection{Targeting Turner energies and \GCb\%}
 We implemented our Boltzmann sampling strategy (Algorithms
@@ -1261,7 +1262,7 @@ optimization run.
 \label{fig:benchmark-results}
 \end{figure}
 
-\section{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
+\section*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
 Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
@@ -1330,7 +1331,7 @@ Now we can build on the connection between the two problems to obtain complexity
   Let us now hypothesize the existence of a polynomial-time algorithm $\mathcal{A}$ for \NumDesign over strongly-connected graphs $G$. Consider the (polynomial-time) algorithm $\mathcal{A}'$ that first executes $\mathcal{A}$ on $G$ to produce $\NumDesign(G)$, and returns $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$. Clearly $\mathcal{A}'$ solves $\#{\sf BIS}$ in polynomial-time. This means that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
 \end{proof}
 
-\section{Conclusion}
+\section*{Conclusion}
 Motivated by the---here established---hardness of the problem, we
 introduced a general framework, and efficient algorithms to design RNA
 sequences that may adopt multiple target structures with fine-tuned
