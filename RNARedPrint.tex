@@ -1284,7 +1284,7 @@ Let $\IS{G}$ denote the set of all independent sets in the connected graph $G$; 
 \end{proposition}
 %
 \begin{proof}
-Consider $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
+Consider the mapping $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
 We show that $\Psi$ is bijective:%
 \begin{itemize}
 \item $\Psi$ is injective, i.e. $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
@@ -1364,7 +1364,11 @@ penalizing a set of alternative helices/structures.
   The authors declare that they have no competing interests.
 
 \section*{Author's contributions}
-  YP and SW initiated the initiated the project and worked out the theoretical framework. YP and WW wrote the core software, while SW and SH contributed additional scripts. SH devised and conducted the computational experiments. All authors wrote, read, and approved the manuscript.
+  YP and SW initiated the project and worked out the algorithms.
+  % SW---I guess we could be less detailed...
+  YP contributed the multi-dimensional Boltzmann sampling background and the \#P-hardness proof.
+  SW contributed the integration with the constraint network setting and its specialization to RNA design.
+  YP and WW wrote the core software, while SW and SH contributed additional scripts. SH devised and conducted the computational experiments. All authors wrote, read, and approved the manuscript.
     % Text for this section \ldots
     % https://www.biomedcentral.com/getpublished/editorial-policies#authorship
 
