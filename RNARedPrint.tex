@@ -43,8 +43,8 @@
 
 %%% loading packages, author definitions
 
-\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
-%\documentclass{bmcart}
+%\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
+\documentclass[linenumbers,doublespacing]{bmcart}
 
 %%% PACKAGES
 
@@ -636,8 +636,8 @@ $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}.$
 Consequently, $S$ is \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
 all $(i,j)\in R$.
  
-RNA energy models like the Turner energy model~\citep{Turner2009} define an energy function that maps a pair of a sequence $S$ and a structure $R$ to a real value, the \Def{energy}. 
-Typically, such energy functions are additively composed from energy contributions of structure elements (like single base pairs or loops). It is most instructive, and in this context already practically useful, to develop pour approach for the simple \Def{base pair energy model}. This model defines energy contributions $\EbpSym(x,y)$ for base pairs $(x,y)\in\Sigma^2$ that specify the energy function as
+RNA energy models like the Turner energy model~\citep{Turner2009} define a function that maps a pair of a sequence $S$ and a structure $R$ to a real value, the \Def{energy}. 
+Typically, such \Def{energy functions} are additively composed from \Def{energy contributions} of structure elements (like single base pairs or loops). It is most instructive, and in this context already practically useful, to develop pour approach for the simple \Def{base pair energy model}. This model defines energy contributions $\EbpSym(x,y)$ for pairs $(x,y)\in\Sigma^2$ that specify the energy function as
 $
 \EbpSym(S,R) = \sum_{(i,j)\in R} \EbpSym(S_i,S_j)
 $
@@ -674,28 +674,25 @@ To stress the analogy to, in the RNA context more familiar (e.g.~\citep{McCaskil
 \prod_{0\leq \ell \leq k} \pi_\ell^{-F_\ell(S)} = exp(-\beta E(S)),
 \end{equation}
 where $\beta$ denotes inverse temperature and $E(S)$ is defined as linear combination of energies $E(S)=\sum_{1\leq \ell \leq k} \ln(\pi_\ell)/\beta E(S,R_\ell)$,
-where the energy $E(S,R_\ell)$ is treated as feature $F_\ell(S) = \EbpSym(S,R_\ell);$ as elaborated later, even Turner energies or pseudoknot energies can be expressed as features based on their additive nature. 
+where the energy $E(S,R_\ell)$ is treated as feature $F_\ell(S) = \EbpSym(S,R_\ell);$ as elaborated later, even Turner energies or pseudoknot energies can be expressed as features due to their additive nature. 
 
 \paragraph{Preliminaries on the complexity} 
 
-The complexity of the central problem depends fundamentally on the dependency structure due to the entire set of feature functions.
+The complexity of the central problem depends fundamentally on the dependency structure that is imposed by the entire set of feature functions.
 
 For design in the base pair energy model or the related counting problem, the dependencies are immediately derived from the set of target structures 
 $\R$. It induces the
 \Def{base pair dependency graph} $G_{\R}$ with nodes $\{1,\dots,n\}$
 and edges $\bigcup_{\ell\in[1,k]} R_\ell$. As well, this graph describes the minimal
-dependency structure of multi-target RNA design, which is present in all relevant settings due to the requirement
-of canonical base pairing.
+dependency structure of multi-target RNA design, which is present in all relevant settings, since base pairings must be canonical.
 
-In more generality, we look at the dependencies due to the set of feature functions $\F$.
-The \Def{dependencies $\dep(f)$} of a single feature function $f$ are precisely described as the minimum set of sequence
-  positions $\I\subseteq\{1,\dots,n\}$, where $f(S)=f(S')$ for all
-  sequences $S$ and $S'$ that have equal nucleotides at the positions in $\I$.
+In more generality, we consider dependencies due to the set of feature functions $\F$.
+Recall that each feature function, even if evaluated for entire sequences, depends only on a subset of all sequence positions, which we call the \Def{dependencies of $f$} and write as $\dep(f)$;
+thus, $\dep(f)$ is the minimal subset of $\{1,\dots,n\}$ s.t.~$\forall S,S'\in\Sigma^n: f(S)=f(S') \text{ only if } (\forall i\in\dep(f): S_i=S_i')$.
   
-Then, the set $\F$ of feature functions (on sequences of length $n$) induces a
-  \Def{dependency graph} on sequence positions, namely the hypergraph
-  $G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\})$. The \Def{tree decomposition} of this dependency
-  graph is fundamental for our algorithms.
+Then, the set $\F$ of feature functions induces a
+  \Def{dependency graph} on sequence positions by interpreting the dependencies as hyperedges, namely the hypergraph 
+  $G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\})$. The \Def{tree decomposition} of $G_\F$ is fundamental for our algorithms.
 
 \begin{definition}[Tree decomposition and width]
   \label{def:treedecomp}
@@ -714,8 +711,7 @@ of $G$ is the smallest width of any tree decomposition of $G$.
 \end{definition}
 %Recall the essential role of the treewidth as fixed parameter in our FPT appraoch.
 
-\subsection*{A fixed-parameter tractable (FPT) algorithm for the
-  partition function and sampling of Boltzmann-weighted designs}
+\subsection*{Partition function and Boltzmann sampling of RNA designs: A fixed-parameter tractable (FPT) algorithm}
 \label{sec:FPT}
 
 We are going to express our algorithms in the formalism of constraint networks, here
@@ -734,7 +730,7 @@ are called \Def{determined} by $\val$ ($1\leq i\leq n$).
 We remark that (partial) sequences correspond to the more general concept of (partial) assignments in
 constraint networks.
 
-Since each feature function $f\in\F$ (as previously introduced)
+Since each feature function $f\in\F$
 depends on only the subset $\dep(f)$ of sequence positions, one can
 evaluate them for partial sequences $\val$ that determine (at least)
 the nucleotides at all positions in $\dep(f)$. Thus for any such function $f$
@@ -748,26 +744,23 @@ An \Def{RNA design network} (for sequences of length $n$) is a tuple $\network=(
 \end{itemize}
 \end{definition}
 %
-Note that we call this object a `network', since $\X$ could be interpreted as nodes, where $\F$ defines the (hyper-)edges between those nodes. In this way, it encodes a dependency structure (i.e. a graph or `network'). 
-%The network has the natural interpretation of assigning an energy to sequences. 
-%The \Def{network energy of a sequence} $S$ for the network
-%$\network$ is the sum of the values of all functions in
-%$f\in\F$ evaluated for $S$, i.e.
-%$\sum_{f\in\F} f(S).$
+Notably the term `network' refers to the implied graph structure, namely the dependency graph.
 
 \newcommand{\weighttransform}[2]{{#1}_{||{#2}}}
 
-Note that one can encode the weight $\pi$ of a features in its feature functions, such that all feature functions can be handled uniformly by our algorithms. For this purpose, we define the \Def{transformed feature function} 
-$$\weighttransform{f}{\pi}(S) := ln(\pi)f(S),$$
+For the algorithms, it is convenient to encode the weight $\pi$ of each feature in its feature functions, such that all feature functions can be handled uniformly. For this purpose, we define the \Def{transformed feature function} 
+$\weighttransform{f}{\pi}(S) := \ln(\pi)f(S),$
 such that $exp(-\weighttransform{f}{\pi}(S))=\pi^{-f(S)}.$ 
+%
 
-Concretely, for the design in the base pair model targeting \GCb\% and structures $\R$ with weights $\pi_0,\dots,\pi_k$, we construct the set $\F$ of the network as the collection of
+Let us now specify the concrete set $\F$ of feature functions that we use
+for the design in the base pair model targeting \GCb\% and structures $\R$ with weights $\pi_0,\dots,\pi_k$. $\F$ consists of
 \begin{itemize}
 \item the transformed feature functions $\weighttransform{f^{GC}_i}{\pi_0}$ for our feature $F_0$, i.e.~$GC\%$ ($i=1,\dots,n$)
 \item the transformed feature functions $\weighttransform{f^{R_\ell}_{ij}}{\pi_\ell}$for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
 \end{itemize}
 
-By this choice of $\F$, the sum $\sum_f\in\F f(S)$ (for any $S\in\Sigma^n$) corresponds to the energy in
+By this choice of $\F$, the sum $\sum_{f\in\F} f(S)$ (for any $S\in\Sigma^n$) corresponds to the energy in
 Eq.~$(\ref{eq:mainproblem}),$ using the equivalence of Eq.~(\ref{eq:feature-energy-transformation}). 
 Consequently, the network encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}). Subsequently, we show how to efficiently compute this partition function based on the network.
 
@@ -1142,19 +1135,19 @@ pseudoknot-free target structures.
 \end{figure*}
 
 \subsection*{Generating high-quality seeds for further optimization}
-Next, we empirically evaluated the capacity of \ourprog{} to generate seed sequences for multiple (pseudoknotted) target structures, possibly followed by subsequent local optimizations. As a baseline for comparison, we considered \RNAblueprint~\citep{Hammer2017}, the current leading tool for multiple design.
-As a quality measure, we used the multi-stable design objective function introduced by~\citet{Hammer2017}, defined as:
+We empirically evaluated the capacity of \ourprog{} to generate seed sequences for multiple (pseudoknotted) target structures, possibly followed by subsequent local optimizations. As a baseline for comparison, we considered \RNAblueprint~\citep{Hammer2017}, the current leading tool for multiple design.
+As a quality measure, we applied the objective function that was introduced by~\citet{Hammer2017} for multi-stable design, defined as:
 % \begin{align}
 %   f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
 %    & +\ \xi \frac{2}{k(k-1)} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
 % \end{align}
-\begin{align}
+\begin{multline}
   \label{eq:blueprintobjective}
-    \Obj(S) &= \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \EnsE(S))\notag\\
-   & +\frac{1}{2\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|,
-\end{align}
+    \Obj(S) = \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \EnsE(S))\\
+    +\frac{1}{2\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|,
+\end{multline}
 %
-where $\EnsE(S)$, the \Def{ensemble free energy} of $S$, is computed
+where the free energies $E(S, R)$ as well as the \Def{ensemble free energy} $\EnsE(S)$ of $S$ are computed
 by {\tt RNAfold}~\citep{Lorenz2011} in the pseudoknot-free case; for
 pseudoknotted targets, $\EnsE(S)$ is approximated by the \Def{minimum
   free energy} (MFE) of $S$ as estimated by {\tt HotKnots}~\citep{Ren2005} in the energy model
@@ -1298,7 +1291,7 @@ We show that $\Psi$ is bijective:%
 If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$.
 We discuss only the case $v\in V_1$, where we restricted the nucleotides to $\Ab$ and $\Gb$. Then, $\{f(v),f'(v)\}$ must equal $\{\Ab,\Gb\}$, such that either $v\in\Psi(f)$ or $v\in\Psi(f')$.
 %
-\item $\Psi$ is surjective, i.e. there is a preimage for each element $I\in \IS{G}$. Define $f\in\Design{G}$ as\begin{displaymath}
+b\item $\Psi$ is surjective, i.e. there is a preimage for each element $I\in \IS{G}$. Define $f\in\Design{G}$ as\begin{displaymath}
 f(v) = \left\{\begin{array}{ll} % @{\qquad}ll
 \Ab{} & \text{if $v\in V_1$ and $v\in I$} \\ %&
 \Cb{} & \text{if $v\in V_2$ and $v\in I$} \\
@@ -1328,7 +1321,9 @@ Now we can build on the connection between the two problems to obtain complexity
 \begin{proof}
   Note that $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ is given by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. Thus any efficient algorithm for $\#{\sf BIS}$ on connected instances provides an efficient algorithm for general graphs.
 
-  Let us now hypothesize the existence of a polynomial-time algorithm $\mathcal{A}$ for \NumDesign over strongly-connected graphs $G$. Consider the (polynomial-time) algorithm $\mathcal{A}'$ that first executes $\mathcal{A}$ on $G$ to produce $\NumDesign(G)$, and returns $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$. Clearly $\mathcal{A}'$ solves $\#{\sf BIS}$ in polynomial-time. This means that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
+  Given any algorithm $\mathcal{A}$ that solves \NumDesign over strongly-connected graphs $G$, one can  construct an algorithm $\mathcal{A}'$ that solves $\#{\sf BIS}$: 1) calculate $\NumDesign(G)$ by calling $\mathcal{A}$ 2) return $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$.
+    Obviously, if $\mathcal{A}$ is a polynomial-time algorithm, so is $\mathcal{A'}$.
+  This implies that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
 \end{proof}
 
 \section*{Conclusion}
@@ -1369,9 +1364,9 @@ penalizing a set of alternative helices/structures.
   The authors declare that they have no competing interests.
 
 \section*{Author's contributions}
-  All authors wrote the manuscript.
+  YP and SW initiated the initiated the project and worked out the theoretical framework. YP and WW wrote the core software, while SW and SH contributed additional scripts. SH devised and conducted the computational experiments. All authors wrote, read, and approved the manuscript.
     % Text for this section \ldots
-    % http://www.biomedcentral.com/submissions/editorial-policies\#authorship
+    % https://www.biomedcentral.com/getpublished/editorial-policies#authorship
 
 \section*{Acknowledgements}
 YP is supported
