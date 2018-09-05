@@ -727,6 +727,48 @@ N/A values correspond to data that could not be obtained by the time of this sub
 \caption{Break-down of average MultiDefect values into their two components.}
 \end{figure}
 
+
+\section{Immediate benefits of negative design for positive design}
+
+Already previous work on RNA Design, e.g. INFO-RNA and Incarnation, observed that---briefly put---positive design benefits from negative design. Here, more concretely, we only \emph{demonstrate} this effect (for small examples), where we consider \Def{positive design} as  
+designing RNA sequences that fold with high probability $Pr(R|S)$ into the given target structure $R$; and \Def{negative design}, as generating one or many sequences that have a low energy for $R$.
+
+For a double-stem structure, we produce a uniform and a weighted Boltzmann sampling, each of 1000 sequenes. For each sampled sequence $S$, we determine the Turner energy $E(S,R)$ as well as the
+%difference $E_\Delta(S,R)$ of $E(S,R)$ to the ensemble energy $E_{\text{ens}}(S)$ of $S$ 
+probability $Pr(R|S)$ of the structure $R$ in the ensemble of sequence $S$ 
+(where the energies are calculated in the Turner model using RNAfold). 
+
+Note that low energy $E(S|R)$ is (non-linearly) correlated with high probability $Pr(S|R)$, the probability to see $S$ in the Boltzmann distribution of sequences folding into $R$. Recall that the probability $Pr(R|S)$ can be calculated as $\exp(-E(S,R)/RT)/Z(S)$,
+where $Z(S)=\sum_{R'} \exp(-E(S,R')/RT)$. 
+%
+Consequently, Figure~\ref{fig:negforpos} ultimately illustrates the dependency between $Pr(S|R)$ and $Pr(R|S)$ for uniform samples and low energy samples (where the latter can be efficiently generated due to our Boltzmann sampling strategy). 
+
+% and high energy difference $E_\Delta(S,R)=E_{\text{ens}}(S)-E(S,R)$, with high probability $\Pr(R|S)$.
+% 
+% To see the latter, recall that the \Def{ensemble energy $E_{\text{Ens}}(S)$} is defined as
+% $$
+% E_{\text{ens}}(S) = -RT \ln( Z(S) ),
+% $$ 
+% based on the partition function $Z(S)=\sum_{R'} \exp(-E(S,R')/RT)$
+% such that 
+% $$
+% E(S,R) - E_{\text{ens}}(S) 
+% =
+% -RT \ln Pr(R|S),
+% $$  
+% which can be derived by term transformation 
+% \begin{align*}
+% -RT \ln P(R|S) &= -RT \ln [ exp(-E(S,R)/RT) / Z(S) ] \\&= -RT \ln (exp(-E(S,R)/RT)) - (-RT\ln Z(S))
+% \\&=  E(S,R) - E_{\text{Ens}}(S). 
+% \end{align*}
+
+\begin{figure}
+\textbf{A}~\includegraphicstop[width=0.48\textwidth]{Figs/Plots/doublestem_weight1}%
+\textbf{B}~\includegraphicstop[width=0.48\textwidth]{Figs/Plots/doublestem_weight500}
+\caption{Comparision of (A) Uniform sampling to (B) Boltzmann sampling with weight $\pi=500$. For given structure $R$, we plot the energies $E(S,R)$ of sampled sequences against the probabilities $Pr(R|S)$; the former is controlled by Boltzmann sampling, while the latter is a common positive design objective.}
+\label{fig:negforpos}
+\end{figure}
+
 \bibliographystyle{vancouver}
 %\bibliographystyle{achemnat}
 %\bibliographystyle{plainnat}
