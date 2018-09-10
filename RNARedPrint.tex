@@ -44,7 +44,7 @@
 %%% loading packages, author definitions
 
 %\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
-\documentclass[linenumbers,doublespacing]{bmcart}
+\documentclass{bmcart}
 
 %%% PACKAGES
 
@@ -635,7 +635,7 @@ Consequently, $S$ is \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
 all $(i,j)\in R$.
  
 RNA energy models like the Turner energy model~\citep{Turner2009} define a function that maps a pair of a sequence $S$ and a structure $R$ to a real value, the \Def{energy}. 
-Typically, such \Def{energy functions} are additively composed from \Def{energy contributions} of structure elements (like single base pairs or loops). It is most instructive, and in this context already practically useful, to develop pour approach for the simple \Def{base pair energy model}. This model defines energy contributions $\EbpSym(x,y)$ for pairs $(x,y)\in\Sigma^2$ that specify the energy function as
+Typically, such \Def{energy functions} are additively composed from \Def{energy contributions} of structure elements (like single base pairs or loops). It is most instructive, and in this context already practically useful, to develop our approach for the simple \Def{base pair energy model}. This model defines energy contributions $\EbpSym(x,y)$ for pairs $(x,y)\in\Sigma^2$ that specify the energy function as
 $
 \EbpSym(S,R) = \sum_{(i,j)\in R} \EbpSym(S_i,S_j)
 $
@@ -643,7 +643,7 @@ for each sequence $S\in\Sigma^n$ and structure $R$ for length $n$.
 
 As the structural targets of our design, we fix the set of RNA structures
 $\R:=\{R_1, \dots, R_k\}$ for sequences of length $n$.
-Recall that we aim to generate random sequences that satisfy a number of constraints like the compatibility of paired bases. Moreover, we want to enforce that generated samples satisfy complex properties, which we express in terms of \emph{features}. An example of such a feature is the \GCb\% (the corresponding property of a sequence is to have a specific \GCb\%). The additional properties that we are going to enforce are specific 'target' energies for the single structures $R_1, \dots, R_k$; for this purpose, each such energy is considered as a feature.
+Recall that we aim to generate random sequences that satisfy a number of constraints like the compatibility of paired bases. Moreover, we want to enforce complex properties, which we express in terms of \emph{features}. An example of such a feature is the \GCb\% (the corresponding property of a sequence is to have a specific \GCb\%). The additional properties that we are going to enforce are specific 'target' energies for the single structures $R_1, \dots, R_k$; for this purpose, each such energy is considered as a feature.
 
 Formally, we define a \Def{feature $F$} as function on sequences, which is expressed by summing over an associated set of \Def{feature functions} on sequences, such that
 $$
