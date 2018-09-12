@@ -43,8 +43,8 @@
 
 %%% loading packages, author definitions
 
-%\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
-\documentclass{bmcart}
+\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
+%\documentclass{bmcart}
 
 %%% PACKAGES
 
@@ -757,9 +757,7 @@ for the design in the base pair model targeting \GCb\% and structures $\R$ with 
 \item the transformed feature functions $\weighttransform{f^{R_\ell}_{ij}}{\pi_\ell}$for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
 \end{itemize}
 
-By this choice of $\F$, the sum $\sum_{f\in\F} f(S)$ (for any $S\in\Sigma^n$) corresponds to the energy in
-Eq.~$(\ref{eq:mainproblem}),$ using the equivalence of Eq.~(\ref{eq:feature-energy-transformation}). 
-Consequently, the network encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}). Subsequently, we show how to efficiently compute this partition function based on the network.
+By these definitions, the network encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}); also confer Eq.~(\ref{eq:feature-energy-transformation}). Subsequently, we show how to efficiently compute this partition function based on the network.
 
 \subsection*{Partition function and Boltzmann sampling through stochastic backtrack}\label{sec:PF}
 
