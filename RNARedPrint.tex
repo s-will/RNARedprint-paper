@@ -782,10 +782,7 @@ moreover, we define the \Def{difference positions} from $u$ to an
 adjacent $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
 
 Since our algorithms iterate over specific sets of sequence positions, we moreover define
-the \Def{set of partial sequences $\partseqs(\Y)$ determining $\Y\subseteq\{1,\dots,n\}$} as
-$$
-\partseqs(\Y)=\{ x\mapsto v \mid \text{$x\in\Y$ and $v\in \{\Ab,\Cb,\Gb,\Ub\}$}\}.
-$$
+the \Def{set $\partseqs(\Y)$ of all partial sequences determining the positions of $\Y\subseteq\{1,\dots,n\}$} in all combinations of nucleotides $\{\Ab,\Cb,\Gb,\Ub\}$.
 %
 We assume several properties of the given cluster tree (reflecting $\F$), which otherwise could be easily obtained:
 \begin{itemize}
