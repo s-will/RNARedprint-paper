@@ -282,7 +282,8 @@
 \begin{frontmatter}
 
 \begin{fmbox}
-\dochead{Research}
+\dochead{Methodology}
+%\dochead{Research}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -344,9 +345,9 @@
 % \address{$^{\text{\sf 1}}$University Leipzig, Department of Computer Science and Interdisciplinary Center for Bioinformatics, 04107 Leipzig, Germany;
 \address[id=aff1]{%                           % unique id
   \orgname{Dept.\ Computer Science, and Interdisciplinary Center
-      for Bioinformatics, Univ.\ Leipzig}, 
-  \street{H{\"a}rtelstr.\ 16-18},                     
-  \postcode{D-04107},   
+      for Bioinformatics, Univ.\ Leipzig},
+  \street{H{\"a}rtelstr.\ 16-18},
+  \postcode{D-04107},
   \city{Leipzig}, 
   \cny{Germany}
 }
@@ -419,25 +420,30 @@
 \begin{abstractbox}
 \begin{abstract}
   \parttitle{Background}
-  The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, which can tremendously impact their cost and feasibility. \\
-  \parttitle{Results} We revisit a central ingredient of most in-silico
-  design methods: the sampling of sequences for the design of
-  multi-target structures, possibly including pseudoknots. For this
-  task, we present the efficient, tree decomposition-based algorithm
-  \ourprog{}. Our fixed parameter tractable approach is underpinned by
-  establishing the $\#${\sf P}-hardness of uniform sampling. Modeling
+  The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, which impact their cost and feasibility. \\
+%
+  \parttitle{Results} We devise a novel approach to a central ingredient of most in-silico
+  design methods: the sampling of sequences for multi-target RNA design. For this task, we present the efficient (fixed-parameter tractable) approach \ourprog{}.
+  % 
+  Modeling
   the problem by specializing constraint networks, \ourprog{} supports generic
-  Boltzmann-weighted sampling for arbitrary additive RNA energy
-  models; this enables the generation of RNA sequences meeting
-  specific goals like expected free energies or \GCb-content. Finally,
-  we empirically study general properties of the approach and generate
+  Boltzmann-weighted sampling, which enables the positive design of RNA sequences
+  with specific free energies (for each of multiple, possibly pseudoknotted, target structures) and \GCb-content.
+%
+  Securing the theoretical foundations of our method, we establish the $\#${\sf P}-hardness of uniform sampling. 
+%
+  Finally, we empirically study general properties of the approach and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
-  common design benchmark, including pseudoknots. Generating seed sequences with \ourprog{}, we demonstrate significant improvements over the previously best multi-target sampling strategy.\\
-  
+  common design benchmark, including pseudoknots.
+  Generating seed sequences with \ourprog{}, we demonstrate significant improvements over the previously best multi-target sampling strategy.\\
+%
+  \parttitle{Conclusion} \ourprog{} introduces a novel, flexible and---as we demonstrate--effective approach to multi-target RNA design, which promises broad applicability and extensibility. 
 
   \smallskip
   \noindent
   Our free software is available at: \url{https://github.com/yannponty/RNARedPrint}\\
+
+  \noindent
   Supplementary data are available online.
 \end{abstract}
 
@@ -496,33 +502,32 @@
 %% Background %%
 %%
 \section*{Background}
-\parHead{Design, applications and motivation for multiple design.}Synthetic biology endeavors the engineering of artificial biological
+\parHead{Design, applications and motivation for multiple design.}Synthetic biology strives for the engineering of artificial biological
 systems, promising broad applications in biology, biotechnology and
 medicine. Centrally, this requires the design of biological
 macromolecules with highly specific properties and programmable functions.
-RNA present itself as a well-suited tool for a
-rational design targeting specific functions~\citep{Kushwaha2016}. RNA function is tightly
+RNAs are particularly well-suited tools for
+rational design targeting specific functions~\citep{Kushwaha2016}: on the one hand, RNA function is tightly
 coupled to the formation of secondary structure, as well as changes in
 base pairing propensities and the accessibility of regions, e.g.\ by
-burying or exposing interaction sites~\citep{Rodrigo2014}. At the same time, the
+burying or exposing interaction sites~\citep{Rodrigo2014}; on the other hand, the
 thermodynamics of RNA secondary structure is well understood and its prediction is
 computationally tractable~\citep{McCaskill1990}. Thus,  structure can serve as effective
-proxy for rational design approaches, ultimately targeting catalytic~\citep{Zhang2013} or regulatory functions.
+proxy for rational design approaches, ultimately targeting catalytic or regulatory functions~\citep{Zhang2013}.
 
 \parHead{Motivating multiple RNA design.} The function of many RNAs
 depends on their selective folding into one or several alternative
 conformations. Classic examples include riboswitches, which
-notoriously adopt different stable structures upon binding a specific
+adopt different stable structures upon binding a specific
 ligand. Riboswitches have been a popular application of rational
 design~\citep{Wachsmuth2013,Domin2017}, partly motivated by their
-capacity to act as biosensors~\citep{Findeiss2017}. At the
-co-transcriptional level, certain RNA families feature alternative,
+capacity to act as biosensors~\citep{Findeiss2017}.
+In particular due to the kinetic coupling of RNA folding with RNA transcription, RNA families can feature alternative,
 evolutionarily conserved, transient structures~\citep{Zhu2013}, which
-facilitate the ultimate adoption of functional structures at full
-elongation.  More generally, simultaneous compatibility to multiple
+are essential for the formation of their functional structures.  More generally, simultaneous compatibility to multiple
 structures is a relevant design objective for engineering kinetically
 controlled RNAs, finally targeting prescribed folding pathways. Thus,
-modern applications of RNA design often target multiple structures,
+advanced applications of RNA design often target multiple structures,
 additionally aiming at other features, such as specific
 \GCb-content (\GCb\%) as previously done by~\citet{Reinharz2013} or the presence/absence of
 functionally relevant motifs (either anywhere or at specific
@@ -530,24 +535,21 @@ positions)~\citep{Zhou2013}; these objectives motivate flexible
 computational design methods.
 
 \parHead{On the importance of sampling for design.}
-Many computational methods for RNA design rely on similar overall
-strategies: initially generating one or several \Def{seed} sequences
-and optimizing them subsequently. In many cases, the seed quality was
+Many computational methods for RNA design follow the ``generate-and-optimize'' strategy: they randomly generate one or several \Def{seed} sequences, which are then optimized.
+In many cases, the seed quality was
 found to be critical for the empirical performance of RNA design
-methods~\citep{Levin2012}. For instance, random seed generation
+methods~\citep{Levin2012}. Generally, random seed generation
 improves the prospect of subsequent optimizations, helping to overcome
 local optima of the objective function, and increases the diversity
 across designs~\citep{Reinharz2013}.  For single-target approaches,
-\Software{INFO-RNA}~\citep{Busch2006} made significant improvements
-mainly by starting its local search from the minimum energy sequence
-for the target structure instead of (uniform) random sequences for the
-early \Software{RNAinverse} algorithm~\citep{Hofacker1994}. This
-strategy was later shown to result in unrealistically high
-\GCb\% in designed sequences. To address this issue,
-tools like \Software{antaRNA}~\citep{Kleinkauf2015} and \Software{IncaRNAtion}~\citep{Reinharz2013} control \GCb\%; the latter based on adaptive sampling.
+\Software{INFO-RNA}~\citep{Busch2006} could significantly improve the success rate over \Software{RNAinverse}~\citep{Hofacker1994}, by starting its local search from the minimum energy sequence
+for the target structure. Since this
+strategy typically designs sequences with unrealistically high
+\GCb\%,
+more recent approaches like \Software{antaRNA}~\citep{Kleinkauf2015} and \Software{IncaRNAtion}~\citep{Reinharz2013} explicitly control \GCb\%; the applying adaptive sampling.
 
 \parHead{Specificities and similarities of multi-target design.}
-Specifically, for multi-target design, virtually all available methods~\citep{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} follow the same overall generate-and-optimize strategy.
+Specifically for multi-target design, virtually all available methods~\citep{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} follow the same overall generate-and-optimize strategy.
 %
 Facing the complex sequence constraints induced by multiple targets, early methods such as \Software{Frnakenstein}~\citep{Lyngsoe2012} and \Software{Modena}~\citep{Taneda2015} did not attempt to solve sequence generation systematically, but rely on ad-hoc sampling strategies.
 %
@@ -555,25 +557,25 @@ Recently, the approach \Software{RNAdesign}~\citep{HoenerzuSiederdissen2013}, co
 search within \RNAblueprint{}~\citep{Hammer2017}, solved the
 problem of sampling seeds from the \emph{uniform} distribution for multiple
 target structures. \Software{RNAdesign} adopts a graph coloring perspective,
-coloring the sequence positions with nucleotides, such that the ends of each base pair receive compatible colors. Initially the method decomposes the graph hierarchically using ear decomposition, and then \Def{precomputes} the number of valid sequences
+coloring the sequence positions with nucleotides, such that the ends of each base pair receive compatible colors. Initially the method decomposes the graph hierarchically, using ear decomposition, and then \Def{precomputes} the number of valid sequences
 within each subgraph. The decomposition is then reinterpreted as a
-decision tree to perform a \Def{stochastic backtrack}, inspired by
+decision tree to perform \Def{stochastic backtracking}, inspired by
 Ding and Lawrence~\citep{Ding2003}. Uniform sampling is achieved by
 choosing individual nucleotide assignments with probabilities derived
 from the subsolution counts. The overall complexity of
 \Software{RNAdesign} grows like $\Theta(4^{\gamma})$, where the
-parameter $\gamma$, while bounded only by the length of the designed RNA, is 
+parameter $\gamma$, while bounded only by the length of the designed RNA, is
 typically much lower, due to the decomposition strategy.
 
-\parHead{Motivation.} 
+\parHead{Motivation.}
 While uniform sampling in \Software{RNAdesign}/\RNAblueprint{} turned out to be very successful,
-the work on these tools gave no definitive answer on the \emph{complexity of uniform sampling for multi-target design}. On the one hand, time and space requirements grow exponential in the general case,
+the work on these tools gave no definitive answer on the \emph{complexity of uniform sampling for multi-target design}. While time and space requirements grow exponential in the general case,
 the decomposition strategy seems to allow practical applications.
-Better understanding of the true complexity bounds is still highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still bounded by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step (since stochastic backtrack can be performed in linear time per sample).
+Better understanding of the true complexity bounds is still highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still bounded by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step (note that stochastic backtracking can be performed in linear time per sample).
 
-Consequently, for elucidating the theoretical fundament of RNA design sampling, we first need to clarify, whether efficient approaches for counting could exist. In this work, we show that there can not exists any efficient, polynomial time algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection (up to a trivial symmetry) between valid sequences and independent sets of a bipartite graph, being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
+Consequently, for elucidating the theoretical fundament of RNA design sampling, we first need to clarify, whether efficient counting is possible. In this work, we show that there can not exists any efficient, polynomial time algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph; the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
 
-As already indicated by \Software{RNAdesign}, the hardness of counting (and conjectured hardness of sampling), does still not rule out practically applicable algorithms for counting and sampling.
+As already demonstrated by \Software{RNAdesign}, the hardness of counting (and conjectured hardness of sampling), does still not rule out practically applicable algorithms for counting and sampling.
 Addressing the following questions in more detail and generality led to the practical advances in this work, which extend the expressivity, flexibility, and performance of multi-structure design: \emph{How to sample, in a general way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as \GCb\%, complex sequence constraints, or the energy of individual structures?}
 
 \begin{figure*}[t]
@@ -586,11 +588,10 @@ Addressing the following questions in more detail and generality led to the prac
 
 To answer these questions, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. As main algorithmic contribution of this work, we devise a dynamic programming algorithm, based on a tree decomposition, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
-. We show that these algorithms are \Def{fixed-parameter tractable (FPT)} for the \Def{treewidth},
-in other words: they have polynomial time and space complexity for a fixed treewidth%
+. We show that these algorithms are time and space-efficient depending on a specific property of the tree decomposition, namely the treewidth; in short, our algorithms are fixed-parameter tractable (FPT).%
 % Subsection~\ref{sec:complexity}
 %
-. Due to the generality of our method, we can moreover strongly limit this parameter in practice by using state-of-the-art tree decomposition algorithms.
+Due to the generality of our method, we can moreover strongly limit this parameter in practice by using state-of-the-art tree decomposition algorithms.
 %Uniform sampling is handled as a special case of Boltzmann sampling, where each valid sequence receives energy zero and---consequently---computing partition functions specializes to counting.
 By evaluating (partial) sequences in a specialized weighted constraint
 network, we support arbitrary multi-ary constraints and thus
@@ -782,7 +783,11 @@ moreover, we define the \Def{difference positions} from $u$ to an
 adjacent $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
 
 Since our algorithms iterate over specific sets of sequence positions, we moreover define
-the \Def{set $\partseqs(\Y)$ of all partial sequences determining the positions of $\Y\subseteq\{1,\dots,n\}$} in all combinations of nucleotides $\{\Ab,\Cb,\Gb,\Ub\}$.
+the \Def{set $\partseqs(\Y)$ of all partial sequences determining the positions of $\Y=\subseteq\{1,\dots,n\}$} in all combinations of nucleotides $\{\Ab,\Cb,\Gb,\Ub\}$,
+i.e.~for $\Y=\{y_1,\dots,y_{q}\}$,
+\begin{align*}
+\partseqs(\Y) = \{ & \{ y_i\mapsto v_i \mid i=1,\dots,q \} \\& | (v_1,\dots,v_{q}) \in \{\Ab,\Cb,\Gb,\Ub\}^{q} \}.
+\end{align*}
 %
 We assume several properties of the given cluster tree (reflecting $\F$), which otherwise could be easily obtained:
 \begin{itemize}
@@ -941,7 +946,7 @@ By this theorem, Boltzmann sampling in our setting is fixed parameter tractable 
 As shown in Supp. Mat.~\ref{sec:improvedComplexity}, the complexity of the precomputation can be further improved to
 $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ is the maximum number of connected components represented in a node of the tree decomposition ($c\le w+1$).
 
-\subsection*{Design for expressive energy models.}\label{sec:energy_models}
+\subsection*{Design for expressive energy models}\label{sec:energy_models}
 
 % \paragraph{Nearest-neighbor model.}
 % Let us now consider a simplified version of the nearest-neighbor model, where the free energy contribution  $\Ehp{x,y,s}$ of a hairpin only depends on the closing base pair $(x,y)$, and the contribution $\Eint{x,y,x',y',s}$ of an interior loop depends on its opening/closing bases pairs $(x,y)/(x',y)$, and its length $s$. Moreover, the energy of a multi loops with $s$ inner base pairs and $t$ unpaired base pairs is approximated as $a+b\,s+c\,t$, where $a,b,c$ are predefined constants.
@@ -1034,6 +1039,79 @@ $\varepsilon=0$.
 %The \GCb\% of designs can also be controlled,
 %jointly and in a similar way, as done in
 %\Software{IncaRNAtion}~\citep{Reinharz2013}.
+
+\subsection*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
+%%% reformulate later
+%We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
+Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
+computing the number of valid sequences for a given compatibility
+graph $G=(V,E)$. Note that this problem corresponds to the partition
+function problem in a simple base pair model, assigning $0$ to
+canonical and $\infty$ to non-canonical base pairs and setting
+$\beta>0$, so that any valid structure counts as $1$ in the partition
+function. As previously noted~\citep{Flamm2001}, a set of target
+structures admits a valid design iff its compatibility graph is
+bipartite, which can be tested in linear time.  Moreover, without
+$\{\Gb, \Ub\}$ base pairs, the design of any connected component $C$
+of $G$ would be entirely determined by the assignment of a single of
+its nucleotides. The number of valid designs is thus simply
+$4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
+  connected components}.
+
+The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
+
+To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($E \cap (V_1\times V_2) = E$), noting that hardness over restricted instances implies hardness of the general problem. Moreover note that, as we explained before, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
+
+Let $\IS{G}$ denote the set of all independent sets in the connected graph $G$; recall that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. 
+
+\begin{proposition}
+  $\Design{G}$ and $\IS{G}$ have equal size.
+\end{proposition}
+%
+\begin{proof}
+Consider the mapping $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
+We show that $\Psi$ is bijective:%
+\begin{itemize}
+\item $\Psi$ is injective, i.e. $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
+If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$.
+We discuss only the case $v\in V_1$, where we restricted the nucleotides to $\Ab$ and $\Gb$. Then, $\{f(v),f'(v)\}$ must equal $\{\Ab,\Gb\}$, such that either $v\in\Psi(f)$ or $v\in\Psi(f')$.
+%
+b\item $\Psi$ is surjective, i.e. there is a preimage for each element $I\in \IS{G}$. Define $f\in\Design{G}$ as\begin{displaymath}
+f(v) = \left\{\begin{array}{ll} % @{\qquad}ll
+\Ab{} & \text{if $v\in V_1$ and $v\in I$} \\ %&
+\Cb{} & \text{if $v\in V_2$ and $v\in I$} \\
+\Gb{} & \text{if $v\in V_1$ and $v\not\in I$} \\ %&
+\Ub{} & \text{if $v\in V_2$ and $v\not\in I$}
+\end{array}\right.
+\end{displaymath}
+One easily verifies that $\Psi(f) = I$.
+%
+%for any $(v_1,v_2)\in V_1\times V_2$ by
+%\begin{align*}
+%f(v_1) &= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} &
+%\text{\quad and\quad}&&
+% f(v_2) &= \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S.\end{cases}
+%\end{align*}
+%
+It remains to show that $f$ is a valid design for $G$, i.e. for each $(v, v') \in E$, $\{f(v),f(v')\}\in \B$; please recall that we defined $\B$ as the set of all valid nucleotide pairs.
+Assume there is an edge $(v_1,v_2)\in E$, violating $\{f(v_1),f(v_2)\} \in \B$. Since $G$ is bipartite,
+$v_1\in V_1$ and $v_2\in V_2$, such that $f(v_1)\in\{\Ab,\Gb\}$ and $f(v_2)\in\{\Cb,\Ub\}$. This implies that among all possible $\{f(v_1), f(v_2)\}$ only $\{\Ab,\Cb\}$ is not in $\B$, which in turn requires $v_1\in I$ and $v_2\in I$. Therefore, since $I$ is an independent set, the edge $(v_1,v_2)\in E$ cannot exist. 
+\end{itemize}
+\end{proof}
+
+Now we can build on the connection between the two problems to obtain complexity results for \NumDesign. Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is indeed a well-studied \#{\sf P}-hard problem~\citep{Ge2012}, from which we immediately conclude:
+\begin{corollary}
+  \NumDesign is $\#{\sf P}$-hard
+\end{corollary}
+\begin{proof}
+  Note that $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ is given by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. Thus any efficient algorithm for $\#{\sf BIS}$ on connected instances provides an efficient algorithm for general graphs.
+
+  Given any algorithm $\mathcal{A}$ that solves \NumDesign over strongly-connected graphs $G$, one can  construct an algorithm $\mathcal{A}'$ that solves $\#{\sf BIS}$: 1) calculate $\NumDesign(G)$ by calling $\mathcal{A}$ 2) return $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$.
+    Obviously, if $\mathcal{A}$ is a polynomial-time algorithm, so is $\mathcal{A'}$.
+  This implies that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
+\end{proof}
+
+
 
 
 \section*{Results}\label{sec:results}
@@ -1238,77 +1316,6 @@ optimization run.
 \label{fig:benchmark-results}
 \end{figure}
 
-\subsection*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
-%%% reformulate later
-%We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
-computing the number of valid sequences for a given compatibility
-graph $G=(V,E)$. Note that this problem corresponds to the partition
-function problem in a simple base pair model, assigning $0$ to
-canonical and $\infty$ to non-canonical base pairs and setting
-$\beta>0$, so that any valid structure counts as $1$ in the partition
-function. As previously noted~\citep{Flamm2001}, a set of target
-structures admits a valid design iff its compatibility graph is
-bipartite, which can be tested in linear time.  Moreover, without
-$\{\Gb, \Ub\}$ base pairs, the design of any connected component $C$
-of $G$ would be entirely determined by the assignment of a single of
-its nucleotides. The number of valid designs is thus simply
-$4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
-  connected components}.
-
-The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
-
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($E \cap (V_1\times V_2) = E$), noting that hardness over restricted instances implies hardness of the general problem. Moreover note that, as we explained before, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
-
-Let $\IS{G}$ denote the set of all independent sets in the connected graph $G$; recall that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. 
-
-\begin{proposition}
-  $\Design{G}$ and $\IS{G}$ have equal size.
-\end{proposition}
-%
-\begin{proof}
-Consider the mapping $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
-We show that $\Psi$ is bijective:%
-\begin{itemize}
-\item $\Psi$ is injective, i.e. $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
-If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$.
-We discuss only the case $v\in V_1$, where we restricted the nucleotides to $\Ab$ and $\Gb$. Then, $\{f(v),f'(v)\}$ must equal $\{\Ab,\Gb\}$, such that either $v\in\Psi(f)$ or $v\in\Psi(f')$.
-%
-b\item $\Psi$ is surjective, i.e. there is a preimage for each element $I\in \IS{G}$. Define $f\in\Design{G}$ as\begin{displaymath}
-f(v) = \left\{\begin{array}{ll} % @{\qquad}ll
-\Ab{} & \text{if $v\in V_1$ and $v\in I$} \\ %&
-\Cb{} & \text{if $v\in V_2$ and $v\in I$} \\
-\Gb{} & \text{if $v\in V_1$ and $v\not\in I$} \\ %&
-\Ub{} & \text{if $v\in V_2$ and $v\not\in I$}
-\end{array}\right.
-\end{displaymath}
-One easily verifies that $\Psi(f) = I$.
-%
-%for any $(v_1,v_2)\in V_1\times V_2$ by
-%\begin{align*}
-%f(v_1) &= \begin{cases} \Ab & \text{if }v_1\in S\\ \Gb & \text{if }v_1\notin S\end{cases} &
-%\text{\quad and\quad}&&
-% f(v_2) &= \begin{cases} \Cb & \text{if }v_2\in S\\ \Ub & \text{if }v_2\notin S.\end{cases}
-%\end{align*}
-%
-It remains to show that $f$ is a valid design for $G$, i.e. for each $(v, v') \in E$, $\{f(v),f(v')\}\in \B$; please recall that we defined $\B$ as the set of all valid nucleotide pairs.
-Assume there is an edge $(v_1,v_2)\in E$, violating $\{f(v_1),f(v_2)\} \in \B$. Since $G$ is bipartite,
-$v_1\in V_1$ and $v_2\in V_2$, such that $f(v_1)\in\{\Ab,\Gb\}$ and $f(v_2)\in\{\Cb,\Ub\}$. This implies that among all possible $\{f(v_1), f(v_2)\}$ only $\{\Ab,\Cb\}$ is not in $\B$, which in turn requires $v_1\in I$ and $v_2\in I$. Therefore, since $I$ is an independent set, the edge $(v_1,v_2)\in E$ cannot exist. 
-\end{itemize}
-\end{proof}
-
-Now we can build on the connection between the two problems to obtain complexity results for \NumDesign. Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is indeed a well-studied \#{\sf P}-hard problem~\citep{Ge2012}, from which we immediately conclude:
-\begin{corollary}
-  \NumDesign is $\#{\sf P}$-hard
-\end{corollary}
-\begin{proof}
-  Note that $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ is given by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. Thus any efficient algorithm for $\#{\sf BIS}$ on connected instances provides an efficient algorithm for general graphs.
-
-  Given any algorithm $\mathcal{A}$ that solves \NumDesign over strongly-connected graphs $G$, one can  construct an algorithm $\mathcal{A}'$ that solves $\#{\sf BIS}$: 1) calculate $\NumDesign(G)$ by calling $\mathcal{A}$ 2) return $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$.
-    Obviously, if $\mathcal{A}$ is a polynomial-time algorithm, so is $\mathcal{A'}$.
-  This implies that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
-\end{proof}
-
 \section*{Conclusion}
 %%!!!!!!!!!!!!!!! consider to merge into disciussion
 %Going beyond our encoding of the base pair model energy features and the \GCb\% feature, the contributions provide more generality and allow expressing complex features of the
@@ -1321,15 +1328,17 @@ Now we can build on the connection between the two problems to obtain complexity
 
 
 
-Motivated by the---here established---hardness of the problem, we
-introduced a general framework, and efficient algorithms to design RNA
-sequences that may adopt multiple target structures with fine-tuned
-properties. Our method combines an FPT stochastic sampling algorithm
+We introduced a novel approach, based on a general framework and efficient algorithms, to design RNA
+sequences, while targeting very specific complex properties; in particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
+Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
-controlled by expressive RNA energy models.  Compared to the
+controlled by expressive RNA energy models. Compared to the
 previously best available sampling method (uniform sampling), this
 approach generated significantly better seed sequences for instances
 of an extensive multi-target design benchmark, including pseudoknots.
+%
+To substantiate our work additionally, we establish the $\#${\sf P}-hardness of uniform sampling;
+from a complexity-theoretic point of view, this motivates the FPT, tree decomposition-based nature of our method.  
 
 The presented method enables new possibilities for the sequence generation
 in the field of RNA sequence design, allowing to enforce additional
@@ -1338,10 +1347,10 @@ multiple target structures. Thus it presents a major advance over
 previously applied ad-hoc sampling and even efficient uniform sampling
 strategies. We have shown the practicality of such controlled sequence
 generation, including the case of pseudoknotted structures, and studied its use for multi-target RNA design. Moreover,
-our framework is amenable to extensions, to include more complex sequence
+our framework is extensible to include various more complex sequence
 constraints, including mandatory/forbidden motifs at specific
 positions, or anywhere in the designed sequences, by adapting formal language constructs
-introduced by \citet{Zhou2013}. Negative design principles could also
+introduced by \citet{Zhou2013}. In future work, negative design principles could 
 be explicitly supported at the generation stage, for instance by
 penalizing a set of alternative helices/structures.
 
