@@ -103,7 +103,6 @@
 
 
 %%% macros for notation in DP framework
-\newcommand{\network}{\mathcal{N}}
 \newcommand{\val}{\bar S} % valuation aka assignment
 \newcommand{\dep}{\operatorname{dep}}
 \newcommand{\energy}[1]{\operatorname{e}_{#1}}
@@ -172,8 +171,8 @@
 
 \newcommand{\ourprog}{\Software{RNARedPrint}}
 
-\newcommand{\evalfor}[2]{#1\llbracket{}#2\rrbracket{}}
-\newcommand{\substitute}[2]{#1\!\oplus\!#2}
+\newcommand{\evalfor}[2]{#1(#2)}
+\newcommand{\substitute}[2]{#1\cup#2}
 
 \renewcommand{\gets}{:=}
 
@@ -269,14 +268,18 @@ instance from set RF3.
   \label{fig:td-example}
 \end{figure}
 
-\section{Expressing higher arity functions as cliques in the dependency graph}
+\section{Tree decomposition with hyper-dependencies}
 \label{appsec:dependency-cliques}
 
-Our implementation relies on external tools for the tree decomposition. Therefore it is not trivial that the weight functions (i.e. terms of the energy function) can be captured within the tree decompositions returned by a specific tool. In other words, it is not immediately clear how one can construct a cluster tree from an arbitrary tree decomposition for a given network.
+Our implementation relies on external tools for the tree decomposition, which do not directly support tree decomposition of hyper-graphs. Therefore it is not immediately obvious how 
+to obtain a suitable tree decomposition, such that even multi-ary contributions are respected and a cluster tree can be generated.
 
-Crucially, one can show that, as long as the arguments $\dep(f)$ of a function $f$ form a clique within the network $\network$, then there exists at least one node in the tree decomposition that contains $\dep(f)$, thus allowing the evaluation of $f$.
+Crucially, one can show that, as long as certain vertices of a graph $G$ from a clique, there exists at least one node in the tree decomposition of $G$ that contains all such vertices.
 %
-While this result is certainly part of folklore, we emphasize the importance for the generality of this work and present a brief direct proof for convenience.
+This allows us to generate suitable tree decompositions, which respect the hyper-edges of our dependency graph, by expanding the hyper-edges to cliques, and then calling the tree-decomposer on the resulting (non-hyper-)graph.
+
+%
+While the result is certainly part of folklore, we emphasize the importance for the generality of this work and present a brief direct proof for convenience.
 
 \begin{lemma}\label{lem:cliques}
 Let $G=(V,E)$ be an undirected graph, and  $(T,\chi)$ be a tree decomposition for $G$. For each clique $C\subseteq V$, there exists a node $u \in T$ such that $C\subseteq\chi(u)$.
@@ -325,253 +328,247 @@ Let $G=(V,E)$ be an undirected graph, and  $(T,\chi)$ be a tree decomposition fo
 This result implies that classic tree decomposition algorithms and, more importantly, implementations can be directly re-used to produce decompositions that capture energy models of arbitrary complexity, functions of arbitrary arity. Indeed, it suffices to add a clique, involving the parameters of the function, and Lemma~\ref{lem:cliques} guarantees that the tree decomposition will feature one node to which the function can be associated.
 
 
-\section{Correctness of the FPT partition function algorithm}
-\label{appsec:correctness}
+    \section{Correctness of the FPT partition function algorithm}
+    \label{appsec:correctness}
 
-\begin{theorem}[Correctness of Alg.~\ref{alg:pf}]
-  \label{the:pfalgo-correctness}
-  As computed by Alg.~\ref{alg:pf} for cluster tree $(T,\chi,\phi)$,
-  the messages $\Message{u}{v}$, for all edges $u\to{}v\in T$, yield
-  the partition functions of subtree of $u$ for the partial sequences
-  $\val\in\partseqs(\separator{u}{v})$, i.e. the messages satisfy
-  \begin{equation}
-   \evalfor{\Message{u}{v}}{\val} = \sum_{\val'\in\partseqs(\chi(T_r(u))-\separator{u}{v})} \quad
-   \prod_{f\in\phi(T_r(u))} \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}}),\label{eq:pfalgo-correct}
- \end{equation}
- where $\chi(T_r(u))$ denotes all $\chi$-assigned positions of nodes in $T_r(u)$;
- respectively $\phi(T_r(u))$; all $\phi$-assigned functions.
-%
-\end{theorem}
+    \begin{theorem}[Correctness of Alg.~\ref{alg:pf}]
+      \label{the:pfalgo-correctness}
+      As computed by Alg.~\ref{alg:pf} for cluster tree $(T,\chi,\phi)$,
+      the messages $\Message{u}{v}$, for all edges $u\to{}v\in T$, yield
+      the partition functions of subtree of $u$ for the partial sequences
+      $\val\in\partseqs(\separator{u}{v})$, i.e. the messages satisfy
+      \begin{equation}
+       \evalfor{\Message{u}{v}}{\val} = \sum_{\val'\in\partseqs(\chi(T_r(u))-\separator{u}{v})} \quad
+       \prod_{f\in\phi(T_r(u))} \exp(-\evalfor{f}{\substitute{\val'}{\val}}),\label{eq:pfalgo-correct}
+     \end{equation}
+     where $\chi(T_r(u))$ denotes all $\chi$-assigned positions of nodes in $T_r(u)$;
+     respectively $\phi(T_r(u))$; all $\phi$-assigned functions.
+    %
+    \end{theorem}
 
-\begin{proof}
-  Note that in more concise notation, Alg.~\ref{alg:pf} computes
-  messages such that
-\begin{equation}
-  \evalfor{\Message{u}{v}}{\val} := \sum_{\val'\in\partseqs(\difference{u}{v})}\quad
-  \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}}) \prod_{(w\to{}u) \in T} \evalfor{\Message{w}{u}}{\substitute{\val'}{\val}}.\label{eq:messages}
-\end{equation}
+    \begin{proof}
+      Note that in more concise notation, Alg.~\ref{alg:pf} computes
+      messages such that
+    \begin{equation}
+      \evalfor{\Message{u}{v}}{\val} := \sum_{\val'\in\partseqs(\difference{u}{v})}\quad
+      \prod_{f\in \phi(u) } \exp(-\evalfor{f}{\substitute{\val'}{\val}}) \prod_{(w\to{}u) \in T} \evalfor{\Message{w}{u}}{\substitute{\val'}{\val}}.\label{eq:messages}
+    \end{equation}
 
-Proof by induction on $T$. If $u$ is a leaf, $\chi(r) = \chi(T_r(u))$,
-there are no messages sent to $u$, and $\phi(u) = \phi(T_r(u));$ implying
-Eq.~$(\ref{eq:pfalgo-correct}).$
-%
-Otherwise, since the algorithm traverses edges in postorder, $u$ received from its children
-$w_1,\dots,w_q$ the messages $\Message{w_1}{u}, \dots, \Message{w_q}{u}$, which satisfy Eq.~$(\ref{eq:pfalgo-correct})$ (induction hypothesis). Let $\val\in\partseqs(\separator{u}{v})$; then, $\evalfor{\Message{u}{v}}{\val}$ is computed by the algorithm according to Eq.~$(\ref{eq:messages})$. We rewrite as follows
-\begin{align*}
-  & \sum_{\val'\in\partseqs(\difference{u}{v})}\quad
-    \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})
-    \prod_{(w\to{}u) \in T} \evalfor{\Message{w}{u}}{\substitute{\val'}{\val}}\\
-  & = \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
-    \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})
-    \prod_{i=1}^q \evalfor{\Message{w_i}{u}}{\substitute{\val'}{\val}}\\
-  & =_{IH}
-    \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
-    \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})
-    \prod_{i=1}^q \sum_{\val''\in\partseqs(\chi(T_r(w_i))-\separator{w_i}{u})} \quad
-    \prod_{f\in\phi(T_r(w_i))} \exp(-\beta \evalfor{f}{\substitute{\val''}{\substitute{\val'}{\val}}}) \\
-& =_{*}
-    \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
-  \sum_{\val''\in\partseqs(\bigcup_{i=1}^q\chi(T_r(w_i))-\separator{w_i}{u})} \quad
-  \prod_{f\in \phi(u) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})
-  \prod_{f\in\phi(T_r(w_i))} \exp(-\beta \evalfor{f}{\substitute{\val''}{\val'} | \val}) \\
-  & =_{(**)} \sum_{\val'\in\partseqs(\chi(T_r(u))-\separator{u}{v})}\quad
-    \prod_{f\in \phi(T_r(u)) } \exp(-\beta \evalfor{f}{\substitute{\val'}{\val}})\\
-\end{align*}
-To see (*) and (**), we observe:
-\begin{itemize}
-\item The sets $\chi(u)-\separator{u}{v}$ and
-  $\chi(T_r(w_i))-\separator{w_i}{u}$ are all disjoint due to
-  Def.~\ref{def:treedecomp}, property 2. First, this property implies
-  that any shared position between the subtrees of $w_i$ and $w_j$
-  must be in $\chi(w_i)$, $\chi(w_j)$ and $\chi(u)$, thus the
-  positions of $\chi(T_r(w_i))-\separator{w_i}{u}$ are
-  disjoint. Second, if a position $\chi(T_r(w_i))$ occurs in
-  $\chi(u)$, it must occur in $\chi(w_i)$ and consequently in $\separator{u}{v}$.
-\item The union of the sets $\chi(u)-\separator{u}{v}$ and
-  $\chi(T_r(w_i))-\separator{w_i}{u}$ is $\chi(T_r(u))-\separator{u}{v}).$
-\end{itemize}
+    Proof by induction on $T$. If $u$ is a leaf, $\chi(r) = \chi(T_r(u))$,
+    there are no messages sent to $u$, and $\phi(u) = \phi(T_r(u));$ implying
+    Eq.~$(\ref{eq:pfalgo-correct}).$
+    %
+    Otherwise, since the algorithm traverses edges in postorder, $u$ received from its children
+    $w_1,\dots,w_q$ the messages $\Message{w_1}{u}, \dots, \Message{w_q}{u}$, which satisfy Eq.~$(\ref{eq:pfalgo-correct})$ (induction hypothesis). Let $\val\in\partseqs(\separator{u}{v})$; then, $\evalfor{\Message{u}{v}}{\val}$ is computed by the algorithm according to Eq.~$(\ref{eq:messages})$. We rewrite as follows
+    \begin{align*}
+      & \sum_{\val'\in\partseqs(\difference{u}{v})}\quad
+        \prod_{f\in \phi(u) } \exp(-\evalfor{f}{\substitute{\val'}{\val}})
+        \prod_{(w\to{}u) \in T} \evalfor{\Message{w}{u}}{\substitute{\val'}{\val}}\\
+      & = \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
+        \prod_{f\in \phi(u) } \exp(-\evalfor{f}{\substitute{\val'}{\val}})
+        \prod_{i=1}^q \evalfor{\Message{w_i}{u}}{\substitute{\val'}{\val}}\\
+      & =_{IH}
+        \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
+        \prod_{f\in \phi(u) } \exp(-\evalfor{f}{\substitute{\val'}{\val}})
+        \prod_{i=1}^q \sum_{\val''\in\partseqs(\chi(T_r(w_i))-\separator{w_i}{u})} \quad
+        \prod_{f\in\phi(T_r(w_i))} \exp(-\evalfor{f}{\substitute{\val''}{\substitute{\val'}{\val}}}) \\
+    & =_{*}
+        \sum_{\val'\in\partseqs(\chi(u)-\separator{u}{v})}\quad
+      \sum_{\val''\in\partseqs(\bigcup_{i=1}^q\chi(T_r(w_i))-\separator{w_i}{u})} \quad
+      \prod_{f\in \phi(u) } \exp(-\evalfor{f}{\substitute{\val'}{\val}})
+      \prod_{f\in\phi(T_r(w_i))} \exp(-\evalfor{f}{\substitute{\val''}{\val'} \cup \val}) \\
+      & =_{(**)} \sum_{\val'\in\partseqs(\chi(T_r(u))-\separator{u}{v})}\quad
+        \prod_{f\in \phi(T_r(u)) } \exp(-\evalfor{f}{\substitute{\val'}{\val}})\\
+    \end{align*}
+    To see (*) and (**), we observe:
+    \begin{itemize}
+    \item The sets $\chi(u)-\separator{u}{v}$ and
+      $\chi(T_r(w_i))-\separator{w_i}{u}$ are all disjoint due to
+      Def.~\ref{def:treedecomp}, property 2. First, this property implies
+      that any shared position between the subtrees of $w_i$ and $w_j$
+      must be in $\chi(w_i)$, $\chi(w_j)$ and $\chi(u)$, thus the
+      positions of $\chi(T_r(w_i))-\separator{w_i}{u}$ are
+      disjoint. Second, if a position $\chi(T_r(w_i))$ occurs in
+      $\chi(u)$, it must occur in $\chi(w_i)$ and consequently in $\separator{u}{v}$.
+    \item The union of the sets $\chi(u)-\separator{u}{v}$ and
+      $\chi(T_r(w_i))-\separator{w_i}{u}$ is $\chi(T_r(u))-\separator{u}{v}).$
+    \end{itemize}
 
-\end{proof}
+    \end{proof}
 
-\section{General complexity of the partition function computation by cluster tree elimination and generation of samples}
-\label{appsec:algcomplexity}
+    \section{General complexity of the partition function computation by cluster tree elimination and generation of samples}
+    \label{appsec:algcomplexity}
 
-\begin{proposition}
-  \label{prop:general-complexity}
-Given a cluster tree $(T,\chi,\phi)$, $T=(V,E)$ of the RNA design network $\network=(\X,\F)$ with treewidth $w$ and maximum separator size $s$, computing the partition function by Algorithm~\ref{alg:pf} takes $O((|F|+|V|)\cdot 4^{w+1})$ time and $O(|V| 4^s)$ space (for storing all messages). The sampling step has time complexity of $O((|F|+|V|)\cdot 4^D)$ per sample.
-\end{proposition}
+    \begin{proposition}
+      \label{prop:general-complexity}
+    Given a cluster tree $(T,\chi,\phi)$, $T=(V,E)$ of the set of contributions $\F{}$ with treewidth $w$ and maximum separator size $s$, computing the partition function by Algorithm~\ref{alg:pf} takes $O((|F|+|V|)\cdot 4^{w+1})$ time and $O(|V| 4^s)$ space (for storing all messages). The sampling step has time complexity of $O((|F|+|V|)\cdot 4^D)$ per sample.
+    \end{proposition}
 
-\begin{proof}[Proposition~\ref{prop:general-complexity}]
-Let $d_u$ denote the degree of node $u$ in $T$, $s_u$ is the size of the separator between
-$u$ and its parent in $T$ rooted at $r$. For each node in the cluster tree, Alg.~\ref{alg:pf} computes one message by combining $(|\phi(u)|+d_u-1)$ functions, each time enumerating $4^{|\chi(u)|}$ combinations; Alg.~\ref{alg:sampling} computes $4^{|\chi{u}|-s_u}$ partition functions each time combining $(|\phi(u)|+d_u-1)$ functions.  $4^{|\chi(u)|}$ is bound by $4^{w+1}$ and $4^{|\chi{u}|-s_u}$ by $4^D$; moreover $\sum_{u\in V} (|\phi(u)|+d_u-1) = |F|+|V|-1$.
-\end{proof}
+    \begin{proof}[Proposition~\ref{prop:general-complexity}]
+    Let $d_u$ denote the degree of node $u$ in $T$, $s_u$ is the size of the separator between
+    $u$ and its parent in $T$ rooted at $r$. For each node in the cluster tree, Alg.~\ref{alg:pf} computes one message by combining $(|\phi(u)|+d_u-1)$ functions, each time enumerating $4^{|\chi(u)|}$ combinations; Alg.~\ref{alg:sampling} computes $4^{|\chi{u}|-s_u}$ partition functions each time combining $(|\phi(u)|+d_u-1)$ functions.  $4^{|\chi(u)|}$ is bound by $4^{w+1}$ and $4^{|\chi{u}|-s_u}$ by $4^D$; moreover $\sum_{u\in V} (|\phi(u)|+d_u-1) = |F|+|V|-1$.
+    \end{proof}
 
 
-\section{Exploiting constraint consistency to reduce the complexity}\label{sec:improvedComplexity}
+    \section{Exploiting constraint consistency to reduce the complexity}\label{sec:improvedComplexity}
 
-%\textcolor{red}{\textbf{SW: Simpler alternative to
-%    Sec.~\ref{sec:first-improvedComplexity}. Note also that the use of
-%    variables in Sec.~\ref{sec:first-improvedComplexity} conflicts
-%    with the (recent) specialization of constraint networks to RNA design
-%    networks.}}
+    While Alg.~\ref{alg:pf} computes messages values for
+    \emph{all} possible combinations of nucleotides for the positions
+    % in the separator set,
+    % yp: for all the positions in a node, right?
+    in a node,
+    we observe here that many such combinations are \emph{not} required for computing all relevant
+    partition functions. In particular, the algorithm can be restricted to
+    consider only \Def{valid} combinations, satisfying the (hard)
+    constraints induced by valid base pairs.
 
-While Alg.~\ref{alg:pf} computes messages values for
-\emph{all} possible combinations of nucleotides for the positions
-% in the separator set,
-% yp: for all the positions in a node, right?
-in a node,
-we observe here that many such combinations are \emph{not} required for computing all relevant
-partition functions. In particular, the algorithm can be restricted to
-consider only \Def{valid} combinations, satisfying the (hard)
-constraints induced by valid base pairs.
+    The given structures in the RNA design problem impose constraints on
+    the sequences for ensuring canonical (aka complementary)
+    base pairing. These constraints can be exploited in a particularly
+    simple and effective way to reduce the complexity.  As previously
+    noted by \citet{Flamm2001}, the base pair complementarity induces a
+    bi-partition of each connected component within the base pair
+    dependency graph, such that the nucleotides assigned to the two set of
+    nodes in the partition are restricted to values in $\{\Ab,\Gb\}$ and
+    $\{\Cb,\Ub\}$ respectively. We call a partial sequence \Def{cc-valid},
+    iff its determined positions are consistent with such a separation for
+    all determined positions of the same connected component.
 
-The given structures in the RNA design problem impose constraints on
-the sequences for ensuring canonical (aka complementary)
-base pairing. These constraints can be exploited in a particularly
-simple and effective way to reduce the complexity.  As previously
-noted by \citet{Flamm2001}, the base pair complementarity induces a
-bi-partition of each connected component within the base pair
-dependency graph, such that the nucleotides assigned to the two set of
-nodes in the partition are restricted to values in $\{\Ab,\Gb\}$ and
-$\{\Cb,\Ub\}$ respectively. We call a partial sequence \Def{cc-valid},
-iff its determined positions are consistent with such a separation for
-all determined positions of the same connected component.
+    % Let $CC=\{cc_1$, $cc_2, \dots\}$ denote the vertex sets of the
+    % connected components of the base pair dependency graph. In this graph,
+    % let each component have the bi-partition $cc_i=cc^0_i\cup cc^1_i$.
 
-% Let $CC=\{cc_1$, $cc_2, \dots\}$ denote the vertex sets of the
-% connected components of the base pair dependency graph. In this graph,
-% let each component have the bi-partition $cc_i=cc^0_i\cup cc^1_i$.
+    One can now modify Alg.~\ref{alg:pf}, on a tree decomposition
+    $(T,\chi)$, such that the values of messages
+    $\Message{u}{v}$ are computed only for cc-valid
+    partial sequences $\val\in\partseqs(\separator{u}{v})$. Moreover, the
+    loop over $\val'\in\partseqs(\difference{u}{v})$ is restricted, such
+    that $\substitute{\val}{\val'}$ are cc-valid. Analogous restrictions are
+    then implemented in the sampling algorithm Alg.~\ref{alg:sampling}.
 
-One can now modify Alg.~\ref{alg:pf}, on a tree decomposition
-$(T,\chi)$, such that the values of messages
-$\Message{u}{v}$ are computed only for cc-valid
-partial sequences $\val\in\partseqs(\separator{u}{v})$. Moreover, the
-loop over $\val'\in\partseqs(\difference{u}{v})$ is restricted, such
-that $\substitute{\val}{\val'}$ are cc-valid. Analogous restrictions are
-then implemented in the sampling algorithm Alg.~\ref{alg:sampling}.
-
-The correctness of the modified algorithm follows from the same
-induction argument, where the message computation over one node
-evaluates messages from its children only at cc-valid partial
-sequences. The result of this computation is a message, which corresponds
-to the partition function, restricted to cc-valid partial sequences.
-Since invalid sequences have infinite energy, they do not contribute to
-the partition function, and the partition function restricted to cc-valid sequences coincides
-with the initial one.
+    The correctness of the modified algorithm follows from the same
+    induction argument, where the message computation over one node
+    evaluates messages from its children only at cc-valid partial
+    sequences. The result of this computation is a message, which corresponds
+    to the partition function, restricted to cc-valid partial sequences.
+    Since invalid sequences have infinite energy, they do not contribute to
+    the partition function, and the partition function restricted to cc-valid sequences coincides
+    with the initial one.
 
 
 
-This restriction drastically improves the time
-complexity. Indeed, for any given node $v$, the original algorithm sends message for
- $\chi(v):=\substitute{\val}{\val'}$ such that
-$\val\in\partseqs(\separator{u}{v})$ and
-$\val'\in\partseqs(\difference{u}{v})$, while the modified algorithm
-only considers cc-valid assignments for $\chi(v)$. Remark that, in any connected component $cc$,
-assigning some nucleotide to a position reduces cc-valid assignments to (at most)
-two alternatives for each of the $|cc|-1$ remaining positions. It follows that, for a node $v$ featuring positions from $\#cc(v)$ distinct connected components $\{cc_1,cc_2\ldots\}$ in the base pair dependency graph, the number of cc-valid assignments to positions in $\chi(v)$ is exactly
-$$4^{\#cc(v)}\prod_{i=1}^{\#cc(v)} 2^{|cc_i|-1} = 2^{\#cc(v)}\, 2^{|\chi(v)|} \in \Theta(2^{\#cc}\, 2^{w+1}),$$
-for a single node, where $\#cc$ is the total number of connected components in the base pair dependency graph, and $w$ is the tree-width of the tree decomposition $T$. Since the number of nodes in $T$ is in $\Theta(n)$, and the number of atomic energy contributions associated with $k$ structures is in $\mathcal{O}(k\,n)$, then the overall complexity grows like $\Theta(n\, k\, 2^{\#cc}\, 2^{w+1})$.
+    This restriction drastically improves the time
+    complexity. Indeed, for any given node $v$, the original algorithm sends message for
+     $\chi(v):=\substitute{\val}{\val'}$ such that
+    $\val\in\partseqs(\separator{u}{v})$ and
+    $\val'\in\partseqs(\difference{u}{v})$, while the modified algorithm
+    only considers cc-valid assignments for $\chi(v)$. Remark that, in any connected component $cc$,
+    assigning some nucleotide to a position reduces cc-valid assignments to (at most)
+    two alternatives for each of the $|cc|-1$ remaining positions. It follows that, for a node $v$ featuring positions from $\#cc(v)$ distinct connected components $\{cc_1,cc_2\ldots\}$ in the base pair dependency graph, the number of cc-valid assignments to positions in $\chi(v)$ is exactly
+    $$4^{\#cc(v)}\prod_{i=1}^{\#cc(v)} 2^{|cc_i|-1} = 2^{\#cc(v)}\, 2^{|\chi(v)|} \in \Theta(2^{\#cc}\, 2^{w+1}),$$
+    for a single node, where $\#cc$ is the total number of connected components in the base pair dependency graph, and $w$ is the tree-width of the tree decomposition $T$. Since the number of nodes in $T$ is in $\Theta(n)$, and the number of atomic energy contributions associated with $k$ structures is in $\mathcal{O}(k\,n)$, then the overall complexity grows like $\Theta(n\, k\, 2^{\#cc}\, 2^{w+1})$.
 
-%For each connected component having at least a position $i$ in $\chi(v)$,
-%the algorithm considers assigning any possible nucleotide $x\in \Sigma$ to $i$ and restricts
-% the assignment of  for
-%any remaining position $j$ of the same connected component, it restricts the domain of $j$ to base-pairs that are consistent with the parity .
-%
-%
-%Let $c(v)$ be the number of connected components involving positions
-%in $\chi(v)$; then, the first stage enumerates $2^{c(v)}$
-%combinations. For each such combination, the second stage enumerates
-%only $2^{|\chi(v)|}$ partial sequences, since there remain only two
-%possible nucleotide choices for each position. All message values for
-%node $v$ are thus computed in time
-%$\Theta(2^{c(v)+|\chi(v)|})$. Consequently, the total time complexity
-%of the modified algorithm is $$O(nk2^{\hat w}),$$ where $n$ is the RNA
-%length, $k$ is the number of structures, and
-%$\hat w := \max_{v\in T} c(v)+|\chi(v)|$.
-%%
-%From this directly follows the slightly looser complexity
-%bound $$O(nk2^{w+1}2^{c})$$ in terms of treewidth $w$ and the maximum
-%number $c$ of connected components represented in a node of the tree
-%decomposition.  Notably, $\hat w$, as well as $w+1+c$, can not exceed
-%$2(w+1)$, since $c\leq w+1$. Consequently the modified algorithm does
-%never increase the original complexity.
+    %For each connected component having at least a position $i$ in $\chi(v)$,
+    %the algorithm considers assigning any possible nucleotide $x\in \Sigma$ to $i$ and restricts
+    % the assignment of  for
+    %any remaining position $j$ of the same connected component, it restricts the domain of $j$ to base-pairs that are consistent with the parity .
+    %
+    %
+    %Let $c(v)$ be the number of connected components involving positions
+    %in $\chi(v)$; then, the first stage enumerates $2^{c(v)}$
+    %combinations. For each such combination, the second stage enumerates
+    %only $2^{|\chi(v)|}$ partial sequences, since there remain only two
+    %possible nucleotide choices for each position. All message values for
+    %node $v$ are thus computed in time
+    %$\Theta(2^{c(v)+|\chi(v)|})$. Consequently, the total time complexity
+    %of the modified algorithm is $$O(nk2^{\hat w}),$$ where $n$ is the RNA
+    %length, $k$ is the number of structures, and
+    %$\hat w := \max_{v\in T} c(v)+|\chi(v)|$.
+    %%
+    %From this directly follows the slightly looser complexity
+    %bound $$O(nk2^{w+1}2^{c})$$ in terms of treewidth $w$ and the maximum
+    %number $c$ of connected components represented in a node of the tree
+    %decomposition.  Notably, $\hat w$, as well as $w+1+c$, can not exceed
+    %$2(w+1)$, since $c\leq w+1$. Consequently the modified algorithm does
+    %never increase the original complexity.
 
-Finally, we remark that even stronger time savings could be possible
-in practice, since cc-valid partial sequences can still violate
-complementarity constraints, e.g. by assigning C and A to positions in
-different sets of a partition, thus satisfying the bi-partition
-constraints, where the positions base pair directly, rendering the
-partial sequence invalid. Moreover, applications of the sampling
-framework can introduce additional constraints that further reduce
-the number of valid partial subsequences. However, exploiting all such
-constraints, in a complete and general way, would likely cause significant
-implementation overhead, while not significantly improving
-the asymptotic complexity.
+    Finally, we remark that even stronger time savings could be possible
+    in practice, since cc-valid partial sequences can still violate
+    complementarity constraints, e.g. by assigning C and A to positions in
+    different sets of a partition, thus satisfying the bi-partition
+    constraints, where the positions base pair directly, rendering the
+    partial sequence invalid. Moreover, applications of the sampling
+    framework can introduce additional constraints that further reduce
+    the number of valid partial subsequences. However, exploiting all such
+    constraints, in a complete and general way, would likely cause significant
+    implementation overhead, while not significantly improving
+    the asymptotic complexity.
 
 
-%\section{Exploiting the bipartite nature of base pair dependency
-%  graphs to reduce the complexity}\label{sec:first-improvedComplexity}
-%\textcolor{red}{\textbf{TODO: discuss and merge with/replace by previous Section}}
-%
-%As already noted by \citet{Flamm2001}, the requirement of canonical
-%base pairing induces a bi-partition of each connected component within
-%the base pair dependency graph, such that the nucleotides assigned to
-%the two set of nodes in the partition are restricted to values
-%$\{\Ab,\Gb\}$ and $\{\Cb,\Ub\}$ respectively.
-%%
-%It follows that, within each connected component of the base pair
-%dependency graph, the assignment of any position drastically restricts
-%the domain of the remaining positions, \emph{i.e.} they may now be
-%assigned to only 2 out of the original 4 nucleotides.
-%\newcommand{\Parity}[1]{p_{#1}} To exploit this property, and further
-%reduce the exponential factor of the complexity, we introduce the
-%notion of \Def{parity} of a vertex/position, whereby vertices of
-%\Def{even} (resp. \Def{odd}) polarities may only be assigned values in
-%$\{\Ab,\Gb\}$ (resp. $\{\Cb,\Ub\}$). Neighbors of an odd vertex must
-%be even and vice versa, so the choice of a parity for any single
-%vertex caracterizes the parity of all vertices in a bipartite
-%connected subgraph.
-%
-%Let $CC=\{cc_1,cc_2,\ldots\}$ denote the connected components of the base pair dependency graph, we consider a modified version of the cluster tree, obtained by:
-%\begin{enumerate}
-%\item Electing, in each connected component $cc_i$, the first position $v_i^\star$ from the component encountered from the root in a pre-order traversal of the cluster tree;\label{step:election}
-%\item Introducing new variables $\mathcal{P}=\{\Parity{1},\ldots,\Parity{|CC|}\}$, representing the parity of elected vertices;
-%\item Adding, to each node $x$ in the tree decomposition, the parity variables of connected components that are represented in the node, \emph{i.e.} such that at least one of the positions in the connected component is in $\chi(x)$; \label{step:addparities}
-%\item Introducing, in the tree decomposition, a chain of intermediate nodes to fix cases where more than a single (parity) variable is introduced between a parent and its child.\label{step:intermediates}
-%\end{enumerate}
-%Note that, since connected components correspond to connected subtrees in the tree decomposition, then adding those variables preserves the properties of a tree decomposition. Also, each node in the former cluster tree introduces at most one new variable compared to its parent, so the elected node is uniquely defined by the rule stated in Step~\ref{step:election}. Finally, we note that the parity of a variable $v\in cc_i$ is entirely characterized by the parity $\Parity{i}$ of $v_i^\star$, and the parity of the distance between $v$ and $v_i^\star$ in the base pair dependency graph. Namely, the parity of $v$ is $\Parity{i}$ if the distance between $v$ and $v^{\star}_i$ is even, and opposite to $\Parity{i}$ if odd. It follows that, thanks to the new variables introduced in Step~\ref{step:addparities}, the domain of each of the original variables can be reduced to two alternatives instead of the original four.
-%
-%The computation of Alg.~\ref{alg:pf} on the new cluster tree, considering reduced assignments for position variables and additional odd/even assignments for parity variables, has complexity in $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $n$ is the RNA length, $k$ is the number of structures, $w$ is the tree-width of the unmodified cluster tree, and $c$ is the maximum number of connected components represented in a node. It should be noted that $c\le \min(|CC|,w+1)$, so that the new complexity cannot be larger than the one stated in Th.~\ref{th:complexities}. Also, note that the number of nodes introduced by Step~\ref{step:intermediates} is bounded by $|CC|$, so that the introduction of these intermediate nodes does not impact the worst-case complexity. For the same reason, the complexity of the stochastic backtrack remains unchanged.
+    %\section{Exploiting the bipartite nature of base pair dependency
+    %  graphs to reduce the complexity}\label{sec:first-improvedComplexity}
+    %\textcolor{red}{\textbf{TODO: discuss and merge with/replace by previous Section}}
+    %
+    %As already noted by \citet{Flamm2001}, the requirement of canonical
+    %base pairing induces a bi-partition of each connected component within
+    %the base pair dependency graph, such that the nucleotides assigned to
+    %the two set of nodes in the partition are restricted to values
+    %$\{\Ab,\Gb\}$ and $\{\Cb,\Ub\}$ respectively.
+    %%
+    %It follows that, within each connected component of the base pair
+    %dependency graph, the assignment of any position drastically restricts
+    %the domain of the remaining positions, \emph{i.e.} they may now be
+    %assigned to only 2 out of the original 4 nucleotides.
+    %\newcommand{\Parity}[1]{p_{#1}} To exploit this property, and further
+    %reduce the exponential factor of the complexity, we introduce the
+    %notion of \Def{parity} of a vertex/position, whereby vertices of
+    %\Def{even} (resp. \Def{odd}) polarities may only be assigned values in
+    %$\{\Ab,\Gb\}$ (resp. $\{\Cb,\Ub\}$). Neighbors of an odd vertex must
+    %be even and vice versa, so the choice of a parity for any single
+    %vertex caracterizes the parity of all vertices in a bipartite
+    %connected subgraph.
+    %
+    %Let $CC=\{cc_1,cc_2,\ldots\}$ denote the connected components of the base pair dependency graph, we consider a modified version of the cluster tree, obtained by:
+    %\begin{enumerate}
+    %\item Electing, in each connected component $cc_i$, the first position $v_i^\star$ from the component encountered from the root in a pre-order traversal of the cluster tree;\label{step:election}
+    %\item Introducing new variables $\mathcal{P}=\{\Parity{1},\ldots,\Parity{|CC|}\}$, representing the parity of elected vertices;
+    %\item Adding, to each node $x$ in the tree decomposition, the parity variables of connected components that are represented in the node, \emph{i.e.} such that at least one of the positions in the connected component is in $\chi(x)$; \label{step:addparities}
+    %\item Introducing, in the tree decomposition, a chain of intermediate nodes to fix cases where more than a single (parity) variable is introduced between a parent and its child.\label{step:intermediates}
+    %\end{enumerate}
+    %Note that, since connected components correspond to connected subtrees in the tree decomposition, then adding those variables preserves the properties of a tree decomposition. Also, each node in the former cluster tree introduces at most one new variable compared to its parent, so the elected node is uniquely defined by the rule stated in Step~\ref{step:election}. Finally, we note that the parity of a variable $v\in cc_i$ is entirely characterized by the parity $\Parity{i}$ of $v_i^\star$, and the parity of the distance between $v$ and $v_i^\star$ in the base pair dependency graph. Namely, the parity of $v$ is $\Parity{i}$ if the distance between $v$ and $v^{\star}_i$ is even, and opposite to $\Parity{i}$ if odd. It follows that, thanks to the new variables introduced in Step~\ref{step:addparities}, the domain of each of the original variables can be reduced to two alternatives instead of the original four.
+    %
+    %The computation of Alg.~\ref{alg:pf} on the new cluster tree, considering reduced assignments for position variables and additional odd/even assignments for parity variables, has complexity in $\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $n$ is the RNA length, $k$ is the number of structures, $w$ is the tree-width of the unmodified cluster tree, and $c$ is the maximum number of connected components represented in a node. It should be noted that $c\le \min(|CC|,w+1)$, so that the new complexity cannot be larger than the one stated in Th.~\ref{th:complexities}. Also, note that the number of nodes introduced by Step~\ref{step:intermediates} is bounded by $|CC|$, so that the introduction of these intermediate nodes does not impact the worst-case complexity. For the same reason, the complexity of the stochastic backtrack remains unchanged.
 
-\section{Illustrating multi-dimensional Boltzmann sampling for three pseudoknot-free target structures}
+    \section{Illustrating multi-dimensional Boltzmann sampling for three pseudoknot-free target structures}
 
-In analogy to Fig.~\ref{fig:energydist-pk} of the main text,
-Fig.~\ref{fig:energydist} illustrates our multi-dimensional sampling
-strategy for three pseudoknot-free target structures (example instance
-from the \texttt{Modena} benchmark). The figure shows Turner energy
-distributions of single structures from sampling with different weight
-parameters, where weights are trained to target specific energies. For
-comparison, the figure shows distributions from uniform and Boltzmann
-sampling at respective homogenous weights $1$ and $e^\beta$.
+    In analogy to Fig.~\ref{fig:energydist-pk} of the main text,
+    Fig.~\ref{fig:energydist} illustrates our multi-dimensional sampling
+    strategy for three pseudoknot-free target structures (example instance
+    from the \texttt{Modena} benchmark). The figure shows Turner energy
+    distributions of single structures from sampling with different weight
+    parameters, where weights are trained to target specific energies. For
+    comparison, the figure shows distributions from uniform and Boltzmann
+    sampling at respective homogenous weights $1$ and $e^\beta$.
 
-Fig.~\ref{fig:gc-content} shows the distributions of the GC content of the samples, while targeting different combinations of energies in this experiment. For completeness, we also report corresponding results for the analogous experiment from the main text. We observe that in addition to the target energies, also the feature $\GCb\%$ is narrowly defined by the multi-dimensional Boltzmann sampling strategy. In comparison, for uniform sampling and Boltzmann sampling at high weight $e^\beta$, where the \GCb\% is not controlled, we obtain much broader distributions. 
+    Fig.~\ref{fig:gc-content} shows the distributions of the GC content of the samples, while targeting different combinations of energies in this experiment. For completeness, we also report corresponding results for the analogous experiment from the main text. We observe that in addition to the target energies, also the feature $\GCb\%$ is narrowly defined by the multi-dimensional Boltzmann sampling strategy. In comparison, for uniform sampling and Boltzmann sampling at high weight $e^\beta$, where the \GCb\% is not controlled, we obtain much broader distributions. 
 
-\begin{figure*}[t]
-  \begin{center}
-    %{\sf \bfseries A}\includegraphicstop[width=0.32\textwidth]{Figs/offset2}\hspace{.5cm}
-    %{\sf \bfseries B}
-    \includegraphicstop[width=0.8\textwidth]{Figs/energy_distribution}
-  \end{center}
-  \caption{%
-    Targeting specific energies using multi-dimensional Boltzmann
-    sampling. We show the Turner energy distributions for
-    three target structures R1, R2 and R3. By
-    targeting the respective free energies $(-40,-40,-20)$ and
-    $(-20,-20,-20)$ for the target structures (annotated in red and
-    blue, resepectively), we demonstrate the
-    effectivity of our adaptive multi-dimensional Boltzmann sampling
-    procedure; moreover, for comparison, the distributions for uniform
-    (U) and Boltzmann (B) samples---respectively associated with
-    homogenous weights $1$ and $e^\beta$.
+    \begin{figure*}[t]
+      \begin{center}
+        %{\sf \bfseries A}\includegraphicstop[width=0.32\textwidth]{Figs/offset2}\hspace{.5cm}
+        %{\sf \bfseries B}
+        \includegraphicstop[width=0.8\textwidth]{Figs/energy_distribution}
+      \end{center}
+      \caption{%
+        Targeting specific energies using multi-dimensional Boltzmann
+        sampling. We show the Turner energy distributions for
+        three target structures R1, R2 and R3. By
+        targeting the respective free energies $(-40,-40,-20)$ and
+        $(-20,-20,-20)$ for the target structures (annotated in red and
+        blue, resepectively), we demonstrate the
+        effectivity of our adaptive multi-dimensional Boltzmann sampling
+        procedure; moreover, for comparison, the distributions for uniform
+        (U) and Boltzmann (B) samples---respectively associated with
+        homogenous weights $1$ and $e^\beta$.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
   }
   \label{fig:energydist}
@@ -725,10 +722,7 @@ From these expressions, we conclude that
 In the numerator of the above expression, one recognizes the variance of the distribution of $E_\ell$.
 Remark that a variance is always non-negative and, in our case, also strictly positive for $\pmb{\pi}$, $\pi_\ell>0$, as soon as there exist at least two distinct sequences $S$ and $S'$ such that $E_\ell(S)\neq E_\ell(S')$.
 Moreover, weights are always positive so the partial derivative in $\pi_\ell$ is always positive. Ultimately, it is always possible to increase (resp. decrease) the expected free energy of a structure by simply decreasing (resp. increasing) its weight, supporting our weight optimization procedure.
-\newpage
-\section{Detailed result of MultiDefect analysis}\label{sec:validity}
-N/A values correspond to data that could not be obtained by the time of this submission for two main reasons: In the case of the initial sampling (left columns), they correspond to instances which, in conjunction with an expressive energy model, resulted in very high tree-width, leading to unreasonable memory requirements incompatible with our available computing resources; The case of missing values after optimization  (right columns), they indicate situations where the initial optimization took too long ($\approx$ 1 day) and was killed.
-\input{table}
+
 
 \section{Contribution of terms to the MultiDefect score}
 \label{sec:improvements}
@@ -796,6 +790,11 @@ sampled sequences against the probabilities $Pr(R|S)$; the former is controlled
 by Boltzmann sampling, while the latter is a common negative design objective.}
 \label{fig:negforpos}
 \end{figure}
+
+\section{Detailed result of MultiDefect analysis}\label{sec:validity}
+N/A values correspond to data that could not be obtained by the time of this submission for two main reasons: In the case of the initial sampling (left columns), they correspond to instances which, in conjunction with an expressive energy model, resulted in very high tree-width, leading to unreasonable memory requirements incompatible with our available computing resources; The case of missing values after optimization  (right columns), they indicate situations where the initial optimization took too long ($\approx$ 1 day) and was killed.
+\input{table}
+
 
 \bibliographystyle{vancouver}
 %\bibliographystyle{achemnat}
