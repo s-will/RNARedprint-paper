@@ -768,7 +768,7 @@ Note that analogous algorithms could be constructed to count valid sequences or 
 %  \caption{Figure illustrating RNA network to hypergraph to tree decomposition}
 %\end{figure}
 
-Our algorithms are formulated to process a \Def{cluster tree}, which is a tuple $(T,\chi,\phi)$, where
+Our algorithms are formulated to process a \Def{cluster tree} of $\F$, which is a tuple $(T,\chi,\phi)$, where
 $(T,\chi)$ is a tree decomposition of $G_\F$, and $\phi(v)$ represents
 a set of functions $f$, each uniquely assigned to a node $v\in T$;
 $\dep(f)\subseteq\chi(v)$ and $\phi(v)\cap \phi(v')=\varnothing$ for
@@ -803,7 +803,7 @@ clusters.
 
 Algorithm~\ref{alg:pf} computes the partition function by passing
 messages along the directed edges $u\to v$ (which point from 
-child $u$ to its parent $v$). Each message $m$ is a function that depends
+child $u$ to its parent $v$). Each message $m$ is  that depends
 on the positions $\dep(m)\subseteq \X$ and yields a partition function
 in $\real$. The message from $u$ to $v$ represents the
 partition functions of the subtree of $u$ for all possible partial
