@@ -164,7 +164,6 @@
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
-
 \newtheorem{observation}[theorem]{Observation}
 
 %\newtheorem{algorithm}{Algorithm}
@@ -423,7 +422,7 @@
   The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, which impact their cost and feasibility. \\
 %
   \parttitle{Results} We devise a novel approach to a central ingredient of most in-silico
-  design methods: the sampling of sequences for multi-target RNA design. For this task, we present the efficient (fixed-parameter tractable) approach \ourprog{}.
+  design methods: the generation of sequences with multiple structural targets. For this task, we present the efficient (fixed-parameter tractable) approach \ourprog{}.
   % 
   Modeling
   the problem by specializing constraint networks, \ourprog{} supports generic
@@ -512,8 +511,8 @@ coupled to the formation of secondary structure, as well as changes in
 base pairing propensities and the accessibility of regions, e.g.\ by
 burying or exposing interaction sites~\citep{Rodrigo2014}; on the other hand, the
 thermodynamics of RNA secondary structure is well understood and its prediction is
-computationally tractable~\citep{McCaskill1990}. Thus,  structure can serve as effective
-proxy for rational design approaches, ultimately targeting catalytic or regulatory functions~\citep{Zhang2013}.
+computationally tractable~\citep{McCaskill1990}. Thus, in rational design approaches, structure can serve as effective
+proxy for, the ultimately targeted, catalytic or regulatory functions~\citep{Zhang2013}.
 
 \parHead{Motivating multiple RNA design.} The function of many RNAs
 depends on their selective folding into one or several alternative
@@ -568,7 +567,7 @@ parameter $\gamma$, while bounded only by the length of the designed RNA, is
 typically much lower, due to the decomposition strategy.
 
 \parHead{Motivation.}
-While uniform sampling in \Software{RNAdesign}/\RNAblueprint{} turned out to be very successful,
+While uniform sampling in \Software{RNAdesign}/\RNAblueprint{} turned out to be highly beneficial for general RNA design,
 the work on these tools gave no definitive answer on the \emph{complexity of uniform sampling for multi-target design}. While time and space requirements grow exponential in the general case,
 the decomposition strategy seems to allow practical applications.
 Better understanding of the true complexity bounds is still highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still bounded by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step (note that stochastic backtracking can be performed in linear time per sample).
@@ -588,7 +587,7 @@ Addressing the following questions in more detail and generality led to the prac
 
 To answer these questions, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. As main algorithmic contribution of this work, we devise a dynamic programming algorithm, based on a tree decomposition, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
-. We show that these algorithms are time and space-efficient depending on a specific property of the tree decomposition, namely the treewidth; in short, our algorithms are fixed-parameter tractable (FPT).%
+. We show that these algorithms are time and space-efficient depending on a specific property of the tree decomposition, namely the treewidth; in short, our algorithms are fixed-parameter tractable (FPT).
 % Subsection~\ref{sec:complexity}
 %
 Due to the generality of our method, we can moreover strongly limit this parameter in practice by using state-of-the-art tree decomposition algorithms.
@@ -611,18 +610,17 @@ Turner RNA energy model
 works well by performing sampling based on less complex RNA energy models, which keeps the treewidth low. This result is highly relevant in practice, since it allows to combine high efficiency with high accuracy and moreover leaves room for extensions of the method.
 
 Eventually this strategy allows generating biologically relevant
-multi-target designs, as we demonstrate in our application 
-to a large set of multi-target RNA design instances from a
-meaningful, representative benchmark.
+multi-target designs, as we demonstrate by performing negative multi-target RNA design for a comprehensive, 
+meaningful benchmark set~\citep{Taneda2015}.
 
 \section*{Methods}
 \subsection*{Problem statement}
 \label{sec:problem-statement}
-The main computational problem addressed in this work is to generate sequences over the alphabet $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$ that achieving prescribed free-energies and $\GCb\%$.
-Despite their apparent diversity, such criteria can be homogeneously abstracted as constraints on the value of \Def{features}, each defined as sums over atomic feature contributions depending on subsets of sequence positions.
+The main computational problem addressed in this work is to generate sequences over the alphabet $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$ with prescribed energies, for each single target structure, and $\GCb\%$.
+Remarkably, such criteria can be homogeneously abstracted as constraints on the value of \Def{features}, each defined as sums over atomic feature contributions depending on limited subsets of sequence positions.
  
 \paragraph{Central computational problem.}
-Let us consider $k$ features $F_1,\dots F_k$ to target all of them simultaneously. We base our strategy for targeting the $k$ features $F_1,\dots,F_k$ on generating samples from a Boltzmann distribution parameterized by weights $\pi_1,\dots,\pi_k$, one for each feature. These weights essentially allows us to shift the sample distributions towards specific targets.
+Let us consider $k$ features $F_1,\dots F_k$ to target all of them simultaneously. We base our strategy for targeting the $k$ features $F_1,\dots,F_k$ on generating samples from a Boltzmann distribution parameterized by weights $\pi_1,\dots,\pi_k$, one for each feature. These weights essentially allow us to shift the sample distributions towards specific targets.
 Sampling from this distribution requires to compute corresponding partition functions, such that we can draw sequences with probabilities proportional to their Boltzmann weight:
 \begin{equation}
 \label{eq:sample-distribution}
@@ -630,35 +628,32 @@ Sampling from this distribution requires to compute corresponding partition func
 \end{equation}
 
 The workhorse of our approach is the efficient (more precisely, fixed-parameter tractable) computation of feature-dependent partition functions over sequences.
-Given are the features $F_1,\dots,F_k$, which encode the energies functions for the fixed structures and the function for the \GCb\% all in terms of simple atomic energy contributions.
+Given are the features $F_1,\dots,F_k$, which encode the energies functions for the fixed structures and the function for the \GCb\%, all in terms of simple atomic energy contributions.
 For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
   \begin{equation}
     \label{eq:mainproblem}
     \partfun{\pi_1,\dots,\pi_k} = \sum_{S\in\Sigma^n} \prod_{1\leq \ell\leq k} \pi_\ell^{-F_\ell(S)}.
   \end{equation}
 
-
-
-
 \paragraph{Representing \GCb\%-content and energies as features.}
-Formally, we define a \Def{feature $F$} as function on sequences, whose value is obtained by summing over an associated set of \Def{atomic feature contributions} $f_1, f_2\ldots$, briefly called \emph{contributions}, that each are associated with a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
+Formally, we define a \Def{feature $F$} as function on sequences, whose value is obtained by summing over an associated set of \Def{atomic feature contributions}, briefly called \emph{contributions}. Each feature $f$ is associated with a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
 $$
-F(S) =\!\!\!\!\!\!\sum_{\substack{\text{contribution $f_i$ of $F$}\\\text{with $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f_i(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
+F(S) =\!\!\!\!\!\!\sum_{\substack{\text{$f$: $f$ is contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
 $$
 
-As simple example, the $\GCb\%$ feature is expressed by $n$ contributions $f^{\GCb}_i$ where $f^{\GCb}_i(\{i\mapsto S_i\})$ equals $-1$ if $S_i=\Gb$ or $\Cb$, and $0$ otherwise. 
+Thus, the $\GCb\%$ feature is expressed by $n$ contributions $f^{\GCb}_i$ where $f^{\GCb}_i(\{i\mapsto S_i\})$ equals $-1$ if $S_i=\Gb$ or $\Cb$, and $0$ otherwise $(i=1,\dots,n)$. 
 
-For the definition of energy features, we abstract an \Def{RNA (secondary) structure $R$ of  length $n$} as a set of \Def{base pairs} $(i,j)$, where
+For the definition of energy features, we abstract an \Def{RNA (secondary) structure $R$ of length $n$} as a set of \Def{base pairs} $(i,j)$, where
 $1\leq i<j\leq n$ and for all different $(i,j), (i',j')\in R$: $\{i,j\}\cap\{i',j'\}=\emptyset$ (``degree $\leq$ 1'')---without precluding pseudoknots.
 % We call an RNA structure $R$ \Def{non-crossing}, iff it does not
 % contain any two different base pairs $(i,j)$ and $(i',j')$ such that
 % $i\leq i'\leq j \leq j'.$
 
 
-In a simple \Def{base pair energy model}, the free-energy of a target structure $R$ is expressed as feature with contributions $f^R_{ij}(\{i\mapsto x, j\mapsto y\})=\EbpSym(x,y)$ for each $(i,j)\in R,$ such that $F^R(S)=\EbpSym(S,R)$. 
+In a simple \Def{base pair energy model}, the energy of a target structure $R$ is expressed as feature with contributions $f^R_{ij}(\{i\mapsto x, j\mapsto y\})=\EbpSym(x,y)$ for each $(i,j)\in R,$ such that $F^R(S)=\EbpSym(S,R)$. 
 
 
-Note that for \GCb\% as well as for the base pair energy features, the contributions depend on the nucleotides at only a small, constantly bounded number of sequence positions (one and two positions, respectively). This is important for the feasibility of our approach, which is designed to profit from contributions that each depend on only few sequence positions. 
+Note that for \GCb\% as well as for the base pair energy features, the contributions depend on the nucleotides at only a small, constantly bounded number of sequence positions (one and two positions, respectively). This is important for the efficiency of our approach, which is designed to profit from contributions that each depend on only few sequence positions. 
 We emphasize that nevertheless, the same framework can capture more expressive RNA energy models like the Turner energy model~\citep{Turner2009}, since such models generally define a function $E$ that maps a pair of a sequence $S$ and a structure $R$ to a real value, the \Def{energy} $E(S,R)$. Here, our approach automatically adapts to the more complex energy functions, leading to a controlled increase of the computational complexity.
 
 Typically, such RNA energy models consider a sequence $S$ \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
@@ -726,7 +721,7 @@ of $G$ is the smallest width of any tree decomposition of $G$.
 %The RNA design network describes how to evaluate RNA sequences and, in
 %particular, partial RNA sequences, which is 
 
-To formalize our algorithms, which iteratively merges evaluations of partial solutions, we extend the idea of atomic feature contributions, which are evaluated at sets of the form $\{x_1\mapsto v_1, \dots, x_p\mapsto v_d\}$. Let us call the latter object \Def{partial sequence}; they are handy to specify partial knowledge on the entire sequence at some point of the algorithm. Easily, we can extend the definition of contributions $f$ to sets $\{x_1\mapsto v_1, \dots, x_p\mapsto v_d\}$, where $\{x_1\dots x_d\}$ is any super-set of $\dep(f)$ by ignoring the superfluous assignments $x\mapsto v$, where $x\not\in\dep(f)$. 
+To formalize our algorithms, which iteratively merge evaluations of partial solutions, we extend the idea of atomic feature contributions, which are evaluated at sets of the form $\{x_1\mapsto v_1, \dots, x_d\mapsto v_p\}$. Let us call the latter object \Def{partial sequence}; they are handy to specify partial knowledge on the entire sequence at some point of the algorithm. Easily, we can extend the definition of contributions $f$ to sets $\{x_1\mapsto v_1, \dots, x_p\mapsto v_p\}$, where $\{x_1\dots x_p\}$ is any super-set of $\dep(f)$ by ignoring the superfluous assignments $x\mapsto v$, where $x\not\in\dep(f)$. 
 
 Our algorithms specialize the idea of cluster tree elimination (CTE)~\citep{Dechter2013}, which operates on constraint networks. In this correspondence, (partial) sequences specialize (partial) assignments and the constraint network would be given by variables for each sequence position, constraints due to valid base pairing, and the set of atomic feature contributions $\cal F$.
 
@@ -740,18 +735,20 @@ Our algorithms specialize the idea of cluster tree elimination (CTE)~\citep{Dech
 %
 %Notably the term `network' refers to the implied graph structure, namely the dependency graph.
 
-\newcommand{\weighttransform}[2]{{#1}_{||{#2}}}
+%\newcommand{\weighttransform}[2]{{#1}_{||{#2}}}
 
-For algorithmic treatment, it is convenient to encode the weight $\pi$ of each feature in its contributions, such that all contributions can be handled uniformly. For this purpose, we define the \Def{transformed contribution} 
-$\weighttransform{f}{\pi}(S) := \ln(\pi)f(S),$
-such that $exp(-\weighttransform{f}{\pi}(S))=\pi^{-f(S)}.$ 
+For algorithmic treatment, it is convenient to encode the weight $\pi$ of each feature in its contributions, such that all contributions can be handled uniformly. This transformation works by multiplying all contributions with $ln(\pi)$, where $\pi$ is the weight of the corresponding feature, since then
+$exp(-\ln(\pi)f(S))=\pi^{-f(S)}.$
+
+%For this purpose, we define the \Def{transformed contribution} 
+%$\weighttransform{f}{\pi}(S) := \ln(\pi)f(S),$
+%such that $exp(-\weighttransform{f}{\pi}(S))=\pi^{-f(S)}.$ 
 %
-
 Let us now specify the concrete set $\F$ of contributions that we use
 for the design in the base pair model targeting \GCb\% and structures $\R$ with weights $\pi_0,\dots,\pi_k$. The set $\F$ thus consists of
 \begin{itemize}
-\item the transformed contributions $\weighttransform{f^{\GCb}_i}{\pi_0}$ for the ~$\GCb\%$ feature ($i=1,\dots,n$)
-\item the transformed contributions $\weighttransform{f^{R_\ell}_{ij}}{\pi_\ell}$for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
+\item the transformed contributions $\ln(\pi_0)f^{\GCb}_i$ for the ~$\GCb\%$ feature ($i=1,\dots,n$)
+\item the transformed contributions $\ln(\pi_\ell)f^{R_\ell}_{ij}$for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
 \end{itemize}
 
 By these definitions, the set $\F$ encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}); also confer Eq.~(\ref{eq:feature-energy-transformation}). 
@@ -761,7 +758,7 @@ By these definitions, the set $\F$ encodes the partition function $\partfun{\pi_
 \subsubsection*{Partition function and stochastic backtracking}\label{sec:PF}
 
 We compute the partition function (as specified by $\F$) by dynamic programming based
-on a tree decomposition of the $\F$'s dependency graph.
+on a tree decomposition of $\F$'s dependency graph.
 Note that analogous algorithms could be constructed to count valid sequences or minimize energy.
 %This yields fixed parameter tractable (FPT) algorithms, based on the treewidth.
 
