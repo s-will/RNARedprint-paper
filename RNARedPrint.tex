@@ -620,7 +620,7 @@ The main computational problem addressed in this work is to generate sequences o
 Remarkably, such criteria can be homogeneously abstracted as constraints on the value of \Def{features}, each defined as sums over atomic feature contributions depending on limited subsets of sequence positions.
  
 \paragraph{Central computational problem.}
-Let us consider $k$ features $F_1,\dots F_k$ to target all of them simultaneously. We base our strategy for targeting the $k$ features $F_1,\dots,F_k$ on generating samples from a Boltzmann distribution parameterized by weights $\pi_1,\dots,\pi_k$, one for each feature. These weights essentially allow us to shift the sample distributions towards specific targets.
+Let us consider $k$ features $F_1,\dots F_k$ to target all of them simultaneously. We base our strategy for targeting the $k$ features $F_1,\dots,F_k$ on generating samples from a Boltzmann distribution parametrized by weights $\pi_1,\dots,\pi_k$, one for each feature. These weights essentially allow us to shift the sample distributions towards specific targets.
 Sampling from this distribution requires to compute corresponding partition functions, such that we can draw sequences with probabilities proportional to their Boltzmann weight:
 \begin{equation}
 \label{eq:sample-distribution}
@@ -1313,14 +1313,14 @@ optimization run.
 \end{figure}
 
 \section*{Conclusion}
-%%!!!!!!!!!!!!!!! consider to merge into disciussion
+%%!!!!!!!!!!!!!!! consider to merge into discussion
 %Going beyond our encoding of the base pair model energy features and the \GCb\% feature, the contributions provide more generality and allow expressing complex features of the
 %sequences alone, e.g.\ rewarding or penalizing specific sequence
 %motifs, as well as features depending on the target structures.
 %Furthermore, constraints, which enforce or forbid features, are
 %naturally expressed by assigning infinite penalties to invalid
 %(partial) sequences (even if in implementations, explicit handling of constraints is advantageous). In particular, the %framework
-%aptures various RNA energy models, they can be handled efficiently (in the sense of FPT), as long as the dependencies of their additive energy contributions are bounded.
+%captures various RNA energy models, they can be handled efficiently (in the sense of FPT), as long as the dependencies of their additive energy contributions are bounded.
 
 
 
