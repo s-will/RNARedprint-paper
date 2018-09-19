@@ -82,21 +82,21 @@
 \usepackage{todonotes}
 
 
-\hypersetup{
-    bookmarks=false,         % show bookmarks bar?
-    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
-    pdftoolbar=true,        % show Acrobat’s toolbar?
-    pdfmenubar=true,        % show Acrobat’s menu?
-    pdffitwindow=true,     % window fit to page when opened
-    pdfstartview={FitH},    % fits the width of the page to the window
-    colorlinks=true,       % false: boxed links; true: colored links
+%\hypersetup{
+%    bookmarks=false,         % show bookmarks bar?
+%    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+%    pdftoolbar=true,        % show Acrobat’s toolbar?
+%    pdfmenubar=true,        % show Acrobat’s menu?
+%    pdffitwindow=true,     % window fit to page when opened
+%    pdfstartview={FitH},    % fits the width of the page to the window
+%    colorlinks=true,       % false: boxed links; true: colored links
 %    linkcolor=red!70!black,          % color of internal links (change box color with linkbordercolor)
 %    citecolor=red!70!black,        % color of links to bibliography
-    linkcolor=black,          % color of internal links (change box color with linkbordercolor)
-    citecolor=black,        % color of links to bibliography
-    filecolor=magenta,      % color of file links
-    urlcolor=red!70!black           % color of external links
-}
+%    linkcolor=black,          % color of internal links (change box color with linkbordercolor)
+%    citecolor=black,        % color of links to bibliography
+%    filecolor=magenta,      % color of file links
+%    urlcolor=red!70!black           % color of external links
+%}
 
 
 
@@ -169,7 +169,7 @@
 %\newtheorem{algorithm}{Algorithm}
 \newtheorem{axiom}{Axiom}
 \newtheorem{hypothesis}{Working Hypothesis}
-\newenvironment{proof}[1][]{\noindent \em Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
+\newenvironment{proof}[1][]{\noindent Proof\ifthenelse{\equal{#1}{}}{}{ (#1)}:~}{}
 
 %%% macros for notation in DP framework
 \newcommand{\network}{\mathcal{N}}
@@ -548,7 +548,7 @@ strategy typically designs sequences with unrealistically high
 more recent approaches like \Software{antaRNA}~\citep{Kleinkauf2015} and \Software{IncaRNAtion}~\citep{Reinharz2013} explicitly control \GCb\%; the latter applying adaptive sampling.
 
 \parHead{Specificities and similarities of multi-target design.}
-Specifically for multi-target design, virtually all available methods~\citep{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} follow the same overall generate-and-optimize strategy.
+In the case of multi-target design, virtually all available methods~\citep{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} follow the same overall generate-and-optimize strategy.
 %
 Facing the complex sequence constraints induced by multiple targets, early methods such as \Software{Frnakenstein}~\citep{Lyngsoe2012} and \Software{Modena}~\citep{Taneda2015} did not attempt to solve sequence generation systematically, but rely on ad-hoc sampling strategies.
 %
@@ -570,12 +570,14 @@ typically much lower, due to the decomposition strategy.
 While uniform sampling in \Software{RNAdesign}/\RNAblueprint{} turned out to be highly beneficial for general RNA design,
 the work on these tools gave no definitive answer on the \emph{complexity of uniform sampling for multi-target design}. While time and space requirements grow exponential in the general case,
 the decomposition strategy seems to allow practical applications.
-Better understanding of the true complexity bounds is still highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still bounded by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step (note that stochastic backtracking can be performed in linear time per sample).
+%
+Better understanding of the true complexity bounds is highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still limited by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step. In other words key questions include: \emph{How to sample, in a general way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as \GCb\%, complex sequence constraints, or the energy of individual structures?}
 
-Consequently, for elucidating the theoretical fundament of RNA design sampling, we first need to clarify, whether efficient counting is possible. In this work, we show that there can not exists any efficient, polynomial time algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph; the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
 
-As already demonstrated by \Software{RNAdesign}, the hardness of counting (and conjectured hardness of sampling), does still not rule out practically applicable algorithms for counting and sampling.
-Addressing the following questions in more detail and generality led to the practical advances in this work, which extend the expressivity, flexibility, and performance of multi-structure design: \emph{How to sample, in a general way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as \GCb\%, complex sequence constraints, or the energy of individual structures?}
+
+
+
+\subsection*{Contributions}
 
 \begin{figure*}[t]
 \begin{center}
@@ -585,9 +587,12 @@ Addressing the following questions in more detail and generality led to the prac
 \label{fig:workflow}
 \end{figure*}
 
-To answer these questions, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. As main algorithmic contribution of this work, we devise a dynamic programming algorithm, based on a tree decomposition, to compute partition functions and sample sequences from the Boltzmann distribution%
+Addressing these questions in more detail and generality leads to the practical advances in this work, which extend the expressivity, flexibility, and performance of multi-structure design. Namely, we introduce a generic framework (illustrated in~Fig.~\ref{fig:workflow}) enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. As main algorithmic contribution of this work, we devise a dynamic programming algorithm, based on a tree decomposition, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
-. We show that these algorithms are time and space-efficient depending on a specific property of the tree decomposition, namely the treewidth; in short, our algorithms are fixed-parameter tractable (FPT).
+. We show that these algorithms are time and space-efficient, while requiring exponential time based on a specific property of the tree decomposition, called treewidth, whose value is typically low for typical instances; in short, our algorithms are fixed-parameter tractable (FPT).
+
+This exponential dependency is arguably necessary, as the underlying counting problem is \#{\sf P}-hard, \emph{i.e.}  we show that there can not exists any efficient, polynomial time algorithm unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph; the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
+
 % Subsection~\ref{sec:complexity}
 %
 Due to the generality of our method, we can moreover strongly limit this parameter in practice by using state-of-the-art tree decomposition algorithms.
@@ -604,8 +609,12 @@ target structures and \GCb\%%
 % (SubSection~\ref{sec:multiBoltzmann})
 . %
 
+
+
+
+
 We observe that
-targeting realistic RNA energies in the realistic
+targeting realistic RNA energies in the
 Turner RNA energy model
 works well by performing sampling based on less complex RNA energy models, which keeps the treewidth low. This result is highly relevant in practice, since it allows to combine high efficiency with high accuracy and moreover leaves room for extensions of the method.
 
@@ -620,7 +629,7 @@ The main computational problem addressed in this work is to generate sequences o
 Remarkably, such criteria can be homogeneously abstracted as constraints on the value of \Def{features}, each defined as sums over atomic feature contributions depending on limited subsets of sequence positions.
  
 \paragraph{Central computational problem.}
-Let us consider $k$ features $F_1,\dots F_k$ to target all of them simultaneously. We base our strategy for targeting the $k$ features $F_1,\dots,F_k$ on generating samples from a Boltzmann distribution parameterized by weights $\pi_1,\dots,\pi_k$, one for each feature. These weights essentially allow us to shift the sample distributions towards specific targets.
+Let us consider $k$ features $F_1,\dots F_k$ to target all of them simultaneously. We base our strategy for targeting the $k$ features $F_1,\dots,F_k$ on generating samples from a Boltzmann distribution parametrized by weights $\pi_1,\dots,\pi_k$, one for each feature. These weights essentially allow us to shift the sample distributions towards specific targets.
 Sampling from this distribution requires to compute corresponding partition functions, such that we can draw sequences with probabilities proportional to their Boltzmann weight:
 \begin{equation}
 \label{eq:sample-distribution}
@@ -638,7 +647,7 @@ For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
 \paragraph{Representing \GCb\%-content and energies as features.}
 Formally, we define a \Def{feature $F$} as function on sequences, whose value is obtained by summing over an associated set of \Def{atomic feature contributions}, briefly called \emph{contributions}. Each feature $f$ is associated with a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
 $$
-F(S) =\!\!\!\!\!\!\sum_{\substack{\text{$f$: $f$ is contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
+F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$: $f$ is contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\!\! f(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
 $$
 
 Thus, the $\GCb\%$ feature is expressed by $n$ contributions $f^{\GCb}_i$ where $f^{\GCb}_i(\{i\mapsto S_i\})$ equals $-1$ if $S_i=\Gb$ or $\Cb$, and $0$ otherwise $(i=1,\dots,n)$. 
@@ -1053,19 +1062,18 @@ of $G$ would be entirely determined by the assignment of a single of
 its nucleotides. The number of valid designs is thus simply
 $4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
   connected components}.
-
 The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
 
 To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($E \cap (V_1\times V_2) = E$), noting that hardness over restricted instances implies hardness of the general problem. Moreover note that, as we explained before, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
 
 Let $\IS{G}$ denote the set of all independent sets in the connected graph $G$; recall that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. 
 
-\begin{proposition}
-  $\Design{G}$ and $\IS{G}$ have equal size.
+\begin{proposition}\label{prop:bijection}
+  $|\Design{G}| = |\IS{G}|$.
 \end{proposition}
 %
 \begin{proof}
-Consider the mapping $\Psi: \Design{G} \to \IS{G}$ defined by $ \Psi(f) := \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
+Consider the mapping $\Psi: \Design{G} \to \IS{G}, f \mapsto \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
 We show that $\Psi$ is bijective:%
 \begin{itemize}
 \item $\Psi$ is injective, i.e. $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
@@ -1095,30 +1103,50 @@ $v_1\in V_1$ and $v_2\in V_2$, such that $f(v_1)\in\{\Ab,\Gb\}$ and $f(v_2)\in\{
 \end{itemize}
 \end{proof}
 
-Now we can build on the connection between the two problems to obtain complexity results for \NumDesign. Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is indeed a well-studied \#{\sf P}-hard problem~\citep{Ge2012}, from which we immediately conclude:
+Now we can build on the connection between the two problems to obtain complexity results for \NumDesign. Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is indeed a well-studied \#{\sf P}-hard problem~\citep{Ge2012}. Now assume the existence of an efficient (polynomial-time) algorithm $\mathcal{A}$ for computing $|\NumDesign(G)|$ on connected (bipartite) graphs. Then, running $\mathcal{A}$ and returning $|\NumDesign(G)|/2$ constitutes an efficient algorithm for $\#{\sf BIS}$ on connected graphs.
+However, $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ can be efficiently computed by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. In other words, any efficient algorithm for \NumDesign implies an efficient algorithm for $\#{\sf BIS}$, and we conclude with the hardness of \NumDesign.
+
 \begin{corollary}
   \NumDesign is $\#{\sf P}$-hard
 \end{corollary}
-\begin{proof}
-  Note that $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ is given by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. Thus any efficient algorithm for $\#{\sf BIS}$ on connected instances provides an efficient algorithm for general graphs.
+% \begin{proof}
 
-  Given any algorithm $\mathcal{A}$ that solves \NumDesign over strongly-connected graphs $G$, one can  construct an algorithm $\mathcal{A}'$ that solves $\#{\sf BIS}$: 1) calculate $\NumDesign(G)$ by calling $\mathcal{A}$ 2) return $\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$.
-    Obviously, if $\mathcal{A}$ is a polynomial-time algorithm, so is $\mathcal{A'}$.
-  This implies that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
-\end{proof}
+%   Given any algorithm $\mathcal{A}$ that solves \NumDesign over strongly-connected graphs $G$, one can  construct an algorithm $\mathcal{A}'$ that solves $\#{\sf BIS}$:
+%   \begin{enumerate}
+%     \item[1)] calculate $\NumDesign(G)$ by calling $\mathcal{A}$
+%     \item[2)] return\\$\NumDesign(G)/2=|\Design{G}| = |\IS{G}|$.
+%   \end{enumerate}
+%     Obviously, if $\mathcal{A}$ is a polynomial-time algorithm, so is $\mathcal{A'}$.
+%   This implies that $\NumDesign$  is at least as hard as $\#{\sf BIS}$, thus does not admit a polynomial time exact algorithm unless $\#{\sf P}={\sf FP}$.
+% \end{proof}
 
 
 
 
 \section*{Results}\label{sec:results}
 Our Boltzmann sampling strategy (Algorithms
-\ref{alg:pf} and \ref{alg:sampling}) were implemented, using a combination of {\tt C++} and {\tt Python}, in a software called \ourprog{}, available at: 
+\ref{alg:pf} and \ref{alg:sampling}) was implemented, using a combination of {\tt C++} and {\tt Python}, in a software called \ourprog{}, available at: 
 
 {\centering \url{https://github.com/yannponty/RNARedPrint}\\[.3em]}
 
 The driver script of \ourprog{} takes as input a set of (secondary) structures, ... and outputs ....
 
-{\bfseries Stefan: Please list available options/features from the Python interface + output format}
+We implemented the core algorithms in C++, resulting in the tool
+C++-tool \ourprog{}, which takes a set of target structures, as well as
+weights for each energy feature and \GCb\%; then,
+it generates a sample (of prescribed size) from the corresponding
+Boltzmann distribution. For \ourprog{}, we implemented the base pair
+energy model and the stacking energy model.
+Moreover, we provide a Python wrapper script for the C++-tool
+\ourprog{} to perform targeting, based on multi-dimensional Boltzmann
+sampling.
+For given secondary structures, together with prescribed target energies
+and target \GCb\%, this script generates
+a series of sequences that satisfy the target values for the energy and
+\GCb\% features within configurable tolerances.
+Notably, these target energies are actual free energies in the realistic
+Turner energy model, which are targeted by efficiently sampling in the
+base pair energy model.
 
 \subsection*{Effectively targeting Turner energies}
 We implemented our Boltzmann sampling strategy (Algorithms
@@ -1167,7 +1195,7 @@ pseudoknot-free target structures.
 \begin{figure*}[t]
   \begin{center}
     %{\sf \bfseries A}\
-    \includegraphicstop[width=0.99\textwidth]{Figs/energy_shift}\hfill
+    \includegraphicstop[width=0.97\textwidth]{Figs/energy_shift}\hfill
     %{\sf \bfseries B}\ \includegraphicstop[width=0.55\textwidth]{Figs/PKB00211_PKB00239_0_energy_distribution}
   \end{center}
   \caption{%
@@ -1313,14 +1341,14 @@ optimization run.
 \end{figure}
 
 \section*{Conclusion}
-%%!!!!!!!!!!!!!!! consider to merge into disciussion
+%%!!!!!!!!!!!!!!! consider to merge into discussion
 %Going beyond our encoding of the base pair model energy features and the \GCb\% feature, the contributions provide more generality and allow expressing complex features of the
 %sequences alone, e.g.\ rewarding or penalizing specific sequence
 %motifs, as well as features depending on the target structures.
 %Furthermore, constraints, which enforce or forbid features, are
 %naturally expressed by assigning infinite penalties to invalid
 %(partial) sequences (even if in implementations, explicit handling of constraints is advantageous). In particular, the %framework
-%aptures various RNA energy models, they can be handled efficiently (in the sense of FPT), as long as the dependencies of their additive energy contributions are bounded.
+%captures various RNA energy models, they can be handled efficiently (in the sense of FPT), as long as the dependencies of their additive energy contributions are bounded.
 
 
 
@@ -1349,6 +1377,7 @@ positions, or anywhere in the designed sequences, by adapting formal language co
 introduced by \citet{Zhou2013}. In future work, negative design principles could 
 be explicitly supported at the generation stage, for instance by
 penalizing a set of alternative helices/structures.
+{\em Add RNASKetch to conclusion for more complex design scenario + need for generic constratins-based framework for flexibility}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
