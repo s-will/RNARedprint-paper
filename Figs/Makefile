@@ -3,12 +3,12 @@ SVGZS=$(wildcard *.svgz)
 
 all: $(SVGS:.svg=.pdf) $(SVGZS:.svgz=.pdf)  Workflow.pdf $(FIGURE_TARGETS) # $(SVGS:.svg=.ps) $(SVGZS:.svgz=.ps)
 
-
-Workflow.pdf: Workflow/Workflow.tex
-	cd Workflow; pdflatex Workflow.tex
+Workflow.pdf:
+	make -C Workflow
 	if [ ! -e Workflow.pdf ] ; then \
 	   mv Workflow/Workflow.pdf . ;\
-        fi
+	fi
+
 
 %.pdf: %.R
 	Rscript $<
