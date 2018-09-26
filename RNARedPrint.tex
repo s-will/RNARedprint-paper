@@ -1353,7 +1353,7 @@ optimization run.
 
 
 We introduced a novel approach, based on a general framework and efficient algorithms, to design RNA
-sequences, while targeting very specific complex properties; in particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
+sequences, while targeting very specific complex properties. In particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
 Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
 controlled by expressive RNA energy models. Compared to the
@@ -1361,8 +1361,8 @@ previously best available sampling method (uniform sampling), this
 approach generated significantly better seed sequences for instances
 of an extensive multi-target design benchmark, including pseudoknots.
 %
-To substantiate our work additionally, we establish the $\#${\sf P}-hardness of uniform sampling;
-from a complexity-theoretic point of view, this motivates the FPT, tree decomposition-based nature of our method.  
+To substantiate our work additionally, we establish the $\#${\sf P}-hardness of uniform sampling which,
+from a complexity-theoretic point of view, motivates the FPT, tree decomposition-based nature of our method.  
 
 The presented method enables new possibilities for the sequence generation
 in the field of RNA sequence design, allowing to enforce additional
@@ -1370,14 +1370,20 @@ constraints, like \GCb\%, while controlling the energy of
 multiple target structures. Thus it presents a major advance over
 previously applied ad-hoc sampling and even efficient uniform sampling
 strategies. We demonstrated the practical feasibility of such controlled sequence
-generation, including the case of pseudoknotted structures, and studied its use for multi-target RNA design. Moreover,
-our framework is extensible to include various more complex sequence
-constraints, including mandatory/forbidden motifs at specific
+generation, including the case of pseudoknotted structures, and studied its use for multi-target RNA design.
+
+%perspectives:
+Our framework is extensible to include various more complex sequence constraints, including mandatory/forbidden motifs at specific
 positions, or anywhere in the designed sequences, by adapting formal language constructs
-introduced by \citet{Zhou2013}. In future work, negative design principles could 
+of Zhou \emph{et al}~\citet{Zhou2013}. In future work, negative design principles could 
 be explicitly supported at the generation stage, for instance by
 penalizing a set of alternative helices/structures.
-{\em Add RNASKetch to conclusion for more complex design scenario + need for generic constratins-based framework for flexibility}
+
+{Stefan: \em Mention RNAsketch to perspectives for more complex design scenario + need for generic constraints-based framework for flexibility ($\to$ generic constraint framework).}
+
+{Yann: \em Connection with statistics (design as perfect random sequences for null-model), mention Rivas/Eddy lncRNAs papers...}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
