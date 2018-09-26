@@ -9,11 +9,11 @@ RNARedPrint.pdf: RNARedPrint.aux supplement.aux
 supplement.pdf: RNARedPrint.aux supplement.aux
 
 %.pdf: %.tex %.aux
-	pdflatex --interaction=nonstopmode $<
-	pdflatex --interaction=nonstopmode $<
+	pdflatex $<
+	pdflatex $<
 
 %.aux: %.tex
-	pdflatex --interaction=nonstopmode $<
+	pdflatex $<
 	bibtex ${<:.tex=}
 
 watch:
