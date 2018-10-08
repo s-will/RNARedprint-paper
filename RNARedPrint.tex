@@ -1123,17 +1123,17 @@ However, $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number
 
 
 \section*{Results}\label{sec:results}
-Our Boltzmann sampling strategy (Algorithms
-\ref{alg:pf} and \ref{alg:sampling}) was implemented, using a combination of {\tt C++} and {\tt Python}, in a software called \ourprog{}, available at: 
+
+We implemented the core algorithms in \texttt{C++}, resulting in the tool
+\ourprog{}, available at: 
 
 {\centering \url{https://github.com/yannponty/RNARedPrint}\\[.3em]}
 
-
-We implemented the core algorithms in \texttt{C++}, resulting in the tool
-\ourprog{}, which takes a set of target structures, as well as
+\ourprog{}  takes a set of target structures, as well as
 weights for each energy feature and \GCb\%, and generates a sample set of sequences compatible with the structures in the corresponding
 Boltzmann distribution. \ourprog{} currently supports the base pair
 energy model and the stacking energy model.
+
 Moreover, we provide a {\tt Python} wrapper script that targets prescribed energies using multi-dimensional Boltzmann sampling.
 For a given set of secondary structures, together with prescribed target energies
 and target \GCb\%, this script generates a series of sequences that satisfy the target values for the energy and
@@ -1243,10 +1243,11 @@ We considered a benchmark of six sets of target structures described in \citep{T
 %energy that favor the stability of the target structures having
 %moderate \GCb\%; all these properties are desirable objectives
 %for RNA design.
-Using \ourprog{}, we generated at least 1\,000 seeds for
-each instance of the benchmark. We used target energies that were
-computed by averaging the energy over samples at higher weights
-$e^{\beta}$, and set the targeted \GCb\% to 60\%.  We compared the
+Using \ourprog{}, for
+each instance of the benchmark, we generated at least 1\,000 seed sequences with similar
+energies for all target structures. For this purpose, we determine good common target energies that
+can be succesfully targeted for all single target structures simultaneously.
+Generally, we targeted 60\% \GCb\%.  We compared the
 \Obj{} value of these sequences against that of seed sequences,
 uniformly sampled using \RNAblueprint{}.  Moreover, for both sets, we
 used an adaptive greedy walk~\citep{Hammer2017} to \Def{minimize} the
