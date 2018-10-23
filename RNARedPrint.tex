@@ -328,9 +328,9 @@
 ]{\inits{SW} \fnm{Sebastian} \snm{Will$^*$}}
 %
 \author[
-    addressref={aff4,aff5},
-    corref={aff4},                       % id of corresponding address, if any
-    email={yann.ponty@lix.polytechnique.fr}
+    addressref={aff4},
+    corref={aff2,aff4},                       % id of corresponding address, if any
+    email={will@tbi.univie.ac.at; yann.ponty@lix.polytechnique.fr}
 ]{\inits{YP} \fnm{Yann} \snm{Ponty}}
 
 
@@ -383,13 +383,7 @@
 }
 
 % $^{\text{\sf 5}}$ AMIBio team, Inria Saclay, Bat Alan Turing, 91120 Palaiseau, France}
-\address[id=aff5]{%
-    \orgname{AMIBio team, Inria Saclay},
-    \street{Bat. Alan Turing},
-    \postcode{91120}
-    \city{Palaiseau},
-    \cny{France}
-}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1134,13 +1128,14 @@ weights for each energy feature and \GCb\%, and generates a sample set of sequen
 Boltzmann distribution. \ourprog{} currently supports the base pair
 energy model and the stacking energy model.
 
-Moreover, we provide a {\tt Python} wrapper script that targets prescribed energies using multi-dimensional Boltzmann sampling.
+Moreover, we provide two {\tt Python} wrapper scripts. The first script targets prescribed energies using multi-dimensional Boltzmann sampling.
 For a given set of secondary structures, together with prescribed target energies
 and target \GCb\%, this script generates a series of sequences that satisfy the target values for the energy and
 \GCb\% features within configurable tolerances.
 Notably, these target energies are actual free energies in the realistic
 Turner energy model, and are targeted by efficiently sampling in the
-base pair energy model, and filtering sequences based on the {\tt RNAeval} tool from the Vienna package~\cite{Lorenz2011}.
+base pair energy model, and filtering sequences based on the {\tt RNAeval} tool from the Vienna package~\cite{Lorenz2011}. The second script generates high quality seed sequences suitable for negative RNA design. The details of this approach are described in the subsections below.
+
 
 \subsection*{Effectively targeting Turner energies}
 We used our Boltzmann sampling strategy (Algorithms
@@ -1376,10 +1371,6 @@ penalizing a set of alternative helices/structures.
 
 One could also envision using positive design as a null model, for instance in order to assess the significance of observed properties. Indeed, the complex set of constraints required in order to achieve a desired function must be equally enforced in RNA design, and to produce random sequences that are known to be constrained at a phenotypic level. One could therefore use constrained design to assess whether P-values, and therefore our perception of the statistical significance, are affected by the overly simplistic simple null models (\emph{e.g.} dinucleotide shuffling) used to model random RNAs~\cite{Rivas2017}.
 
-{Stefan: \em Mention RNAsketch to perspectives for more complex design scenario + need for generic constraints-based framework for flexibility ($\to$ generic constraint framework).}
-
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -1393,11 +1384,11 @@ One could also envision using positive design as a null model, for instance in o
   The authors declare that they have no competing interests.
 
 \section*{Author's contributions}
-  YP and SW initiated the project and worked out the algorithms.
+  YP and SW initiated the project and designed the algorithms.
   % SW---I guess we don't need to be super-detailed, otherwise something like...
   %YP contributed the multi-dimensional Boltzmann sampling background and the \#P-hardness proof.
   %SW contributed the integration with the constraint network setting and its specialization to RNA design.
-  YP and WW wrote the core software, while SW and SH contributed additional scripts. SH devised and conducted the computational experiments. All authors wrote, read, and approved the manuscript.
+  YP, SW and WW wrote the core software, while SW and SH contributed the weight optimization scripts. SH, SW and YP devised the computational experiments, which were conducted by SH. All authors wrote, read, and approved the manuscript.
     % Text for this section \ldots
     % https://www.biomedcentral.com/getpublished/editorial-policies#authorship
 
