@@ -59,7 +59,9 @@
 
 \newcommand{\Answer}[1]{\noindent{\color{gray!55!black}\textsf{\ul{Response:} }{\sf#1}}}
 \newcommand{\Comment}[1]{\item{\textsf{\ul{Comment:} }{\it#1}}}
-\newcommand{\AnswerTODO}[2][All]{\noindent{\color{blue!80!black}\textsf{\ul{TODO Respond (#1):} }{\sf#2}}}
+
+\usepackage{todonotes}
+\newcommand{\AnswerTODO}[2][All]{{\todo[inline]{\ul{TODO (#1)}: #2}}}
 
 %%% END Article customizations
 
@@ -95,12 +97,15 @@ Stefan Hammer \and Wei Wang \and Sebastian Will \and Yann Ponty}
 
 We thank the reviewers for their encouraging comments and constructive criticisms and thoroughly addressed their points in our revised version of the manuscript.
 
-\medskip
+\section{General comments}
+
 In particular, the reviews helped us to state the goal of this work more clearly. While we demonstrate the applicability of our approach to negative RNA design, which (here by optimizing 'MultiDefect') aims at high and similar probability of the target structures, the focus of this work is the positive design of sequences that fold into multiple target structures with highly specific properties. We discuss this positive design, in particular, for specific folding energies (for each single target structure) and GC content. Moreover, as we like to emphasize, the method is even more general, which we see as most important strength of our approach; it is prepared to handle many additional constraints and sequence features based on the same mechanism. 
 
 Naturally, we hope that this method turns out to be highly useful for single- and multi-target negative design (and various other applications, like generating background models for assessing significance) in future applications, but---while we present preliminary results for negative design (based on generating seed sequences for the MODENA benchmark)---a more in-depth evaluation of its use in negative design is beyond the scope of this paper. This seems even more acceptable, since the principal benefits of controlled sampling have been shown with RNABlueprint. We apologize for potential misunderstandings about the objectives of the manuscript and hope to better clarify these aspects in our revision.
 
 To emphasize our focus on positive design and the prototypical nature of our brief proof-of-concept study in the use of our method for negative design, we carefully rephrased the respective paragraph at the end of the introduction as well statements in the subsection about the optimization of the MultiDefect. (TODO: write!)
+
+\todo[inline]{Mention that our sampling could be used in combination with MODENA / not necessarily competition}
 
 \section{Detailed responses}
 
@@ -109,58 +114,52 @@ To emphasize our focus on positive design and the prototypical nature of our bri
 \Comment{While this manuscript exhaustively described the algorithms of RNARedPrint and its advancement from theoretical aspects, it would be hard for BMC bioinformatics readers to understand what are the sophisticated points applied in RNARedPrint for a practical use.
 Related to that problem, it is also not clear what methods (or what options or approximations) are applied for each comparison in the results.
 Thus, this manuscript is considered to be further improved in terms of intelligibility of the methods and results using fair evaluation criteria.\\[1em]}%
-\AnswerTODO[Yann]{We structured the results section more clearly and adapted the introduction accordingly. In Results, we introduce single subsections for the following sub-results to reflect our main results in a logical order:
+\Answer{We structured and rephrased the Results section more clearly and adapted the introduction accordingly. In Results, we introduce single subsections for the following sub-results to reflect our main results in a logical order:
   \begin{itemize}
-    \item The full-featured RNA energy model (Turner) can be well approximated by the much more efficiently tractable stacking model.
-    \item Controlled Boltzmann sampling for typical multi-target design instances requires little time (corresponding to small tree-width).
-    \item Multi-dimensional Boltzmann sampling solves the positive design problem effectively, requiring only a limited number of rejections (even for multiple simultaneously considered features).
+    \item The full-featured RNA energy model (Turner) can be well approximated by the much more efficiently tractable stacking model;
+    \item Controlled Boltzmann sampling for typical multi-target design instances requires little time (corresponding to small tree-width); Multi-dimensional Boltzmann sampling solves the positive design problem effectively, requiring only a limited number of rejections (even for multiple simultaneously considered features);
     \item The positively designed sequences are suitable for improving negative design approaches.
 \end{itemize}}
+\AnswerTODO{Restructure Results and Intro)}
 
-\Comment{For evaluation of a method to design RNA molecules, the number of the solutions it produces and its running time are considered to be important.\\[1em]}%
-\Answer{We agree that running times are important for assessing the method; consequently, we included details timing information in the revision. As we show now explicitly, the running times directly depend on the already reported tree-widths. The run-times are generally modest for the relevant design instances.} 
-
-%\Answer{Indeed, this is a relevant parameter to ensure a fair comparison. We note, however, that one must distinguish the number of sequences produced as the final output of our method from the total number of sequences generated by our rejection sampling strategy, the large majority of which are discarded for not satisfying certain properties. While this may appear wasteful, this probabilistic approach saves very substantial amount of time (and memory) compared to natural alternatives (classified dynamic programming, or constraint-based systems), at the price of some rejections, expected to remain reasonable from general analytic combinatorics principles.}
-\Comment{
-In the scope of this study, the running time and memory comparison should be shown to produce the same number of sequences by some minor variants of RNARedPrint method, RNABluePrint, and MODENA.\\[1em]}%%
-\AnswerTODO[Stefan]{
-  We do now report and discuss the run-times of such methods for generating samples. Since MODENA does not allow to measure separate times for sequence sampling, we estimated those times and report our estimates. It should be emphasized that MODENA produces a very different kind of sampling compared to RNARedPrint (and as well RNABluePrint), such one should be careful to compare only run-times. While RNARedPrint produces a very specific distribution of samples, solving a hard positive design problem, MODENA  
-  
-  We did not fully understand this remark, and interpreted it to mean that a fair comparison should dedicate equal amount of runtime to each of the compared method. 
-(Stefan, is that the case?)
-In the revised version, we reported the runtime required by all those approaches in the setting of the benchmark.
-}
+\Comment{For evaluation of a method to design RNA molecules, the number of the solutions it produces and its running time are considered to be important.\\[1em]
+In the scope of this study, the running time and memory comparison should be shown to produce the same number of sequences by some minor variants of RNARedPrint method, RNABluePrint, and MODENA.\\[1em]}%
+\Answer{We agree that running times are important for assessing the method; consequently, we included details timing information in the revision. As we show now explicitly, the running times directly depend on the already reported tree-widths. The run-time requirements are generally modest for the relevant design instances. 
+%
+Concerning the comparison: since MODENA does not allow to measure separate times for sequence sampling, we could only estimate its run-times by running the MODENA binary with parameters that turn off the optimization as far as this is possible. Moreover, we want to re-emphasize that MODENA, while it implements a sophisticated optimization procedure, does not put any specific focus on the sampling procedure for generating its seed sequences. Consequently, it does not sample from a specific distribution and produces random sequences without targeting any specific properties (neither good stability nor specific GC-content, etc.). In contrast, RNARedPrint produces highly specific samples, thereby solving a fundamentally different problem (i.e. positive design). This crucial difference should kept in mind, when comparing the run-times of these tools. 
+\AnswerTODO{...}}
 \Comment{
 It would be informative if the authors show the number of rejected sequences produced by RNARedPrint considering the specific criteria (GC\% or free energy). 
 Since RNARedPrint keeps the sequences to be under the specific constraint by a simple rejection method, such information for various target conditions would be better to estimate the practical running time of RNARedPrint.\\[1em]}%
 \AnswerTODO[Sebastian]{
-We now report the frequency of rejections measured under various conditions. (Further comments...)
+We now report the frequency of rejections measured under various conditions. +add plots (moving distributions over rounds...)
 }
 \Comment{
 Another is the quality of their solutions in terms of the stability of each target structure.\\[1em]}%
-\AnswerTODO[Seb+Stefan]{ Can we report that? If so, why not...
-}
+\Answer{We were unsure how to interpret this remark: RNARedPrint enforces an explicit control on target free-energies through multidimensional Boltzmann sampling, so it cannot be used as an external validation of the quality of our output. Moreover the final targeted free energies differ greatly across structures across our various benchmark, so one would have to report them on a per sequence basis, leading to a result that would be hard to interpret.  Finally, note that the MODENA multidefect objective function already depends critically from achieving low, consistent, energies, and already arguably captures this notion of stability.}
 \Comment{
 According to their results, adaptive sampling has a strong power to improve the results. Unfortunately, the authors only introduce the existence of weights first in the first section of methods.
 It would be better that the authors introduce the concept of weights at the beginning (and whether they are completely same with those in RNAblueprint or not).\\[1em]}%
-\AnswerTODO[Yann]{
+\Answer{
 Weights are used for two different purposes:
 \begin{itemize}
     \item In order to induce a Boltzmann distribution on the set of sequences;
     \item As a technical artifact, to ensure the efficiency of a rejection-based strategy to control auxiliary features (free-energies for structures, GC\%\ldots)
 \end{itemize}
 }
+\AnswerTODO[Yann]{
+  Introducing gently the concept of adaptive sampling and weights in intro + Diplomatic answer
+}
 \Comment{
 Moreover, it is not well described how we can choose the initial weights and what values they are converged in the actual cases (e.g., Fig2 and S4) after adaptive sampling.\\[1em]}%
-\AnswerTODO[Stefan]{
+\Answer{
 The calibration of weights relies on a numerical iteration aiming at computing weights such that expected properties of sampled sequences (which depend on weights) match their targeted values. Associated problems are usually convex, and we describe in supplementary material a numerical iteration to compute suitable weights.
-We also added to Fig 2 and 4 the final weights.
+We also added to Fig. 2 and 4 the final weights.
 }
 \Comment{
 The influence of long loops and stacking should be measured for the sequences having different GC contents and length. Moreover, the number of base pairs in target structures should be considered since such approximation might be critical when the long loops appear in the target structures.
 \\[1em]}%
 \AnswerTODO[Yann]{Our approximation only hold for a single structure. Long loops tend to be oblivious of their content so, while approximating the energy model for long loops would be a problem in the context of structure prediction, they are not in the context of design. (to be clarified/elaborated)
-
 }
 \Comment{
 $R^2$ values and $p$-values are also necessary to evaluate the correlation between two energy models. (What are the lines in Fig2A representing?)
@@ -169,52 +168,54 @@ $R^2$ values and $p$-values are also necessary to evaluate the correlation betwe
 Compute $R^2$ (detaching plot). Write paragraph about goodness of fit
 }
 \Comment{
-Through the analyses, the names of energy models should be specified more clearly. The original model, simplified base paired model, and stacking model are confusing. Remove base-paired (simplified Turner).
+Through the analyses, the names of energy models should be specified more clearly. The original model, simplified base paired model, and stacking model are confusing.
 \\[1em]}%
-\AnswerTODO[Yann]{
-To avoid any confusion, we moved the paragraph describing the integration of various energy models to the appendix. We now only describe our simplified stacking model, which we more explicitly show to be highly correlated with the Turner energy model.
-}
+\Answer{While we believe that the capacity of our framework to describe various energy models is important, and demonstrates its versatility and potential for future developments, it is true that only the stacking model is absolutely necessary to understand the method.
+To avoid any further confusion, we moved the paragraph describing the integration of various energy models to the appendix. We now only describe our simplified stacking model, which we more explicitly show to be highly correlated with the Turner energy model.}
+\AnswerTODO[Sebastian]{Check that BP model does not appear too recurrently in manuscript}
 \Comment{
 Multi defect can be a good measure to understand the overall performance of the sequence designing method, but there is little explanation why Multidefect is enough to evaluate the quality of sequences for the multi (target-structure) objective problem in a practical use case such as Riboswitch design.
 \\[1em]}%
-\AnswerTODO[Yann]{Not really our job, but we can maybe remind some of the key arguments.
+\Answer{The MultiDefect objective function is based on the rationale that target structures should achieve high stability, and that the chosen RNA cannot adopt alternative, more stable, structures. It is a well accepted metrics introduced by other contributors, which we did not feel necessary to question or further improve.
 }
 \Comment{
 Although RNABluePrint was compared with MODENA in the previous study, RNABluePrint did not overwhelm MODENA in all of conditions (and it is unclear which version (variant) of RNABluePrint is applied in this study).
 For that reason, RNARedPrint still should be compared with MODENA (in the same running time) using Multidefect and the criteria used in the previous studies such as $\delta$e1 and $\delta$e2. Also, RNARedprint and RNABlueprint are optimised to increase only a Multidefect value.\\[1em]}%
-\AnswerTODO[Stefan]{First of all, it is perhaps worth reminding that RNAredprint is not intended as a tool for negative design, but rather a good seed generation algorithm, amenable to further optimization using other tools. For this reason, we focused our validation on this potential for better initialization, and compared the quality of sequences generated by RNAredprint (Boltzmann weighted) to RNAblueprint (uniform). We noticed that, while RNAredprint is not explicitly tailored to optimize MultiDefect, it nevertheless produces sequences that: 1) achieve better values; and 2) are amenable to better further optimizations than the uniform version implemented by RNABluePrint.
-}
+\Answer{First of all, it is perhaps worth reminding that RNAredprint is not intended as a tool for negative design, but rather a generation algorithm, not only addressing a large array of design use-cases, but also able to generate good seed sequences, amenable to further optimization using other tools. For this reason, we focused our validation on this potential for better initialization, and compared the quality of sequences generated by RNARedPrint (Boltzmann weighted) to RNABlueprint (uniform). We noticed that, while RNAredprint is not explicitly tailored to optimize MultiDefect, it nevertheless produces sequences that: 1) achieve better values; and 2) are amenable to better further optimizations than the uniform version implemented by RNABluePrint.}
 
-\Comment{
-Hence, the distribution of Multidefect, previous criteria, and the first and second term of Multidefect should be shown in box plots or violin plots to know the robustness of RNARedPrint It is also interesting what is the characteristic of the sequence designed by each method in a specific example of functional RNA molecules. \\[1em]}%
-\AnswerTODO[Yann]{Again, we do not adhere to such a benchmark-driven view of design tasks. The time of design is generally negligible compared to the time taken to experimentally assess the ultimate functionality of a design. What we believe to matter more to the community is the expressivity of the tools, allowing to address various use-cases.
+\Comment{Hence, the distribution of Multidefect, previous criteria, and the first and second term of Multidefect should be shown in box plots or violin plots to know the robustness of RNARedPrint. It is also interesting what is the characteristic of the sequence designed by each method in a specific example of functional RNA molecules.\\[1em]}%
+\AnswerTODO[Yann]{Again, we do not feel the need to validate, or further analyze, the MultiDefect metrics, which has been a standard for multiple structure design. The time taken by the computational design is generally negligible compared to the time taken to experimentally validate the ultimate functionality of a design. What we believe to matter more to the community is the expressivity of the tool which, in this case, allows to address various use-cases, including some that could not be addressed before.
 }
 \Comment{(Is RNARedPrint able to produce, for example, the combination of two long stem loops which are high and low GC-content, respectively?)\\[1em]}%
-\AnswerTODO[Yann]{In the current implementation, it is only possible to constrain the global GC\% of the sequence. It is however possible to support this feature within our general framework, since one can associated individual objectives to structures (eg  structures are already associated with individual target energies). Different stems can be expressed as different structures by "peeling the structure", so this feature could be added to a future version, should the concrete need arise.
-}
+\Answer{In the current implementation, it is only possible to constrain the global GC\% of the sequence. It is however possible to support this feature within our general framework, since one can associated individual objectives to structures (eg  structures are already associated with individual target energies). Different stems can be expressed as different structures by "peeling the structure", so this feature could be added to a future version, should the concrete need arise.}
 \Comment{
-The section "problem statement" is not helpful enough for readers, both of algorithmic and biological people.\\[1em]}%
+The section "problem statement" is not helpful enough for readers, both of algorithmic and biological people.
+In particular, it is difficult to comprehend the relationships between the variables due to insufficient descriptions and lack of definitions.
+For example, they do not specify any relationship between R and F in this section while they should not be independent. (e.g., m should be equal or less than k?)
+\\[1em]}%
 \AnswerTODO[Yann]{We attempted to clarify it.
 }
 \Comment{
-In particular, it is difficult to comprehend the relationships between the variables due to insufficient descriptions and lack of definitions.
-For example, they do not specify any relationship between R and F in this section while they should not be independent. (e.g., m should be equal or less than k?)
 Moreover, I cannot find a definition of several variables. (e.g., What is $S$, $S_i$, $x$, $xp$, $xd$, $vp$, $bu{chi}$ (P9L24) ? Where "its dependence dep $f$" comes from?)
 Because this manuscript contains many variables and abbreviations, it is recommended to have a table or image to explain the variables and their actual examples following the sampling example in Fig1. The description of the brief aim and summary of each step would be a good guide for readers.\\[1em]}%
 \AnswerTODO[Yan]{
 Add method overview
 }
+
+\noindent
+{\bf Detailed comments:}
+
 \Comment{
 * Ensemble free energy: might be an ambiguous definition\\[1em]}%
 \Answer{The concept of ensemble free-energy is a well-defined concept in statistical mechanics, and is used here in a way that, to the best of our knowledge, matches its usual definition.}
 \Comment{
 * While $\chi$ is a subset of nodes $X$, is a subset of $\chi$ an edge? (P7 L19)\\[1em]}%
 \AnswerTODO{
-??
+ $\chi(v)$ is a subset of the positions in the RNA sequence. For an edge/base pair to be included in this set simply means that both of its edges are part of that set. It is crucial that all edges/base pairs are captured by at least one node $v$, so that the sequence compatibility can be ensured.
 }
 \Comment[Sebastian :)]{
 * Is the output of algorithm 2 only one sequence? It is unclear when two (or more?) sequences are merged by $S \cup S'$.\\[1em]}%
-\AnswerTODO{???
+\AnswerTODO{Indeed. In order to simplify the notations, we use $S$ and $S'$ to mean partial assignments, which can be merged through an union.
 }
 \Comment{
 Is it correct no break at P10L23?\\[1em]}%
@@ -227,8 +228,8 @@ Is it correct no break at P10L23?\\[1em]}%
 }
 \Comment{
 * Unfortunately, I could not run RNARedPrint (while it can be just compiled when I make bin directory). More detailed documentation is required such as OS dependency or the version information the authors confirmed.\\[1em]}%
-\AnswerTODO[Yanns]{
-Yann will check
+\AnswerTODO[Yann]{
+Yann will check; mention OS dependencies---not checked on MacOS. Merge pyscript branch into master branch!
 }
 \Comment{
 * It seems not trivial that Boltzmann sampling works better to control GC contents, but the stability of structures. What's the reason the authors include GC contents for the criteria of Boltzmann-weighted sampling?\\[1em]}%
@@ -237,40 +238,38 @@ Yann will check
 }
 \Comment{
 * The order of authors is different between the main manuscript and supplementary (not sure whether they used just an alphabetical order).\\[1em]}%
-\AnswerTODO{
-?
+\Answer{Thank you for spotting that issue, devoid of any deeper significance.
 }
 \Comment{
 * Is the section "\# P-hardness of counting valid designs" necessary in the main script (not supplementary) to explain the results? The complexity of the problem is important to consider theoretical limitations, but the assumption in that section seems not to be necessary since the authors applied a greedy sampling strategy and not in the scope of this study.\\[1em]}%
-\Answer{we respectfully disagree with that assessment.
-The core of our approach consists in generating, uniformly at random (resp. in a Boltzmann distribution, which identifies with the uniform distribution when $T\to +\infty$). Such a generation algorithm usually starts by precomputing some numbers of solutions (here, sequences that satisfy the classic base pairing rules) later to be used to ensure the uniformity of the generation through stochastic choices. The precomputation step  requires an efficient algorithm for counting the number of solutions. In this work, we provide an {\bfseries exact} algorithm (not a heuristics) for the problem which, while being FPT, still requires exponential time when the tree-width increases with the sequence length. This raises the natural question: Can a truly polynomial algorithm exist for the problem? Our proof of \#P-hardness provides a negative answer to this problem under fairly reasonable assumptions. We tried to clarify those points in our introduction of the \#P hardness result.
+\Answer{We respectfully disagree with that assessment. The core of our approach consists in generating, uniformly at random (resp. in a Boltzmann distribution, which identifies with the uniform distribution when $T\to +\infty$). Such a generation algorithm usually starts by precomputing some numbers of solutions (here, sequences that satisfy the classic base pairing rules) later to be used to ensure the uniformity of the generation through stochastic choices. The precomputation step  requires an efficient algorithm for counting the number of solutions. In this work, we provide an {\bfseries exact} algorithm (not a heuristics) for the problem which, while being FPT, still requires exponential time when the tree-width increases with the sequence length. This motivates the natural question: Can a truly polynomial algorithm exist for the problem? Our proof of \#P-hardness provides a negative answer to this problem under fairly reasonable assumptions. We tried to clarify those points in our introduction of the \#P hardness result.
 }
+\AnswerTODO{Revamp intro for \#P result + maybe overall intro}
 \Comment{
 * Move the first section in the result to the method.\\[1em]}%
 \AnswerTODO[Yann]{
-Ok (but include efficiency of multidim sampling, keeping correlation analysis)
+Ok (but include efficiency of multidim sampling, keeping correlation analysis) TODO:move parts of the Subsection: Efficiently targeting... to Methods.
 }
 \end{enumerate}
 \subsection{Reviewer \#2}
 \begin{enumerate}
 \Comment{
 1) The "Methods" section is very long, it should be shortened.\\[1em]}%
+\Answer{
+As this reviewer could probably notice, the techniques used in this paper are quite divers, and stem from several subfields of computer science (graph algorithms, enumerative/analytic combinatorics...). For this reason, a more concise description of the method would be poorly self-contained, possibly to the point of irreproducibility. However, we share the concern of this reviewer regarding an imbalanced manuscript, and moved less original/central parts of the method to the appendix. This includes the expression of various energy models as constraints Turner, and the description of our naive numerical weight optimization.
+}
 \AnswerTODO[Yann]{
-Well, some methods require longer descriptions ;)
-Move expression of various energy models as constraints Turner to appendix
-Move numerical weight optim to appendix
+Move material to appendix
 Better motivations for \#P-hardness
 New results : 
   1) Validation of stacking approximation: Correlation coefficient of Stacking and Turner (+ goodness of fit)
-  2) Rejection analysis for multidim sampling
-  3) Tree width and Time benchmark
-  5) Proof-of-concept -Potential of better seeds
+  2) Tree width and Time benchmark
+  3) Rejection analysis for multidim sampling
+  4) Proof-of-concept -Potential of better seeds
 }
 \Comment{
 2) Although, it was shown previously, that RNABluePrint is a leading tool for multiple design, it would be valuable to include and compare the results generated by the other tools, e.g. Frnakenstein.\\[1em]}%
-\AnswerTODO[Stefan+Sebastian]{
-The three currently available tools are Frnakenstein, RNABluePrint and Modena. Shall we do that?
-}
+\AnswerTODO[Stefan+Sebastian]{Unfortunately, we could no longer locate the implementation of FRNAkenstein. Moreover, in the context of positive, the strategies of MODENA and FRNAkenstein are virtually identical.}
 \Comment{
 3) Please include computational times of the performed designs with the given benchmark.\\[1em]}%
 \AnswerTODO[Stefan]{
@@ -286,18 +285,19 @@ Will do
 \begin{enumerate}
 \Comment{
 In Figure 3 of Supplementary Material: more detailed description for explaining the two examples of tree decomposition is appreciated, particularly for the readers who are not familiar with tree decomposition; e.g. why these two examples are output, and the other examples for RF3 exist or not?\\[1em]}%
+\Answer{This figure illustrates the impact of the energy model on the tree-decomposition, a simple energy model leading to a much simpler tree-decomposition than the stacking model. We now describe more explicitly
+}
 \AnswerTODO[Sebastian]{
-Discussion
+Add a description of tree decompositions and why they differ + New Illustration
 }
 \Comment{
-In "L Detailed result of MultiDefect Analysis" of Supplementary Material, running time is missing. Since the Boltzmann sampling in RNARedPrint utilizes the rejection approach, I would like to know the difference between the running times of the Boltzmann sampling and the uniform sampling. \\[1em]}%
-\AnswerTODO[Yann]{ Added runtimes.
-None, but for multidim sampling, rejection and weight optimization stack up (we report them).
-}
+In "Detailed result of MultiDefect Analysis" of Supplementary Material, running time is missing. Since the Boltzmann sampling in RNARedPrint utilizes the rejection approach, I would like to know the difference between the running times of the Boltzmann sampling and the uniform sampling. \\[1em]}%
+\Answer{We were unsure about what was meant in this comment. Just to be precise, we distinguish the term 'Boltzmann sampling' from 'multi-dimensional Bolzmann sampling' in our paper. 
+On the one hand, Boltzmann sampling, i.e. drawing sequences from the Boltzmann distribution does not involve any rejection, and is actually exactly as costly as drawing them uniformly. In such a uniform mode, RNARedPrint performs equally as fast as RNABluePrint, and usually faster, since the graph decomposition used in RNABluePrint implies time and memory consumptions that are provably strictly less efficient than the tree decomposition underlying RNARedPrint.
+On the other hand, multi-dimensional Boltzmann sampling requires a rejection step to target specific properties that are typically difficult to obtain by chance in the uniform distribution. There is, of course, an added cost associated to this rejection, and the simultaneous weight optimization, which we discuss further in a new "Result" subsection, where we also report the exact time differences.}
 \Comment{
 In addition, I think it is better that the N/A result is indicated not by a blank but by a "N/A" in the table.\\[1em]}%
-\AnswerTODO[Stefan/Sebastian]{
-Will add results times}
+\Answer{We used N/A in the table.}
 \end{enumerate}
 %\bibliographystyle{amsplain}
 %\bibliography{response}
