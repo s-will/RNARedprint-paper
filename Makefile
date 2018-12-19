@@ -1,7 +1,7 @@
-DOCUMENTS=RNARedPrint supplement
+DOCUMENTS=BMC-Response-Round1 RNARedPrint supplement
 
 all: figs $(DOCUMENTS:=.pdf)
-
+pdf: all
 figs:
 	make -C Figs
 

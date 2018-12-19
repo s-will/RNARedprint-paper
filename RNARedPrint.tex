@@ -43,8 +43,8 @@
 
 %%% loading packages, author definitions
 
-\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
-%\documentclass{bmcart}
+%\documentclass[doublespacing,linenumbers]{bmcart}% uncomment this for twocolumn layout and comment line below
+\documentclass{bmcart}
 
 %%% PACKAGES
 
@@ -267,6 +267,8 @@
 \newcommand{\citet}[1]{\cite{#1}}
 
 \renewcommand{\Pr}[1]{\mathbb{P}{#1}}
+
+\newcommand{\revised}[1]{\textcolor{red}{#1}}
 
 %%% end macro defs
 
@@ -752,7 +754,7 @@ for the design in the base pair model targeting \GCb\% and structures $\R$ with 
 \item the transformed contributions $\ln(\pi_\ell)f^{R_\ell}_{ij}$for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
 \end{itemize}
 
-By these definitions, the set $\F$ encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}); also confer Eq.~(\ref{eq:feature-energy-transformation}). 
+By these definitions, the set $\F$ encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}).
 %Subsequently, we show how to efficiently compute this partition function based on the 
 %corresponding dependency graph and its tree decomposition.
 
@@ -1210,7 +1212,7 @@ pseudoknot-free target structures.
 
 \subsection*{Generating high-quality seeds for further optimization}
 We empirically evaluated \ourprog{} for generating seed sequences targeting multiple (pseudoknotted) structures, possibly followed by subsequent local optimizations. As a baseline for comparison, we considered \RNAblueprint~\citep{Hammer2017}, the current leading tool for multiple design.
-As a quality measure, we applied the objective function that was introduced by~\citet{Hammer2017} for multi-stable design, defined as:
+As a quality measure, we applied the objective function introduced by~\citet{Hammer2017} \revised{based on \cite{Flamm2001,HoenerzuSiederdissen2013}} for multi-stable design, defined as:
 % \begin{align}
 %   f(S)= \quad & \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - G(S))\notag\\
 %    & +\ \xi \frac{2}{k(k-1)} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|.
@@ -1382,6 +1384,10 @@ One could also envision using positive design as a null model, for instance in o
 
 \section*{Competing interests}
   The authors declare that they have no competing interests.
+
+
+\section*{Availability of data and materials}
+The software and data of this work are available in the Github repository \url{https://github.com/yannponty/RNARedPrint}.
 
 \section*{Author's contributions}
   YP and SW initiated the project and designed the algorithms.
