@@ -562,13 +562,11 @@ Ding and Lawrence~\citep{Ding2003}. Uniform sampling is achieved by
 choosing individual nucleotide assignments with probabilities derived
 from the subsolution counts. While, due to its decomposition strategy, 
 \Software{RNAdesign} performs much better than the theoretical bound of $O(4^n)$, no attempts were made to characterize or justify its---still exponential---complexity; leaving important theoretical questions of the complexity of counting and uniform sampling open.
-As well, the \Software{RNAdesign}/\RNAblueprint{} approach is very specialized to uniform sampling, which limits its direct extensibility. Both aspects call for a more systematic redesign of multi-target sampling, which builds on established concepts in computer science. In turn, this promises a fundamentally broader range of applications for extensions of the sampling method.
+As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uniform sampling, which limits its direct extensibility. Both aspects call for a more systematic redesign of multi-target sampling, which builds on established concepts in computer science. In turn, this promises a fundamentally broader range of applications for extensions of the sampling method.
 
-\parHead{Motivation.}
+\todo[inline]{SW: The following paragraph (together with the first sentence of Subsection Contributions) is rather confusing than helpful. We could drop this here and give brief explanations of the complexity issues in the contributions section.}
 Better understanding of the true complexity bounds is highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still limited by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step. In other words key questions include: \emph{How to sample, in a general way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as \GCb\%, complex sequence constraints, or the energy of individual structures?}
-
-%All such extensions are still limited by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step. 
-
+ 
 \subsection*{Contributions}
 
 \begin{figure*}[t]
