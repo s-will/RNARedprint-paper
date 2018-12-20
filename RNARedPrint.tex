@@ -638,7 +638,7 @@ For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
 \subsection*{Representing \GCb\%-content and energies as features.}
 Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ depends on a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
 $$
-F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$: $f$ is contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\!\! f(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
+F(S) =\!\!\!\!\!\!\!\!\!\!\sum_{\substack{\text{$f$: $f$ is contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\!\!\!\!\! f(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
 $$
 
 For instance, the $\GCb\%$ can be expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$,  where $f^{\GCb}_i(\{i\mapsto S_i\})=-1$ if $S_i=\Gb$ or $\Cb$, and $0$ otherwise. 
@@ -650,10 +650,10 @@ For instance, the $\GCb\%$ can be expressed using $n$ contributions $f^{\GCb}_i$
 % $i\leq i'\leq j \leq j'.$
 
 
-Moreover, in a simple \Def{base pair energy model}, the energy of a target structure $R$ is expressed as a feature associated with contributions $f^R_{ij}(\{i\mapsto x, j\mapsto y\})=\EbpSym(x,y)$ for each base pair $(i,j)$ of $R,$ such that $F^R(S)=\EbpSym(S,R)$. 
+%Moreover, in a simple \Def{base pair energy model}, the energy of a target structure $R$ is expressed as a feature associated with contributions $f^R_{ij}(\{i\mapsto x, j\mapsto y\})=\EbpSym(x,y)$ for each base pair $(i,j)$ of $R,$ such that $F^R(S)=\EbpSym(S,R)$. 
 
 
-Note that for \GCb\% as well as for the base pair energy features, the contributions depend on the nucleotides at only a small, constantly bounded number of sequence positions (one and two positions, respectively). 
+%Note that the \GCb\% as well as for the base pair energy features, the contributions depend on the nucleotides at only a small, constantly bounded, number of sequence positions (one and two positions, respectively). 
 
 %This is important for the efficiency of our approach, which is designed to profit from contributions that each depend on only few sequence positions. 
 %We emphasize that nevertheless, the same framework can capture more expressive RNA energy models like the Turner energy model~\citep{Turner2009}, since such models generally define a function $E$ that maps a pair of a sequence $S$ and a structure $R$ to a real value, the \Def{energy} $E(S,R)$. Here, our approach automatically adapts to the more complex energy functions, leading to a controlled increase of the computational complexity.
@@ -709,7 +709,7 @@ The set $\F$ of contributions induces a
 \item for all $e\in E$, there is a node $v\in T$, such that $e\subseteq\chi(v)$.
 \end{enumerate}
 \end{definition}
-\revised{Intuitively, the tree decomposition of an (hypergraph) $G$ is a tree structure which features all the vertices of $G$, captures all the hyperedges of $G$, and helps ensure some notion of consistency. Figure~\ref{fig:treedec} illustrates one of the optimal tree decomposition for a pair of secondary structure under the stacking energy model.}
+\revised{Intuitively, a tree decomposition for an (hyper)graph $G$ is a tree structure which features all the vertices of $G$, captures all the (hyper)edges of $G$, and helps ensure some notion of consistency. Figure~\ref{fig:treedec} illustrates shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
 \begin{definition}[Tree width]
 The \Def{width} of a tree decomposition $(T,\chi)$ is defined as
 $$\min_{u\in T} |\chi(u)| - 1.$$ The \Def{treewidth}
@@ -732,9 +732,10 @@ of a graph $G$ is the smallest width of any tree decomposition of $G$.
 %The RNA design network describes how to evaluate RNA sequences and, in
 %particular, partial RNA sequences, which is 
 
-To formalize our algorithms, which iteratively merge evaluations of partial solutions, we extend the idea of atomic feature contributions, which are evaluated at sets of the form $\{x_1\mapsto v_1, \dots, x_d\mapsto v_p\}$. Let us call the latter object \Def{partial sequence}; they are handy to specify partial knowledge on the entire sequence at some point of the algorithm. Easily, we can extend the definition of contributions $f$ to sets $\{x_1\mapsto v_1, \dots, x_p\mapsto v_p\}$, where $\{x_1\dots x_p\}$ is any super-set of $\dep(f)$ by ignoring the superfluous assignments $x\mapsto v$, where $x\not\in\dep(f)$. 
-
 Our algorithms specialize the idea of cluster tree elimination (CTE)~\citep{Dechter2013}, which operates on constraint networks. In this correspondence, (partial) sequences specialize (partial) assignments and the constraint network would be given by variables for each sequence position, constraints due to valid base pairing, and the set of atomic feature contributions $\cal F$.
+
+
+To formalize our algorithms, which iteratively merge evaluations of partial solutions, we extend the idea of atomic feature contributions, which are evaluated at sets of the form $\{x_1\mapsto v_1, \dots, x_d\mapsto v_p\}$. Let us call the latter object a \Def{partial sequence}; such an object will help specify partial knowledge on the sequence at some point of the algorithm. Easily, we can extend the definition of contributions $f$ to sets $\{x_1\mapsto v_1, \dots, x_p\mapsto v_p\}$, where $\{x_1\dots x_p\}$ is any super-set of $\dep(f)$ by ignoring the superfluous assignments $x\mapsto v$, where $x\not\in\dep(f)$. 
 
 %\begin{definition}
 %An \Def{RNA design network} (for sequences of length $n$) is a tuple $\network=(\X,\F)$, where
@@ -770,7 +771,7 @@ By these definitions, the set $\F$ encodes the partition function $\partfun{\pi_
 
 We compute the partition function (as specified by $\F$) by dynamic programming based
 on a tree decomposition of $G_{\F}$, the dependency graph associated with $\F$.
-Note that analogous algorithms could be easily derived to count valid sequences, or produce the sequence with minimal free-energy.
+Note that analogous algorithms could be easily derived to count valid sequences, or list sequences having minimal free-energy.
 %This yields fixed parameter tractable (FPT) algorithms, based on the treewidth.
 
 %\begin{figure}[t]
@@ -797,7 +798,7 @@ i.e.~for $\Y=\{y_1,\dots,y_{q}\}$,
 \partseqs(\Y) = \{ & \{ y_i\mapsto v_i \mid i=1,\dots,q \} \\& | (v_1,\dots,v_{q}) \in \{\Ab,\Cb,\Gb,\Ub\}^{q} \}.
 \end{align*}
 %
-We assume several properties of the given cluster tree (reflecting $\F$), which otherwise could be easily obtained:
+We assume the following properties of the given cluster tree (reflecting $\F$):
 \begin{itemize}
 \item
 $T$ is
@@ -858,7 +859,7 @@ the edges in the tree decomposition are generated by Algorithm \ref{alg:pf},
 one can repeatedly call Algorithm~\ref{alg:sampling}, each time
 randomly drawing another sequence from the Boltzmann distribution.
 
-\subsection*{Computational complexity of the multiple target sampling algorithm}\label{sec:complexity}
+\subsection*{Complexity considerations}\label{sec:complexity}
 
 %The complexity of the proposed sampling algorithm depends on the treewidth of the dependency graph $G_\F$.
 % The treewidth $w$ of a cluster tree $(T,\chi,\phi)$, $T=(V,E)$, is $\max_{v\in V} |\chi(v)| - 1$, i.e.~the maximum number of positions in any of its clusters minus 1.
@@ -1051,6 +1052,7 @@ $\varepsilon=0$.
 \subsection*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
+This 
 Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
 computing the number of valid sequences for a given compatibility
 graph $G=(V,E)$. Note that this problem corresponds to the partition
