@@ -268,7 +268,7 @@
 
 \renewcommand{\Pr}[1]{\mathbb{P}{#1}}
 
-\newcommand{\revised}[1]{\textcolor{red}{#1}}
+\newcommand{\revised}[1]{{\color{red} #1}}
 
 %%% end macro defs
 
@@ -635,13 +635,26 @@ For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
     \partfun{\pi_1,\dots,\pi_k} = \sum_{S\in\Sigma^n} \prod_{1\leq \ell\leq k} \pi_\ell^{-F_\ell(S)}.
   \end{equation}
 
-\subsection*{Representing \GCb\%-content and energies as features.}
-Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ depends on a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
+\subsection*{Expressing \GCb\%-content, sequence validity and energies as features}
+Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
 $$
-F(S) =\!\!\!\!\!\!\!\!\!\!\sum_{\substack{\text{$f$: $f$ is contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\!\!\!\!\! f(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
+F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f\left(\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}\right).
 $$
 
-For instance, the $\GCb\%$ can be expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$,  where $f^{\GCb}_i(\{i\mapsto S_i\})=-1$ if $S_i=\Gb$ or $\Cb$, and $0$ otherwise. 
+
+The $\GCb\%$ can be trivially expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$, whose dependencies are restricted to individual nucleotides,  and such that 
+$$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&\text{ otherwise}.\end{cases}$$ 
+\revised{By summing $f^{\GCb}_i$ over the whole sequence, one simply counts the occurrences of $\Gb$ and $\Cb$.}
+
+\revised{
+	Such features can also be used to count the number of \Def{valid sequences}, \emph{i.e.} sequences inducing only base pairs in $\mathcal{B}:=\{\{\Ab,\Ub\}, \{\Gb,\Cb\}, \{\Gb,\Ub\}\}$. Indeed, consider a feature $F^{\tt BP}$ composed of  contributions $f^{\tt BP}_{i,j}$, for each base pair $(i,j)$ occurring in some structure, such that 
+	$$f^{{\sf BP}}_{i,j}(\left\{\substack{i\mapsto a\\j\mapsto b}\right\})=\begin{cases}0&\text{ if }\{a,b\}\in\mathcal{B} \\+\infty&\text{ otherwise}.\end{cases}$$ 
+	The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid seqeunce is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Equation~\ref{eq:mainproblem} simply counts the number of valid sequences when restricted to to $F^{\tt BP}$.
+
+
+	Energy models for structure prediction vary considerably, yet can always be expressed as a sum over contributions associated with local structural motifs (base pairs, stacking pairs, loops\ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, to each motif $m$ occurring in a structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its specific set of positions $\dep(f_m)$. For instance, the contribution of a stacking pair, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, will be expressed through a 
+
+}
 
 %For the definition of energy features, we abstract an \Def{RNA (secondary) structure} $R$ of length $n$ as a set of \Def{base pairs} $(i,j)$, where
 %$1\leq i<j\leq n$ and for all different $(i,j), (i',j')\in R$: $\{i,j\}\cap\{i',j'\}=\emptyset$ (``degree $\leq$ 1'')---without precluding pseudoknots.
@@ -675,7 +688,7 @@ For instance, the $\GCb\%$ can be expressed using $n$ contributions $f^{\GCb}_i$
 %where $\beta$ denotes inverse temperature and $E(S)$ is defined as linear combination of energies $E(S)=\sum_{1\leq \ell \leq k} \ln(\pi_\ell)/\beta E(S,R_\ell)$,
 %where the energy $E(S,R_\ell)$ is treated as feature $F_\ell(S) = \EbpSym(S,R_\ell);$ as elaborated later, even Turner energies or pseudoknot energies can be expressed as features due to their additive nature. 
 
-\subsection*{Dependency structure, tree decomposition and width}
+\subsection*{Dependency graph, tree decomposition and width}
 %The complexity of the central problem depends fundamentally on the dependency structure that is imposed by the entire set of contributions.
 
 %For design in the base pair energy model or the related counting problem, the dependencies are immediately derived from the set of target structures $\R$. 
@@ -684,17 +697,18 @@ For instance, the $\GCb\%$ can be expressed using $n$ contributions $f^{\GCb}_i$
 %all $(i,j)\in R$, where $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}$ describes the valid base pairs.
 
 
-First, in order to capture the requirement of canonical base pairing for each structure,
+In order to capture the requirement of canonical base pairing for each structure,
 we define the \Def{base pair dependency graph} $G_{\R}$ as the graph with nodes $\{1,\dots,n\}$
 and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct dependency between the chosen nucleotide assignments for the two positions.
 
-More generally, we consider dependencies induced by the complete set of contributions $\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}$.
+More generally, we consider dependencies induced by the complete set of contributions $$\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}.$$
 %
 %Let us denote the \emph{dependencies of a contribution $f$} as \dep{f}.
 %
 The set $\F$ of contributions induces a
-  \Def{dependency graph} $G_\F$ on sequence positions by interpreting the dependencies as hyperedges, namely the hypergraph 
-  $G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\})$. The \Def{tree decomposition} of $G_\F$ is fundamental for our algorithms.
+  \Def{dependency graph} $G_\F$ on sequence positions by interpreting the dependencies as hyperedges, leading to the hypergraph 
+  $$G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\}).$$ 
+  Let us now remind the \Def{tree decomposition} of a graph $G_\F$, a fundamental ingredient of our algorithms.
 
 \begin{definition}[Tree decomposition]
   \label{def:treedecomp}
@@ -708,7 +722,7 @@ The set $\F$ of contributions induces a
 \item for all $e\in E$, there is a node $v\in T$, such that $e\subseteq\chi(v)$.
 \end{enumerate}
 \end{definition}
-\revised{Intuitively, a tree decomposition for an (hyper)graph $G$ is a tree structure which features all the vertices of $G$, captures all the (hyper)edges of $G$, and helps ensure some notion of consistency. Figure~\ref{fig:treedec} illustrates shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
+\revised{Intuitively, a tree decomposition for an (hyper)graph $G$ is a tree structure which features all the vertices of $G$, captures all the (hyper)edges of $G$, and helps ensure some notion of consistency by allowing the propagation of values. Figure~\ref{fig:treedec} illustrates shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
 \begin{definition}[Tree width]
 The \Def{width} of a tree decomposition $(T,\chi)$ is defined as
 $$\min_{u\in T} |\chi(u)| - 1.$$ The \Def{treewidth}
@@ -748,7 +762,7 @@ To formalize our algorithms, which iteratively merge evaluations of partial solu
 
 %\newcommand{\weighttransform}[2]{{#1}_{||{#2}}}
 
-For algorithmic treatment, it is convenient to encode the weight $\pi$ of each feature in its contributions, such that all contributions can be handled uniformly. This transformation works by multiplying all contributions with $ln(\pi)$, where $\pi$ is the weight of the corresponding feature, since then
+Moreover, to ensure a uniform algorithmic treatment of contributions, it is convenient to encode the weight $\pi$ of each feature in its contributions. This transformation works by multiplying all contributions with $ln(\pi)$, where $\pi$ is the weight of the corresponding feature, since then
 $exp(-\ln(\pi)f(S))=\pi^{-f(S)}.$
 
 %For this purpose, we define the \Def{transformed contribution} 
@@ -1018,7 +1032,7 @@ The flexibility of our framework allows to support the advanced sampling techniq
 This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; here, in addition to controlling \GCb\% (our feature $F_0$) we use it to target the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the individual target structures (features $F_1,\dots,F_m$).
 
 For the multidimensional Boltzmann sampling, we require the already established ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ is
-$\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=0}^{k} \pi_i^{-F_i(S)}}{\partfun{\pmb{\pi}}},$
+$$\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=0}^{k} \pi_i^{-F_i(S)}}{\partfun{\pmb{\pi}}},$$
 where $\pmb{\pi}:=(\pi_0\cdots\pi_k)$ is the vector of the positive real-valued \Def{weights}, and $\partfun{\pmb{\pi}}$ is the weighted partition function.
 
 %Such a distribution can be induced by a simple modification of the functions described in Sec.~\ref{sec:energy_models}, where any energy function $E(\val)$ for a structure $\ell$ is replaced by $E'(\val):= \ln(\pi_\ell)\, E(\val)/\beta.$ 
@@ -1051,26 +1065,28 @@ $\varepsilon=0$.
 \subsection*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-This 
-Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
-computing the number of valid sequences for a given compatibility
-graph $G=(V,E)$. Note that this problem corresponds to the partition
-function problem with weights $\pi_\ell=1$ for each target structure, so that each valid structure contributes $1$ to the partition
-function; each invalid structure, 0.
+\revised{While efficient, both in practice and in theory for graphs of bounded tree width, our algorithms remain exponential in the worst case scenario, since the tree-width of a dependency graph can then become arbitrarily large. This exponential complexity in the worst case seems intrinsic. Indeed, we show that a specialization of our core problem, namely the enumeration of designs that respect canonical base pairing rules ($\Ab \leftrightarrow \Ub$, $\Gb \leftrightarrow \Cb$, $\Gb \leftrightarrow \Ub$) is $\#{\sf P}$-hard, even when the dependency graph is bipartite and connected. The existence of a polynomial time algorithm for computing the partition function of Equation \eqref{eq:mainproblem} is thus unlikely, and it would imply that  ${\sf\# P}={\sf FP}$ and, in turn, that ${\sf P}={\sf NP}$.}
 
-As previously noted~\citep{Flamm2001}, a set of target
-structures admits a valid design iff its compatibility graph is
-bipartite, which can be tested in linear time.  Moreover, without
-$\{\Gb, \Ub\}$ base pairs, the design of any connected component $C$
-of $G$ would be entirely determined by the assignment of a single of
-its nucleotides. The number of valid designs is thus simply
-$4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
-  connected components}.
-The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
+%Our contributed algorithms, while 
+%Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
+%computing the number of valid sequences for a given compatibility
+%graph $G=(V,E)$. Note that this problem corresponds to the partition
+%function problem with weights $\pi_\ell=1$ for each target structure, so that each valid structure contributes $1$ to the partition
+%function; each invalid structure, 0.
+%
+%As previously noted~\citep{Flamm2001}, a set of target
+%structures admits a valid design iff its compatibility graph is
+%bipartite, which can be tested in linear time.  Moreover, without
+%$\{\Gb, \Ub\}$ base pairs, the design of any connected component $C$
+%of $G$ would be entirely determined by the assignment of a single of
+%its nucleotides. The number of valid designs is thus simply
+%$4^{\#{\rm CC}(G)}$, where $\#{\rm CC}(G)$ is the \Def{number of
+%  connected components}.
+%The problem becomes much harder when $\{\Gb, \Ub\}$ base pairs are allowed, and we show that valid designs for a set of structures cannot be counted in polynomial time, unless ${\sf\# P}={\sf FP}$. This equality would, in particular, imply the classic ${\sf P}={\sf NP}$.
 
-To establish that claim, we consider instances $G=(V_1\cup V_2, E)$ that are connected and bipartite ($E \cap (V_1\times V_2) = E$), noting that hardness over restricted instances implies hardness of the general problem. Moreover note that, as we explained before, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
+To establish that claim, we consider a dependency graph $G=(V_1\cup V_2, E)$ that is connected and bipartite ($E \cap (V_1\times V_2) = E$). Note that, assigning a nucleotide to a position $u\in V$ constrains the parity ($\{\Ab,\Gb\}$ or $\{\Cb,\Ub\}$) of all positions in the connected component of $u$. For this reason, we restrict our attention to the counting of valid designs \emph{up to trivial  symmetry} $(\Ab\leftrightarrow \Cb/\Gb\leftrightarrow \Ub)$, by constraining the positions in $V_{1}$ to $\Ab$ and $\Gb$. Let $\Design{G}$ denote the subset of all designs for $G$ under this constraint, noting that $\NumDesign(G) = 2\cdot|\Design{G}|$.
 
-Let $\IS{G}$ denote the set of all independent sets in the connected graph $G$; recall that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. 
+Finally, let $\IS{G}$ denote the set of all independent sets in the connected graph $G$; recall that an \Def{independent set} of $G=(V,E)$ is a subset $V'\subseteq V$ of nodes that are not connected by any edge in $E$. 
 
 \begin{proposition}\label{prop:bijection}
   $|\Design{G}| = |\IS{G}|$.
@@ -1107,8 +1123,9 @@ $v_1\in V_1$ and $v_2\in V_2$, such that $f(v_1)\in\{\Ab,\Gb\}$ and $f(v_2)\in\{
 \end{itemize}
 \end{proof}
 
-Now we can build on the connection between the two problems to obtain complexity results for \NumDesign. Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is indeed a well-studied \#{\sf P}-hard problem~\citep{Ge2012}. Now assume the existence of an efficient (polynomial-time) algorithm $\mathcal{A}$ for computing $|\NumDesign(G)|$ on connected (bipartite) graphs. Then, running $\mathcal{A}$ and returning $|\NumDesign(G)|/2$ constitutes an efficient algorithm for $\#{\sf BIS}$ on connected graphs.
-However, $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ can be efficiently computed by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. In other words, any efficient algorithm for \NumDesign implies an efficient algorithm for $\#{\sf BIS}$, and we conclude with the hardness of \NumDesign.
+Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is a well-studied problem, shown to be \#{\sf P}-hard~\citep{Ge2012} even on connected graphs. Now assume the existence of an efficient (polynomial-time) algorithm $\mathcal{A}$ for computing $|\NumDesign(G)|$ on connected (bipartite) graphs. Then, running $\mathcal{A}$ and returning $|\NumDesign(G)|/2$ constitutes an efficient algorithm for $\#{\sf BIS}$ on connected graphs.
+%However, $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ can be efficiently computed by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. 
+In other words, any efficient algorithm for \NumDesign implies an efficient algorithm for $\#{\sf BIS}$, thus our conclusion on the complexity of \NumDesign.
 
 \begin{corollary}
   \NumDesign is $\#{\sf P}$-hard
