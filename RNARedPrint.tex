@@ -697,7 +697,7 @@ The set $\F$ of contributions induces a
   \Def{dependency graph} $G_\F$ on sequence positions by interpreting the dependencies as hyperedges, namely the hypergraph 
   $G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\})$. The \Def{tree decomposition} of $G_\F$ is fundamental for our algorithms.
 
-\begin{definition}[Tree decomposition and width]
+\begin{definition}[Tree decomposition]
   \label{def:treedecomp}
   Let $G=(X, E)$ be a (hyper)graph with nodes in $X$ and (hyper)edges in $E$. A \Def{tree decomposition} of $G$ is
   a pair $(T,\chi)$, where $T$ is an unrooted tree/forest and, for
@@ -708,11 +708,19 @@ The set $\F$ of contributions induces a
 \item for all $x\in X$, $\{ v \mid x \in \chi(v) \}$ induces a connected subtree of $T$;
 \item for all $e\in E$, there is a node $v\in T$, such that $e\subseteq\chi(v)$.
 \end{enumerate}
+\end{definition}
+\revised{Intuitively, the tree decomposition of an (hypergraph) $G$ is a tree structure which features all the vertices of $G$, captures all the hyperedges of $G$, and helps ensure some notion of consistency. Figure~\ref{fig:treedec} illustrates one of the optimal tree decomposition for a pair of secondary structure under the stacking energy model.}
+\begin{definition}[Tree width]
 The \Def{width} of a tree decomposition $(T,\chi)$ is defined as
-$\width(T,\chi) = \min_{u\in T} |\chi(u)| - 1 $. The \Def{treewidth}
-of $G$ is the smallest width of any tree decomposition of $G$.
+$$\min_{u\in T} |\chi(u)| - 1.$$ The \Def{treewidth}
+of a graph $G$ is the smallest width of any tree decomposition of $G$.
 \end{definition}
 %Recall the essential role of the treewidth as fixed parameter in our FPT appraoch.
+
+\begin{figure}
+{\centering \includegraphics[width=.9\linewidth]{Figs/example-treedec-stacking}\\}
+\caption{\revised{Toy example of a tree decomposition associated with two target structures in the stacking energy model. Two target secondary structures ({\bfseries\sffamily A}) are merged into a joint hypergraph ({\bfseries\sffamily B}), whose hyperedges correspond to the quadruplets of positions involved in stacking pairs (colored). A valid tree decomposition ({\bfseries\sffamily C}) for the hypergraph ensures, among other properties, that each stacking pair/hyperedge is represented in at least one of its node, so that the energy features can be adequately evaluated. The width of this tree decomposition is 3, and is provably optimal for any tree decomposition of the input hypergraph.}\label{fig:treedec}}
+\end{figure}
 
 \subsection*{Fixed-parameter tractable (FPT) algorithm}
 \label{sec:FPT}
