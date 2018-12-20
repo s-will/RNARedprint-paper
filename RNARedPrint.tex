@@ -638,7 +638,7 @@ For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
 \subsection*{Representing \GCb\%-content and energies as features.}
 Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ depends on a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
 $$
-F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$: $f$ is contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\!\! f(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
+F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\!\! f(\{x_1\mapsto S_{x_1},\ldots,x_p\mapsto S_{x_p}\}).
 $$
 
 For instance, the $\GCb\%$ can be expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$,  where $f^{\GCb}_i(\{i\mapsto S_i\})=-1$ if $S_i=\Gb$ or $\Cb$, and $0$ otherwise. 
@@ -650,7 +650,7 @@ For instance, the $\GCb\%$ can be expressed using $n$ contributions $f^{\GCb}_i$
 % $i\leq i'\leq j \leq j'.$
 
 
-Moreover, in a simple \Def{base pair energy model}, the energy of a target structure $R$ is expressed as a feature associated with contributions $f^R_{ij}(\{i\mapsto x, j\mapsto y\})=\EbpSym(x,y)$ for each base pair $(i,j)$ of $R,$ such that $F^R(S)=\EbpSym(S,R)$. 
+% Moreover, in a simple \Def{base pair energy model}, the energy of a target structure $R$ is expressed as a feature associated with contributions $f^R_{ij}(\{i\mapsto x, j\mapsto y\})=\EbpSym(x,y)$ for each base pair $(i,j)$ of $R,$ such that $F^R(S)=\EbpSym(S,R)$. 
 
 
 Note that for \GCb\% as well as for the base pair energy features, the contributions depend on the nucleotides at only a small, constantly bounded number of sequence positions (one and two positions, respectively). 
@@ -684,10 +684,9 @@ Note that for \GCb\% as well as for the base pair energy features, the contribut
 %all $(i,j)\in R$, where $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}$ describes the valid base pairs.
 
 
-
 First, in order to capture the requirement of canonical base pairing for each structure,
 we define the \Def{base pair dependency graph} $G_{\R}$ as the graph with nodes $\{1,\dots,n\}$
-and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j$ materializes the existence the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct depency between the assignments of these two positions.
+and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct dependency between the chosen nucleotide assignments for the two positions.
 
 More generally, we consider dependencies induced by the complete set of contributions $\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}$.
 %
@@ -719,7 +718,7 @@ of a graph $G$ is the smallest width of any tree decomposition of $G$.
 
 \begin{figure}
 {\centering \includegraphics[width=.9\linewidth]{Figs/example-treedec-stacking}\\}
-\caption{\revised{Toy example of a tree decomposition associated with two target structures in the stacking energy model. Two target secondary structures ({\bfseries\sffamily A}) are merged into a joint hypergraph ({\bfseries\sffamily B}), whose hyperedges correspond to the quadruplets of positions involved in stacking pairs (colored). A valid tree decomposition ({\bfseries\sffamily C}) for the hypergraph ensures, among other properties, that each stacking pair/hyperedge is represented in at least one of its node, so that the energy features can be adequately evaluated. The width of this tree decomposition is 3, and is provably optimal for any tree decomposition of the input hypergraph.}\label{fig:treedec}}
+\caption{\revised{Toy example of a tree decomposition associated with two target structures in the stacking energy model. Two target secondary structures ({\bfseries\sffamily A}) are merged into a joint hypergraph ({\bfseries\sffamily B}), whose hyperedges correspond to the quadruplets of positions involved in stacking pairs (colored). A valid tree decomposition ({\bfseries\sffamily C}) for the hypergraph ensures, among other properties, that each base pair and each stacking pair/hyperedge is represented in at least one of its node, so that features can be adequately evaluated. The width of this tree decomposition is 3, a provably optimal value for this input hypergraph.}\label{fig:treedec}}
 \end{figure}
 
 \subsection*{Fixed-parameter tractable (FPT) algorithm}
