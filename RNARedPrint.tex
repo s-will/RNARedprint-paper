@@ -916,7 +916,7 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 
 \begin{algorithm}
  \KwData{Cluster tree $(T,\chi,\phi)$ and partition functions $\Message{u'}{v'}$ for all $(u'\to{}v')\in T$.}
- \KwResult{Boltzmann-distributed random sequence $\val$.}
+ \KwResult{One random sequence $\val$ sampled from the Boltzmann distribution}
  $\val$ \gets $\varnothing$\;
  \For{$u\to{}v\in T$ in preorder}{
    $r \gets \text{uniform random number between $0$ and $\evalfor{\Message{u}{v}}{\val}$}$\;
