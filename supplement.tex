@@ -437,6 +437,9 @@ $0.95$ an $0.94$.
 
 \section{Contribution of terms to the MultiDefect score}
 
+\newcommand{\EnsE}{\text{\rm G}} %ensemble energy
+
+
 Figure~\ref{fig:contribtions-multidefect} breaks down the multi-defect
 score of Eq.~$(\ref{eq:blueprintobjective})$, which is used to
 evaluate the quality of multi-target designs. Recall that the total
@@ -494,9 +497,13 @@ model and in the stacking model. Then, we performed tree decomposition
 graph. The obtained treewidths are reported in
 Fig.~\ref{fig:td-widths}, while Fig.~\ref{fig:td-times} shows the
 corresponding run-times of the tree decomposition.
-Fig.~\ref{fig:td-example} shows the tree decompositions for an example
-instance from set RF3.
 
+\revised{
+  Finally, for further illustration, we show concrete tree decompositions for a selected instance in the benchmark set RF3 in Figure~\ref{fig:td-example}. Note that this figure is provided solely for illustrational purposes:
+  First, it depicts the tree decomposition for a typical, realistic sampling task. Second, it exemplarily illustrates the typical impact of the energy model on the tree decomposition.
+  Compared to the tree decomposition based on the stacking model, the tree decomposition for the base pair model is much simpler. This shows in many connected components, which correspond to independently solvable sub-problems, and fewer positions per bag (i.e. smaller tree width), which allows far more efficient evaluation per tree node. 
+  Note that the complexity of the tree decomposition ultimately shows the complexity of the dependencies that need to be considered for simultaneous energy evaluation for all target structures. This complexity is substantially increased in the stacking model over the simpler base pair model.
+}
 
 \begin{figure}
   %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
@@ -839,7 +846,7 @@ Moreover, weights are always positive so the partial derivative in $\pi_\ell$ is
 
 
 
-\section{Detailed result of MultiDefect analysis}\label{sec:validity}
+\section{Detailed results of MultiDefect analysis}\label{sec:validity}
 N/A values correspond to data that could not be obtained by the time of this submission for two main reasons: In the case of the initial sampling (left columns), they correspond to instances which, in conjunction with an expressive energy model, resulted in very high tree-width, leading to unreasonable memory requirements incompatible with our available computing resources; The case of missing values after optimization  (right columns), they indicate situations where the initial optimization took too long ($\approx$ 1 day) and was killed.
 \input{table}
 
