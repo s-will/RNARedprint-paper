@@ -8,6 +8,10 @@ figs:
 RNARedPrint.pdf: RNARedPrint.aux supplement.aux
 supplement.pdf: RNARedPrint.aux supplement.aux
 
+# compile the response letter w/o bibtex
+BMC-Response-Round1.pdf: BMC-Response-Round1.tex
+	pdflatex BMC-Response-Round1.tex
+
 %.pdf: %.tex %.aux
 	pdflatex $<
 	pdflatex $<
