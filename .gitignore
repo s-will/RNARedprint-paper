@@ -14,6 +14,13 @@ supplement.out
 supplement.pdf
 Figs/Plots/*.pdf
 
+BMC-Response-Round1.aux
+BMC-Response-Round1.bbl
+BMC-Response-Round1.blg
+BMC-Response-Round1.log
+BMC-Response-Round1.pdf
+BMC-Response-Round1.thm
+
 tmp
 Figs/Workflow/*.pdf
 Figs/Workflow/Workflow.aux

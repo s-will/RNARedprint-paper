@@ -1,0 +1,19 @@
+Cover Letter: BIOINF-2018-1096
+
+To whom it may concern,
+
+It is my pleasure to submit to your attention our manuscript, entitled "Fixed-Parameter Tractable Sampling for RNA Design with Multiple Target Structures", describing our latest results on RNA design. In this collaboration, we revisited the positive design problem for multiple RNA secondary structures, the random generation of sequences satisfying a set of constraints induced by the targeted adoption of a set of alternative structures. We were able to:
+ 1- Propose a fixed-parameter tractable algorithm, based on the tree decomposition, for sequence sampling in trivial to realistic energy models;
+ 2- Generalize the algorithm to sample from the Boltzmann ensemble over sequences, thereby greatly improving the affinity of sampled sequences towards the target;
+ 3- Extend our algorithm to a multi-dimensional Boltzmann sampling scheme, allowing the user to specify predefined energies for the various alternative structures;
+ 4- Establish the intrinsic difficulty of any sampling based on a precomputation of local probabilities (an overwhelmingly classic strategy for statistical sampling), by showing the #P-hardness of the associated counting problem (itself relying on a surprising bijection between RNA sequences fulfilling base-pairing constraints, and the independent sets of a bipartite graph).
+
+Our algorithms were implemented in C++, are freely available, and were validated on a classic benchmark. They were shown to significantly outperform previous propositions on all instances, based on a classic objective function for multiple target design. Interestingly, our algorithms do not require the input structures to be pseudoknot-free, and are not affected by the addition of such complex topological features. Overall, we believe our proposition provides a major step towards the design of RNAs with complex energy landscapes.
+
+Some of our present results were presented at the RECOMB 2018 conference in Paris, but only appear as a two-pages abstract in the proceedings published in LNBI. Thus, this manuscript would appear for the first time in print, should it be selected for publication in Bioinformatics.
+
+We hope you will appreciate this work as much as we did, and thank the editor and reviewers in advance for the time dedicated to its review.
+
+Best regards,
+
+Yann Ponty, on behalf of the authors

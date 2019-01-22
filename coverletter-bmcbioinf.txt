@@ -1,0 +1,23 @@
+To whom it may concern,
+
+It is my pleasure to bring to your attention our manuscript "Fixed-Parameter Tractable Sampling for RNA Design with Multiple Target Structures", which describes our latest results on RNA design. We revisited the positive design problem for multiple RNA secondary structures, i.e. the random generation of sequences satisfying complex properties in relation to a set of target structures. As main result of this work, our novel method enables efficiently generating RNA sequences with highly specific properties, i.e. specific Turner energy for each structure and specific GC-content.
+This significantly improves bioinformatic's capabilities for biological research on RNAs with multiple stable structures, e.g. the analysis and design of RNA switches (e.g. Domin, et al., NAR 2017).
+
+In more detail, we 
+ 1- propose a fixed-parameter tractable algorithm, based on the tree decomposition, for sequence sampling in trivial to realistic energy models;
+ 2- generalize the algorithm to sample from the Boltzmann ensemble over sequences, thereby greatly improving the tendency of sampled sequences to fold into the targets;
+ 3- extend our algorithm to a multi-dimensional Boltzmann sampling scheme, allowing the user to specify predefined energies for the various alternative structures;
+ 4- and finally, establish the intrinsic difficulty of any sampling based on precomputing local probabilities (the prevalent strategy for statistical sampling), by showing the #P-hardness of the associated counting problem.
+
+Our algorithms were implemented in C++ and are freely available on Github. Moreover, we provide Python scripts to support their direct application to target multiple, specific properties and generate seed sequences for negative RNA design. Our method was shown to significantly outperform previous methods on an independent negative design benchmark for multiple target design. Remarkably, our algorithms naturally support pseudoknots in the input structures. Overall, we believe our proposition provides a major step towards the design of RNAs with complex energy landscapes.
+
+Some of our present results were presented at the RECOMB 2018 conference in Paris, but appear only as a two-pages abstract in the proceedings published in LNBI in the intention to avoid any concerns of double publication. Consequently, this manuscript would be the first complete description of the method to appear in print. Moreover, the work was substantially revised and improved over the original submission to RECOMB.
+
+Since this work was initiated, shaped, and conducted by both of us in the same extent, we sincerely ask for your permission to share the role of corresponding author.
+
+In the hope you will appreciate this work, we like to thank the editor and reviewers in advance for the time dedicated to its review.
+
+Best regards,
+
+Sebastian Will and Yann Ponty, on behalf of all authors
+
