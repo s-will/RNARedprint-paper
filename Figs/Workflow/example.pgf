@@ -131,7 +131,7 @@
 
       \node (midpoint) at (2.5,0) {};
     \end{scope}
-      \node[subcaption] at (midpoint|-cap1) {iii) Compatibility Graph};
+      \node[subcaption] at (midpoint|-cap1) {iii) Dependency Graph};
 
       \begin{scope}[yshift=+14.5em, 
   sibling distance = 4em,

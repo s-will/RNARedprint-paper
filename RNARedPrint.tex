@@ -421,19 +421,19 @@
   The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, which impact their cost and feasibility. \\
 %
   \parttitle{Results} We devise a novel approach to a central ingredient of most in-silico
-  design methods: the generation of sequences with multiple structural targets. For this task, we present the efficient (fixed-parameter tractable) approach \ourprog{}.
+  design methods: the generation of sequences \revised{that fold well into multiple target structures.} For this task, we present the fixed-parameter tractable (FPT) approach \ourprog{}.
   % 
-  Modeling
-  the problem by specializing constraint networks, \ourprog{} supports generic
+  \revised{Based on} constraint networks, \ourprog{} supports generic
   Boltzmann-weighted sampling, which enables the positive design of RNA sequences
   with specific free energies (for each of multiple, possibly pseudoknotted, target structures) and \GCb-content.
 %
-  Securing the theoretical foundations of our method, we establish the $\#${\sf P}-hardness of uniform sampling. 
+  %Securing the theoretical foundations of our method
+  Moreover, we establish the $\#${\sf P}-hardness of \revised{counting to theoretically justify the development of an FPT approach}. 
 %
-  Finally, we empirically study general properties of the approach and generate
+  Finally, we study general properties of our approach empirically and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
-  common design benchmark, including pseudoknots.
-  Generating seed sequences with \ourprog{}, we demonstrate significant improvements over the previously best multi-target sampling strategy.\\
+  common design benchmark.
+  We demonstrate significant improvements over the previously best multi-target sampling strategy, due to generating seed sequences with \ourprog{}.\\
 %
   \parttitle{Conclusion} \ourprog{} introduces a novel, flexible and---as we demonstrate--effective approach to multi-target RNA design, which promises broad applicability and extensibility. 
 
@@ -535,7 +535,7 @@ computational design methods.
 \parHead{On the importance of sampling for design.}
 Many computational methods for RNA design follow the ``generate-and-optimize'' strategy: \Def{seed} sequences are randomly generated and then optimized.
 While the quality of the seeds was
-found to be performance critical for such RNA design
+found to be performance-critical for such RNA design
 methods~\citep{Levin2012}, random seed generation
 can improve the prospect of subsequent optimizations
 and increases the diversity
@@ -547,9 +547,9 @@ strategy typically designs sequences with unrealistically high
 more recent approaches like \Software{antaRNA}~\citep{Kleinkauf2015} and \Software{IncaRNAtion}~\citep{Reinharz2013} explicitly control \GCb\%; the latter applying adaptive sampling.
 
 \parHead{Specificities and similarities of multi-target design.}
-Available methods for multi-target RNA design~\citep{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} all follow the same overall generate-and-optimize strategy.
+The available methods for multi-target RNA design~\citep{Lyngsoe2012,HoenerzuSiederdissen2013,Taneda2015,Hammer2017} all follow the same overall generate-and-optimize strategy.
 %
-Faced with the complex constraints due to the multiple targets, early methods such as \Software{Frnakenstein}~\citep{Lyngsoe2012} and \Software{Modena}~\citep{Taneda2015} passed on any systematic generation of sequences, but rely on ad-hoc sampling strategies.
+Faced with the complex constraints due to the multiple targets, early methods such as \Software{Frnakenstein}~\citep{Lyngsoe2012} and \Software{Modena}~\citep{Taneda2015} \revised{do not even attempt to sample sequences systematically from a controlled distribution}, but rely on ad-hoc generation strategies.
 %
 Recently, the approach \Software{RNAdesign}~\citep{HoenerzuSiederdissen2013}, coupled with local
 search in \RNAblueprint{}~\citep{Hammer2017}, solved the
@@ -564,8 +564,9 @@ from the subsolution counts. While, due to its decomposition strategy,
 \Software{RNAdesign} performs much better than the theoretical bound of $O(4^n)$, no attempts were made to characterize or justify its---still exponential---complexity; leaving important theoretical questions of the complexity of counting and uniform sampling open.
 As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uniform sampling, which limits its direct extensibility. Both aspects call for a more systematic redesign of multi-target sampling, which builds on established concepts in computer science. In turn, this promises a fundamentally broader range of applications for extensions of the sampling method.
 
-\todo[inline]{SW: The following paragraph (together with the first sentence of Subsection Contributions) is rather confusing than helpful. We could drop this here and give brief explanations of the complexity issues in the contributions section.}
-Better understanding of the true complexity bounds is highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still limited by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step. In other words key questions include: \emph{How to sample, in a general way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as \GCb\%, complex sequence constraints, or the energy of individual structures?}
+%\todo[inline]{SW: The following paragraph (together with the first sentence of Subsection Contributions) is rather confusing than helpful. We could drop this here and give brief explanations of the complexity issues in the contributions section.}
+%
+%Better understanding of the true complexity bounds is highly relevant for the application of such methods, in particular for applications in more expressive settings (e.g. Boltzmann sampling as discussed in this work or sampling satisfying multiple additional constraints and properties). All such extensions are still limited by the complexity of the multi-target uniform sampling problem, where counting of valid designs is the dominating step. In other words key questions include: \emph{How to sample, in a general way, from a Boltzmann distribution based on expressive energy models? How to enforce additional constraints, such as \GCb\%, complex sequence constraints, or the energy of individual structures?}
  
 \subsection*{Contributions}
 
@@ -573,13 +574,19 @@ Better understanding of the true complexity bounds is highly relevant for the ap
 \begin{center}
     \includegraphics[width=.8\textwidth]{Figs/Workflow}
 \end{center}
-\caption{General outline of \ourprog{} for base pair-based energy models. From a set of target secondary structures (i), base-pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb\%, leading to the production of suitable designs (vi).}
+\caption{General outline of \ourprog{}. From a set of target secondary structures (i), base pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb\%, leading to the production of suitable designs (vi). \revised{For simplicity, we assume that only dependencies between the ends of base pairs have to be considered. Our computations based on a more complex energy model (stacking model) require additional dependencies.}
+  }
 \label{fig:workflow}
 \end{figure*}
 
-Addressing these questions in more detail and generality leads to the practical advances in this work, which extend the expressivity, flexibility, and performance of multi-structure design. Namely, we introduce a generic framework, summarized in~Fig.~\ref{fig:workflow}, enabling efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. The main algorithmic contribution of this work consists in dynamic programming algorithms, based on the concept of \Def{tree decomposition}, to compute the dual partition function, and sample sequences from the Boltzmann distribution%
+\revised{As central main contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of sequences that target the energies of multiple structures and the \GCb\%.}
+
+\revised{Fig.~\ref{fig:workflow} summarizes our generic framework, which enables} efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. The main \emph{algorithmic} contribution of this work consists of dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions, and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
-. The complexities of our algorithms depend exponentially on a specific property of the tree decomposition, called the \Def{treewidth}, whose value remains typically low for typical instances. However, for any given value of the treewidth, the complexity only scales linearly with the size of designed sequences and the number of targeted structures, \emph{i.e.} our algorithms are Fixed-Parameter Tractable (FPT).
+.
+\revised{Generally, tree decompositions are data structures that capture the specific dependencies of a problem instance (here, the dependencies induced by the target structures) to guide the efficient processing by DP algorithms.}
+%
+\revised{Building on this principle, }the complexities of our algorithms depend exponentially on a specific property of the tree decomposition, called the \Def{treewidth}, which remains low for typical instances. However, for any given value of the treewidth, the complexity scales only linearly with the size of designed sequences and the number of targeted structures, \emph{i.e.} our algorithms are fixed-parameter tractable (FPT).
 
 This exponential dependency is arguably necessary. Indeed, the underlying counting problem is \#{\sf P}-hard, meaning that there is no efficient, polynomial time algorithm for the problem unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph, the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
 
@@ -606,10 +613,12 @@ target structures and \GCb\%%
 We observe that
 targeting realistic RNA energies in the
 Turner RNA energy model
-works well by performing sampling based on less complex RNA energy models, which keeps the treewidth low. This result is highly relevant in practice, since it allows to combine high efficiency with high accuracy and moreover leaves room for extensions of the method.
+works well by performing sampling based on \revised{a simplified RNA energy model, which induces lower treewidth}. This result is highly relevant in practice, since it allows to combine high efficiency with high accuracy (and even leaves room for \revised{future extensions supporting additional constraints}).
 
-Eventually this strategy allows generating biologically relevant
-multi-target designs, as demonstrated by its leading performance on a comprehensive benchmark set for multi-target RNA design~\citep{Taneda2015}.
+\revised{Eventually our proof-of-concept results 
+ on a comprehensive multi-target RNA design benchmark~\citep{Taneda2015} 
+  suggest that our sampling strategy supports designing biologically relevant
+RNAs for multiple targets.} 
 
 \section*{Methods}
 The main computational problem addressed in this work is the design of sequences over the alphabet $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$, featuring a given $\GCb\%$, and compatible with a set of secondary structures, associated with prescribed free-energies.
@@ -620,7 +629,7 @@ To achieve maximal diversity within candidate designs, we abstract the problem a
 \subsection*{Problem statement}
 \label{sec:problem-statement}
 %\paragraph{Central computational problem.}
-Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and $k$ features $F_1,\dots, F_k$, associated with weights $\pi_1,\dots,\pi_k$, our goal is to sample from the Boltzmann distribution, defined over the set of sequences that satisfy classic base-pairing rules for each structure as: 
+Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and $k$ features $F_1,\dots, F_k$, associated with weights $\pi_1,\dots,\pi_k$, our goal is to sample from the Boltzmann distribution, defined over the set of sequences that satisfy classic base pairing rules for each structure as: 
 \begin{equation}
 \label{eq:sample-distribution}
 \Pr(S\mid\pi_1,\dots,\pi_k) \propto \displaystyle\prod_{1\leq \ell\leq k}\!\! \pi_\ell^{-F_\ell(S)} \end{equation}
@@ -720,7 +729,7 @@ The set $\F$ of contributions induces a
 \item for all $e\in E$, there is a node $v\in T$, such that $e\subseteq\chi(v)$.
 \end{enumerate}
 \end{definition}
-\revised{Intuitively, a tree decomposition for an (hyper)graph $G$ is a tree structure which features all the vertices of $G$, captures all the (hyper)edges of $G$, and helps ensure some notion of consistency by allowing the propagation of values. Figure~\ref{fig:treedec} illustrates shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
+\revised{Intuitively, a tree decomposition for an (hyper)graph $G$ is a tree structure which features all the vertices of $G$, captures all the (hyper)edges of $G$, and helps ensure some notion of consistency by allowing the propagation of values. Figure~\ref{fig:treedec} shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
 \begin{definition}[Tree width]
 The \Def{width} of a tree decomposition $(T,\chi)$ is defined as
 $$\min_{u\in T} |\chi(u)| - 1.$$ The \Def{treewidth}
