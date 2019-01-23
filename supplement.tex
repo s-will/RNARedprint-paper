@@ -393,19 +393,18 @@ Nevertheless, the comparison to run times of \RNAblueprint{} is still interestin
   \label{fig:gc-content}
 \end{figure}
 
+\begin{revision}
 \section{Effectivity of the seed sequence generation}
-\todo[inline]{TODO}
-
 Figure~\ref{fig:seed-generation} shows relative numbers of finished instances and admissible sequences at each iteration of the seed generation procedure for the benchmark set \texttt{3str}. We obtain qualitatively equivalent results for all other benchmark sets (not shown). The top plot illustrates the  precomputation step of our strategy, where weights are calibrated for \GCb\% of 0.6. In this step, we produce sequence of the targeted \GCb\% to determine the linear transformation from the sampling energy model (stacking model) to the Turner model. The bottom plot shows the actual generation of the seed sequences after precomputation. The plot shows that most of the instances are finished after the first iterations, with only a few harder instances that require 2--3 times more iterations. Recall that the seed sequences were designed to have similar energy for all target structures.
 
-\begin{figure}[tbh]
+\begin{figure}[h!]
   \centering
   \includegraphics[width=0.7\textwidth]{Figs/SeedGeneration/iterations_gc_3str.pdf}\\
   \includegraphics[width=0.7\textwidth]{Figs/SeedGeneration/iterations_en_3str.pdf}
   \caption{Relative numbers of finished instances and admissible sequences at each iteration of the seed generation procedure for the benchmark set \texttt{3str}.}
   \label{fig:seed-generation}
 \end{figure}
-
+\end{revision}
 
 \section{Parameters for the base pair and the stacking energy model}
 \label{appsec:modelparameters}
