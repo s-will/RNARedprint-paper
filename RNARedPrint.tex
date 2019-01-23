@@ -696,7 +696,7 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
 %where $\beta$ denotes inverse temperature and $E(S)$ is defined as linear combination of energies $E(S)=\sum_{1\leq \ell \leq k} \ln(\pi_\ell)/\beta E(S,R_\ell)$,
 %where the energy $E(S,R_\ell)$ is treated as feature $F_\ell(S) = \EbpSym(S,R_\ell);$ as elaborated later, even Turner energies or pseudoknot energies can be expressed as features due to their additive nature. 
 
-\subsection*{Dependency graph, tree decomposition and width}
+\subsection*{Dependency (hyper)graph, tree decomposition and width}
 %The complexity of the central problem depends fundamentally on the dependency structure that is imposed by the entire set of contributions.
 
 %For design in the base pair energy model or the related counting problem, the dependencies are immediately derived from the set of target structures $\R$. 
@@ -704,20 +704,22 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
 %Typically, such RNA energy models consider a sequence $S$ \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
 %all $(i,j)\in R$, where $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}$ describes the valid base pairs.
 
-\revised{In order to compute the partition function of Eq.~\ref{eq:mainproblem}, and thus sample in a well-defined definition, one needs an abstraction to express dependencies beyond pairs of positions. 
-Namely, we must consider dependencies induced by the complete set of contributions $$\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}.$$
+\revised{In order to compute the partition function of Eq.~\ref{eq:mainproblem}, and thus sample in a well-defined distribution, one needs to abstract dependencies beyond pairs of positions. To that purpose, we consider the notion of \Def{hypergraph}, which consists of vertices (here, the sequence positions) connected by \Def{hyperedges} defined as sets of vertices. Undirected graphs can be modeled as hypergraphs whose hyperedges are pairs of vertices, but hypergraphs also allow to express complex dependencies.
+
+Here, we consider the complete set of contributions $$\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}.$$
 %
 %Let us denote the \emph{dependencies of a contribution $f$} as \dep{f}.
 %
 The set $\F$ of contributions induces a
-\Def{dependency graph} $G_\F$ on sequence positions by interpreting the dependencies as hyperedges, leading to the hypergraph 
-$$G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\}).$$ 
-Let us now remind the \Def{tree decomposition} of a graph $G_\F$, a fundamental ingredient of our algorithms.}
- 
-Moreover, to capture the requirement of canonical base pairing for each structure,
-we define the \Def{base pair dependency graph} $G_{\R}$ as the graph with nodes $\{1,\dots,n\}$
-and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct dependency between the chosen nucleotide assignments for the two positions.
+\Def{dependency (hyper)graph} $G_\F$ on sequence positions by interpreting the dependencies as hyperedges, leading to an hypergraph 
+$G_\F=(V, H)$ having vertices $V=\{1,\dots,n\}$ and hyperedges $H = \{\dep(f)\mid f\in \F\})$.
 
+Irrespectively of the chosen energy model, to capture the requirements of canonical base pairing for each structure,
+we also define the \Def{base pair dependency graph} $G_{\R} = (V,E)$ having vertices $V=\{1,\dots,n\}$ 
+and edges $E=\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in at least one of the input structures, and induce a direct dependency between the nucleotide assignments for those positions.
+}
+
+Let us now remind the \Def{tree decomposition} of an (hyper)graph $G_\F$, a fundamental ingredient of our algorithms. 
 
 \begin{definition}[Tree decomposition]
   \label{def:treedecomp}
@@ -733,9 +735,9 @@ and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j
 \end{definition}
 \revised{Intuitively, a tree decomposition for an (hyper)graph $G$ is a tree structure which features all the vertices of $G$, captures all the (hyper)edges of $G$, and helps ensure some notion of consistency by allowing the propagation of values. Figure~\ref{fig:treedec} shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
 \begin{definition}[Tree width]
-The \Def{width} of a tree decomposition $(T,\chi)$ is defined as
+The \Def{width} of a tree decomposition $(T,\chi)$ is 
 $$\min_{u\in T} |\chi(u)| - 1.$$ The \Def{treewidth}
-of a graph $G$ is the smallest width of any tree decomposition of $G$.
+of an (hyper)graph $G$ is the smallest width of a tree decomposition of $G$.
 \end{definition}
 %Recall the essential role of the treewidth as fixed parameter in our FPT appraoch.
 
@@ -1074,7 +1076,7 @@ $\varepsilon=0$.
 \subsection*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-\revised{While efficient, both in practice and in theory for graphs of bounded tree width, our algorithms remain exponential in the worst case scenario, since the tree-width of a dependency graph can then become arbitrarily large. This exponential complexity in the worst case seems intrinsic. Indeed, we show that a specialization of our core problem, namely the enumeration of designs that respect canonical base pairing rules ($\Ab \leftrightarrow \Ub$, $\Gb \leftrightarrow \Cb$, $\Gb \leftrightarrow \Ub$) is $\#{\sf P}$-hard, even when the dependency graph is bipartite and connected. The existence of a polynomial time algorithm for computing the partition function of Equation \eqref{eq:mainproblem} is thus unlikely, and it would imply that  ${\sf\# P}={\sf FP}$ and, in turn, that ${\sf P}={\sf NP}$.}
+\revised{While efficient, both in practice and in theory for graphs of bounded tree width, our algorithms remain exponential in the worst case scenario, since the tree-width of a dependency graph can then become arbitrarily large. This exponential complexity in the worst case appears to be intrinsic. Indeed, we show that a specialization of our core problem, namely the enumeration of designs that respect canonical base pairing rules ($\Ab \leftrightarrow \Ub$, $\Gb \leftrightarrow \Cb$, $\Gb \leftrightarrow \Ub$) is $\#{\sf P}$-hard, even when the dependency graph is bipartite and connected. The existence of a polynomial time algorithm for computing the partition function of Equation \eqref{eq:mainproblem} is thus unlikely, as it would imply that  ${\sf\# P}={\sf FP}$ and, in turn, that ${\sf P}={\sf NP}$.}
 
 %Our contributed algorithms, while 
 %Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
@@ -1134,7 +1136,9 @@ $v_1\in V_1$ and $v_2\in V_2$, such that $f(v_1)\in\{\Ab,\Gb\}$ and $f(v_2)\in\{
 
 Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is a well-studied problem, shown to be \#{\sf P}-hard~\citep{Ge2012} even on connected graphs. Now assume the existence of an efficient (polynomial-time) algorithm $\mathcal{A}$ for computing $|\NumDesign(G)|$ on connected (bipartite) graphs. Then, running $\mathcal{A}$ and returning $|\NumDesign(G)|/2$ constitutes an efficient algorithm for $\#{\sf BIS}$ on connected graphs.
 %However, $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ can be efficiently computed by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. 
-In other words, any efficient algorithm for \NumDesign implies an efficient algorithm for $\#{\sf BIS}$, thus our conclusion that \NumDesign is $\#{\sf P}$-hard.
+In other words, any efficient algorithm for \NumDesign implies an efficient algorithm for $\#{\sf BIS}$, thus our conclusion that \NumDesign is $\#{\sf P}$-hard. 
+
+\revised{Proposition~\ref{prop:bijection} also strongly impacts the complexity of computing the partition function. Indeed it implies that, among the $4^k$ possible assignments of nucleotides to $k$ connected positions (in the base-pair dependency graph), at most $2^k$ are compatible with base pairing rules. One can thus sharply reduce the complexity of Algorithm~\ref{alg:pf} by restricting the precomputations to compatible assignments.}
 
 % \begin{proof}
 
