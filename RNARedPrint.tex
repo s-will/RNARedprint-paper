@@ -622,8 +622,8 @@ works well by performing sampling based on \revised{a simplified RNA energy mode
 RNAs for multiple targets.} 
 
 \section*{Methods}
-The main computational problem addressed in this work is the design of sequences over the alphabet $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$, featuring a given $\GCb\%$, and compatible with a set of secondary structures, associated with prescribed free-energies.
-Such criteria are here abstracted as constraints on the value of \Def{features}, functions of the sequence that are expressed as sums over real-valued contributions. Such contributions typically depend on the nucleotides assigned to a subset of sequence positions.
+The main computational problem addressed in this work is the generation of sequences over the alphabet $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$, \revised{such that the sequences feature a given $\GCb\%$, and have prescribed energies for a set of target secondary structures.
+Here, such criteria are modeled} as constraints on the value of \Def{features}, functions of the sequence that are expressed as sums over real-valued contributions. Such contributions typically depend on the nucleotides assigned to a subset of sequence positions.
 
 To achieve maximal diversity within candidate designs, we abstract the problem as a random generation of sequences within a Boltzmann distribution. The probability of a sequence then depends on its associated features, and of weights that are associated features. Those influence the expected feature values of generated sequences, allowing us to shift the sample distributions towards specific targets. Sampling from this distribution requires to compute corresponding partition functions, such that we can draw sequences with probabilities proportional to their Boltzmann weight. A final rejection step, made efficient by the fine calibration of weights, allows to produce sequences satisfying the input set of constraints.
  
