@@ -207,9 +207,7 @@
 \begin{revision}
   \section{Run times for generating samples}
 
-To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times for generating 1000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}). 
-
-\todo[inline]{@Stefan: could you please include technical data about the machines used for the timings? Please also check the claims/statements in the text for correctness. If necessary---please edit.}
+To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 20.000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}).
 
 A fair comparison to sampling times by other tools can hardly be given, since the other tools produce samplings of very different nature. In particular, Modena does not make any guarantees on properties of the sampling. Non-surprisingly, this allows it to sample significantly faster (several orders of magnitudes).
 
@@ -218,7 +216,9 @@ The comparison to run times of \RNAblueprint{} is still interesting, since this 
 \begin{figure}[tbh]
   \centering
   \includegraphics[width=0.45\textwidth]{Figs/RunTimes/construction_time_sets}\quad%
-  \includegraphics[width=0.45\textwidth]{Figs/RunTimes/sample_time_sets}
+  \includegraphics[width=0.45\textwidth]{Figs/RunTimes/sample_time_sets}\\
+  \includegraphics[width=0.45\textwidth]{Figs/RunTimes/construction_time_sets_bp}\quad%
+  \includegraphics[width=0.45\textwidth]{Figs/RunTimes/sample_time_sets_bp}
   \caption{\todo[inline]{caption Stefan?}}
   \label{fig:run-times-redprint}
 \end{figure}
