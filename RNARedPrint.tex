@@ -44,7 +44,8 @@
 %%% loading packages, author definitions
 
 %\documentclass[doublespacing,linenumbers]{bmcart}% uncomment this for twocolumn layout and comment line below
-\documentclass[twocolumn]{bmcart}
+\documentclass[]{bmcart}
+%\documentclass[twocolumn]{bmcart}
 
 %%% PACKAGES
 
@@ -574,21 +575,21 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 \begin{center}
     \includegraphics[width=.8\textwidth]{Figs/Workflow}
 \end{center}
-\caption{General outline of \ourprog{}. From a set of target secondary structures (i), base pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb\%, leading to the production of suitable designs (vi). \revised{For simplicity, we assume that only dependencies between the ends of base pairs have to be considered. Our computations based on a more complex energy model (stacking model) require additional dependencies.}
+\caption{General outline of \ourprog{}. From a set of target secondary structures (i), base pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb\%, leading to the production of suitable designs (vi). \revised{Note that for simplicity, we assume in this figure that only dependencies between the ends of base pairs are considered to evaluate the energies of structures. Our computations based on a more complex energy model (stacking model) require additional dependencies.}
   }
 \label{fig:workflow}
 \end{figure*}
 
-\revised{As central main contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of sequences that target the energies of multiple structures and the \GCb\%.}
+\revised{As our central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of sequences that target the energies of multiple structures and the \GCb\%.}
 
-\revised{Fig.~\ref{fig:workflow} summarizes our generic framework, which enables} efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. The main \emph{algorithmic} contribution of this work consists of dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions, and sample sequences from the Boltzmann distribution%
+\revised{Fig.~\ref{fig:workflow} summarizes our generic framework, which enables} efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. \revised{\emph{Algorithmically}, we contribute} dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
 .
 \revised{Generally, tree decompositions are data structures that capture the specific dependencies of a problem instance (here, the dependencies induced by the target structures) to guide the efficient processing by DP algorithms.}
 %
 \revised{Building on this principle, }the complexities of our algorithms depend exponentially on a specific property of the tree decomposition, called the \Def{treewidth}, which remains low for typical instances. However, for any given value of the treewidth, the complexity scales only linearly with the size of designed sequences and the number of targeted structures, \emph{i.e.} our algorithms are fixed-parameter tractable (FPT).
 
-This exponential dependency is arguably necessary. Indeed, the underlying counting problem is \#{\sf P}-hard, meaning that there is no efficient, polynomial time algorithm for the problem unless ${\sf P}={\sf NP}$. Our result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph, the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
+\revised{Remarkably, we show that it is not possible to find a better, efficient method for sampling (unless ${\sf P}={\sf NP}$), since the underlying counting problem is \#{\sf P}-hard. The practical relevance of this result is that it rules out substantially better sampling techniques, such that there will always remain---in practice---an upper limit on the tractable number of structures and their heterogeneity, the complexity of the directly treatable energy model, and the number and complexity of additional constraints that could be considered in future sampling-based applications.} Technically, this result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph, the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
 
 % Subsection~\ref{sec:complexity}
 %
