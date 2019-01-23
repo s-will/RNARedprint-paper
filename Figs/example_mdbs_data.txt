@@ -1,7 +1,10 @@
 Figure S5:
 ==========
+generate 1000 samples per targeting experiment
+
 iteration %found:
 20,-20,-20.raw
+"Iteration" "Relative finished instances"
 0 0.0
 1 0.0
 2 0.058
@@ -52,6 +55,8 @@ sys	0m1.808s
 
 Figure 2:
 ==========
+generate 5000 samples per targeting experiment
+
 iteration %found:
 20,-30.raw
 0 0.0
