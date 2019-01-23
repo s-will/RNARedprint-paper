@@ -1170,8 +1170,18 @@ Notably, these target energies are actual free energies in the realistic
 Turner energy model, and are targeted by efficiently sampling in the
 base pair energy model, and filtering sequences based on the {\tt RNAeval} tool from the Vienna package~\cite{Lorenz2011}. The second script generates high quality seed sequences suitable for negative RNA design. The details of this approach are described in the subsections below.
 
+\subsection*{A parsimonious stacking energy model as a proxy for the Turner energy model}
+Sampling for fixed weight
+Time benchmark
 
-\subsection*{Effectively targeting Turner energies}
+Figure 10 - Correlation plot -- Right
+Figure 2 -- Distribution plot -- Right (Turner is even untractable to compute the tree width itself in benchmark instances)
+Figure 3 -- Right -- Distribution 
+
+\subsection*{Effectively targeting Turner energies using multidimensionnal sampling}
+\revised{
+
+
 We used our Boltzmann sampling strategy (Algorithms
 \ref{alg:pf} and \ref{alg:sampling}), to sample valid sequences for
 given target structures and weights $\pi_1,\dots,\pi_k$.  Moreover, we
@@ -1202,11 +1212,12 @@ For an example instance of the \texttt{Modena} benchmark with two
 pseudoknotted target structures, Fig.~\ref{fig:energydist-pk}B shows
 the Turner energy distributions of the single structures as they
 result from sampling with different weight parameters. The figure
-illustrates how our multidimensionnal Boltzmann sampling strategy can,
+illustrates how our multidimensional Boltzmann sampling strategy can,
 to a large extent, independently shift the Turner energies of sampled
 sequences towards prescribed targets. See Supp. Mat.,
 Fig.~\ref{fig:energydist} for a further example with three
-pseudoknot-free target structures.
+pseudoknot-free target structures.}
+
 
 %To reduce the cost of the precomputation, we used a stacking energy model
 %as a proxy for the Turner model. Indeed, we observed a strong linear
