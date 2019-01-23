@@ -287,14 +287,7 @@ graph. The obtained treewidths are reported in
 Fig.~\ref{fig:td-widths}, while Fig.~\ref{fig:td-times} shows the
 corresponding run-times of the tree decomposition.
 
-\revised{
-  Finally, for further illustration, we show concrete tree decompositions for a selected instance in the benchmark set RF3 in Figure~\ref{fig:td-example}. This figure is provided solely for illustrational purposes:
-  First, it depicts the tree decomposition for a typical, realistic sampling task. Second, it exemplarily illustrates the typical impact of the energy model on the tree decomposition.
-  Compared to the tree decomposition based on the stacking model, the tree decomposition for the base pair model is much simpler. This shows in many connected components, which correspond to independently solvable sub-problems, and fewer positions per bag (i.e. smaller tree width), which allows far more efficient evaluation per tree node. 
-  Note that the complexity of the tree decomposition ultimately shows the complexity of the dependencies that need to be considered for simultaneous energy evaluation for all target structures. This complexity is substantially increased in the stacking model over the simpler base pair model.
-}
-
-\begin{figure}
+\begin{figure}[h!]
   %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
   \centering\includegraphics[width=0.9\textwidth]{Figs/td-widths}
   \caption{Treewidths for multi-target RNA design instances of
@@ -302,7 +295,7 @@ corresponding run-times of the tree decomposition.
   \label{fig:td-widths}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
   %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
   \centering
   \includegraphics[width=0.9\textwidth]{Figs/td-times}
@@ -312,8 +305,15 @@ corresponding run-times of the tree decomposition.
   \label{fig:td-times}
 \end{figure}
 
+\revised{
+  Finally, for further illustration, we show concrete tree decompositions for a selected instance in the benchmark set RF3 in Figure~\ref{fig:td-example}. This figure is provided solely for illustrational purposes:
+  First, it depicts the tree decomposition for a typical, realistic sampling task. Second, it exemplarily illustrates the typical impact of the energy model on the tree decomposition.
+  Compared to the tree decomposition based on the stacking model, the tree decomposition for the base pair model is much simpler. This shows in many connected components, which correspond to independently solvable sub-problems, and fewer positions per bag (i.e. smaller tree width), which allows far more efficient evaluation per tree node. 
+  Note that the complexity of the tree decomposition ultimately shows the complexity of the dependencies that need to be considered for simultaneous energy evaluation for all target structures. This complexity is substantially increased in the stacking model over the simpler base pair model.
+}
 
-\begin{figure}[t!]
+
+\begin{figure}[h!]
   %% the figure shows benchmark_inputs/RNAfold/3str/f3.100.0.inp
   \centering
   \verbatiminput{Figs/f3_100_0.txt}
@@ -327,23 +327,23 @@ corresponding run-times of the tree decomposition.
 
   \section{Run times for generating samples}
 
-To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 20.000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{fig:run-times-redprint}.
+To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{fig:run-times-redprint}.
 
 A fair comparison to sampling times by other tools can hardly be given, since the other tools produce samplings of very different nature. In particular, Modena does not make any guarantees on properties of the sampling. Non-surprisingly, this allows it to sample significantly faster (several orders of magnitudes).
 Nevertheless, the comparison to run times of \RNAblueprint{} is still interesting, since this tool generates---similarly to our tool---\emph{controlled} samples. As we argue that the Boltzmann sampling is fundamentally more flexible than uniform sampling as generated by \RNAblueprint, \ourprog{} performs even particularly well, beating \RNAblueprint{} most of the time with only a few exceptions for particularly hard instances. The results for \RNAblueprint{} are shown in Figure~\ref{fig:run-times-rbp}.
 
-\begin{figure}[tbh]
+\begin{figure}[h!]
   \centering
   \includegraphics[width=0.45\textwidth]{Figs/RunTimes/construction_time_sets}\quad%
   \includegraphics[width=0.45\textwidth]{Figs/RunTimes/sample_time_sets}
-  \caption{Boxplots showing the run-time distribution of sequence sampling with \ourprog{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 20.000 sequences. }
+  \caption{Boxplots showing the run-time distribution of sequence sampling with \ourprog{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences. }
   \label{fig:run-times-redprint}
 \end{figure}
-\begin{figure}[tbh]
+\begin{figure}[h!]
   \centering
   \includegraphics[width=0.45\textwidth]{Figs/RunTimes/construction_time_sets_rbp}\quad%
   \includegraphics[width=0.45\textwidth]{Figs/RunTimes/sample_time_sets_rbp}
-  \caption{Boxplots showing the run-time distribution of sequence sampling with \RNAblueprint{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 20.000 sequences.}
+  \caption{Boxplots showing the run-time distribution of sequence sampling with \RNAblueprint{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences.}
   \label{fig:run-times-rbp}
 \end{figure}
 
@@ -362,7 +362,7 @@ Nevertheless, the comparison to run times of \RNAblueprint{} is still interestin
 
     Fig.~\ref{fig:gc-content} shows the distributions of the GC content of the samples, while targeting different combinations of energies in this experiment. For completeness, we also report corresponding results for the analogous experiment from the main text. We observe that in addition to the target energies, also the feature $\GCb\%$ is narrowly defined by the multi-dimensional Boltzmann sampling strategy. In comparison, for uniform sampling and Boltzmann sampling at high weight $e^\beta$, where the \GCb\% is not controlled, we obtain much broader distributions. 
 
-\begin{figure}[tb]
+\begin{figure}[h!]
       \begin{center}
         %{\sf \bfseries A}\includegraphicstop[width=0.32\textwidth]{Figs/offset2}\hspace{.5cm}
         %{\sf \bfseries B}
@@ -384,7 +384,7 @@ Nevertheless, the comparison to run times of \RNAblueprint{} is still interestin
   \label{fig:energydist}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
   \begin{center}
     {\sf \bfseries A}~\includegraphicstop[width=0.45\textwidth]{Figs/Plots/PKB00211_PKB00239_0_GC_content}
     ~~~~~{\sf \bfseries B}~\includegraphicstop[width=0.45\textwidth]{Figs/Plots/supp_3str_GC_content}
@@ -445,7 +445,7 @@ trained parameters in the base pair and stacking models for predicting
 the Turner energies in the test set with respective correlations of
 $0.95$ an $0.94$.
 
-\begin{figure}
+\begin{figure}[h!]
   \centering
   A)\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/basepaircor}
   B)\includegraphicstop[width=0.4\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor}
