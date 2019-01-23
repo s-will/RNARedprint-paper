@@ -657,10 +657,10 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
 \revised{
 	Such features can also be used to count the number of \Def{valid sequences}, \emph{i.e.} sequences inducing only base pairs in $\mathcal{B}:=\{\{\Ab,\Ub\}, \{\Gb,\Cb\}, \{\Gb,\Ub\}\}$. Indeed, consider a feature $F^{\tt BP}$ composed of  contributions $f^{\tt BP}_{i,j}$, for each base pair $(i,j)$ occurring in some structure, such that 
 	$$f^{{\sf BP}}_{i,j}(\left\{\substack{i\mapsto a\\j\mapsto b}\right\})=\begin{cases}0&\text{ if }\{a,b\}\in\mathcal{B} \\+\infty&\text{ otherwise}.\end{cases}$$ 
-	The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid seqeunce is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Equation~\ref{eq:mainproblem} simply counts the number of valid sequences when restricted to to $F^{\tt BP}$.
+	The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Equation~\ref{eq:mainproblem} simply counts the number of valid sequences when restricted to $F^{\tt BP}$.
 
 
-	Energy models for structure prediction vary considerably, yet can always be expressed as a sum over contributions associated with local structural motifs (base pairs, stacking pairs, loops\ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, to each motif $m$ occurring in a structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its specific set of positions $\dep(f_m)$. For instance, the contribution of a stacking pair, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, will be expressed through a 
+	Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions associated with local structural motifs (base pairs, stacking pairs, loops\ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, for each motif $m$ occurring in a target structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its positions $\dep(f_m)$. For instance, the contribution of a stacking pair, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
 
 }
 
@@ -704,19 +704,20 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
 %Typically, such RNA energy models consider a sequence $S$ \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
 %all $(i,j)\in R$, where $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}$ describes the valid base pairs.
 
-
-In order to capture the requirement of canonical base pairing for each structure,
-we define the \Def{base pair dependency graph} $G_{\R}$ as the graph with nodes $\{1,\dots,n\}$
-and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct dependency between the chosen nucleotide assignments for the two positions.
-
-More generally, we consider dependencies induced by the complete set of contributions $$\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}.$$
+\revised{In order to compute the partition function of Eq.~\ref{eq:mainproblem}, and thus sample in a well-defined definition, one needs an abstraction to express dependencies beyond pairs of positions. 
+Namely, we must consider dependencies induced by the complete set of contributions $$\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}.$$
 %
 %Let us denote the \emph{dependencies of a contribution $f$} as \dep{f}.
 %
 The set $\F$ of contributions induces a
-  \Def{dependency graph} $G_\F$ on sequence positions by interpreting the dependencies as hyperedges, leading to the hypergraph 
-  $$G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\}).$$ 
-  Let us now remind the \Def{tree decomposition} of a graph $G_\F$, a fundamental ingredient of our algorithms.
+\Def{dependency graph} $G_\F$ on sequence positions by interpreting the dependencies as hyperedges, leading to the hypergraph 
+$$G_\F=(\{1,\dots,n\} ,\{\dep(f)\mid f\in \F\}).$$ 
+Let us now remind the \Def{tree decomposition} of a graph $G_\F$, a fundamental ingredient of our algorithms.}
+ 
+Moreover, to capture the requirement of canonical base pairing for each structure,
+we define the \Def{base pair dependency graph} $G_{\R}$ as the graph with nodes $\{1,\dots,n\}$
+and edges $\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct dependency between the chosen nucleotide assignments for the two positions.
+
 
 \begin{definition}[Tree decomposition]
   \label{def:treedecomp}
@@ -1133,11 +1134,8 @@ $v_1\in V_1$ and $v_2\in V_2$, such that $f(v_1)\in\{\Ab,\Gb\}$ and $f(v_2)\in\{
 
 Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is a well-studied problem, shown to be \#{\sf P}-hard~\citep{Ge2012} even on connected graphs. Now assume the existence of an efficient (polynomial-time) algorithm $\mathcal{A}$ for computing $|\NumDesign(G)|$ on connected (bipartite) graphs. Then, running $\mathcal{A}$ and returning $|\NumDesign(G)|/2$ constitutes an efficient algorithm for $\#{\sf BIS}$ on connected graphs.
 %However, $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ can be efficiently computed by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. 
-In other words, any efficient algorithm for \NumDesign implies an efficient algorithm for $\#{\sf BIS}$, thus our conclusion on the complexity of \NumDesign.
+In other words, any efficient algorithm for \NumDesign implies an efficient algorithm for $\#{\sf BIS}$, thus our conclusion that \NumDesign is $\#{\sf P}$-hard.
 
-\begin{corollary}
-  \NumDesign is $\#{\sf P}$-hard
-\end{corollary}
 % \begin{proof}
 
 %   Given any algorithm $\mathcal{A}$ that solves \NumDesign over strongly-connected graphs $G$, one can  construct an algorithm $\mathcal{A}'$ that solves $\#{\sf BIS}$:
@@ -1157,7 +1155,7 @@ In other words, any efficient algorithm for \NumDesign implies an efficient algo
 We implemented the core algorithms in \texttt{C++}, resulting in the tool
 \ourprog{}, available at: 
 
-{\centering \url{https://github.com/yannponty/RNARedPrint}\\[.3em]}
+{\centering \url{https://github.com/yannponty/RNARedPrint}\\[.3em]}%
 
 \ourprog{}  takes a set of target structures, as well as
 weights for each energy feature and \GCb\%, and generates a sample set of sequences compatible with the structures in the corresponding
