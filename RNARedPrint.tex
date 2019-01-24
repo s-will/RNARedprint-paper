@@ -631,12 +631,14 @@ On this basis, we can finely calibrate the weights, to maximize the probability 
 
 %\paragraph{Central computational problem.}
 Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and \revised{$k\geq m$} features $F_1,\dots, F_k$, associated with weights $\pi_1,\dots,\pi_k$. Our goal is to sample from the Boltzmann distribution, defined over the set of sequences that satisfy classic base pairing rules for each structure as: 
+\todo{$S$ sequence not defined!}
 \begin{equation}
 \label{eq:sample-distribution}
 \Pr(S\mid\pi_1,\dots,\pi_k) \propto \displaystyle\prod_{1\leq \ell\leq k}\!\! \pi_\ell^{-F_\ell(S)} \end{equation}
 
 The workhorse of our approach is the \revised{fixed-parameter tractable} computation of feature-dependent partition functions over sequences:
 %Given are the features $F_1,\dots,F_k$, which encode the energies functions for the fixed structures and the function for the \GCb\%, all in terms of simple atomic energy contributions.
+
 For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
   \begin{equation}
     \label{eq:mainproblem}
@@ -644,6 +646,7 @@ For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
   \end{equation}
 
 \subsection*{Expressing \GCb\%-content, sequence validity and energies as features}
+\todo{$x_1$ position(?) not defined!\\$S_x_1$ nucleotide at position(?) not defined!\\$p$ number of dependent positions(?) from $x_p$ not defined!}
 Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
 $$
 F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f\left(\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}\right).
@@ -652,12 +655,13 @@ $$
 
 The $\GCb\%$ can be simply expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$, whose dependencies are restricted to individual nucleotides,  and such that 
 $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&\text{ otherwise}.\end{cases}$$ 
+\todo{Why here $i$ and not $x_i$??}
 \revised{By summing $f^{\GCb}_i(\{i\mapsto S_i\})$ over the whole sequence, one simply counts the occurrences of $\Gb$ and $\Cb$.}
 
 \revised{
   To start with a simple example of evaluating the energy of sequences by features, let us explain how they are used to count the number of \Def{valid sequences}, \emph{i.e.} sequences inducing only base pairs in $\mathcal{B}:=\{\{\Ab,\Ub\}, \{\Gb,\Cb\}, \{\Gb,\Ub\}\}$. Consider a feature $F^{\tt BP}$ composed of  contributions $f^{\tt BP}_{i,j}$, for each base pair $(i,j)$ occurring in some structure, such that 
 	$$f^{{\sf BP}}_{i,j}(\left\{\substack{i\mapsto a\\j\mapsto b}\right\})=\begin{cases}0&\text{ if }\{a,b\}\in\mathcal{B} \\+\infty&\text{ otherwise}.\end{cases}$$ 
-        The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Eq.~\ref{eq:mainproblem} (when restricted to $F^{\tt BP}) $simply counts the number of valid sequences.
+        The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Eq.~\ref{eq:mainproblem} (when restricted to $F^{\tt BP})$ simply counts the number of valid sequences.
 
 
         Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions associated with local structural motifs (base pairs, base pair stacks, loops\ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, for each motif $m$ occurring in a target structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its positions $\dep(f_m)$. For instance, the contribution of a \Def{base pair stack}, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
