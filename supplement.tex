@@ -269,9 +269,22 @@ run times in multi-target design instances, we consider five sets of
 multi-target RNA design instances of different complexity. Our first
 set consists of the Modena benchmark instances.
 
+In addition, we generated four sets of instances of increasing
+complexity. The instances of the sets RF3, RF4, RF5, and RF6, each
+respectively specify 3,4,5, and 6 target structures for sequence
+length 100.  For each instance (100 instances per set), we generated a
+set of $k$ ($k=3,\dots,6$) compatible structures as follows
+
+\begin{itemize}
+\item Generate a random sequence of length 100;
+\item Compute its minimum free energy structure (ViennaRNA package);
+\item Add the new structure to the instances if the resulting base pair dependency graph is bipartite;
+\item Repeat until $k$ structures are collected.
+\end{itemize}
+
 \begin{figure}[h!]
   %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
-  \centering\includegraphics[width=0.9\textwidth]{Figs/td-widths}
+  \centering\includegraphics[width=0.8\textwidth]{Figs/td-widths}
   \caption{Treewidths for multi-target RNA design instances of
     different complexity. Distributions of treewidths shown as boxplots for the base pair (left) and stacking model (right).}
   \label{fig:td-widths}
@@ -280,30 +293,20 @@ set consists of the Modena benchmark instances.
 \begin{figure}[h!]
   %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
   \centering
-  \includegraphics[width=0.9\textwidth]{Figs/td-times}
+  \includegraphics[width=0.8\textwidth]{Figs/td-times}
   \caption{Computation time of tree decompositions for
     multi-target RNA design instances of different complexity.
     Distributions of times (in ms/instance) shown as boxplots for the base pair (left) and stacking model (right).}
   \label{fig:td-times}
 \end{figure}
 
-In addition, we generated four sets of instances of increasing
-complexity. The instances of the sets RF3, RF4, RF5, and RF6, each
-respectively specify 3,4,5, and 6 target structures for sequence
-length 100.  For each instance (100 instances per set), we generated a
-set of $k$ ($k=3,\dots,6$) compatible structures as follows
-\begin{itemize}
-\item Generate a random sequence of length 100;
-\item Compute its minimum free energy structure (ViennaRNA package);
-\item Add the new structure to the instances if the resulting base pair dependency graph is bipartite;
-\item Repeat until $k$ structures are collected.
-\end{itemize}
 For each instance, we generated the dependency graphs in the base pair
 model and in the stacking model. Then, we performed tree decomposition
 (using strategy ``GreedyFillIn'' of LibTW~\citep{Dijk2006}) on each dependency
 graph. The obtained treewidths are reported in
 Fig.~\ref{fig:td-widths}, while Fig.~\ref{fig:td-times} shows the
 corresponding run-times of the tree decomposition.
+
 
 \begin{figure}[h!]
   %% the figure shows benchmark_inputs/RNAfold/3str/f3.100.0.inp
@@ -326,22 +329,22 @@ corresponding run-times of the tree decomposition.
 
 \section{Run times for generating samples}
 
+To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{fig:run-times-redprint}.
+
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.45\textwidth]{Figs/RunTimes/construction_time_sets}\quad%
-  \includegraphics[width=0.45\textwidth]{Figs/RunTimes/sample_time_sets}
+  \includegraphics[width=0.43\textwidth]{Figs/RunTimes/construction_time_sets}\quad%
+  \includegraphics[width=0.43\textwidth]{Figs/RunTimes/sample_time_sets}
   \caption{Boxplots showing the run-time distribution of sequence sampling with \ourprog{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences. }
   \label{fig:run-times-redprint}
 \end{figure}
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.45\textwidth]{Figs/RunTimes/construction_time_sets_rbp}\quad%
-  \includegraphics[width=0.45\textwidth]{Figs/RunTimes/sample_time_sets_rbp}
+  \includegraphics[width=0.43\textwidth]{Figs/RunTimes/construction_time_sets_rbp}\quad%
+  \includegraphics[width=0.43\textwidth]{Figs/RunTimes/sample_time_sets_rbp}
   \caption{Boxplots showing the run-time distribution of sequence sampling with \RNAblueprint{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences.}
   \label{fig:run-times-rbp}
 \end{figure}
-
-To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{fig:run-times-redprint}.
 
 A fair comparison to sampling times by other tools can hardly be given, since the other tools produce samplings of very different nature. In particular, Modena does not make any guarantees on properties of the sampling. Non-surprisingly, this allows it to sample significantly faster (several orders of magnitudes).
 Nevertheless, the comparison to run times of \RNAblueprint{} is still interesting, since this tool generates---similarly to our tool---\emph{controlled} samples. As we argue that the Boltzmann sampling is fundamentally more flexible than uniform sampling as generated by \RNAblueprint, \ourprog{} performs even particularly well, beating \RNAblueprint{} most of the time with only a few exceptions for particularly hard instances. The results for \RNAblueprint{} are shown in Figure~\ref{fig:run-times-rbp}.
