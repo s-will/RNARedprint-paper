@@ -645,11 +645,11 @@ The workhorse of our approach is the \revised{fixed-parameter tractable} computa
 
 \subsection*{Expressing \GCb\%-content, sequence validity and energies as features}
 Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
-}
+
 $$
 F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,x_2,\ldots\}$}}}\!\!\!\!\!\! f\left(\left\{\substack{x_1\mapsto S_{x_1}\\x_p\mapsto S_{x_2}\\\cdots}\right\}\right).
 $$
-\revised{Here, since $\dep(f)=\{x_1,\ldots,x_p\}$, $\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}$ denotes the assignment, that assigns to all positions $x_k$  in $\dep(f)$ the respective nucleotide $S_{x_k}$ ($1\leq k\leq p$).} 
+\revised{Here, since $\dep(f)=\{x_1,\ldots,x_p\}, $\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}$ denotes the assignment, that assigns to all positions $x_k$  in $\dep(f)$ the respective nucleotide $S_{x_k}$ ($1\leq k\leq p$).} 
 
 The $\GCb\%$ can be simply expressed using $n$ contributions $f^{\GCb}_i$, \revised{each dependencing only on position $i\in[1,n]$, i.e.~$\dep(f^{\GCb}_i)=\{i\}$}, such that 
 $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&\text{ otherwise}.\end{cases}$$ 
