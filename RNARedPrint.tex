@@ -850,7 +850,6 @@ cluster tree, an equivalent (in term of treewidth) cluster tree can
 always be obtained by inserting at most $\Theta(|\X|)$ additional
 clusters.
 \end{itemize}
-\todo{$\Theta$ not defined, what is it?}
 
 Algorithm~\ref{alg:pf} computes the partition function by passing
 messages along the directed edges $u\to v$ (which point from 
@@ -1007,18 +1006,16 @@ negligible compared to Alg.~\ref{alg:pf}
 % \end{itemize}
 % Finally add for each $R_\ell$ and unpaired base $i$ in a multi loop of $R_\ell$, the function $f$, $\evalfor{f}{\val_S}=c$.
 
-In order to capture realistic energy models like the Turner model or pseudoknot models like {\tt HotKnots}~\citep{Ren2005}, our sampling strategy can be extended in two ways: 1) either by directly sampling based on more expressive energy models or 2) by sampling in a simple energy model can be used to approximate sampling in more complex models.  In practice, complex energy models has a strong influence on the treewidth (of optimal tree decompositions) of the dependency graph and, in turn the computational complexity of our approach. Therefore, it is interesting to consider, in addition to the base pair model, other
+In order to capture realistic energy models like the Turner model or pseudoknot models like {\tt HotKnots}~\citep{Ren2005}, our sampling strategy can be extended in two ways: 1) either by directly sampling based on more expressive energy models \revised{or 2) by sampling in a simple energy model which} can be used to approximate sampling in more complex models.  In practice, complex energy models \revised{have} a strong influence on the treewidth (of optimal tree decompositions) of the dependency graph and \revised{thus on} the computational complexity of our approach. Therefore, it is interesting to consider---in addition to the base pair model---other
 stripped-down variants of the nearest neighbor model, which could offer a compromise between the low-complexity base pair energy model and the high-accuracy Turner model. 
 
 
 \paragraph{Exact energy models.}
 A first model, which is particularly promising, is the
-\Def{stacking energy model}. This model assigns only assigns energy
+\Def{stacking energy model}. This model only assigns energy
 contributions $\Delta G(x_i,x_j,x_{i+1},x_{j-1})$ to stacks consisting of two nested base pairs $(i,j)$ and $(i+1,j-1)$. Within our framework, this energy model is captured by contributions $f_S(\{x_i\mapsto s_i, x_{i+1}\mapsto s_{i+1}, x_{j-1}\mapsto s_{j-1}, x_{j}\mapsto s_{j}\}):=\Delta G(x_i,x_j,x_{i+1},x_{j-1})$ associated with stacks occurring in at least one of the input structures.
 
-Complex \Def{loop-based}
- energy models---e.g.~the Turner model,
-which, among others, includes energy terms for special loops and dangling
+Complex \Def{loop-based} energy models---e.g.~the Turner model which, among others, includes energy terms for special loops and dangling
 ends---can also be encoded exactly as instances of our general framework. Namely, each loop $L$ involving positions $x_1$,\ldots,$x_p$ will be modeled by a contribution $f_L(\{x_1\mapsto s_1,\ldots, x_p\mapsto s_p\}):=\Delta G(s_1,\ldots,s_p)$, where $\Delta G(s_1,\ldots,s_p)$ is the energy assigned to the loop in the energy model for a given nucleotide content $s_1,\ldots,s_p$. Note that the maximum arity of contributions constitutes a lower bound on the treewidth, which may impact the practical complexity of our algorithms. For instance, loop contributions in the Turner 2004 model~\citep{Turner2009} may depend on up to
 nine bases for interior loops, with a total of 5 unpaired bases (``2x3'' interior loops)--- although all other energy contributions, including dangling ends, only depend on at most four nucleotides.
 
@@ -1054,7 +1051,7 @@ $\EnergyTurner^{\star}$ in the Turner model.
 
 \subsection*{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
 The flexibility of our framework allows to support the advanced sampling technique called "multidimensional Boltzmann sampling"~\citep{Bodini2010}, which allows to enforce (probabilistically)  additional, complex properties of the samples through an additional rejection.
-This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences; here, in addition to controlling \GCb\% (our feature $F_0$) we use it to target the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the individual target structures (features $F_1,\dots,F_m$).
+This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and dinucleotide content~\citep{Zhang2013} of sampled RNA sequences. Here, in addition to controlling \GCb\% (our feature $F_0$) we use it to target the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the individual target structures (features $F_1,\dots,F_m$).
 
 For the multidimensional Boltzmann sampling, we require the already established ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ is
 $$\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=0}^{k} \pi_i^{-F_i(S)}}{\partfun{\pmb{\pi}}},$$
@@ -1125,7 +1122,7 @@ We show that $\Psi$ is bijective:%
 If $f\neq f'$, then there exists a node $v\in V$ such that $f(v)\neq f'(v)$.
 We discuss only the case $v\in V_1$, where we restricted the nucleotides to $\Ab$ and $\Gb$. Then, $\{f(v),f'(v)\}$ must equal $\{\Ab,\Gb\}$, such that either $v\in\Psi(f)$ or $v\in\Psi(f')$.
 %
-b\item $\Psi$ is surjective, i.e. there is a preimage for each element $I\in \IS{G}$. Define $f\in\Design{G}$ as\begin{displaymath}
+\item $\Psi$ is surjective, i.e. there is a preimage for each element $I\in \IS{G}$. Define $f\in\Design{G}$ as\begin{displaymath}
 f(v) = \left\{\begin{array}{ll} % @{\qquad}ll
 \Ab{} & \text{if $v\in V_1$ and $v\in I$} \\ %&
 \Cb{} & \text{if $v\in V_2$ and $v\in I$} \\

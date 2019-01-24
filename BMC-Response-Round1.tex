@@ -115,7 +115,7 @@ Related to that problem, it is also not clear what methods (or what options or a
 Thus, this manuscript is considered to be further improved in terms of intelligibility of the methods and results using fair evaluation criteria.\\[1em]}%
 
 \Answer{
-  We thank the reviewer for the criticism, which motivated us to work on clarifying the practical use of the method and tool RNARedPrint; we have carefully edited the entire manuscript having these issues in mind.
+  We thank the reviewer for the criticism, which motivated us to work on clarifying the practical use of the method and tool RNARedPrint in several ways; we have carefully edited the entire manuscript having these issues in mind.
   In the methods section, we tried to improve the general readability especially of our overview of the method and central problem.
   Moreover, we structured and rephrased the Results section more clearly and adapted our contributions outline and conclusion accordingly. In Results, we introduce single subsections for the following sub-results to reflect our main results in a logical order:
   \begin{itemize}
@@ -133,18 +133,19 @@ In the scope of this study, the running time and memory comparison should be sho
   
 Please note that the running times directly depend on the (for the benchmark sets already reported) treewidths, which strongly depend on the specific design instances. Notably, we took measures to keep these treewidths low; in particular 1) we show that it suffices to sample based on an approximation of the full energy model and 2) we tailored the approach to benefit from state-of-the-art decomposition methods. In consequence, the run-time requirements are generally modest for the relevant design instances; making our approach applicable in practice. 
 
-We included further data comparing to RNABluePrint in the supplement (Supp. Mat. C) and discuss the comparison to MODENA. While comparing to MODENA in the same way as to RNABluePrint can admittedly appear obvious, the sampling in MODENA is of a very different nature, such that elaborate comparisons do not provide relevant insights. Here is a brief elaboration: 
+We included further data comparing to RNABluePrint in the supplement (Supp. Mat. C) and discuss the comparison to MODENA. While comparing to MODENA in the same way as to RNABluePrint can admittedly appear obvious, the sampling in MODENA is of a very different nature, such that---in our opinion---elaborate comparisons would not provide relevant insights. Of course, this has to be explained: 
 
-While MODENA implements a sophisticated optimization procedure, does not put any specific focus on the sampling procedure for generating its seed sequences. Consequently, it does not sample from a specific distribution and produces random sequences without targeting any specific properties (neither good stability nor specific GC-content, etc.). In contrast, RNARedPrint produces highly specific samples, thereby solving a fundamentally different problem (i.e. positive design). 
-In consequence, MODENA's sampling procedure is non-surprisingly much faster than the ones of RNARedPrint and RNABluePrint, which we openly admit in our text. 
+While MODENA implements a sophisticated optimization procedure, it does not put specific focus on the sampling procedure for generating its seed sequences. Consequently, it does not sample from a specific distribution and produces sequences without targeting any specific properties (neither good stability nor specific GC-content, etc.). In contrast, RNARedPrint produces highly specific samples, thereby solving a fundamentally different problem (i.e. positive design). As a consequence, MODENA's sampling procedure is non-surprisingly much faster than the ones of RNARedPrint and RNABluePrint, which we openly admit in our text. 
 
 Reporting data for comparison would have been difficult for one additional reason: MODENA does not allow to measure separate times for sequence sampling. Thus, we could only estimate its run-times by running the MODENA binary with parameters that turn off the optimization as far as this is possible. 
 }
 \Comment{
 It would be informative if the authors show the number of rejected sequences produced by RNARedPrint considering the specific criteria (GC\% or free energy). 
 Since RNARedPrint keeps the sequences to be under the specific constraint by a simple rejection method, such information for various target conditions would be better to estimate the practical running time of RNARedPrint.\\[1em]}%
-\AnswerTODO[Sebastian]{
-We now report the frequency of rejections measured under various conditions. +add plots (moving distributions over rounds...)
+\Answer{
+We do now explicitly report the run times of the sampling procedure for specific weights (Supp. Mat. C).
+To further the run times of the multi-dimensional Boltzmann sampling and the seed generation, which both  
+
 }
 \Comment{
 Another is the quality of their solutions in terms of the stability of each target structure.\\[1em]}%
