@@ -520,7 +520,7 @@ conformations. Classic examples include riboswitches, which
 adopt different stable structures upon binding a specific
 ligand. Riboswitches have been a popular application of rational
 design~\citep{Wachsmuth2013,Domin2017}, partly motivated by their
-capacity to act as biosensors~\citep{Findeiss2017}.
+capacity to act as biosensors~\citep{Findeiss2017}, \revised{which suggests them for biotechnological applications.}
 In particular due to the kinetic coupling of RNA folding with RNA transcription, RNA families can feature alternative,
 evolutionarily conserved, transient structures~\citep{Zhu2013}, which
 are essential for the formation of their functional structures.  More generally, simultaneous compatibility to multiple
@@ -556,14 +556,14 @@ Recently, the approach \Software{RNAdesign}~\citep{HoenerzuSiederdissen2013}, co
 search in \RNAblueprint{}~\citep{Hammer2017}, solved the
 problem of sampling seeds from the \emph{uniform} distribution for multiple
 target structures. \Software{RNAdesign} adopts a graph coloring perspective,
-coloring the sequence positions with nucleotides, such that the ends of each base pair receive compatible colors. Initially, the method decomposes the graph hierarchically and then \Def{precomputes} the number of valid sequences
+\revised{assigning nucleotide symbols (like ``colors'') to the sequence positions, such that compatible nucleotides are assigned to the ends of each base pair.} Initially, the method decomposes the graph hierarchically and then \Def{precomputes} the number of valid sequences
 within each subgraph. The decomposition is then reinterpreted as a
 decision tree to perform \Def{stochastic backtracking}, inspired by
 Ding and Lawrence~\citep{Ding2003}. Uniform sampling is achieved by
 choosing individual nucleotide assignments with probabilities derived
 from the subsolution counts. While, due to its decomposition strategy, 
 \Software{RNAdesign} performs much better than the theoretical bound of $O(4^n)$, no attempts were made to characterize or justify its---still exponential---complexity; leaving important theoretical questions of the complexity of counting and uniform sampling open.
-As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uniform sampling, which limits its direct extensibility. Both aspects call for a more systematic redesign of multi-target sampling, which builds on established concepts in computer science. In turn, this promises a fundamentally broader range of applications for extensions of the sampling method.
+As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uniform sampling, which limits its direct extensibility. \revised{Substantial improvements of multi-target sampling thus require a systematically redesigned appraoch. To enable a fundamentally broader range of applications in extensions of the sampling method, we build our approach, from the start, on established concepts in computer science.}
 
 %\todo[inline]{SW: The following paragraph (together with the first sentence of Subsection Contributions) is rather confusing than helpful. We could drop this here and give brief explanations of the complexity issues in the contributions section.}
 %
@@ -580,12 +580,12 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 \label{fig:workflow}
 \end{figure*}
 
-\revised{As central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of RNA sequences that target the energies of multiple structures and the \GCb\%.}
+\revised{As central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of RNA sequences that have specific energies for multiple structures and specific \GCb\%.}
 
 \revised{Figure~\ref{fig:workflow} summarizes our generic framework, which enables this targeted sequence generation based on multi-dimensional Boltzmann sampling. \emph{Algorithmically}, we originally contribute} dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
 .
-\revised{Generally, tree decompositions are data structures that capture the specific dependencies of a problem instance (here, the dependencies induced by the target structures) to guide the efficient processing by DP algorithms.}
+\revised{Generally, tree decompositions are data structures that capture the specific dependencies of a problem instance (here, the dependencies between sequence positions induced by the target structures), such that they can guide the efficient processing by DP algorithms.}
 %
 \revised{Building on this principle, the complexities of our algorithms depend exponentially on a specific property of the tree decomposition, called the \Def{treewidth}. Thus, it is essential for the applicability of our approach that---by appropriate design choices---we can keep this parameter low for typical instances. For} any fixed value of the treewidth, the complexity scales only linearly with the size of designed sequences and the number of targeted structures, \emph{i.e.} our algorithms are \emph{fixed-parameter tractable (FPT)}.
 
@@ -596,9 +596,8 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 Due to the generality of our method, we can moreover strongly limit \revised{the treewidth} in practice by using state-of-the-art tree decomposition algorithms.
 %Uniform sampling is handled as a special case of Boltzmann sampling, where each valid sequence receives energy zero and---consequently---computing partition functions specializes to counting.
 By evaluating sequences in a specialized weighted constraint
-network, we support---in principle---arbitrary multi-ary constraints and thus
-arbitrarily complex energy models,
-notably subsuming all commonly
+network, we support---in principle---arbitrary \revised{complex constraints and energy models},
+notably subsuming the commonly
 used RNA energy models%
 %(Subsection~\ref{sec:energy_models})
 .  Moreover, we describe an \Def{adaptive
@@ -631,12 +630,14 @@ On this basis, we can finely calibrate the weights, to maximize the probability 
 
 %\paragraph{Central computational problem.}
 Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and \revised{$k\geq m$} features $F_1,\dots, F_k$, associated with weights $\pi_1,\dots,\pi_k$. Our goal is to sample from the Boltzmann distribution, defined over the set of sequences that satisfy classic base pairing rules for each structure as: 
+\todo{$S$ sequence not defined!}
 \begin{equation}
 \label{eq:sample-distribution}
 \Pr(S\mid\pi_1,\dots,\pi_k) \propto \displaystyle\prod_{1\leq \ell\leq k}\!\! \pi_\ell^{-F_\ell(S)} \end{equation}
 
 The workhorse of our approach is the \revised{fixed-parameter tractable} computation of feature-dependent partition functions over sequences:
 %Given are the features $F_1,\dots,F_k$, which encode the energies functions for the fixed structures and the function for the \GCb\%, all in terms of simple atomic energy contributions.
+
 For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
   \begin{equation}
     \label{eq:mainproblem}
@@ -644,6 +645,7 @@ For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
   \end{equation}
 
 \subsection*{Expressing \GCb\%-content, sequence validity and energies as features}
+\todo{$x_1$ position(?) not defined!\\$S_x_1$ nucleotide at position(?) not defined!\\$p$ number of dependent positions(?) from $x_p$ not defined!}
 Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
 $$
 F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f\left(\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}\right).
@@ -652,12 +654,13 @@ $$
 
 The $\GCb\%$ can be simply expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$, whose dependencies are restricted to individual nucleotides,  and such that 
 $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&\text{ otherwise}.\end{cases}$$ 
+\todo{Why here $i$ and not $x_i$??}
 \revised{By summing $f^{\GCb}_i(\{i\mapsto S_i\})$ over the whole sequence, one simply counts the occurrences of $\Gb$ and $\Cb$.}
 
 \revised{
   To start with a simple example of evaluating the energy of sequences by features, let us explain how they are used to count the number of \Def{valid sequences}, \emph{i.e.} sequences inducing only base pairs in $\mathcal{B}:=\{\{\Ab,\Ub\}, \{\Gb,\Cb\}, \{\Gb,\Ub\}\}$. Consider a feature $F^{\tt BP}$ composed of  contributions $f^{\tt BP}_{i,j}$, for each base pair $(i,j)$ occurring in some structure, such that 
 	$$f^{{\sf BP}}_{i,j}(\left\{\substack{i\mapsto a\\j\mapsto b}\right\})=\begin{cases}0&\text{ if }\{a,b\}\in\mathcal{B} \\+\infty&\text{ otherwise}.\end{cases}$$ 
-        The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Eq.~\ref{eq:mainproblem} (when restricted to $F^{\tt BP}) $simply counts the number of valid sequences.
+        The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Eq.~\ref{eq:mainproblem} (when restricted to $F^{\tt BP})$ simply counts the number of valid sequences.
 
 
         Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions associated with local structural motifs (base pairs, base pair stacks, loops\ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, for each motif $m$ occurring in a target structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its positions $\dep(f_m)$. For instance, the contribution of a \Def{base pair stack}, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
@@ -1272,7 +1275,7 @@ the two target structures of Fig.~\ref{fig:energydist-pk}B,
 Fig.~\ref{fig:energydist-pk}A shows the good fit between realistic
 energies in the full-fledged Dirks and Pierce energy model for
 pseudoknots (D\&P model) and energies in the stacking energy
-model\revised{, which is obtained for each of the two target structures (with respective $R^2$ values of $0.846$ and $0.841$)}. For the shown fits we sampled $n=1\,000$ sequences, targeting a
+model\revised{, which is obtained for each of the two target structures (with respective $R^2$ values of $0.846$ and $0.841$)}. For the shown fits we sampled $n=10\,000$ sequences, targeting a
 \GCb\% of $60\%$.
 %
 For an example instance of the \texttt{Modena} benchmark with two
@@ -1302,18 +1305,12 @@ pseudoknot-free target structures.}
     Targeting specific energies for pseudoknotted structures using
     multi-dimensional Boltzmann sampling. \textbf{(A)} Linear fits between the
     energies in the stacking model to the realistic pseudoknot energy
-    model by Dirks and Pierce (D\&P) for the sampled sequences and both target structures R1 and R2. The good
+    model by Dirks and Pierce (D\&P) for \revised{initially} sampled sequences and both target structures R1 and R2 (shown in subfigure B). The good
     match \revised{(respective $R^2$ values of $0.846$ and $0.841$)} enables more efficient targeting of Turner energies based on
-    targeting stacking model energies.  We show the fits for both
-    target structures R1 and R2 of subfigure B.  \textbf{(B)} D\&P energy
-    distributions for two target structures R1 and R2. We show the
-    results of targeting the respective free energies $(-30,-20)$,
-    $(-30,-30)$, $(-25,-25)$, and $(-20,-30)$ for the target
-    structures---this demonstrates the effectivity of our adaptive
-    multi-dimensional Boltzmann sampling procedure; moreover, for
-    comparison, the distributions for uniform and Boltzmann
-    samples---respectively associated with homogenous weights $1$ and
-    $e^\beta$.
+    targeting stacking model energies. \textbf{(B)} Resulting D\&P energy distributions for the two target structures R1 and R2 when aiming for the respective free energies $(-30,-20)$,
+    $(-30,-30)$, $(-25,-25)$, and $(-20,-30)$. These demonstrate the effectivity of our adaptive
+    multi-dimensional Boltzmann sampling procedure, especially by comparing the distributions to those of uniform and Boltzmann sampled sequences, with homogenous weights $1$ and
+    $e^\beta$, respectively.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
   }
   \label{fig:energydist-pk}
@@ -1457,10 +1454,11 @@ We introduced a novel approach, based on a general framework and efficient algor
 sequences, while targeting very specific complex properties. In particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
 Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
-controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice, which is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. In a proof-of-concept study 
-  on an established benchmark set for multi-target RNA design (including pseudoknotted instances), 
+controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice, which is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. By conducting a proof-of-concept study 
+  on an established benchmark set for negative multi-target RNA design (including pseudoknotted instances), we showcase a typical application of our tool \ourprog{}. In this study, 
   the approach generated significantly better seed sequences than
-the previously best available method (uniform sampling). These results strongly suggest that the presented technique for positive design can be highly beneficial in future negative design approaches.}
+the previously best available method (uniform sampling). These results strongly suggest that the presented technique for positive design can be highly beneficial in future negative design approaches.
+}
 %
 To substantiate our work additionally, we establish the $\#${\sf P}-hardness of uniform sampling which,
 from a complexity-theoretic point of view, motivates the FPT, tree decomposition-based nature of our method.  
