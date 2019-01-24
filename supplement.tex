@@ -269,6 +269,24 @@ run times in multi-target design instances, we consider five sets of
 multi-target RNA design instances of different complexity. Our first
 set consists of the Modena benchmark instances.
 
+\begin{figure}[h!]
+  %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
+  \centering\includegraphics[width=0.9\textwidth]{Figs/td-widths}
+  \caption{Treewidths for multi-target RNA design instances of
+    different complexity. Distributions of treewidths shown as boxplots for the base pair (left) and stacking model (right).}
+  \label{fig:td-widths}
+\end{figure}
+
+\begin{figure}[h!]
+  %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Figs/td-times}
+  \caption{Computation time of tree decompositions for
+    multi-target RNA design instances of different complexity.
+    Distributions of times (in ms/instance) shown as boxplots for the base pair (left) and stacking model (right).}
+  \label{fig:td-times}
+\end{figure}
+
 In addition, we generated four sets of instances of increasing
 complexity. The instances of the sets RF3, RF4, RF5, and RF6, each
 respectively specify 3,4,5, and 6 target structures for sequence
@@ -288,21 +306,13 @@ Fig.~\ref{fig:td-widths}, while Fig.~\ref{fig:td-times} shows the
 corresponding run-times of the tree decomposition.
 
 \begin{figure}[h!]
-  %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
-  \centering\includegraphics[width=0.9\textwidth]{Figs/td-widths}
-  \caption{Treewidths for multi-target RNA design instances of
-    different complexity. Distributions of treewidths shown as boxplots for the base pair (left) and stacking model (right).}
-  \label{fig:td-widths}
-\end{figure}
-
-\begin{figure}[h!]
-  %\hspace*{2cm}\textbf{Base pair model}\hspace{4.75cm}\textbf{Stacking model}\\[-28pt]
+  %% the figure shows benchmark_inputs/RNAfold/3str/f3.100.0.inp
   \centering
-  \includegraphics[width=0.9\textwidth]{Figs/td-times}
-  \caption{Computation time of tree decompositions for
-    multi-target RNA design instances of different complexity.
-    Distributions of times (in ms/instance) shown as boxplots for the base pair (left) and stacking model (right).}
-  \label{fig:td-times}
+  {\small \verbatiminput{Figs/f3_100_0.txt}}
+  \includegraphicstop[width=0.55\textwidth]{Figs/td-example-basepair}%
+  \includegraphicstop[width=0.30\textwidth]{Figs/td-example-stacking}
+  \caption{Example instance from RF3 (top) with its tree decompositions in the base pair (left) and stacking model (right). The respective treewidths are 2 and 12.}
+  \label{fig:td-example}
 \end{figure}
 
 \revised{
@@ -312,25 +322,9 @@ corresponding run-times of the tree decomposition.
   Note that the complexity of the tree decomposition ultimately shows the complexity of the dependencies that need to be considered for simultaneous energy evaluation for all target structures. This complexity is substantially increased in the stacking model over the simpler base pair model.
 }
 
-
-\begin{figure}[h!]
-  %% the figure shows benchmark_inputs/RNAfold/3str/f3.100.0.inp
-  \centering
-  \verbatiminput{Figs/f3_100_0.txt}
-  \includegraphicstop[width=0.6\textwidth]{Figs/td-example-basepair}%
-  \includegraphicstop[width=0.35\textwidth]{Figs/td-example-stacking}
-  \caption{Example instance from RF3 (top) with its tree decompositions in the base pair (left) and stacking model (right). The respective treewidths are 2 and 12.}
-  \label{fig:td-example}
-\end{figure}
-
 \begin{revision}
 
-  \section{Run times for generating samples}
-
-To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{fig:run-times-redprint}.
-
-A fair comparison to sampling times by other tools can hardly be given, since the other tools produce samplings of very different nature. In particular, Modena does not make any guarantees on properties of the sampling. Non-surprisingly, this allows it to sample significantly faster (several orders of magnitudes).
-Nevertheless, the comparison to run times of \RNAblueprint{} is still interesting, since this tool generates---similarly to our tool---\emph{controlled} samples. As we argue that the Boltzmann sampling is fundamentally more flexible than uniform sampling as generated by \RNAblueprint, \ourprog{} performs even particularly well, beating \RNAblueprint{} most of the time with only a few exceptions for particularly hard instances. The results for \RNAblueprint{} are shown in Figure~\ref{fig:run-times-rbp}.
+\section{Run times for generating samples}
 
 \begin{figure}[h!]
   \centering
@@ -346,6 +340,11 @@ Nevertheless, the comparison to run times of \RNAblueprint{} is still interestin
   \caption{Boxplots showing the run-time distribution of sequence sampling with \RNAblueprint{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences.}
   \label{fig:run-times-rbp}
 \end{figure}
+
+To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{fig:run-times-redprint}.
+
+A fair comparison to sampling times by other tools can hardly be given, since the other tools produce samplings of very different nature. In particular, Modena does not make any guarantees on properties of the sampling. Non-surprisingly, this allows it to sample significantly faster (several orders of magnitudes).
+Nevertheless, the comparison to run times of \RNAblueprint{} is still interesting, since this tool generates---similarly to our tool---\emph{controlled} samples. As we argue that the Boltzmann sampling is fundamentally more flexible than uniform sampling as generated by \RNAblueprint, \ourprog{} performs even particularly well, beating \RNAblueprint{} most of the time with only a few exceptions for particularly hard instances. The results for \RNAblueprint{} are shown in Figure~\ref{fig:run-times-rbp}.
 
 \end{revision}
 
@@ -395,15 +394,17 @@ Nevertheless, the comparison to run times of \RNAblueprint{} is still interestin
 
 \begin{revision}
 \section{Effectivity of the seed sequence generation}
+
 Figure~\ref{fig:seed-generation} shows relative numbers of finished instances and admissible sequences at each iteration of the seed generation procedure for the benchmark set \texttt{3str}. We obtain qualitatively equivalent results for all other benchmark sets (not shown). The top plot illustrates the  precomputation step of our strategy, where weights are calibrated for \GCb\% of 0.6. In this step, we produce sequence of the targeted \GCb\% to determine the linear transformation from the sampling energy model (stacking model) to the Turner model. The bottom plot shows the actual generation of the seed sequences after precomputation. The plot shows that most of the instances are finished after the first iterations, with only a few harder instances that require 2--3 times more iterations. Recall that the seed sequences were designed to have similar energy for all target structures.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.7\textwidth]{Figs/SeedGeneration/iterations_gc_3str.pdf}\\
-  \includegraphics[width=0.7\textwidth]{Figs/SeedGeneration/iterations_en_3str.pdf}
+  \includegraphics[width=0.48\textwidth]{Figs/SeedGeneration/iterations_gc_3str.pdf}
+  \includegraphics[width=0.48\textwidth]{Figs/SeedGeneration/iterations_en_3str.pdf}
   \caption{Relative numbers of finished instances and admissible sequences at each iteration of the seed generation procedure for the benchmark set \texttt{3str}.}
   \label{fig:seed-generation}
 \end{figure}
+
 \end{revision}
 
 \section{Parameters for the base pair and the stacking energy model}
