@@ -1177,7 +1177,8 @@ weights for each energy feature and \GCb\%, and generates a sample set of sequen
 Boltzmann distribution. \ourprog{} currently supports the base pair
 energy model and the stacking energy model.
 
-Moreover, we provide two {\tt Python} wrapper scripts. The first script targets prescribed energies using multi-dimensional Boltzmann sampling.
+Moreover, we provide two {\tt Python} wrapper scripts. 
+The first script targets prescribed energies using multi-dimensional Boltzmann sampling.
 For a given set of secondary structures, together with prescribed target energies
 and target \GCb\%, this script generates a series of sequences that satisfy the target values for the energy and
 \GCb\% features within configurable tolerances.
@@ -1185,14 +1186,64 @@ Notably, these target energies are actual free energies in the realistic
 Turner energy model, and are targeted by efficiently sampling in the
 base pair energy model, and filtering sequences based on the {\tt RNAeval} tool from the Vienna package~\cite{Lorenz2011}. The second script generates high quality seed sequences suitable for negative RNA design. The details of this approach are described in the subsections below.
 
-\subsection*{A parsimonious stacking energy model as a proxy for the Turner energy model}
+\subsection*{Practical efficacy of Boltzmann sampling for sequences}
 
-Sampling for fixed weight
-Time benchmark
+\begin{figure}
+	\includegraphicstop[width=0.8\textwidth]{Figs/Plots/doublestem_weight1-500_mean}
+	\caption{\revised{Comparison of free-energy and Boltzmann probability for 10~000 uniform ($\pi=1$; blue dots) and Boltzmann distributed ($\pi=500$; green dots) sequences, targeting a simple structure consisting of two adjacent helices.}}\label{fig:BoltzmannBenefits}
+\end{figure}
 
-Figure 10 - Correlation plot -- Right
-Figure 2 -- Distribution plot -- Right (Turner is even untractable to compute the treewidth itself in benchmark instances)
-Figure 3 -- Right -- Distribution 
+\revised{First, we show how seed sequences can be generated in a Boltzmann distribution, leading to designs that are substantially more stable that those generated uniformly. As can be seen in Figure~\ref{fig:BoltzmannBenefits} and Supp. Mat. \ref{appsec:immediate-benefits-for-negative-design}, sequences generated in the Boltzmann distribution not only reach lower free-energies than those generated in a uniform setting, but also achieve better Boltzmann probabilities. While the former is expected since the Boltzmann distribution explicitly favors low-energy candidates, the latter is somewhat surprising, since the Boltzmann probability of a target structure could, in principle, decrease under Boltzmann sampling due to the partition function growing faster than the Boltzmann factor. The empirical superiority of Boltzmann sampling appears robust, and is at the foundation of other approaches~\cite{Reinharz2013}.
+	
+\begin{figure}
+	  \begin{minipage}{.35\textwidth}\centering 
+{\sffamily {\bfseries A} -- 
+	Stacking model}\\
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{c|c@{\hspace{.5em}}c@{\hspace{.5em}}c@{\hspace{.5em}}c@{\hspace{.5em}}c@{\hspace{.5em}}c}
+		$\Delta G$ 	& \Ab\Ub & \Cb\Gb & \Gb\Cb & \Gb\Ub & \Ub\Ab & \Ub\Gb \\[.4em]\hline
+			\Ab\Ub &
+			-0.18&
+			-1.13&
+			-1.09&
+			-0.38&
+			-0.26&
+			-0.62
+			\\[.4em]
+			\Cb\Gb&
+			-1.11&
+			-2.23&
+			-1.89&
+			-1.22&
+			-1.10&
+			-1.44
+			\\[.4em]
+			\Gb\Ub&
+			-0.55&
+			-1.26&
+			-1.58&
+			-0.72&
+			-0.50&
+			-0.69
+			\\
+	\end{tabular}}\\[3em]
+{\sffamily {\bfseries C} -- Tree widths}\\
+\includegraphics[width=\textwidth,trim=350 0 0 50,clip]{Figs/td-widths}
+\end{minipage}
+	  \begin{minipage}{.6\textwidth}\centering
+	{\sffamily {\bfseries B} -- Correlation plot}\\
+	  	\includegraphicstop[width=\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor} 
+  	\end{minipage}
+	  
+	\caption{\revised{A fitted energy model based on stacking pairs ({\sffamily\bfseries A}) leads to approximated free-energies that are highly correlated (R=0.99) with free-energies in the Turner energy model ({\sffamily\bfseries B}), yet induces tree widths that are amenable to practical sampling ({\sffamily\bfseries C})}.\label{fig:correlation}}
+\end{figure}
+
+However, while in principle feasible, sampling in a Boltzmann distribution directly using the Turner energy model may induce extreme computational demands, with tree-widths scaling at least as large as the number of nucleotides in the largest loop. Fortunately, we found that intricacy of the Turner energy model can be circumvented with minimal loss of precision by using a simpler stacking energy model. As can be shown in Figure~\ref{fig:correlation}, a simple stacking energy model, further described in Supp. Mat.~\ref{appsec:modelparameters} can be used to approximate the Turner energy model (correlation coefficient $R=0.99$), while greatly reducing the tree width, and thus the computational requirements of the whole method even for complex instances.
+
+
+ 
+
+}
 
 \subsection*{Effectively targeting Turner energies using multidimensionnal sampling}
 \revised{
