@@ -644,7 +644,7 @@ The workhorse of our approach is the \revised{fixed-parameter tractable} computa
   for specific weights $\pi_1,\dots,\pi_k$.
 
 \subsection*{Expressing \GCb\%-content, sequence validity and energies as features}
-Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, namely its \emph{dependencies $\dep(f)$}, such that
+Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, \revised{namely its \emph{dependencies}, denoted $\dep(f)$}, such that
 
 $$
 F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f\left(\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}\right).
@@ -1301,8 +1301,8 @@ pseudoknot-free target structures.}
     energies in the stacking model to the realistic pseudoknot energy
     model by Dirks and Pierce (D\&P) for \revised{initially} sampled sequences and both target structures R1 and R2 (shown in B). The good
     match \revised{(respective $R^2$ values of $0.846$ and $0.841$)} enables more efficient targeting of Turner energies based on
-    targeting stacking model energies. \textbf{(B)} \revised{Resulting D\&P energy distributions for the two target structures R1 and R2 when aiming for the respective free energies $(-30,-20)$,
-    $(-30,-30)$, $(-25,-25)$, and $(-20,-30)$. These demonstrate the effectivity of our adaptive
+    targeting stacking model energies. \textbf{(B)} \revised{Resulting D\&P energy distributions for the two target structures R1 and R2 when aiming for the respective free energies $-30$ and $-20$,
+    $-30$ and $-30$, $-25$ and $-25$, $-20$ and $-30$\,kcal/mol. These demonstrate the effectivity of our adaptive
     multi-dimensional Boltzmann sampling procedure, especially by} comparing the distributions to those of uniform and Boltzmann sampled sequences, with homogeneous weights $1$ and
     $e^\beta$, respectively.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
@@ -1346,7 +1346,7 @@ For this purpose, we determine good common target energies that
 can be successfully targeted for all single target structures simultaneously.
 Generally, we targeted 60\% \GCb\%.
 \revised{%
-Supp.\ Mat.~\ref{appsec:effectivity-seed-generation}, provides detailed results from this iterative procedure, which works similarily to the previously described multi-dimensional Boltzmann sampling. In particular, we observe that most of the benchmark inputs finish within only few iterations, where each iteration requires  little time (confer Supp.\ Mat.~\ref{appsec:run-times}).}
+Supp.\ Mat.~\ref{appsec:effectivity-seed-generation} provides detailed results from this iterative procedure, which works similarly to the previously described multi-dimensional Boltzmann sampling. In particular, we observe that most of the benchmark inputs finish within only few iterations, where each iteration requires  little time (confer Supp.\ Mat.~\ref{appsec:run-times}).}
 
 We compared the
 \Obj{} value of \revised{the derived} sequences against that of seed sequences,
