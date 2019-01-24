@@ -589,11 +589,11 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 %
 \revised{Building on this principle, the complexities of our algorithms depend exponentially on a specific property of the tree decomposition, called the \Def{treewidth}. Thus, it is essential for the applicability of our approach that---by appropriate design choices---we can keep this parameter low for typical instances. For} any fixed value of the treewidth, the complexity scales only linearly with the size of designed sequences and the number of targeted structures, \emph{i.e.} our algorithms are \emph{fixed-parameter tractable (FPT)}.
 
-\revised{Moreover, we could show that it is not possible to find a better, efficient method for sampling (unless ${\sf P}={\sf NP}$), since the underlying counting problem is \#{\sf P}-hard. The practical relevance of this theoretical result is that it rules out substantially better sampling techniques, such that there will always---even using improved sampling methods----remain an upper limit on the---in practice---tractable number and heterogeneity of structures, the complexity of the directly treatable energy model, and the number and complexity of additional constraints that could be considered in future sampling-based applications.} Technically, this result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph, the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
+\revised{Remarkably, we could show that it is not possible to find a better, efficient method for sampling (unless ${\sf P}={\sf NP}$), since the underlying counting problem is \#{\sf P}-hard. The practical relevance of this theoretical result is that it rules out substantially better sampling techniques, such that there will always---even using improved sampling methods---remain an upper limit on the---in practice---tractable number and heterogeneity of structures, the complexity of the directly treatable energy model, and the number and complexity of additional constraints that could be considered in future sampling-based applications.} Technically, this result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph, the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
 
 % Subsection~\ref{sec:complexity}
 %
-Due to the generality of our method, we can moreover strongly limit this parameter in practice by using state-of-the-art tree decomposition algorithms.
+Due to the generality of our method, we can moreover strongly limit \revised{the treewidth} in practice by using state-of-the-art tree decomposition algorithms.
 %Uniform sampling is handled as a special case of Boltzmann sampling, where each valid sequence receives energy zero and---consequently---computing partition functions specializes to counting.
 By evaluating sequences in a specialized weighted constraint
 network, we support---in principle---arbitrary multi-ary constraints and thus
@@ -614,7 +614,7 @@ works well by performing sampling based on \revised{a simplified RNA energy mode
 
 \revised{Eventually our proof-of-concept results 
  on a comprehensive multi-target RNA design benchmark~\citep{Taneda2015} 
-  suggest that our sampling strategy supports designing biologically relevant
+  suggest that our sampling strategy well supports designing biologically relevant
 RNAs for multiple targets.} 
 
 \section*{Methods}
@@ -622,7 +622,7 @@ RNAs for multiple targets.}
 Here, these desired sequence properties are modeled as constraints on the values of \Def{features}, which are functions of the sequence that are expressed as sums over real-valued \Def{contributions}. Each contribution depends on the nucleotides at---typically few---specific sequence positions.}
 
 \revised{To generate diverse design candidates, we randomly generate sequences from a Boltzmann distribution. The probability of a sequence then depends on its features (e.g. the energies of the target structures), and the weight of each feature (which influences its distribution). Sampling from the (multi-feature) Boltzmann distribution requires to compute corresponding partition functions, such that we can draw sequences with probabilities proportional to their Boltzmann weight. 
-On this basis, we can finely calibrate the weights, to increase the probability that sampled sequences meet prescribed target values for each feature. Together with a final rejection step this results in an effective procedure for generating highly specific sequences.}
+On this basis, we can finely calibrate the weights, to increase the probability that sampled sequences meet the desired target values for each feature. Together with a final rejection step this results in an effective procedure for generating highly specific sequences.}
 
 
  
@@ -650,9 +650,9 @@ F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\de
 $$
 
 
-The $\GCb\%$ can be trivially expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$, whose dependencies are restricted to individual nucleotides,  and such that 
+The $\GCb\%$ can be simply expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$, whose dependencies are restricted to individual nucleotides,  and such that 
 $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&\text{ otherwise}.\end{cases}$$ 
-\revised{By summing $f^{\GCb}_i$ over the whole sequence, one simply counts the occurrences of $\Gb$ and $\Cb$.}
+\revised{By summing $f^{\GCb}_i(\{i\mapsto S_i\})$ over the whole sequence, one simply counts the occurrences of $\Gb$ and $\Cb$.}
 
 \revised{
   To start with a simple example of evaluating the energy of sequences by features, let us explain how they are used to count the number of \Def{valid sequences}, \emph{i.e.} sequences inducing only base pairs in $\mathcal{B}:=\{\{\Ab,\Ub\}, \{\Gb,\Cb\}, \{\Gb,\Ub\}\}$. Consider a feature $F^{\tt BP}$ composed of  contributions $f^{\tt BP}_{i,j}$, for each base pair $(i,j)$ occurring in some structure, such that 
@@ -730,7 +730,7 @@ The \Def{dependency (hyper)graph induced by $\F$} is then defined as the hypergr
 by interpreting the dependencies as hyperedges, i.e. $H =
 \{\dep(f)\mid f\in \F\})$.
 
-Let us now define the \Def{tree decomposition} of the graph $G_\F$, a fundamental ingredient of our algorithms, which also determines their efficiency (most importantly, via its property called treewidth).
+Let us finally define the \Def{tree decomposition} of the graph $G_\F$, a fundamental ingredient of our algorithms, which also determines their efficiency (most importantly, via its property called treewidth).
 }
 \begin{definition}[Tree decomposition and treewidth]
   \label{def:treedecomp}
@@ -750,8 +750,8 @@ The \Def{treewidth} of a tree decomposition $(T,\chi)$ is defined as
 $\min_{u\in T} |\chi(u)| - 1.$ 
 %The \Def{treewidth} of a graph $G$ is the smallest treewidth of any tree decomposition of $G$.
 \end{definition}
-
-\revised{Intuitively, a tree decomposition for an (hyper)graph $G$ is a tree structure which features all the vertices of $G$, captures all the (hyper)edges of $G$, and helps ensure some notion of consistency by allowing the propagation of values. Figure~\ref{fig:treedec} shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
+%
+\revised{Intuitively, a tree decomposition of an (hyper)graph $G$ is a tree that captures all the vertices and (hyper)edges of $G$, and properly relates dependend subproblems to ensure consistency in a recursive computation. Figure~\ref{fig:treedec} shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
 
 \begin{figure}
 {\centering \includegraphics[width=.9\linewidth]{Figs/example-treedec-stacking}\\}
