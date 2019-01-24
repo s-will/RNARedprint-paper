@@ -215,7 +215,7 @@ given target structure $R$; and \Def{positive design}, as generating one or
 many sequences that have a low energy for $R$.
 
 For each of two small examples, a single-stem and a double-stem structure, we produce a uniform and a weighted Boltzmann
-sampling, each of 10000 sequenes. For each sampled sequence $S$, we determine
+sampling, each of 10\,000 sequences. For each sampled sequence $S$, we determine
 the Turner energy $E(S,R)$ as well as the
 %difference $E_\Delta(S,R)$ of $E(S,R)$ to the ensemble energy $E_{\text{ens}}(S)$ of $S$ 
 probability $Pr(R|S)$ of the structure $R$ in the ensemble of sequence $S$ 
@@ -330,20 +330,20 @@ corresponding run-times of the tree decomposition.
 \section{Run times for Boltzmann sampling (at fixed weights)}
 \label{appsec:run-times}
 
-To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{appfig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{appfig:run-times-redprint}.
+To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant precomputation, it is informative to separately show construction and sampling times (Figure~\ref{appfig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the run-time, as noticeable in Figure~\ref{appfig:run-times-redprint}.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.43\textwidth]{Figs/RunTimes/construction_time_sets}\quad%
   \includegraphics[width=0.43\textwidth]{Figs/RunTimes/sample_time_sets}
-  \caption{Boxplots showing the run-time distribution of sequence sampling with \ourprog{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences. }
+  \caption{Boxplots showing the run-time distribution of sequence sampling with \ourprog{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the precomputation, while the latter is the time needed to generate 10000 sequences. }
   \label{appfig:run-times-redprint}
 \end{figure}
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.43\textwidth]{Figs/RunTimes/construction_time_sets_rbp}\quad%
   \includegraphics[width=0.43\textwidth]{Figs/RunTimes/sample_time_sets_rbp}
-  \caption{Boxplots showing the run-time distribution of sequence sampling with \RNAblueprint{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences.}
+  \caption{Boxplots showing the run-time distribution of sequence sampling with \RNAblueprint{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the precomputation, while the latter is the time needed to generate 10000 sequences.}
   \label{appfig:run-times-rbp}
 \end{figure}
 
@@ -362,7 +362,7 @@ In analogy to Fig.~\ref{fig:energydist-pk} of the main text,
     distributions of single structures from sampling with different weight
     parameters, where weights are trained to target specific energies. For
     comparison, the figure shows distributions from uniform and Boltzmann
-    sampling at respective homogenous weights $1$ and $e^\beta$.
+    sampling at respective homogeneous weights $1$ and $e^\beta$.
 
     Fig.~\ref{appfig:gc-content} shows the distributions of the GC content of the samples, while targeting different combinations of energies in this experiment. For completeness, we also report corresponding results for the analogous experiment from the main text. We observe that in addition to the target energies, also the feature $\GCb\%$ is narrowly defined by the multi-dimensional Boltzmann sampling strategy. In comparison, for uniform sampling and Boltzmann sampling at high weight $e^\beta$, where the \GCb\% is not controlled, we obtain much broader distributions. 
 
@@ -378,11 +378,11 @@ In analogy to Fig.~\ref{fig:energydist-pk} of the main text,
         three target structures R1, R2 and R3. By
         targeting the respective free energies $(-40,-40,-20)$ and
         $(-20,-20,-20)$ for the target structures (annotated in red and
-        blue, resepectively), we demonstrate the
+        blue, respectively), we demonstrate the
         effectivity of our adaptive multi-dimensional Boltzmann sampling
         procedure; moreover, for comparison, the distributions for uniform
         (U) and Boltzmann (B) samples---respectively associated with
-        homogenous weights $1$ and $e^\beta$.
+        homogeneous weights $1$ and $e^\beta$.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
   }
   \label{appfig:energydist}
@@ -773,7 +773,7 @@ This result implies that classic tree decomposition algorithms and, more importa
     %\Def{even} (resp. \Def{odd}) polarities may only be assigned values in
     %$\{\Ab,\Gb\}$ (resp. $\{\Cb,\Ub\}$). Neighbors of an odd vertex must
     %be even and vice versa, so the choice of a parity for any single
-    %vertex caracterizes the parity of all vertices in a bipartite
+    %vertex characterizes the parity of all vertices in a bipartite
     %connected subgraph.
     %
     %Let $CC=\{cc_1,cc_2,\ldots\}$ denote the connected components of the base pair dependency graph, we consider a modified version of the cluster tree, obtained by:
