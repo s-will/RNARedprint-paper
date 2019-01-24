@@ -662,7 +662,7 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
         The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Eq.~\ref{eq:mainproblem} (when restricted to $F^{\tt BP})$ simply counts the number of valid sequences.
 
 
-        Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions associated with local structural motifs (base pairs, base pair stacks, loops\ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, for each motif $m$ occurring in a target structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its positions $\dep(f_m)$. For instance, the contribution of a \Def{base pair stack}, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
+        Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions associated with local structural motifs (base pairs, base pair stacks, loops, \ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, for each motif $m$ occurring in a target structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its positions $\dep(f_m)$. For instance, the contribution of a \Def{base pair stack}, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
         We refer to energy models that consider the contributions of all base pair stacks (and thus introduce the corresponding dependencies) collectively as the \Def{stacking energy model}.
 }
 
@@ -725,7 +725,7 @@ relate more than two positions, in general its dependencies cannot be
 represented by a graph. Instead, this requires a structure known as
 \Def{hypergraph}, which consists of vertices (here, the sequence
 positions) connected by \Def{hyperedges}, which are arbitrary sets of
-vertices. In this way, hypergraphs generalize undirected graphs, where
+vertices. In this way, hypergraphs generalize undirected graphs where
 each edge is a set of exactly two vertices.
 %
 The \Def{dependency (hyper)graph induced by $\F$} is then defined as the hypergraph $G_\F=(V, H)$ on sequence positions $V=\{1,\dots,n\}$
