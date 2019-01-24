@@ -99,13 +99,12 @@ We thank the reviewers for their encouraging comments and constructive criticism
 
 \section{General comments}
 
-In particular, the reviews helped us to state the goal of this work more clearly and improve its presentation. While we demonstrate the applicability of our approach to negative RNA design, which (here by optimizing 'MultiDefect') aims at high and similar probability of the target structures, the focus of this work is the positive design of sequences that fold into multiple target structures with highly specific properties. We discuss this positive design, in particular, for specific folding energies (for each single target structure) and GC content. Moreover, as we like to emphasize, the method is even more general, which we see as most important strength of our approach; it is prepared to handle many additional constraints and sequence features based on the same mechanism. 
+In particular, the reviews helped us to state the goal of this work more clearly and improve its presentation. While we demonstrate the applicability of our approach to negative RNA design, which  aims at high and similar probability of the target structures (here measured as 'MultiDefect'), the focus of this work is the positive design of sequences that fold into multiple target structures with highly specific properties. We discuss this positive design, in particular, for specific folding energies (for each single target structure) and GC content. Moreover, as we like to emphasize, the method is even more general, which we see as most important strength of our approach; it is prepared to handle many additional constraints and sequence features based on the same mechanism. 
 
 Naturally, we hope that this method turns out to be highly useful for single- and multi-target negative design (and various other applications, like generating background models for assessing significance) in future applications, but---while we present preliminary results for negative design (based on generating seed sequences for the MODENA benchmark)---a more in-depth evaluation of its use in negative design is beyond the scope of this paper. This seems even more acceptable, since the principal benefits of controlled sampling have been shown with RNABlueprint. We apologize for potential misunderstandings about the objectives of the manuscript and hope to better clarify these aspects in our revision.
 
-To emphasize our focus on positive design and the prototypical nature of our brief proof-of-concept study in the use of our method for negative design, we carefully rephrased the respective paragraph at the end of the introduction as well statements in the subsection about the optimization of the MultiDefect. (TODO: write!)
+To emphasize our focus on positive design and the prototypical nature of our brief proof-of-concept study in the use of our method for negative design, we carefully rephrased the respective paragraph at the end of the introduction as well statements in the subsection about the optimization of the MultiDefect. 
 
-\todo[inline]{Mention that our sampling could be used in combination with MODENA / not necessarily competition}
 
 \section{Detailed responses}
 
@@ -114,21 +113,33 @@ To emphasize our focus on positive design and the prototypical nature of our bri
 \Comment{While this manuscript exhaustively described the algorithms of RNARedPrint and its advancement from theoretical aspects, it would be hard for BMC bioinformatics readers to understand what are the sophisticated points applied in RNARedPrint for a practical use.
 Related to that problem, it is also not clear what methods (or what options or approximations) are applied for each comparison in the results.
 Thus, this manuscript is considered to be further improved in terms of intelligibility of the methods and results using fair evaluation criteria.\\[1em]}%
-\Answer{We structured and rephrased the Results section more clearly and adapted the introduction accordingly. In Results, we introduce single subsections for the following sub-results to reflect our main results in a logical order:
+
+\Answer{
+  We thank the reviewer for the criticism, which motivated us to work on clarifying the practical use of the method and tool RNARedPrint; we have carefully edited the entire manuscript having these issues in mind.
+  In the methods section, we tried to improve the general readability especially of our overview of the method and central problem.
+  Moreover, we structured and rephrased the Results section more clearly and adapted our contributions outline and conclusion accordingly. In Results, we introduce single subsections for the following sub-results to reflect our main results in a logical order:
   \begin{itemize}
-    \item The full-featured RNA energy model (Turner) can be well approximated by the much more efficiently tractable stacking model; in this model, controlled Boltzmann sampling for typical multi-target design instances requires little time (corresponding to small tree-width);
+    \item Boltzmann sampling of positively designed sequences for multiple target structures works effectively and accurately, where the full-featured RNA energy model (Turner) can be well approximated.
+      For this approximation, we use the much more efficiently tractable stacking model; in this model, controlled Boltzmann sampling for typical multi-target design instances requires little time (corresponding to small tree-width);
     \item Multi-dimensional Boltzmann sampling solves the positive design problem effectively, requiring only a limited number of rejections (even for multiple simultaneously considered features);
-    \item The positively designed sequences are suitable for improving negative design approaches.
+    \item Our method can be beneficially used in the setting of negative design. Here, we demonstrate a typical use case of the method. Moreover, we empirically show that 
+      the positively designed sequences can improve negative design approaches, where
+      they work better than previous approaches (for seed generation).
 \end{itemize}}
-\AnswerTODO{Restructure Results and Intro)}
 
 \Comment{For evaluation of a method to design RNA molecules, the number of the solutions it produces and its running time are considered to be important.\\[1em]
 In the scope of this study, the running time and memory comparison should be shown to produce the same number of sequences by some minor variants of RNARedPrint method, RNABluePrint, and MODENA.\\[1em]}%
-\Answer{We agree that running times are important for assessing the method; consequently, we included detailed timing information in the revision. The running times directly depend on the already reported treewidths (which we actively keep low due to approximating the full energy model and using state-of-the-art decomposition methods). In consequence, the run-time requirements are generally modest for the relevant design instances; making our approach applicable in practice. 
+\Answer{We agree that running times are important for assessing the method; consequently, we included detailed information in our supplement (Supp. Mat. C). Moreover, Supp. Mat. E provides detailed information on the generation of seed sequences in our application to negative design.  
+  
+Please note that the running times directly depend on the (for the benchmark sets already reported) treewidths, which strongly depend on the specific design instances. Notably, we took measures to keep these treewidths low; in particular 1) we show that it suffices to sample based on an approximation of the full energy model and 2) we tailored the approach to benefit from state-of-the-art decomposition methods. In consequence, the run-time requirements are generally modest for the relevant design instances; making our approach applicable in practice. 
 
-Concerning the comparison: since MODENA does not allow to measure separate times for sequence sampling, we could only estimate its run-times by running the MODENA binary with parameters that turn off the optimization as far as this is possible. Moreover, we want to re-emphasize that MODENA, while it implements a sophisticated optimization procedure, does not put any specific focus on the sampling procedure for generating its seed sequences. Consequently, it does not sample from a specific distribution and produces random sequences without targeting any specific properties (neither good stability nor specific GC-content, etc.). In contrast, RNARedPrint produces highly specific samples, thereby solving a fundamentally different problem (i.e. positive design). This crucial difference should be kept in mind, when comparing the run-times of these tools. 
-\AnswerTODO{...}}
+We included further data comparing to RNABluePrint in the supplement (Supp. Mat. C) and discuss the comparison to MODENA. While comparing to MODENA in the same way as to RNABluePrint can admittedly appear obvious, the sampling in MODENA is of a very different nature, such that elaborate comparisons do not provide relevant insights. Here is a brief elaboration: 
 
+While MODENA implements a sophisticated optimization procedure, does not put any specific focus on the sampling procedure for generating its seed sequences. Consequently, it does not sample from a specific distribution and produces random sequences without targeting any specific properties (neither good stability nor specific GC-content, etc.). In contrast, RNARedPrint produces highly specific samples, thereby solving a fundamentally different problem (i.e. positive design). 
+In consequence, MODENA's sampling procedure is non-surprisingly much faster than the ones of RNARedPrint and RNABluePrint, which we openly admit in our text. 
+
+Reporting data for comparison would have been difficult for one additional reason: MODENA does not allow to measure separate times for sequence sampling. Thus, we could only estimate its run-times by running the MODENA binary with parameters that turn off the optimization as far as this is possible. 
+}
 \Comment{
 It would be informative if the authors show the number of rejected sequences produced by RNARedPrint considering the specific criteria (GC\% or free energy). 
 Since RNARedPrint keeps the sequences to be under the specific constraint by a simple rejection method, such information for various target conditions would be better to estimate the practical running time of RNARedPrint.\\[1em]}%
