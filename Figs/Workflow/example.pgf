@@ -64,8 +64,6 @@
 	  \node[right=55pt  of input] (merged)  {\YRNA{abcdefghijklmnopqrstuv}{1/21,2/20,3/19,4/8,5/7,10/17,11/16,12/15}%
     {1/5,2/4,6/12,7/11,15/22,16/21,17/20}{5/19,6/18,7/14,8/13,9/12}{}};
       \node[subcaption] at (merged |- cap1){ii) Merged Base-Pairs};
-
-    
   
     \begin{scope}[xshift=19cm,yshift=9cm] 
       \node[cell] at (2,2) (node-1-1) {a};
@@ -92,33 +90,10 @@
       \node[cell] at (4,1) (node-1-22) {v};
       \node[cell] at (3,1) (node-1-9) {i};
       \node[cell] at (1,0) (node-1-18) {r};
-
-      %\draw (node-1-1) edge[baseedge] (node-1-21);
-      %\draw (node-1-5) edge[baseedge] (node-1-7);
-      %\draw (node-1-11) edge[baseedge] (node-1-16);
-      %\draw (node-1-1) edge[baseedge] (node-1-5);
-      %\draw (node-1-21) edge[baseedge] (node-1-16);
-      %\draw (node-1-7) edge[baseedge] (node-1-11);
-      %\draw (node-1-4) edge[baseedge] (node-1-8);
-      %\draw (node-1-4) edge[baseedge] (node-1-2);
-      %\draw (node-1-2) edge[baseedge] (node-1-20);
-      %\draw (node-1-20) edge[baseedge] (node-1-17);
-      %\draw (node-1-17) edge[baseedge] (node-1-10);
-      %\draw (node-1-6) edge[baseedge] (node-1-12);
-      %\draw (node-1-12) edge[baseedge] (node-1-15);
-      %\draw (node-1-15) edge[baseedge] (node-1-22);
-      %\draw (node-1-3) edge[baseedge] (node-1-19);
-
-      %\draw (node-1-5) edge[baseedge] (node-1-19);
-      %\draw (node-1-6) edge[baseedge] (node-1-18);
-      %\draw (node-1-7) edge[baseedge] (node-1-14);
-      %\draw (node-1-8) edge[baseedge] (node-1-13);
-      %\draw (node-1-9) edge[baseedge] (node-1-12);
-
  
       \tikzstyle{ccr1}=[blue,line width=2pt]
-      \tikzstyle{ccr2}=[ccr1,green!60!black]
-      \tikzstyle{ccr3}=[ccr1,red]
+      \tikzstyle{ccr2}=[ccr1,red]
+      \tikzstyle{ccr3}=[ccr1,green!60!black]
 
       \newcommand{\drawedges}[3][]{%
         \foreach \x/\y in {#2} {%
@@ -142,7 +117,7 @@
   \node at (2,1) (root) {$\varnothing$};
  
   \tikzstyle{tdnodes}=[shape=rectangle, font=\sf,
-    draw, align=center,draw=cyan!90!black,line width=1.5pt]
+    draw, align=center,draw=gray,line width=1.5pt]
 
   \node (r1) {v o} 
       child 
@@ -186,7 +161,7 @@
         }
       };
 
-  \tikzstyle{tdnodes}+=[draw=purple!50,line width=1.5pt]
+  \tikzstyle{tdnodes}+=[draw=gray,line width=1.5pt]
 
   \node (r3) at (4,0) {k p} 
       child 
