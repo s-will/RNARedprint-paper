@@ -271,6 +271,7 @@
 
 \newcommand{\revised}[1]{{\color{red} #1}}
 
+
 %%% end macro defs
 
 %% fix some weirdness of the bioinfo class (footer overlapping text on page 1)
@@ -856,7 +857,7 @@ in $\real$. The message from $u$ to $v$ represents the
 partition functions of the subtree of $u$ for all possible partial
 sequences in $\partseqs(\separator{u}{v})$. Induction over $T$ lets us show
 the correctness of the algorithm
-(Supp. Mat.~\ref{appsec:correctness}).  After running
+(Supp.\ Mat.~\ref{appsec:correctness}).  After running
 Alg.~\ref{alg:pf}, multiplying the 0-ary messages sent to the root $r$
 yields the total partition function (i.e.~due to proper encoding the partition function of our design problem) through
 \begin{math}
@@ -902,11 +903,10 @@ Let $s$ denote the maximum size of any separator set $\separator{u}{v}$ and $D$ 
 $\difference{u}{v}$ over $(u,v)\in E$.  In the absence
 of specific optimizations, running Alg.~\ref{alg:pf} requires
 $\mathcal{O}((|\F|+|V|)\cdot 4^{w+1})$ time and
-$\mathcal{O}(|V|\cdot4^s)$ space
-(Supp. Mat.~\ref{appsec:algcomplexity}); Alg.~\ref{alg:sampling} would
+$\mathcal{O}(|V|\cdot4^s)$ space; Alg.~\ref{alg:sampling} would
 require $\mathcal{O}((|\F|+|V|)\cdot 4^D)$ per sample on arbitrary
 tree decompositions
-(Supp. Mat.~\ref{appsec:algcomplexity}). W.l.o.g.\ we assume that
+(Supp.\ Mat.~\ref{appsec:algcomplexity}). W.l.o.g.\ we assume that
 $D=1$; note that tree decompositions can generally be transformed,
 such that $\difference{u}{v}\leq 1$.
 %
@@ -978,8 +978,8 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 
 By this theorem, the complexity is polynomial for fixed value of $w$, and Boltzmann sampling in our setting is thus fixed parameter tractable (FPT) in the treewidth.
 %
-As shown in Supp. Mat.~\ref{sec:improvedComplexity}, the complexity of the precomputation can be further improved to
-$\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ is the maximum number of connected components represented in a node of the tree decomposition ($c\le w+1$).
+The complexity of the precomputation can be further improved to
+$\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ ($c\le w+1$) is the maximum number of connected components represented in a node of the tree decomposition (Supp.\ Mat.~\ref{appsec:improvedComplexity}).
 
 
 Note that in this complexity analysis, we do not include time and space for computing the
@@ -987,7 +987,7 @@ tree decomposition itself, since we observed that the computation time
 of tree decomposition (\Software{GreedyFillIn}, implemented in
 \Software{LibTW}~by \citet{Dijk2006}) for multi-target sampling is
 negligible compared to Alg.~\ref{alg:pf}
-(Supp. Mat.~\ref{appsec:treedecomp} and
+(Supp.\ Mat.~\ref{appsec:treedecomp} and
 \ref{appsec:dependency-cliques}).
 
 \subsection*{Design within expressive energy models}\label{sec:energy_models}
@@ -1035,7 +1035,7 @@ nine bases for interior loops, with a total of 5 unpaired bases (``2x3'' interio
 \paragraph{Approximating Turner Energy using Simpler Energy Models.}
 To capture the realistic Turner model $\EnergyTurner$ more efficiently, we exploit the tight correlation between
 $\EnergyTurner$ and the fitted stacking model $\EnergyStacking$
-(Supp. Fig~\ref{fig:training-cor}). More precisely, we observed a
+(Supp.\ Mat.~\ref{appsec:modelparameters}). More precisely, we observed a
 structure-specific affine dependency between the Turner and stacking
 energy models, so that
 $\EnergyTurner(S;R) \approx \gamma\cdot \EnergyStacking(S;R) + \delta$
@@ -1063,7 +1063,7 @@ where $\pmb{\pi}:=(\pi_0\cdots\pi_k)$ is the vector of the positive real-valued 
 %$\prod_{\ell=0}^{k} \pi_i^{-F_i(S)} = \prod_{f\in\F} f(S).$
 
 One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution. In other words,  $\mathbb{E}(F_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$ and, analogously, the expectation of $F_0(S)$ is the targeted GC content.
-The expected value of $F_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp. Mat.~\ref{sec:weight_derivatives}). More generally, computing a suitable parameter vector $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
+The expected value of $F_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp.\ Mat.~\ref{appsec:weight_derivatives}). More generally, computing a suitable parameter vector $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
 
 In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ for $\beta=1/(RT)$, T=$37^\circ$, and gas constant $R$. Then, at each iteration, it generates samples $\mathcal{S}$ of sequences. The expected value of an energy $F_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}F_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$.
 $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically  ($\gamma=1.2$) to achieve effective optimization.
@@ -1206,7 +1206,7 @@ stacking energy model $\EnergyStacking$, whose parameters were fitted
 to best approximate Turner energies. As well, we implemented and
 fitted a base pair energy model for \ourprog{}, which was not studied
 for its targeting performance (both models:
-Supp. Mat.~\ref{appsec:modelparameters}).
+Supp.\ Mat.~\ref{appsec:modelparameters}).
 %
 %\paragraph{Implementation of multi-dimensional Boltzmann sampling}
 %As suggested in Section~\ref{sec:multiBoltzmann}, we heuristically optimize weights to target specific energies and \GCb\% in an iterative procedure (based on the core sampling algorithm).
@@ -1229,8 +1229,7 @@ the Turner energy distributions of the single structures as they
 result from sampling with different weight parameters. The figure
 illustrates how our multidimensional Boltzmann sampling strategy can,
 to a large extent, independently shift the Turner energies of sampled
-sequences towards prescribed targets. See Supp. Mat.,
-Fig.~\ref{fig:energydist} for a further example with three
+sequences towards prescribed targets. See Supp.\ Mat.~\ref{appsec:illustrating-mdbs} for a further example with three
 pseudoknot-free target structures.}
 
 
@@ -1320,12 +1319,12 @@ Boltzmann-sampled sequences outperform uniform seeds on every dataset,
 leading to average improvements in \Obj{} values ranging from $7.26$
 ({\sf LE80}) to $16.05$ ({\sf 2str}) units. Remarkably, this
 improvement is be observed for both of the terms in \Obj{} (see
-Supp. Mat.~\ref{sec:improvements}).  This means that \ourprog{}
+Supp. Mat.~\ref{appsec:contributions-multidefect}).  This means that \ourprog{}
 produces sequences whose targets are both substantially closer to
 the sequence ensemble/minimal free energy, and more similarly stable across targets.  In fact, for
 every sequence in our benchmark, consisting of 332 sets of target
 structures, we observed better \Obj{} for Boltzmann sampling than for
-uniform sampling (see Supp. Mat.~\ref{sec:validity}).  Notably,
+uniform sampling (see Supp. Mat.~\ref{appsec:detailed-benchmark-results}).  Notably,
 \ourprog{} performs equally well in the presence of pseudoknots;
 the difficulty rather lies in the computation of the \Obj{} function, since
 free-energy minimization is costly in the presence of
@@ -1334,8 +1333,8 @@ pseudoknots~\citep{Sheikh2012} and good implementations are scarce.
 %
 Moreover, for all instances as well, the superiority of Boltzmann designs
 remains unchallenged even after local optimizations, as shown by
-Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{sec:improvements}
-and \ref{sec:validity}. This observation is consistent with a
+Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{appsec:contributions-multidefect}
+and \ref{appsec:detailed-benchmark-results}. This observation is consistent with a
 superior quality of the starting point for the greedy walk, probably leading
 to better local minima of the \Obj{} function. However, it should be noted
 that the greedy walk is based on the uniform sampling of

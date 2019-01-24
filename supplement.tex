@@ -205,7 +205,7 @@
 \end{center}
 
 \section{Immediate benefits of positive design for negative design}
-
+\label{appsec:immediate-benefits-for-negative-design}
 Already previous work on RNA Design, e.g. INFO-RNA and Incarnation, observed
 that---put briefly---negative design benefits from positive design. Here, more
 concretely, we simply \emph{demonstrate} this effect (for small examples), where
@@ -227,10 +227,10 @@ of sequences folding into $R$. Recall that the probability $Pr(R|S)$ can be
 calculated as $\exp(-E(S,R)/RT)/Z(S)$,
 where $Z(S)=\sum_{R'} \exp(-E(S,R')/RT)$.
 %
-Consequently, Figure~\ref{fig:negforpos} ultimately illustrates the dependencies
+Consequently, Figure~\ref{appfig:negforpos} ultimately illustrates the dependencies
 between $Pr(S|R)$ and $Pr(R|S)$ for uniform samples and low energy samples
 (where those samples can be efficiently generated due to our Boltzmann sampling
-strategy). For our examples, we observe (Fig.~\ref{fig:negforpos}) that Boltzmann sampling with weight 500 (green), generates good negative designs 
+strategy). For our examples, we observe (Fig.~\ref{appfig:negforpos}) that Boltzmann sampling with weight 500 (green), generates good negative designs 
 with substantially higher probability than uniform sampling (blue).
 
 % and high energy difference $E_\Delta(S,R)=E_{\text{ens}}(S)-E(S,R)$, with high probability $\Pr(R|S)$.
@@ -252,13 +252,13 @@ with substantially higher probability than uniform sampling (blue).
 % \\&=  E(S,R) - E_{\text{Ens}}(S). 
 % \end{align*}
 
-\begin{figure}[h!]
+\begin{figure}[!h]
 \textbf{A}~\includegraphicstop[width=0.48\textwidth]{Figs/Plots/stem_weight1-500_mean}%
 \textbf{B}~\includegraphicstop[width=0.48\textwidth]{Figs/Plots/doublestem_weight1-500_mean}%
 \caption{Comparison of uniform sampling and Boltzmann sampling with
 weight $\pi=500$. We show results for two different small structures: (A) single stem structure (B) double stem structure. For each respective structure $R$, we plot the energies $E(S,R)$ of
 10000 sampled sequences against the probabilities $Pr(R|S)$ (in log scale). For illustrating the trend, we show moving averages over windows of $\pm 1$ kcal. Note that while only the energy $E(S,R)$ is directly controlled by Boltzmann sampling, this strongly impacts the common negative design objective $Pr(R|S)$.}
-\label{fig:negforpos}
+\label{appfig:negforpos}
 \end{figure}
 
 \section{Tree decomposition for RNA design instances in practice}
@@ -287,7 +287,7 @@ set of $k$ ($k=3,\dots,6$) compatible structures as follows
   \centering\includegraphics[width=0.8\textwidth]{Figs/td-widths}
   \caption{Treewidths for multi-target RNA design instances of
     different complexity. Distributions of treewidths shown as boxplots for the base pair (left) and stacking model (right).}
-  \label{fig:td-widths}
+  \label{appfig:td-widths}
 \end{figure}
 
 \begin{figure}[h!]
@@ -297,14 +297,14 @@ set of $k$ ($k=3,\dots,6$) compatible structures as follows
   \caption{Computation time of tree decompositions for
     multi-target RNA design instances of different complexity.
     Distributions of times (in ms/instance) shown as boxplots for the base pair (left) and stacking model (right).}
-  \label{fig:td-times}
+  \label{appfig:td-times}
 \end{figure}
 
 For each instance, we generated the dependency graphs in the base pair
 model and in the stacking model. Then, we performed tree decomposition
 (using strategy ``GreedyFillIn'' of LibTW~\citep{Dijk2006}) on each dependency
 graph. The obtained treewidths are reported in
-Fig.~\ref{fig:td-widths}, while Fig.~\ref{fig:td-times} shows the
+Fig.~\ref{appfig:td-widths}, while Fig.~\ref{appfig:td-times} shows the
 corresponding run-times of the tree decomposition.
 
 
@@ -315,11 +315,11 @@ corresponding run-times of the tree decomposition.
   \includegraphicstop[width=0.55\textwidth]{Figs/td-example-basepair}%
   \includegraphicstop[width=0.30\textwidth]{Figs/td-example-stacking}
   \caption{Example instance from RF3 (top) with its tree decompositions in the base pair (left) and stacking model (right). The respective treewidths are 2 and 12.}
-  \label{fig:td-example}
+  \label{appfig:td-example}
 \end{figure}
 
 \revised{
-  Finally, for further illustration, we show concrete tree decompositions for a selected instance in the benchmark set RF3 in Figure~\ref{fig:td-example}. This figure is provided solely for illustrational purposes:
+  Finally, for further illustration, we show concrete tree decompositions for a selected instance in the benchmark set RF3 in Figure~\ref{appfig:td-example}. This figure is provided solely for illustrational purposes:
   First, it depicts the tree decomposition for a typical, realistic sampling task. Second, it exemplarily illustrates the typical impact of the energy model on the tree decomposition.
   Compared to the tree decomposition based on the stacking model, the tree decomposition for the base pair model is much simpler. This shows in many connected components, which correspond to independently solvable sub-problems, and fewer positions per bag (i.e. smaller tree width), which allows far more efficient evaluation per tree node. 
   Note that the complexity of the tree decomposition ultimately shows the complexity of the dependencies that need to be considered for simultaneous energy evaluation for all target structures. This complexity is substantially increased in the stacking model over the simpler base pair model.
@@ -327,34 +327,36 @@ corresponding run-times of the tree decomposition.
 
 \begin{revision}
 
-\section{Run times for generating samples}
+\section{Run times for Boltzmann sampling (at fixed weights)}
+\label{appsec:run-times}
 
-To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{fig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{fig:run-times-redprint}.
+To illustrate the efficiency and practical feasibility of our Boltzmann sampling approach, we show the distributions of run times (Intel(R) Core(TM) i7-4770 CPU) for generating 10000 samples (over the Modena benchmark instances and grouped by benchmark sub-set). Since producing a controlled Boltzmann sampling requires significant pre-computation, it is informative to separately show construction and sampling times (Figure~\ref{appfig:run-times-redprint}). Moreover, \ourprog{} can be used with a simpler base pair model or a rather complex stacking energy model, which introduces much stronger dependencies than required for uniform sampling. Technically, these stronger dependencies increase the tree width and thus the runtime, as noticeable in Figure~\ref{appfig:run-times-redprint}.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.43\textwidth]{Figs/RunTimes/construction_time_sets}\quad%
   \includegraphics[width=0.43\textwidth]{Figs/RunTimes/sample_time_sets}
   \caption{Boxplots showing the run-time distribution of sequence sampling with \ourprog{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences. }
-  \label{fig:run-times-redprint}
+  \label{appfig:run-times-redprint}
 \end{figure}
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.43\textwidth]{Figs/RunTimes/construction_time_sets_rbp}\quad%
   \includegraphics[width=0.43\textwidth]{Figs/RunTimes/sample_time_sets_rbp}
   \caption{Boxplots showing the run-time distribution of sequence sampling with \RNAblueprint{} for the various benchmark sets. The times are split into construction time (left) and sampling time (right). Construction includes all the pre-computation, while the latter is the time needed to generate 10000 sequences.}
-  \label{fig:run-times-rbp}
+  \label{appfig:run-times-rbp}
 \end{figure}
 
 A fair comparison to sampling times by other tools can hardly be given, since the other tools produce samplings of very different nature. In particular, Modena does not make any guarantees on properties of the sampling. Non-surprisingly, this allows it to sample significantly faster (several orders of magnitudes).
-Nevertheless, the comparison to run times of \RNAblueprint{} is still interesting, since this tool generates---similarly to our tool---\emph{controlled} samples. As we argue that the Boltzmann sampling is fundamentally more flexible than uniform sampling as generated by \RNAblueprint, \ourprog{} performs even particularly well, beating \RNAblueprint{} most of the time with only a few exceptions for particularly hard instances. The results for \RNAblueprint{} are shown in Figure~\ref{fig:run-times-rbp}.
+Nevertheless, the comparison to run times of \RNAblueprint{} is still interesting, since this tool generates---similarly to our tool---\emph{controlled} samples. As we argue that the Boltzmann sampling is fundamentally more flexible than uniform sampling as generated by \RNAblueprint, \ourprog{} performs even particularly well, beating \RNAblueprint{} most of the time with only a few exceptions for particularly hard instances. The results for \RNAblueprint{} are shown in Figure~\ref{appfig:run-times-rbp}.
 
 \end{revision}
 
 \section{Illustrating multi-dimensional Boltzmann sampling for three pseudoknot-free target structures}
+\label{appsec:illustrating-mdbs}
 
-    In analogy to Fig.~\ref{fig:energydist-pk} of the main text,
-    Fig.~\ref{fig:energydist} illustrates our multi-dimensional sampling
+In analogy to Fig.~\ref{fig:energydist-pk} of the main text,
+    Fig.~\ref{appfig:energydist} illustrates our multi-dimensional sampling
     strategy for three pseudoknot-free target structures (example instance
     from the \texttt{Modena} benchmark). The figure shows Turner energy
     distributions of single structures from sampling with different weight
@@ -362,7 +364,7 @@ Nevertheless, the comparison to run times of \RNAblueprint{} is still interestin
     comparison, the figure shows distributions from uniform and Boltzmann
     sampling at respective homogenous weights $1$ and $e^\beta$.
 
-    Fig.~\ref{fig:gc-content} shows the distributions of the GC content of the samples, while targeting different combinations of energies in this experiment. For completeness, we also report corresponding results for the analogous experiment from the main text. We observe that in addition to the target energies, also the feature $\GCb\%$ is narrowly defined by the multi-dimensional Boltzmann sampling strategy. In comparison, for uniform sampling and Boltzmann sampling at high weight $e^\beta$, where the \GCb\% is not controlled, we obtain much broader distributions. 
+    Fig.~\ref{appfig:gc-content} shows the distributions of the GC content of the samples, while targeting different combinations of energies in this experiment. For completeness, we also report corresponding results for the analogous experiment from the main text. We observe that in addition to the target energies, also the feature $\GCb\%$ is narrowly defined by the multi-dimensional Boltzmann sampling strategy. In comparison, for uniform sampling and Boltzmann sampling at high weight $e^\beta$, where the \GCb\% is not controlled, we obtain much broader distributions. 
 
 \begin{figure}[h!]
       \begin{center}
@@ -383,7 +385,7 @@ Nevertheless, the comparison to run times of \RNAblueprint{} is still interestin
         homogenous weights $1$ and $e^\beta$.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
   }
-  \label{fig:energydist}
+  \label{appfig:energydist}
 \end{figure}
 
 \begin{figure}[h!]
@@ -391,21 +393,22 @@ Nevertheless, the comparison to run times of \RNAblueprint{} is still interestin
     {\sf \bfseries A}~\includegraphicstop[width=0.45\textwidth]{Figs/Plots/PKB00211_PKB00239_0_GC_content}
     ~~~~~{\sf \bfseries B}~\includegraphicstop[width=0.45\textwidth]{Figs/Plots/supp_3str_GC_content}
   \end{center}
-  \caption{Distribution of the \GCb-content \GCb\% in the experiments of (A) Fig.~\ref{fig:energydist-pk} of the main text and (B) Suppl.~Fig.~\ref{fig:energydist}.}
-  \label{fig:gc-content}
+  \caption{Distribution of the \GCb-content \GCb\% in the experiments of (A) Fig.~\ref{fig:energydist-pk} of the main text and (B) Suppl.~Fig.~\ref{appfig:energydist}.}
+  \label{appfig:gc-content}
 \end{figure}
 
 \begin{revision}
 \section{Effectivity of the seed sequence generation}
+\label{appsec:effectivity-seed-generation}
 
-Figure~\ref{fig:seed-generation} shows relative numbers of finished instances and admissible sequences at each iteration of the seed generation procedure for the benchmark set \texttt{3str}. We obtain qualitatively equivalent results for all other benchmark sets (not shown). The top plot illustrates the  precomputation step of our strategy, where weights are calibrated for \GCb\% of 0.6. In this step, we produce sequence of the targeted \GCb\% to determine the linear transformation from the sampling energy model (stacking model) to the Turner model. The bottom plot shows the actual generation of the seed sequences after precomputation. The plot shows that most of the instances are finished after the first iterations, with only a few harder instances that require 2--3 times more iterations. Recall that the seed sequences were designed to have similar energy for all target structures.
+Figure~\ref{appfig:seed-generation} shows relative numbers of finished instances and admissible sequences at each iteration of the seed generation procedure for the benchmark set \texttt{3str}. We obtain qualitatively equivalent results for all other benchmark sets (not shown). The first plot illustrates the  precomputation step of our strategy, where weights are calibrated for \GCb\% of 0.6. In this step, we produce sequence of the targeted \GCb\% to determine the linear transformation from the sampling energy model (stacking model) to the Turner model. The second plot shows the actual generation of the seed sequences after precomputation. The plot shows that most of the instances are finished after the first iterations, with only a few harder instances that require 2--3 times more iterations. Recall that the seed sequences were designed to have similar energy for all target structures.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.48\textwidth]{Figs/SeedGeneration/iterations_gc_3str.pdf}
   \includegraphics[width=0.48\textwidth]{Figs/SeedGeneration/iterations_en_3str.pdf}
-  \caption{Relative numbers of finished instances and admissible sequences at each iteration of the seed generation procedure for the benchmark set \texttt{3str}.}
-  \label{fig:seed-generation}
+  \caption{Relative numbers of finished instances and admissible sequences at each iteration of the seed generation procedure for the benchmark set \texttt{3str}. The left illustrates the procedure for targeting just the \GCb\% in the precomputation step; this step is used to learn instance-specific transformations of approximate energies to the Turner model from the generated sample. The right plots illustrates generating samples targeting \GCb\% and the Turner energies. }
+  \label{appfig:seed-generation}
 \end{figure}
 
 \end{revision}
@@ -444,7 +447,7 @@ parameters are reported in Tables~\ref{tab:basepairmodel} and
 
 For validating the trained parameters, we generate a second
 independent test set of random RNA sequences in the same
-way. Fig.~\ref{fig:training-cor} shows correlation plots for the
+way. Fig.~\ref{appfig:training-cor} shows correlation plots for the
 trained parameters in the base pair and stacking models for predicting
 the Turner energies in the test set with respective correlations of
 $0.95$ an $0.94$.
@@ -458,7 +461,7 @@ $0.95$ an $0.94$.
     independently sampled sequences in the test set. We show
     correlation plots against the Turner energies reported by the
     ViennaRNA package.}
-  \label{fig:training-cor}
+  \label{appfig:training-cor}
 \end{figure}
 
 \begin{table}[b]
@@ -654,7 +657,8 @@ This result implies that classic tree decomposition algorithms and, more importa
     \end{proof}
 
 
-    \section{Exploiting constraint consistency to reduce the complexity}\label{sec:improvedComplexity}
+    \section{Exploiting constraint consistency to reduce the complexity}
+    \label{appsec:improvedComplexity}
 
     While Alg.~\ref{alg:pf} computes messages values for
     \emph{all} possible combinations of nucleotides for the positions
@@ -749,8 +753,8 @@ This result implies that classic tree decomposition algorithms and, more importa
     the asymptotic complexity.
 
 
-    %\section{Exploiting the bipartite nature of base pair dependency
-    %  graphs to reduce the complexity}\label{sec:first-improvedComplexity}
+    %section{Exploiting the bipartite nature of base pair dependency
+    %  graphs to reduce the complexity}\label{appsec:first-improvedComplexity}
     %\textcolor{red}{\textbf{TODO: discuss and merge with/replace by previous Section}}
     %
     %As already noted by \citet{Flamm2001}, the requirement of canonical
@@ -785,7 +789,8 @@ This result implies that classic tree decomposition algorithms and, more importa
 
 
 \section{Monotonicity of the partial derivatives within weight calibration}
-\label{sec:weight_derivatives}
+\label{appsec:weight_derivatives}
+
 %
 In weighted distributions, one witnesses a fairly predictable impact of the variation of any weight $\pi_\ell$ over the expected value $\mathbb{E}(E_\ell\mid \pmb{\pi})$, $\pmb{\pi}:= (\pi_1\cdots\pi_k)$, of the free energy $E_\ell$ of structure $\ell$.  Let us  first remind the probability of a sequence $S$ in the weighted distribution
 \begin{align*}
@@ -824,6 +829,8 @@ Moreover, weights are always positive so the partial derivative in $\pi_\ell$ is
 
 
 \section{Approximate counting and random generation}
+\label{appsec:approximate-counting}
+
 In fact, not only is $\#{\sf BIS}$ a reference problem in counting complexity, but it is also a landmark problem with respect to the complexity of approximate counting problems. In this context, it is the representative for a class of $\#{\sf BIS}$-hard problems~\citep{Bulatov2013} that are easier to approximate than $\# {\sf SAT}$, yet are widely believed not to admit any Fully Polynomial-time Randomized Approximation Scheme. Recent results reveal a surprising dichotomy in the behavior of $\#{\sf BIS}$: it admits a Fully Polynomial-Time Approximation Scheme (FPTAS) for graphs of max degree $\le 5$~\citep{Weitz2006}, but is as hard to approximate as the general $\#{\sf BIS}$ problem on graphs of degree $\ge 6$~\citep{Cai2016}. In other words, there is a clear threshold, in term of the max degree, separating (relatively) easy instances from really hard ones.
 
 Additionally, let us note that, from the classic Vizing Theorem, any bipartite graph $G$ having maximum degree $\Delta$ can be decomposed in polynomial time in exactly $\Delta$ matchings. Any such matching can be reinterpreted as a secondary structure, possibly with crossing interactions (\Def{pseudoknots}). These results have two immediate consequences for the pseudoknotted version of the multiple design counting problem.
@@ -836,11 +843,12 @@ Additionally, let us note that, from the classic Vizing Theorem, any bipartite g
 It is worth noting that the $\#{\sf P}$ hardness of \NumDesign does not immediately imply the hardness of generating a valid design uniformly at random, as demonstrated constructively by Jerrum, Valiant and Vazirani~\citep{Jerrum1986}. However, in the same work, the authors establish a strong connection between the complexity of approximate counting and the uniform random generation. Namely, they showed that, for problems associated with self-reducible relations, approximate counting is equally hard as (almost) uniform random generation. We conjecture that the (almost) uniform sampling of sequences from multiple structures with pseudoknots is in fact \#{\sf BIS}-hard as soon as the number of input structures strictly exceeds $5$, as indicated by~\citet{Goldberg2004}, motivating even further our parameterized approach.
 
 \section{Contribution of terms to the MultiDefect score}
-
+\label{appsec:contributions-multidefect}
+  
 \newcommand{\EnsE}{\text{\rm G}} %ensemble energy
 
 
-Figure~\ref{fig:contribtions-multidefect} breaks down the multi-defect
+Figure~\ref{appfig:contributions-multidefect} breaks down the multi-defect
 score of Eq.~$(\ref{eq:blueprintobjective})$, which is used to
 evaluate the quality of multi-target designs. Recall that the total
 score is composed of the term $\frac{1}{k} \sum_{\ell=1}^{k} (E(S,
@@ -850,20 +858,21 @@ the term $\frac{1}{2\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq
   k}|E(S,R_\ell) - E(S,R_j)|$, which evaluates the similarity of the
 target structure energies of the target structures (Heterogeneity).
 
-\label{appsec:multidefect}
 \begin{figure}[h!]
 \includegraphics[width=.48\textwidth]{Figs/statistics-Term1}
 \includegraphics[width=.48\textwidth]{Figs/statistics-Term2}
 \caption{Break-down of average MultiDefect values into their two components.}
-\label{fig:contribtions-multidefect}
+\label{appfig:contributions-multidefect}
 \end{figure}
 
 
 
-\section{Detailed results of MultiDefect analysis}\label{sec:validity}
-N/A values correspond to data that could not be obtained by the time of this submission for two main reasons: In the case of the initial sampling (left columns), they correspond to instances which, in conjunction with an expressive energy model, resulted in very high tree-width, leading to unreasonable memory requirements incompatible with our available computing resources; The case of missing values after optimization  (right columns), they indicate situations where the initial optimization took too long ($\approx$ 1 day) and was killed.
-\input{table}
+\section{Detailed results of the negative design benchmark}
+\label{appsec:detailed-benchmark-results}
 
+N/A values correspond to data that could not be obtained by the time of this submission for two main reasons: In the case of the initial sampling (left columns), they correspond to instances which, in conjunction with an expressive energy model, resulted in very high tree-width, leading to unreasonable memory requirements incompatible with our available computing resources; The case of missing values after optimization  (right columns), they indicate situations where the initial optimization took too long ($\approx$ 1 day) and was killed.
+
+\input{table}
 
 \bibliographystyle{vancouver}
 %\bibliographystyle{achemnat}
