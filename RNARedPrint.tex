@@ -555,7 +555,7 @@ Recently, the approach \Software{RNAdesign}~\citep{HoenerzuSiederdissen2013}, co
 search in \RNAblueprint{}~\citep{Hammer2017}, solved the
 problem of sampling seeds from the \emph{uniform} distribution for multiple
 target structures. \Software{RNAdesign} adopts a graph coloring perspective,
-coloring the sequence positions with nucleotides, such that the ends of each base pair receive compatible colors. Initially the method decomposes the graph hierarchically, using ear decomposition, and then \Def{precomputes} the number of valid sequences
+coloring the sequence positions with nucleotides, such that the ends of each base pair receive compatible colors. Initially, the method decomposes the graph hierarchically and then \Def{precomputes} the number of valid sequences
 within each subgraph. The decomposition is then reinterpreted as a
 decision tree to perform \Def{stochastic backtracking}, inspired by
 Ding and Lawrence~\citep{Ding2003}. Uniform sampling is achieved by
@@ -579,7 +579,7 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 \label{fig:workflow}
 \end{figure*}
 
-\revised{As central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of sequences that target the energies of multiple structures and the \GCb\%.}
+\revised{As central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of RNA sequences that target the energies of multiple structures and the \GCb\%.}
 
 \revised{Figure~\ref{fig:workflow} summarizes our generic framework, which enables this targeted sequence generation based on multi-dimensional Boltzmann sampling. \emph{Algorithmically}, we originally contribute} dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
