@@ -520,7 +520,7 @@ conformations. Classic examples include riboswitches, which
 adopt different stable structures upon binding a specific
 ligand. Riboswitches have been a popular application of rational
 design~\citep{Wachsmuth2013,Domin2017}, partly motivated by their
-capacity to act as biosensors~\citep{Findeiss2017}.
+capacity to act as biosensors~\citep{Findeiss2017}, \revised{which suggests them for biotechnological applications.}
 In particular due to the kinetic coupling of RNA folding with RNA transcription, RNA families can feature alternative,
 evolutionarily conserved, transient structures~\citep{Zhu2013}, which
 are essential for the formation of their functional structures.  More generally, simultaneous compatibility to multiple
@@ -556,14 +556,14 @@ Recently, the approach \Software{RNAdesign}~\citep{HoenerzuSiederdissen2013}, co
 search in \RNAblueprint{}~\citep{Hammer2017}, solved the
 problem of sampling seeds from the \emph{uniform} distribution for multiple
 target structures. \Software{RNAdesign} adopts a graph coloring perspective,
-coloring the sequence positions with nucleotides, such that the ends of each base pair receive compatible colors. Initially, the method decomposes the graph hierarchically and then \Def{precomputes} the number of valid sequences
+\revised{assigning nucleotide symbols (like ``colors'') to the sequence positions, such that compatible nucleotides are assigned to the ends of each base pair.} Initially, the method decomposes the graph hierarchically and then \Def{precomputes} the number of valid sequences
 within each subgraph. The decomposition is then reinterpreted as a
 decision tree to perform \Def{stochastic backtracking}, inspired by
 Ding and Lawrence~\citep{Ding2003}. Uniform sampling is achieved by
 choosing individual nucleotide assignments with probabilities derived
 from the subsolution counts. While, due to its decomposition strategy, 
 \Software{RNAdesign} performs much better than the theoretical bound of $O(4^n)$, no attempts were made to characterize or justify its---still exponential---complexity; leaving important theoretical questions of the complexity of counting and uniform sampling open.
-As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uniform sampling, which limits its direct extensibility. Both aspects call for a more systematic redesign of multi-target sampling, which builds on established concepts in computer science. In turn, this promises a fundamentally broader range of applications for extensions of the sampling method.
+As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uniform sampling, which limits its direct extensibility. \revised{Substantial improvements of multi-target sampling thus require a systematically redesigned appraoch. To enable a fundamentally broader range of applications in extensions of the sampling method, we build our approach, from the start, on established concepts in computer science.}
 
 %\todo[inline]{SW: The following paragraph (together with the first sentence of Subsection Contributions) is rather confusing than helpful. We could drop this here and give brief explanations of the complexity issues in the contributions section.}
 %
@@ -580,12 +580,12 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 \label{fig:workflow}
 \end{figure*}
 
-\revised{As central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of RNA sequences that target the energies of multiple structures and the \GCb\%.}
+\revised{As central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of RNA sequences that have specific energies for multiple structures and specific \GCb\%.}
 
 \revised{Figure~\ref{fig:workflow} summarizes our generic framework, which enables this targeted sequence generation based on multi-dimensional Boltzmann sampling. \emph{Algorithmically}, we originally contribute} dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
 .
-\revised{Generally, tree decompositions are data structures that capture the specific dependencies of a problem instance (here, the dependencies induced by the target structures) to guide the efficient processing by DP algorithms.}
+\revised{Generally, tree decompositions are data structures that capture the specific dependencies of a problem instance (here, the dependencies between sequence positions induced by the target structures), such that they can guide the efficient processing by DP algorithms.}
 %
 \revised{Building on this principle, the complexities of our algorithms depend exponentially on a specific property of the tree decomposition, called the \Def{treewidth}. Thus, it is essential for the applicability of our approach that---by appropriate design choices---we can keep this parameter low for typical instances. For} any fixed value of the treewidth, the complexity scales only linearly with the size of designed sequences and the number of targeted structures, \emph{i.e.} our algorithms are \emph{fixed-parameter tractable (FPT)}.
 
@@ -596,9 +596,8 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 Due to the generality of our method, we can moreover strongly limit \revised{the treewidth} in practice by using state-of-the-art tree decomposition algorithms.
 %Uniform sampling is handled as a special case of Boltzmann sampling, where each valid sequence receives energy zero and---consequently---computing partition functions specializes to counting.
 By evaluating sequences in a specialized weighted constraint
-network, we support---in principle---arbitrary multi-ary constraints and thus
-arbitrarily complex energy models,
-notably subsuming all commonly
+network, we support---in principle---arbitrary \revised{complex constraints and energy models},
+notably subsuming the commonly
 used RNA energy models%
 %(Subsection~\ref{sec:energy_models})
 .  Moreover, we describe an \Def{adaptive
@@ -1405,10 +1404,11 @@ We introduced a novel approach, based on a general framework and efficient algor
 sequences, while targeting very specific complex properties. In particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
 Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
-controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice, which is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. In a proof-of-concept study 
-  on an established benchmark set for multi-target RNA design (including pseudoknotted instances), 
+controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice, which is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. By conducting a proof-of-concept study 
+  on an established benchmark set for negative multi-target RNA design (including pseudoknotted instances), we showcase a typical application of our tool \ourprog{}. In this study, 
   the approach generated significantly better seed sequences than
-the previously best available method (uniform sampling). These results strongly suggest that the presented technique for positive design can be highly beneficial in future negative design approaches.}
+the previously best available method (uniform sampling). These results strongly suggest that the presented technique for positive design can be highly beneficial in future negative design approaches.
+}
 %
 To substantiate our work additionally, we establish the $\#${\sf P}-hardness of uniform sampling which,
 from a complexity-theoretic point of view, motivates the FPT, tree decomposition-based nature of our method.  
