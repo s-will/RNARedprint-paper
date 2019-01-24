@@ -419,24 +419,23 @@
 \begin{abstractbox}
 \begin{abstract}
   \parttitle{Background}
-  The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, which impact their cost and feasibility. \\
+  The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, \revised{which substantially reduce the need for costly wet-lab experiments.} \\
 %
   \parttitle{Results} We devise a novel approach to a central ingredient of most in-silico
-  design methods: the generation of sequences \revised{that fold well into multiple target structures.} For this task, we present the fixed-parameter tractable (FPT) approach \ourprog{}.
+  design methods: the generation of sequences \revised{that fold well into multiple target structures.} 
   % 
-  \revised{Based on} constraint networks, \ourprog{} supports generic
+  \revised{Based on constraint networks, our approach \ourprog{}} supports generic
   Boltzmann-weighted sampling, which enables the positive design of RNA sequences
   with specific free energies (for each of multiple, possibly pseudoknotted, target structures) and \GCb-content.
 %
-  %Securing the theoretical foundations of our method
-  Moreover, we establish the $\#${\sf P}-hardness of \revised{counting to theoretically justify the development of an FPT approach}. 
-%
-  Finally, we study general properties of our approach empirically and generate
+  Moreover, we study general properties of our approach empirically and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
-  common design benchmark.
-  We demonstrate significant improvements over the previously best multi-target sampling strategy, due to generating seed sequences with \ourprog{}.\\
+  \revised{established} design benchmark. \revised{Our results demonstrate the effectivity and feasiblity of the method in practice
+  as well as the benefits of Boltzmann sampling over the previously best multi-target sampling strategy---even for the case of negative design of multi-stable RNAs.}\\
 %
-  \parttitle{Conclusion} \ourprog{} introduces a novel, flexible and---as we demonstrate--effective approach to multi-target RNA design, which promises broad applicability and extensibility. 
+  \revised{Besides empirically studies, we finally justify the algorithmic details due to a fundamental theoretic result about multi-stable RNA design, namely the \#P-hardness of the counting of designs.}
+%
+  \parttitle{Conclusion} \ourprog{} introduces a novel, flexible and---as we demonstrate---effective approach to multi-target RNA design, which promises broad applicability and extensibility. 
 
   \smallskip
   \noindent
