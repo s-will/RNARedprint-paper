@@ -719,18 +719,14 @@ To express this, let us define the \Def{base pair dependency graph} $G_{\R}$ as 
 and edges $\bigcup_{\ell\in[1,k]} R_\ell$. %Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct dependency between the chosen nucleotide assignments for the two positions.
 
 Since $\F$ defines potentially more complex dependencies, which can
-relate more than two positions, its dependencies cannot be similarily
+relate more than two positions, in general its dependencies cannot be 
 represented by a graph. Instead, this requires a structure known as
 \Def{hypergraph}, which consists of vertices (here, the sequence
-positions) connected by \Def{hyperedges}, which are sets of
+positions) connected by \Def{hyperedges}, which are arbitrary sets of
 vertices. In this way, hypergraphs generalize undirected graphs, where
-edges are sets of two vertices.
-%Undirected graphs can be
-%modeled as hypergraphs whose hyperedges are pairs of vertices, but
-%hypergraphs also allow to express complex dependencies.
-
-The set $\F$ of contributions induces the \Def{dependency
-  (hyper)graph} $G_\F=(V, H)$ on sequence positions $V=\{1,\dots,n\}$
+each edge is a set of exactly two vertices.
+%
+The \Def{dependency (hyper)graph induced by $\F$} is then defined as the hypergraph $G_\F=(V, H)$ on sequence positions $V=\{1,\dots,n\}$
 by interpreting the dependencies as hyperedges, i.e. $H =
 \{\dep(f)\mid f\in \F\})$.
 
