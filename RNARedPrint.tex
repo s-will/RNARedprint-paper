@@ -1220,7 +1220,7 @@ the two target structures of Fig.~\ref{fig:energydist-pk}B,
 Fig.~\ref{fig:energydist-pk}A shows the good fit between realistic
 energies in the full-fledged Dirks and Pierce energy model for
 pseudoknots (D\&P model) and energies in the stacking energy
-model. For the shown fits we sampled $n=1\,000$ sequences, targeting a
+model\revised{, which is obtained for each of the two target structures (with respective $R^2$ values of $0.846$ and $0.841$)}. For the shown fits we sampled $n=1\,000$ sequences, targeting a
 \GCb\% of $60\%$.
 %
 For an example instance of the \texttt{Modena} benchmark with two
@@ -1250,8 +1250,8 @@ pseudoknot-free target structures.}
     Targeting specific energies for pseudoknotted structures using
     multi-dimensional Boltzmann sampling. \textbf{(A)} Linear fits between the
     energies in the stacking model to the realistic pseudoknot energy
-    model by Dirks and Pierce (D\&P) for sampled sequences; the good
-    match enables more efficient targeting of Turner energies based on
+    model by Dirks and Pierce (D\&P) for the sampled sequences and both target structures R1 and R2. The good
+    match \revised{(respective $R^2$ values of $0.846$ and $0.841$)} enables more efficient targeting of Turner energies based on
     targeting stacking model energies.  We show the fits for both
     target structures R1 and R2 of subfigure B.  \textbf{(B)} D\&P energy
     distributions for two target structures R1 and R2. We show the
@@ -1318,7 +1318,7 @@ The results, shown in Fig.~\ref{fig:benchmark-results}, reveal that
 Boltzmann-sampled sequences outperform uniform seeds on every dataset,
 leading to average improvements in \Obj{} values ranging from $7.26$
 ({\sf LE80}) to $16.05$ ({\sf 2str}) units. Remarkably, this
-improvement is be observed for both of the terms in \Obj{} (see
+improvement is observed for both of the terms in \Obj{} (see
 Supp. Mat.~\ref{appsec:contributions-multidefect}).  This means that \ourprog{}
 produces sequences whose targets are both substantially closer to
 the sequence ensemble/minimal free energy, and more similarly stable across targets.  In fact, for
@@ -1331,8 +1331,8 @@ free-energy minimization is costly in the presence of
 pseudoknots~\citep{Sheikh2012} and good implementations are scarce.
 
 %
-Moreover, for all instances as well, the superiority of Boltzmann designs
-remains unchallenged even after local optimizations, as shown by
+Moreover, for all instances as well, the Boltzmann designs
+remain superior even after local optimizations, as shown by
 Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{appsec:contributions-multidefect}
 and \ref{appsec:detailed-benchmark-results}. This observation is consistent with a
 superior quality of the starting point for the greedy walk, probably leading
@@ -1405,10 +1405,10 @@ We introduced a novel approach, based on a general framework and efficient algor
 sequences, while targeting very specific complex properties. In particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
 Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
-controlled by expressive RNA energy models. Compared to the
-previously best available sampling method (uniform sampling), this
-approach generated significantly better seed sequences for instances
-of an extensive multi-target design benchmark, including pseudoknots.
+controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice, which is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. In a proof-of-concept study 
+  on an established benchmark set for multi-target RNA design (including pseudoknotted instances), 
+  the approach generated significantly better seed sequences than
+the previously best available method (uniform sampling). These results strongly suggest that the presented technique for positive design can be highly beneficial in future negative design approaches.}
 %
 To substantiate our work additionally, we establish the $\#${\sf P}-hardness of uniform sampling which,
 from a complexity-theoretic point of view, motivates the FPT, tree decomposition-based nature of our method.  
