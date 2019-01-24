@@ -1149,7 +1149,10 @@ Counting independent sets in bipartite graphs ($\#{\sf BIS}$) is a well-studied 
 %However, $\#{\sf BIS}$ is also \#{\sf P}-hard on connected graphs, as the number of independent sets for a disconnected graph $G$ can be efficiently computed by $|\IS{G}|=\prod_{cc\in CC(G)} |\IS{cc}|$. 
 In other words, any efficient algorithm for \NumDesign implies an efficient algorithm for $\#{\sf BIS}$, thus our conclusion that \NumDesign is $\#{\sf P}$-hard. 
 
-\revised{Proposition~\ref{prop:bijection} also strongly impacts the complexity of computing the partition function. Indeed it implies that, among the $4^k$ possible assignments of nucleotides to $k$ connected positions (in the base-pair dependency graph), at most $2^k$ are compatible with base pairing rules. One can thus sharply reduce the complexity of Algorithm~\ref{alg:pf} by restricting the precomputations to compatible assignments.}
+\revised{Proposition~\ref{prop:bijection} also strongly impacts the complexity of computing the partition function. Indeed it implies that, among the $4^k$ possible assignments of nucleotides to $k$ connected positions (in the base-pair dependency graph), at most $2^k$ are compatible with base pairing rules. One can thus sharply reduce the complexity of Algorithm~\ref{alg:pf} by restricting the precomputations to compatible assignments.
+
+For a discussion on the implications of our hardness results beyond exact counting see Supp.\ Mat.~\ref{appsec:approximate-counting}.
+}
 
 % \begin{proof}
 
@@ -1238,17 +1241,11 @@ base pair energy model, and filtering sequences based on the {\tt RNAeval} tool 
 	\caption{\revised{A fitted energy model based on stacking pairs ({\sffamily\bfseries A}) leads to approximated free-energies that are highly correlated (R=0.99) with free-energies in the Turner energy model ({\sffamily\bfseries B}), yet induces tree widths that are amenable to practical sampling ({\sffamily\bfseries C})}.\label{fig:correlation}}
 \end{figure}
 
-However, while in principle feasible, sampling in a Boltzmann distribution directly using the Turner energy model may induce extreme computational demands, with tree-widths scaling at least as large as the number of nucleotides in the largest loop. Fortunately, we found that intricacy of the Turner energy model can be circumvented with minimal loss of precision by using a simpler stacking energy model. As can be shown in Figure~\ref{fig:correlation}, a simple stacking energy model, further described in Supp. Mat.~\ref{appsec:modelparameters} can be used to approximate the Turner energy model (correlation coefficient $R=0.99$), while greatly reducing the tree width, and thus the computational requirements of the whole method even for complex instances.
-
-
- 
-
+However, while in principle feasible, sampling in a Boltzmann distribution directly using the Turner energy model may induce extreme computational demands, with tree-widths scaling at least as large as the number of nucleotides in the largest loop. Fortunately, we found that intricacy of the Turner energy model can be circumvented with minimal loss of precision by using a simpler stacking energy model. As shown in Figure~\ref{fig:correlation}, a simple stacking energy model, further described in Supp. Mat.~\ref{appsec:modelparameters}, can be used to well approximate the Turner energy model (correlation coefficient $R=0.99$) for our purpose. This greatly reduces the treewidth, and thus the computational requirements of the whole method even for complex instances.
 }
 
 \subsection*{Effectively targeting Turner energies using multidimensionnal sampling}
 \revised{
-
-
 We used our Boltzmann sampling strategy (Algorithms
 \ref{alg:pf} and \ref{alg:sampling}), to sample valid sequences for
 given target structures and weights $\pi_1,\dots,\pi_k$.  Moreover, we
@@ -1343,12 +1340,14 @@ We considered a benchmark of six sets of target structures described in \citep{T
 %energy that favor the stability of the target structures having
 %moderate \GCb\%; all these properties are desirable objectives
 %for RNA design.
-Using \ourprog{}, for
-each instance of the benchmark, we generated at least 1\,000 seed sequences with similar
-energies for all target structures. For this purpose, we determine good common target energies that
-can be succesfully targeted for all single target structures simultaneously.
-Generally, we targeted 60\% \GCb\%.  We compared the
-\Obj{} value of these sequences against that of seed sequences,
+Using \revised{multi-dimensional Boltzmann sampling based on} \ourprog{}, for
+each instance of the benchmark, we generated at least 1\,000 seed sequences with similar energies for all target structures. 
+For this purpose, we determine good common target energies that
+can be successfully targeted for all single target structures simultaneously.
+Generally, we targeted 60\% \GCb\%.
+\revised{As described in Section~\ref{sec:multiBoltzmann}, to find sequences fulfilling our energy and \GCb\% criteria, we iteratively sampled 10\,000 sequences and kept admissible ones while optimizing the weights. In practice, this sampling operation performs quite fast (see \ref{appsec:run-times}) and only little iterations were needed for most of the benchmark inputs as reported in  \ref{appsec:effectivity-seed-generation}.}
+We compared the
+\Obj{} value of \revised{the derived} sequences against that of seed sequences,
 uniformly sampled using \RNAblueprint{}.  Moreover, for both sets we
 used an adaptive greedy walk~\citep{Hammer2017} to \Def{minimize} the
 \Obj{} function. At each step, the local search resamples (uniformly
