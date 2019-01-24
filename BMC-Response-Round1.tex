@@ -116,18 +116,19 @@ Related to that problem, it is also not clear what methods (or what options or a
 Thus, this manuscript is considered to be further improved in terms of intelligibility of the methods and results using fair evaluation criteria.\\[1em]}%
 \Answer{We structured and rephrased the Results section more clearly and adapted the introduction accordingly. In Results, we introduce single subsections for the following sub-results to reflect our main results in a logical order:
   \begin{itemize}
-    \item The full-featured RNA energy model (Turner) can be well approximated by the much more efficiently tractable stacking model;
-    \item Controlled Boltzmann sampling for typical multi-target design instances requires little time (corresponding to small tree-width); Multi-dimensional Boltzmann sampling solves the positive design problem effectively, requiring only a limited number of rejections (even for multiple simultaneously considered features);
+    \item The full-featured RNA energy model (Turner) can be well approximated by the much more efficiently tractable stacking model; in this model, controlled Boltzmann sampling for typical multi-target design instances requires little time (corresponding to small tree-width);
+    \item Multi-dimensional Boltzmann sampling solves the positive design problem effectively, requiring only a limited number of rejections (even for multiple simultaneously considered features);
     \item The positively designed sequences are suitable for improving negative design approaches.
 \end{itemize}}
 \AnswerTODO{Restructure Results and Intro)}
 
 \Comment{For evaluation of a method to design RNA molecules, the number of the solutions it produces and its running time are considered to be important.\\[1em]
 In the scope of this study, the running time and memory comparison should be shown to produce the same number of sequences by some minor variants of RNARedPrint method, RNABluePrint, and MODENA.\\[1em]}%
-\Answer{We agree that running times are important for assessing the method; consequently, we included details timing information in the revision. As we show now explicitly, the running times directly depend on the already reported tree-widths. The run-time requirements are generally modest for the relevant design instances. 
-%
+\Answer{We agree that running times are important for assessing the method; consequently, we included detailed timing information in the revision. The running times directly depend on the already reported treewidths (which we actively keep low due to approximating the full energy model and using state-of-the-art decomposition methods). In consequence, the run-time requirements are generally modest for the relevant design instances; making our approach applicable in practice. 
+
 Concerning the comparison: since MODENA does not allow to measure separate times for sequence sampling, we could only estimate its run-times by running the MODENA binary with parameters that turn off the optimization as far as this is possible. Moreover, we want to re-emphasize that MODENA, while it implements a sophisticated optimization procedure, does not put any specific focus on the sampling procedure for generating its seed sequences. Consequently, it does not sample from a specific distribution and produces random sequences without targeting any specific properties (neither good stability nor specific GC-content, etc.). In contrast, RNARedPrint produces highly specific samples, thereby solving a fundamentally different problem (i.e. positive design). This crucial difference should be kept in mind, when comparing the run-times of these tools. 
 \AnswerTODO{...}}
+
 \Comment{
 It would be informative if the authors show the number of rejected sequences produced by RNARedPrint considering the specific criteria (GC\% or free energy). 
 Since RNARedPrint keeps the sequences to be under the specific constraint by a simple rejection method, such information for various target conditions would be better to estimate the practical running time of RNARedPrint.\\[1em]}%
