@@ -271,6 +271,7 @@
 
 \newcommand{\revised}[1]{{\color{red} #1}}
 
+
 %%% end macro defs
 
 %% fix some weirdness of the bioinfo class (footer overlapping text on page 1)
@@ -419,24 +420,23 @@
 \begin{abstractbox}
 \begin{abstract}
   \parttitle{Background}
-  The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, which impact their cost and feasibility. \\
+  The design of multi-stable RNA molecules has important applications in biology, medicine, and biotechnology. Synthetic design approaches profit strongly from effective in-silico methods, \revised{which substantially reduce the need for costly wet-lab experiments.} \\
 %
   \parttitle{Results} We devise a novel approach to a central ingredient of most in-silico
-  design methods: the generation of sequences \revised{that fold well into multiple target structures.} For this task, we present the fixed-parameter tractable (FPT) approach \ourprog{}.
+  design methods: the generation of sequences \revised{that fold well into multiple target structures.} 
   % 
-  \revised{Based on} constraint networks, \ourprog{} supports generic
+  \revised{Based on constraint networks, our approach \ourprog{}} supports generic
   Boltzmann-weighted sampling, which enables the positive design of RNA sequences
   with specific free energies (for each of multiple, possibly pseudoknotted, target structures) and \GCb-content.
 %
-  %Securing the theoretical foundations of our method
-  Moreover, we establish the $\#${\sf P}-hardness of \revised{counting to theoretically justify the development of an FPT approach}. 
-%
-  Finally, we study general properties of our approach empirically and generate
+  Moreover, we study general properties of our approach empirically and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
-  common design benchmark.
-  We demonstrate significant improvements over the previously best multi-target sampling strategy, due to generating seed sequences with \ourprog{}.\\
+  \revised{established} design benchmark. \revised{Our results demonstrate the effectivity and feasiblity of the method in practice
+  as well as the benefits of Boltzmann sampling over the previously best multi-target sampling strategy---even for the case of negative design of multi-stable RNAs.}\\
 %
-  \parttitle{Conclusion} \ourprog{} introduces a novel, flexible and---as we demonstrate--effective approach to multi-target RNA design, which promises broad applicability and extensibility. 
+  \revised{Besides empirically studies, we finally justify the algorithmic details due to a fundamental theoretic result about multi-stable RNA design, namely the \#P-hardness of the counting of designs.}
+%
+  \parttitle{Conclusion} \ourprog{} introduces a novel, flexible and---as we demonstrate---effective approach to multi-target RNA design, which promises broad applicability and extensibility. 
 
   \smallskip
   \noindent
@@ -556,7 +556,7 @@ Recently, the approach \Software{RNAdesign}~\citep{HoenerzuSiederdissen2013}, co
 search in \RNAblueprint{}~\citep{Hammer2017}, solved the
 problem of sampling seeds from the \emph{uniform} distribution for multiple
 target structures. \Software{RNAdesign} adopts a graph coloring perspective,
-coloring the sequence positions with nucleotides, such that the ends of each base pair receive compatible colors. Initially the method decomposes the graph hierarchically, using ear decomposition, and then \Def{precomputes} the number of valid sequences
+coloring the sequence positions with nucleotides, such that the ends of each base pair receive compatible colors. Initially, the method decomposes the graph hierarchically and then \Def{precomputes} the number of valid sequences
 within each subgraph. The decomposition is then reinterpreted as a
 decision tree to perform \Def{stochastic backtracking}, inspired by
 Ding and Lawrence~\citep{Ding2003}. Uniform sampling is achieved by
@@ -575,28 +575,28 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 \begin{center}
     \includegraphics[width=.8\textwidth]{Figs/Workflow}
 \end{center}
-\caption{General outline of \ourprog{}. From a set of target secondary structures (i), base pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb\%, leading to the production of suitable designs (vi). \revised{Note that for simplicity, we assume in this figure that only dependencies between the ends of base pairs are considered to evaluate the energies of structures. Our computations based on a more complex energy model (stacking model) require additional dependencies.}
+\caption{General outline of \ourprog{}. From a set of target secondary structures (i), base pairs are merged (ii) into a (base pair) dependency graph (iii) and transformed into a tree decomposition (iv). The tree is then used to compute the partition function, followed by a Boltzmann sampling of valid sequences (v). An adaptive scheme learns weights to achieve targeted energies and \GCb\%, leading to the production of suitable designs (vi). \revised{Note that for simplicity, we assume in this figure that only dependencies between the ends of base pairs are considered to evaluate the energies of structures. Our computations based on a more complex energy model, which considers energy contributions of base pair stacks, require additional dependencies.}
   }
 \label{fig:workflow}
 \end{figure*}
 
-\revised{As our central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of sequences that target the energies of multiple structures and the \GCb\%.}
+\revised{As central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of RNA sequences that target the energies of multiple structures and the \GCb\%.}
 
-\revised{Fig.~\ref{fig:workflow} summarizes our generic framework, which enables} efficient Boltzmann-weighted sampling over RNA sequences with multiple target structures. \revised{\emph{Algorithmically}, we contribute} dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions and sample sequences from the Boltzmann distribution%
+\revised{Figure~\ref{fig:workflow} summarizes our generic framework, which enables this targeted sequence generation based on multi-dimensional Boltzmann sampling. \emph{Algorithmically}, we originally contribute} dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
 .
 \revised{Generally, tree decompositions are data structures that capture the specific dependencies of a problem instance (here, the dependencies induced by the target structures) to guide the efficient processing by DP algorithms.}
 %
-\revised{Building on this principle, }the complexities of our algorithms depend exponentially on a specific property of the tree decomposition, called the \Def{treewidth}, which remains low for typical instances. However, for any given value of the treewidth, the complexity scales only linearly with the size of designed sequences and the number of targeted structures, \emph{i.e.} our algorithms are fixed-parameter tractable (FPT).
+\revised{Building on this principle, the complexities of our algorithms depend exponentially on a specific property of the tree decomposition, called the \Def{treewidth}. Thus, it is essential for the applicability of our approach that---by appropriate design choices---we can keep this parameter low for typical instances. For} any fixed value of the treewidth, the complexity scales only linearly with the size of designed sequences and the number of targeted structures, \emph{i.e.} our algorithms are \emph{fixed-parameter tractable (FPT)}.
 
-\revised{Remarkably, we show that it is not possible to find a better, efficient method for sampling (unless ${\sf P}={\sf NP}$), since the underlying counting problem is \#{\sf P}-hard. The practical relevance of this result is that it rules out substantially better sampling techniques, such that there will always remain---in practice---an upper limit on the tractable number of structures and their heterogeneity, the complexity of the directly treatable energy model, and the number and complexity of additional constraints that could be considered in future sampling-based applications.} Technically, this result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph, the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
+\revised{Remarkably, we could show that it is not possible to find a better, efficient method for sampling (unless ${\sf P}={\sf NP}$), since the underlying counting problem is \#{\sf P}-hard. The practical relevance of this theoretical result is that it rules out substantially better sampling techniques, such that there will always---even using improved sampling methods---remain an upper limit on the---in practice---tractable number and heterogeneity of structures, the complexity of the directly treatable energy model, and the number and complexity of additional constraints that could be considered in future sampling-based applications.} Technically, this result relies on a surprising bijection between valid sequences and independent sets of a bipartite graph, the latter being the object of recent breakthroughs in approximate counting complexity~\citep{Bulatov2013,Cai2016}.
 
 % Subsection~\ref{sec:complexity}
 %
-Due to the generality of our method, we can moreover strongly limit this parameter in practice by using state-of-the-art tree decomposition algorithms.
+Due to the generality of our method, we can moreover strongly limit \revised{the treewidth} in practice by using state-of-the-art tree decomposition algorithms.
 %Uniform sampling is handled as a special case of Boltzmann sampling, where each valid sequence receives energy zero and---consequently---computing partition functions specializes to counting.
-By evaluating (partial) sequences in a specialized weighted constraint
-network, we support arbitrary multi-ary constraints and thus
+By evaluating sequences in a specialized weighted constraint
+network, we support---in principle---arbitrary multi-ary constraints and thus
 arbitrarily complex energy models,
 notably subsuming all commonly
 used RNA energy models%
@@ -607,35 +607,35 @@ target structures and \GCb\%%
 % (SubSection~\ref{sec:multiBoltzmann})
 . %
 
-
-
-
-
 We observe that
 targeting realistic RNA energies in the
 Turner RNA energy model
-works well by performing sampling based on \revised{a simplified RNA energy model, which induces lower treewidth}. This result is highly relevant in practice, since it allows to combine high efficiency with high accuracy (and even leaves room for \revised{future extensions supporting additional constraints}).
+works well by performing sampling based on \revised{a simplified RNA energy model, which induces much lower treewidth than the Turner model}. This result is \revised{essential for the applicability of our method, since it allows to combine high efficiency (by keeping the treewidth low) with sufficient accuracy to precisely target realistic Turner energies.} 
 
-\revised{Eventually our proof-of-concept results 
+\revised{Eventually, our proof-of-concept results 
  on a comprehensive multi-target RNA design benchmark~\citep{Taneda2015} 
-  suggest that our sampling strategy supports designing biologically relevant
+  suggest that our sampling strategy well supports designing biologically relevant
 RNAs for multiple targets.} 
 
 \section*{Methods}
-The main computational problem addressed in this work is the generation of sequences over the alphabet $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$, \revised{such that the sequences feature a given $\GCb\%$, and have prescribed energies for a set of target secondary structures.
-Here, such criteria are modeled} as constraints on the value of \Def{features}, functions of the sequence that are expressed as sums over real-valued contributions. Such contributions typically depend on the nucleotides assigned to a subset of sequence positions.
+\revised{The main computational problem addressed in this work is the positive design of RNA sequences for multiple target structures; more specifically, the generation of sequences over the alphabet $\Sigma=\{\Ab,\Cb,\Gb,\Ub\}$, such that the sequences feature a given $\GCb\%$, and have prescribed energies for a set of target secondary structures.
+Here, these desired sequence properties are modeled as constraints on the values of \Def{features}, which are functions of the sequence that are expressed as sums over real-valued \Def{contributions}. Each contribution depends on the nucleotides at---typically few---specific sequence positions.}
 
-To achieve maximal diversity within candidate designs, we abstract the problem as a random generation of sequences within a Boltzmann distribution. The probability of a sequence then depends on its associated features, and of weights that are associated features. Those influence the expected feature values of generated sequences, allowing us to shift the sample distributions towards specific targets. Sampling from this distribution requires to compute corresponding partition functions, such that we can draw sequences with probabilities proportional to their Boltzmann weight. A final rejection step, made efficient by the fine calibration of weights, allows to produce sequences satisfying the input set of constraints.
+\revised{To generate diverse design candidates, we randomly generate sequences from a Boltzmann distribution. The probability of a sequence then depends on its features (e.g. the energies of the target structures), and the weight of each feature (which influences its distribution). Sampling from the (multi-feature) Boltzmann distribution requires to compute corresponding partition functions, such that we can draw sequences with probabilities proportional to their Boltzmann weight. 
+On this basis, we can finely calibrate the weights, to maximize the probability that sampled sequences meet the desired target values for each feature. Together with a final rejection step this results in an effective procedure for generating highly specific sequences.}
+
+
  
 \subsection*{Problem statement}
 \label{sec:problem-statement}
+
 %\paragraph{Central computational problem.}
-Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and $k$ features $F_1,\dots, F_k$, associated with weights $\pi_1,\dots,\pi_k$, our goal is to sample from the Boltzmann distribution, defined over the set of sequences that satisfy classic base pairing rules for each structure as: 
+Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and \revised{$k\geq m$} features $F_1,\dots, F_k$, associated with weights $\pi_1,\dots,\pi_k$. Our goal is to sample from the Boltzmann distribution, defined over the set of sequences that satisfy classic base pairing rules for each structure as: 
 \begin{equation}
 \label{eq:sample-distribution}
 \Pr(S\mid\pi_1,\dots,\pi_k) \propto \displaystyle\prod_{1\leq \ell\leq k}\!\! \pi_\ell^{-F_\ell(S)} \end{equation}
 
-The workhorse of our approach is the efficient (more precisely, fixed-parameter tractable) computation of feature-dependent partition functions over sequences:
+The workhorse of our approach is the \revised{fixed-parameter tractable} computation of feature-dependent partition functions over sequences:
 %Given are the features $F_1,\dots,F_k$, which encode the energies functions for the fixed structures and the function for the \GCb\%, all in terms of simple atomic energy contributions.
 For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
   \begin{equation}
@@ -650,19 +650,21 @@ F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\de
 $$
 
 
-The $\GCb\%$ can be trivially expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$, whose dependencies are restricted to individual nucleotides,  and such that 
+The $\GCb\%$ can be simply expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$, whose dependencies are restricted to individual nucleotides,  and such that 
 $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&\text{ otherwise}.\end{cases}$$ 
-\revised{By summing $f^{\GCb}_i$ over the whole sequence, one simply counts the occurrences of $\Gb$ and $\Cb$.}
+\revised{By summing $f^{\GCb}_i(\{i\mapsto S_i\})$ over the whole sequence, one simply counts the occurrences of $\Gb$ and $\Cb$.}
 
 \revised{
-	Such features can also be used to count the number of \Def{valid sequences}, \emph{i.e.} sequences inducing only base pairs in $\mathcal{B}:=\{\{\Ab,\Ub\}, \{\Gb,\Cb\}, \{\Gb,\Ub\}\}$. Indeed, consider a feature $F^{\tt BP}$ composed of  contributions $f^{\tt BP}_{i,j}$, for each base pair $(i,j)$ occurring in some structure, such that 
+  To start with a simple example of evaluating the energy of sequences by features, let us explain how they are used to count the number of \Def{valid sequences}, \emph{i.e.} sequences inducing only base pairs in $\mathcal{B}:=\{\{\Ab,\Ub\}, \{\Gb,\Cb\}, \{\Gb,\Ub\}\}$. Consider a feature $F^{\tt BP}$ composed of  contributions $f^{\tt BP}_{i,j}$, for each base pair $(i,j)$ occurring in some structure, such that 
 	$$f^{{\sf BP}}_{i,j}(\left\{\substack{i\mapsto a\\j\mapsto b}\right\})=\begin{cases}0&\text{ if }\{a,b\}\in\mathcal{B} \\+\infty&\text{ otherwise}.\end{cases}$$ 
-	The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Equation~\ref{eq:mainproblem} simply counts the number of valid sequences when restricted to $F^{\tt BP}$.
+        The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Eq.~\ref{eq:mainproblem} (when restricted to $F^{\tt BP}) $simply counts the number of valid sequences.
 
 
-	Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions associated with local structural motifs (base pairs, stacking pairs, loops\ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, for each motif $m$ occurring in a target structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its positions $\dep(f_m)$. For instance, the contribution of a stacking pair, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
-
+        Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions associated with local structural motifs (base pairs, base pair stacks, loops\ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, for each motif $m$ occurring in a target structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its positions $\dep(f_m)$. For instance, the contribution of a \Def{base pair stack}, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
+        We refer to energy models that consider the contributions of all base pair stacks (and thus introduce the corresponding dependencies) collectively as the \Def{stacking energy model}.
 }
+
+
 
 %For the definition of energy features, we abstract an \Def{RNA (secondary) structure} $R$ of length $n$ as a set of \Def{base pairs} $(i,j)$, where
 %$1\leq i<j\leq n$ and for all different $(i,j), (i',j')\in R$: $\{i,j\}\cap\{i',j'\}=\emptyset$ (``degree $\leq$ 1'')---without precluding pseudoknots.
@@ -696,7 +698,8 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
 %where $\beta$ denotes inverse temperature and $E(S)$ is defined as linear combination of energies $E(S)=\sum_{1\leq \ell \leq k} \ln(\pi_\ell)/\beta E(S,R_\ell)$,
 %where the energy $E(S,R_\ell)$ is treated as feature $F_\ell(S) = \EbpSym(S,R_\ell);$ as elaborated later, even Turner energies or pseudoknot energies can be expressed as features due to their additive nature. 
 
-\subsection*{Dependency (hyper)graph, tree decomposition and width}
+\subsection*{Dependency (hyper)graph, tree decomposition and treewidth}
+
 %The complexity of the central problem depends fundamentally on the dependency structure that is imposed by the entire set of contributions.
 
 %For design in the base pair energy model or the related counting problem, the dependencies are immediately derived from the set of target structures $\R$. 
@@ -704,24 +707,32 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
 %Typically, such RNA energy models consider a sequence $S$ \Def{valid} for $R$, iff $\{S_i,S_j\}\in \B$ for
 %all $(i,j)\in R$, where $\B:=\left\{\{\Ab,\Ub\},\{\Gb,\Cb\},\{\Gb,\Ub\}\right\}$ describes the valid base pairs.
 
-\revised{In order to compute the partition function of Eq.~\ref{eq:mainproblem}, and thus sample in a well-defined distribution, one needs to abstract dependencies beyond pairs of positions. To that purpose, we consider the notion of \Def{hypergraph}, which consists of vertices (here, the sequence positions) connected by \Def{hyperedges} defined as sets of vertices. Undirected graphs can be modeled as hypergraphs whose hyperedges are pairs of vertices, but hypergraphs also allow to express complex dependencies.
+\revised{In order to compute the partition function of Eq.~\ref{eq:mainproblem}, and thus sample in a well-defined way, one must consider dependencies induced by the complete set of contributions $$\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}.$$}
 
-Here, we consider the complete set of contributions $$\F := \bigcup_{\ell}\{f\mid f\text{ contribution of } F_\ell\}.$$
 %
 %Let us denote the \emph{dependencies of a contribution $f$} as \dep{f}.
 %
-The set $\F$ of contributions induces a
-\Def{dependency (hyper)graph} $G_\F$ on sequence positions by interpreting the dependencies as hyperedges, leading to an hypergraph 
-$G_\F=(V, H)$ having vertices $V=\{1,\dots,n\}$ and hyperedges $H = \{\dep(f)\mid f\in \F\})$.
 
-Irrespectively of the chosen energy model, to capture the requirements of canonical base pairing for each structure,
-we also define the \Def{base pair dependency graph} $G_{\R} = (V,E)$ having vertices $V=\{1,\dots,n\}$ 
-and edges $E=\bigcup_{\ell\in[1,k]} R_\ell$. Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in at least one of the input structures, and induce a direct dependency between the nucleotide assignments for those positions.
+\revised{
+In the simplest case, this set captures the requirement of canonical base pairing for each structure.
+To express this, let us define the \Def{base pair dependency graph} $G_{\R}$ as the graph with nodes $\{1,\dots,n\}$
+and edges $\bigcup_{\ell\in[1,k]} R_\ell$. %Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct dependency between the chosen nucleotide assignments for the two positions.
+
+Since $\F$ defines potentially more complex dependencies, which can
+relate more than two positions, in general its dependencies cannot be 
+represented by a graph. Instead, this requires a structure known as
+\Def{hypergraph}, which consists of vertices (here, the sequence
+positions) connected by \Def{hyperedges}, which are arbitrary sets of
+vertices. In this way, hypergraphs generalize undirected graphs, where
+each edge is a set of exactly two vertices.
+%
+The \Def{dependency (hyper)graph induced by $\F$} is then defined as the hypergraph $G_\F=(V, H)$ on sequence positions $V=\{1,\dots,n\}$
+by interpreting the dependencies as hyperedges, i.e. $H =
+\{\dep(f)\mid f\in \F\})$.
+
+Let us finally define the \Def{tree decomposition} of the graph $G_\F$, a fundamental ingredient of our algorithms, which also determines their efficiency (most importantly, via its property called treewidth).
 }
-
-Let us now remind the \Def{tree decomposition} of an (hyper)graph $G_\F$, a fundamental ingredient of our algorithms. 
-
-\begin{definition}[Tree decomposition]
+\begin{definition}[Tree decomposition and treewidth]
   \label{def:treedecomp}
   Let $G=(X, E)$ be a (hyper)graph with nodes in $X$ and (hyper)edges in $E$. A \Def{tree decomposition} of $G$ is
   a pair $(T,\chi)$, where $T$ is an unrooted tree/forest and, for
@@ -732,18 +743,19 @@ Let us now remind the \Def{tree decomposition} of an (hyper)graph $G_\F$, a fund
 \item for all $x\in X$, $\{ v \mid x \in \chi(v) \}$ induces a connected subtree of $T$;
 \item for all $e\in E$, there is a node $v\in T$, such that $e\subseteq\chi(v)$.
 \end{enumerate}
+
+\smallskip
+\noindent
+The \Def{treewidth} of a tree decomposition $(T,\chi)$ is defined as
+$\min_{u\in T} |\chi(u)| - 1.$ 
+%The \Def{treewidth} of a graph $G$ is the smallest treewidth of any tree decomposition of $G$.
 \end{definition}
-\revised{Intuitively, a tree decomposition for an (hyper)graph $G$ is a tree structure which features all the vertices of $G$, captures all the (hyper)edges of $G$, and helps ensure some notion of consistency by allowing the propagation of values. Figure~\ref{fig:treedec} shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
-\begin{definition}[Tree width]
-The \Def{width} of a tree decomposition $(T,\chi)$ is 
-$$\min_{u\in T} |\chi(u)| - 1.$$ The \Def{treewidth}
-of an (hyper)graph $G$ is the smallest width of a tree decomposition of $G$.
-\end{definition}
-%Recall the essential role of the treewidth as fixed parameter in our FPT appraoch.
+%
+\revised{Intuitively, a tree decomposition of an (hyper)graph $G$ is a tree that captures all the vertices and (hyper)edges of $G$, and properly relates dependend subproblems to ensure consistency in a recursive computation. Figure~\ref{fig:treedec} shows an optimal tree decomposition for a pair of structures under the stacking energy model.}
 
 \begin{figure}
 {\centering \includegraphics[width=.9\linewidth]{Figs/example-treedec-stacking}\\}
-\caption{\revised{Toy example of a tree decomposition associated with two target structures in the stacking energy model. Two target secondary structures ({\bfseries\sffamily A}) are merged into a joint hypergraph ({\bfseries\sffamily B}), whose hyperedges correspond to the quadruplets of positions involved in stacking pairs (colored). A valid tree decomposition ({\bfseries\sffamily C}) for the hypergraph ensures, among other properties, that each base pair and each stacking pair/hyperedge is represented in at least one of its node, so that features can be adequately evaluated. The width of this tree decomposition is 3, a provably optimal value for this input hypergraph.}\label{fig:treedec}}
+\caption{\revised{Toy example of a tree decomposition associated with two target structures in the stacking energy model (where the four positions of each base pair stack depend on each other). Two target secondary structures ({\bfseries\sffamily A}) are merged into a joint hypergraph ({\bfseries\sffamily B}), whose hyperedges correspond to the quadruplets of positions involved in base pair stacks (colored). A valid tree decomposition ({\bfseries\sffamily C}) for the hypergraph ensures, among other properties, that each base pair and each base pair stack is represented in at least one of its node, so that features can be correctly evaluated. The treewidth of this tree decomposition is 3, a provably optimal value for this input hypergraph.}\label{fig:treedec}}
 \end{figure}
 
 \subsection*{Fixed-parameter tractable (FPT) algorithm}
@@ -845,7 +857,7 @@ in $\real$. The message from $u$ to $v$ represents the
 partition functions of the subtree of $u$ for all possible partial
 sequences in $\partseqs(\separator{u}{v})$. Induction over $T$ lets us show
 the correctness of the algorithm
-(Supp. Mat.~\ref{appsec:correctness}).  After running
+(Supp.\ Mat.~\ref{appsec:correctness}).  After running
 Alg.~\ref{alg:pf}, multiplying the 0-ary messages sent to the root $r$
 yields the total partition function (i.e.~due to proper encoding the partition function of our design problem) through
 \begin{math}
@@ -891,11 +903,10 @@ Let $s$ denote the maximum size of any separator set $\separator{u}{v}$ and $D$ 
 $\difference{u}{v}$ over $(u,v)\in E$.  In the absence
 of specific optimizations, running Alg.~\ref{alg:pf} requires
 $\mathcal{O}((|\F|+|V|)\cdot 4^{w+1})$ time and
-$\mathcal{O}(|V|\cdot4^s)$ space
-(Supp. Mat.~\ref{appsec:algcomplexity}); Alg.~\ref{alg:sampling} would
+$\mathcal{O}(|V|\cdot4^s)$ space; Alg.~\ref{alg:sampling} would
 require $\mathcal{O}((|\F|+|V|)\cdot 4^D)$ per sample on arbitrary
 tree decompositions
-(Supp. Mat.~\ref{appsec:algcomplexity}). W.l.o.g.\ we assume that
+(Supp.\ Mat.~\ref{appsec:algcomplexity}). W.l.o.g.\ we assume that
 $D=1$; note that tree decompositions can generally be transformed,
 such that $\difference{u}{v}\leq 1$.
 %
@@ -965,10 +976,10 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
   %$\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
 \end{theorem}
 
-By this theorem, the complexity is polynomial for fixed value of $w$, and Boltzmann sampling in our setting is thus fixed parameter tractable (FPT) in the tree width.
+By this theorem, the complexity is polynomial for fixed value of $w$, and Boltzmann sampling in our setting is thus fixed parameter tractable (FPT) in the treewidth.
 %
-As shown in Supp. Mat.~\ref{sec:improvedComplexity}, the complexity of the precomputation can be further improved to
-$\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ is the maximum number of connected components represented in a node of the tree decomposition ($c\le w+1$).
+The complexity of the precomputation can be further improved to
+$\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ ($c\le w+1$) is the maximum number of connected components represented in a node of the tree decomposition (Supp.\ Mat.~\ref{appsec:improvedComplexity}).
 
 
 Note that in this complexity analysis, we do not include time and space for computing the
@@ -976,7 +987,7 @@ tree decomposition itself, since we observed that the computation time
 of tree decomposition (\Software{GreedyFillIn}, implemented in
 \Software{LibTW}~by \citet{Dijk2006}) for multi-target sampling is
 negligible compared to Alg.~\ref{alg:pf}
-(Supp. Mat.~\ref{appsec:treedecomp} and
+(Supp.\ Mat.~\ref{appsec:treedecomp} and
 \ref{appsec:dependency-cliques}).
 
 \subsection*{Design within expressive energy models}\label{sec:energy_models}
@@ -993,7 +1004,7 @@ negligible compared to Alg.~\ref{alg:pf}
 % \end{itemize}
 % Finally add for each $R_\ell$ and unpaired base $i$ in a multi loop of $R_\ell$, the function $f$, $\evalfor{f}{\val_S}=c$.
 
-In order to capture realistic energy models like the Turner model or pseudoknot models like {\tt HotKnots}~\citep{Ren2005}, our sampling strategy can be extended in two ways: 1) either by directly sampling based on more expressive energy models; 2) or by sampling in a simple energy model can be used to approximate sampling in more complex models.  In practice, complex energy models has a strong influence on the tree width of the dependency graph and, in turn computational complexity of our approach. Therefore, it is interesting to consider, in addition to the base pair model, other
+In order to capture realistic energy models like the Turner model or pseudoknot models like {\tt HotKnots}~\citep{Ren2005}, our sampling strategy can be extended in two ways: 1) either by directly sampling based on more expressive energy models; 2) or by sampling in a simple energy model can be used to approximate sampling in more complex models.  In practice, complex energy models has a strong influence on the treewidth (of optimal tree decompositions) of the dependency graph and, in turn the computational complexity of our approach. Therefore, it is interesting to consider, in addition to the base pair model, other
 stripped-down variants of the nearest neighbor model, which could offer a compromise between the low-complexity base pair energy model and the high-accuracy Turner model. 
 
 
@@ -1024,7 +1035,7 @@ nine bases for interior loops, with a total of 5 unpaired bases (``2x3'' interio
 \paragraph{Approximating Turner Energy using Simpler Energy Models.}
 To capture the realistic Turner model $\EnergyTurner$ more efficiently, we exploit the tight correlation between
 $\EnergyTurner$ and the fitted stacking model $\EnergyStacking$
-(Supp. Fig~\ref{fig:training-cor}). More precisely, we observed a
+(Supp.\ Mat.~\ref{appsec:modelparameters}). More precisely, we observed a
 structure-specific affine dependency between the Turner and stacking
 energy models, so that
 $\EnergyTurner(S;R) \approx \gamma\cdot \EnergyStacking(S;R) + \delta$
@@ -1052,7 +1063,7 @@ where $\pmb{\pi}:=(\pi_0\cdots\pi_k)$ is the vector of the positive real-valued 
 %$\prod_{\ell=0}^{k} \pi_i^{-F_i(S)} = \prod_{f\in\F} f(S).$
 
 One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution. In other words,  $\mathbb{E}(F_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$ and, analogously, the expectation of $F_0(S)$ is the targeted GC content.
-The expected value of $F_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp. Mat.~\ref{sec:weight_derivatives}). More generally, computing a suitable parameter vector $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
+The expected value of $F_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp.\ Mat.~\ref{appsec:weight_derivatives}). More generally, computing a suitable parameter vector $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
 
 In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ for $\beta=1/(RT)$, T=$37^\circ$, and gas constant $R$. Then, at each iteration, it generates samples $\mathcal{S}$ of sequences. The expected value of an energy $F_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}F_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$.
 $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically  ($\gamma=1.2$) to achieve effective optimization.
@@ -1076,7 +1087,7 @@ $\varepsilon=0$.
 \subsection*{\#{\sf P}-hardness of counting valid designs}\label{sec:counting}
 %%% reformulate later
 %We define the following notations: $\real^\infty:=\real\cup\{\infty\}$, $[i,j]:=\{i,\ldots,j\},$ \ldots
-\revised{While efficient, both in practice and in theory for graphs of bounded tree width, our algorithms remain exponential in the worst case scenario, since the tree-width of a dependency graph can then become arbitrarily large. This exponential complexity in the worst case appears to be intrinsic. Indeed, we show that a specialization of our core problem, namely the enumeration of designs that respect canonical base pairing rules ($\Ab \leftrightarrow \Ub$, $\Gb \leftrightarrow \Cb$, $\Gb \leftrightarrow \Ub$) is $\#{\sf P}$-hard, even when the dependency graph is bipartite and connected. The existence of a polynomial time algorithm for computing the partition function of Equation \eqref{eq:mainproblem} is thus unlikely, as it would imply that  ${\sf\# P}={\sf FP}$ and, in turn, that ${\sf P}={\sf NP}$.}
+\revised{While efficient, both in practice and in theory for graphs of bounded treewidth, our algorithms remain exponential in the worst case scenario, since the treewidth of a dependency graph can then become arbitrarily large. This exponential complexity in the worst case appears to be intrinsic. Indeed, we show that a specialization of our core problem, namely the enumeration of designs that respect canonical base pairing rules ($\Ab \leftrightarrow \Ub$, $\Gb \leftrightarrow \Cb$, $\Gb \leftrightarrow \Ub$) is $\#{\sf P}$-hard, even when the dependency graph is bipartite and connected. The existence of a polynomial time algorithm for computing the partition function of Equation \eqref{eq:mainproblem} is thus unlikely, as it would imply that  ${\sf\# P}={\sf FP}$ and, in turn, that ${\sf P}={\sf NP}$.}
 
 %Our contributed algorithms, while 
 %Finally, we turn to the complexity of $\NumDesign(G)$, the problem of
@@ -1180,7 +1191,7 @@ Sampling for fixed weight
 Time benchmark
 
 Figure 10 - Correlation plot -- Right
-Figure 2 -- Distribution plot -- Right (Turner is even untractable to compute the tree width itself in benchmark instances)
+Figure 2 -- Distribution plot -- Right (Turner is even untractable to compute the treewidth itself in benchmark instances)
 Figure 3 -- Right -- Distribution 
 
 \subsection*{Effectively targeting Turner energies using multidimensionnal sampling}
@@ -1196,7 +1207,7 @@ stacking energy model $\EnergyStacking$, whose parameters were fitted
 to best approximate Turner energies. As well, we implemented and
 fitted a base pair energy model for \ourprog{}, which was not studied
 for its targeting performance (both models:
-Supp. Mat.~\ref{appsec:modelparameters}).
+Supp.\ Mat.~\ref{appsec:modelparameters}).
 %
 %\paragraph{Implementation of multi-dimensional Boltzmann sampling}
 %As suggested in Section~\ref{sec:multiBoltzmann}, we heuristically optimize weights to target specific energies and \GCb\% in an iterative procedure (based on the core sampling algorithm).
@@ -1210,7 +1221,7 @@ the two target structures of Fig.~\ref{fig:energydist-pk}B,
 Fig.~\ref{fig:energydist-pk}A shows the good fit between realistic
 energies in the full-fledged Dirks and Pierce energy model for
 pseudoknots (D\&P model) and energies in the stacking energy
-model. For the shown fits we sampled $n=1\,000$ sequences, targeting a
+model\revised{, which is obtained for each of the two target structures (with respective $R^2$ values of $0.846$ and $0.841$)}. For the shown fits we sampled $n=1\,000$ sequences, targeting a
 \GCb\% of $60\%$.
 %
 For an example instance of the \texttt{Modena} benchmark with two
@@ -1219,8 +1230,7 @@ the Turner energy distributions of the single structures as they
 result from sampling with different weight parameters. The figure
 illustrates how our multidimensional Boltzmann sampling strategy can,
 to a large extent, independently shift the Turner energies of sampled
-sequences towards prescribed targets. See Supp. Mat.,
-Fig.~\ref{fig:energydist} for a further example with three
+sequences towards prescribed targets. See Supp.\ Mat.~\ref{appsec:illustrating-mdbs} for a further example with three
 pseudoknot-free target structures.}
 
 
@@ -1241,8 +1251,8 @@ pseudoknot-free target structures.}
     Targeting specific energies for pseudoknotted structures using
     multi-dimensional Boltzmann sampling. \textbf{(A)} Linear fits between the
     energies in the stacking model to the realistic pseudoknot energy
-    model by Dirks and Pierce (D\&P) for sampled sequences; the good
-    match enables more efficient targeting of Turner energies based on
+    model by Dirks and Pierce (D\&P) for the sampled sequences and both target structures R1 and R2. The good
+    match \revised{(respective $R^2$ values of $0.846$ and $0.841$)} enables more efficient targeting of Turner energies based on
     targeting stacking model energies.  We show the fits for both
     target structures R1 and R2 of subfigure B.  \textbf{(B)} D\&P energy
     distributions for two target structures R1 and R2. We show the
@@ -1309,23 +1319,23 @@ The results, shown in Fig.~\ref{fig:benchmark-results}, reveal that
 Boltzmann-sampled sequences outperform uniform seeds on every dataset,
 leading to average improvements in \Obj{} values ranging from $7.26$
 ({\sf LE80}) to $16.05$ ({\sf 2str}) units. Remarkably, this
-improvement is be observed for both of the terms in \Obj{} (see
-Supp. Mat.~\ref{sec:improvements}).  This means that \ourprog{}
+improvement is observed for both of the terms in \Obj{} (see
+Supp. Mat.~\ref{appsec:contributions-multidefect}).  This means that \ourprog{}
 produces sequences whose targets are both substantially closer to
 the sequence ensemble/minimal free energy, and more similarly stable across targets.  In fact, for
 every sequence in our benchmark, consisting of 332 sets of target
 structures, we observed better \Obj{} for Boltzmann sampling than for
-uniform sampling (see Supp. Mat.~\ref{sec:validity}).  Notably,
+uniform sampling (see Supp. Mat.~\ref{appsec:detailed-benchmark-results}).  Notably,
 \ourprog{} performs equally well in the presence of pseudoknots;
 the difficulty rather lies in the computation of the \Obj{} function, since
 free-energy minimization is costly in the presence of
 pseudoknots~\citep{Sheikh2012} and good implementations are scarce.
 
 %
-Moreover, for all instances as well, the superiority of Boltzmann designs
-remains unchallenged even after local optimizations, as shown by
-Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{sec:improvements}
-and \ref{sec:validity}. This observation is consistent with a
+Moreover, for all instances as well, the Boltzmann designs
+remain superior even after local optimizations, as shown by
+Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{appsec:contributions-multidefect}
+and \ref{appsec:detailed-benchmark-results}. This observation is consistent with a
 superior quality of the starting point for the greedy walk, probably leading
 to better local minima of the \Obj{} function. However, it should be noted
 that the greedy walk is based on the uniform sampling of
@@ -1396,10 +1406,10 @@ We introduced a novel approach, based on a general framework and efficient algor
 sequences, while targeting very specific complex properties. In particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
 Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
-controlled by expressive RNA energy models. Compared to the
-previously best available sampling method (uniform sampling), this
-approach generated significantly better seed sequences for instances
-of an extensive multi-target design benchmark, including pseudoknots.
+controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice, which is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. In a proof-of-concept study 
+  on an established benchmark set for multi-target RNA design (including pseudoknotted instances), 
+  the approach generated significantly better seed sequences than
+the previously best available method (uniform sampling). These results strongly suggest that the presented technique for positive design can be highly beneficial in future negative design approaches.}
 %
 To substantiate our work additionally, we establish the $\#${\sf P}-hardness of uniform sampling which,
 from a complexity-theoretic point of view, motivates the FPT, tree decomposition-based nature of our method.  
