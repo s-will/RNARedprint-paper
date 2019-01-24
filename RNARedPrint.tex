@@ -629,7 +629,7 @@ On this basis, we can finely calibrate the weights, to maximize the probability 
 \label{sec:problem-statement}
 
 %\paragraph{Central computational problem.}
-Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and \revised{$k\geq m$} features $F_1,\dots, F_k$, associated with weights $\pi_1,\dots,\pi_k$. Our goal is to sample from the Boltzmann distribution, defined over the set of sequences that satisfy classic base pairing rules for each structure as: 
+Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and \revised{$k\geq m$} features $F_1,\dots, F_k$, associated with weights $\pi_1,\dots,\pi_k$. Our goal is to sample from the Boltzmann distribution, such that the probability of a sequence $S\in \Sigma^\star$ of length $n$, within the set of sequences that satisfy classic base pairing rules, is defined as: 
 \todo{$S$ sequence not defined!}
 \begin{equation}
 \label{eq:sample-distribution}
@@ -645,16 +645,18 @@ For weights $\pi_1,\dots,\pi_k$, one wants to compute the partition function
   \end{equation}
 
 \subsection*{Expressing \GCb\%-content, sequence validity and energies as features}
-\todo{$x_1$ position(?) not defined!\\$S_x_1$ nucleotide at position(?) not defined!\\$p$ number of dependent positions(?) from $x_p$ not defined!}
-Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that
+\todo{$x_1$ position(?) not defined!\\$S_{x_1}$ nucleotide at position(?) not defined!\\$p$ number of dependent positions(?) from $x_p$ not defined!\\
+Yann: We just defined the dependencies as positions in the sequence, so $x_i$ should be fine from the context. $p$ is purely declarative (it differs for each $f$), so it should be ok, but since it is unused, we can probably drop it...
+}
+Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, its \emph{dependencies $\dep(f)$}, such that 
 $$
-F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f\left(\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}\right).
+F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,x_2,\ldots\}$}}}\!\!\!\!\!\! f\left(\left\{\substack{x_1\mapsto S_{x_1}\\x_p\mapsto S_{x_2}\\\cdots}\right\}\right).
 $$
-
+where any $x_i \in [1,n]$ represents a position in $S$, and $S_x$ represents the letter found at position $x$ in $S$.
 
 The $\GCb\%$ can be simply expressed using $n$ contributions $f^{\GCb}_i$, $i\in[1,n]$, whose dependencies are restricted to individual nucleotides,  and such that 
 $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&\text{ otherwise}.\end{cases}$$ 
-\todo{Why here $i$ and not $x_i$??}
+\todo{Why here $i$ and not $x_i$??\\Yann: Because $x_1$, $x_2$... was just a way to talk about the first, second... argument of a function having an arbitrary number of args. Here, there is just one, so no need for subscripts.}
 \revised{By summing $f^{\GCb}_i(\{i\mapsto S_i\})$ over the whole sequence, one simply counts the occurrences of $\Gb$ and $\Cb$.}
 
 \revised{
