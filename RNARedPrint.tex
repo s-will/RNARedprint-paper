@@ -773,7 +773,7 @@ $\min_{u\in T} |\chi(u)| - 1.$
 Our algorithms specialize the idea of cluster tree elimination (CTE)~\citep{Dechter2013}, which operates on constraint networks. In this correspondence, (partial) sequences specialize (partial) assignments and the constraint network would be given by variables for each sequence position, constraints due to valid base pairing, and the set of atomic feature contributions $\cal F$.
 
 
-To formalize our algorithms, which iteratively merge evaluations of partial solutions, we extend the idea of atomic feature contributions, which are evaluated at sets of the form $\{x_1\mapsto v_1, \dots, x_d\mapsto v_p\}$. Let us call the latter object a \Def{partial sequence}; such an object will help specify partial knowledge on the sequence at some point of the algorithm. Easily, we can extend the definition of contributions $f$ to sets $\{x_1\mapsto v_1, \dots, x_p\mapsto v_p\}$, where $\{x_1\dots x_p\}$ is any super-set of $\dep(f)$ by ignoring the superfluous assignments $x\mapsto v$, where $x\not\in\dep(f)$. 
+To formalize our algorithms, which iteratively merge evaluations of partial solutions, we extend the idea of atomic feature contributions, which are evaluated at sets of the form $\{x_1\mapsto v_1, \dots, x_d\mapsto v_p\}$. Let us call the latter object a \Def{partial sequence}. Such an object will help \revised{to} specify partial knowledge on the sequence at some point of the algorithm. Easily, we can extend the definition of contributions $f$ to sets $\{x_1\mapsto v_1, \dots, x_p\mapsto v_p\}$, where $\{x_1\dots x_p\}$ is any super-set of $\dep(f)$ by ignoring the superfluous assignments $x\mapsto v$, where $x\not\in\dep(f)$. 
 
 %\begin{definition}
 %An \Def{RNA design network} (for sequences of length $n$) is a tuple $\network=(\X,\F)$, where
@@ -809,7 +809,7 @@ By these definitions, the set $\F$ encodes the partition function $\partfun{\pi_
 
 We compute the partition function (as specified by $\F$) by dynamic programming based
 on a tree decomposition of $G_{\F}$, the dependency graph associated with $\F$.
-Note that analogous algorithms could be easily derived to count valid sequences, or list sequences having minimal free-energy.
+Note, that analogous algorithms could be easily derived to count valid sequences, or list sequences having minimal free-energy.
 %This yields fixed parameter tractable (FPT) algorithms, based on the treewidth.
 
 %\begin{figure}[t]
@@ -850,6 +850,7 @@ cluster tree, an equivalent (in term of treewidth) cluster tree can
 always be obtained by inserting at most $\Theta(|\X|)$ additional
 clusters.
 \end{itemize}
+\todo{$\Theta$ not defined, what is it?}
 
 Algorithm~\ref{alg:pf} computes the partition function by passing
 messages along the directed edges $u\to v$ (which point from 
