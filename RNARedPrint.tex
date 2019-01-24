@@ -1304,9 +1304,9 @@ pseudoknot-free target structures.}
     energies in the stacking model to the realistic pseudoknot energy
     model by Dirks and Pierce (D\&P) for \revised{initially} sampled sequences and both target structures R1 and R2 (shown in subfigure B). The good
     match \revised{(respective $R^2$ values of $0.846$ and $0.841$)} enables more efficient targeting of Turner energies based on
-    targeting stacking model energies. \textbf{(B)} Resulting D\&P energy distributions for the two target structures R1 and R2 when aiming for the respective free energies $(-30,-20)$,
+    targeting stacking model energies. \textbf{(B)} \revised{Resulting D\&P energy distributions for the two target structures R1 and R2 when aiming for the respective free energies $(-30,-20)$,
     $(-30,-30)$, $(-25,-25)$, and $(-20,-30)$. These demonstrate the effectivity of our adaptive
-    multi-dimensional Boltzmann sampling procedure, especially by comparing the distributions to those of uniform and Boltzmann sampled sequences, with homogenous weights $1$ and
+    multi-dimensional Boltzmann sampling procedure, especially by} comparing the distributions to those of uniform and Boltzmann sampled sequences, with homogenous weights $1$ and
     $e^\beta$, respectively.
 %    ($\delta=0.05, \delta'=0.1, \gamma=1.1, \psi=20, n=1000$)
   }
@@ -1349,7 +1349,7 @@ energies for all target structures. For this purpose, we determine good common t
 can be succesfully targeted for all single target structures simultaneously.
 Generally, we targeted 60\% \GCb\%.  We compared the
 \Obj{} value of these sequences against that of seed sequences,
-uniformly sampled using \RNAblueprint{}.  Moreover, for both sets, we
+uniformly sampled using \RNAblueprint{}.  Moreover, for both sets we
 used an adaptive greedy walk~\citep{Hammer2017} to \Def{minimize} the
 \Obj{} function. At each step, the local search resamples (uniformly
 at random) the positions of a randomly selected component in the base
@@ -1364,9 +1364,9 @@ The results, shown in Fig.~\ref{fig:benchmark-results}, reveal that
 Boltzmann-sampled sequences outperform uniform seeds on every dataset,
 leading to average improvements in \Obj{} values ranging from $7.26$
 ({\sf LE80}) to $16.05$ ({\sf 2str}) units. Remarkably, this
-improvement is observed for both of the terms in \Obj{} (see
+improvement is observed for both terms in \Obj{} (see
 Supp. Mat.~\ref{appsec:contributions-multidefect}).  This means that \ourprog{}
-produces sequences whose targets are both substantially closer to
+produces sequences whose targets are both, substantially closer to
 the sequence ensemble/minimal free energy, and more similarly stable across targets.  In fact, for
 every sequence in our benchmark, consisting of 332 sets of target
 structures, we observed better \Obj{} for Boltzmann sampling than for
@@ -1447,8 +1447,8 @@ optimization run.
 
 
 
-We introduced a novel approach, based on a general framework and efficient algorithms, to design RNA
-sequences, while targeting very specific complex properties. In particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
+\revised{Based on a general framework and efficient algorithms, we introduced a novel approach to design RNA
+sequences while targeting very specific complex properties}. In particular, we describe the targeting of the free energies of multiple target strucutures and the \GCb-content.
 Our method combines an FPT stochastic sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
 controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice, which is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. By conducting a proof-of-concept study 
@@ -1463,19 +1463,19 @@ from a complexity-theoretic point of view, motivates the FPT, tree decomposition
 The presented method enables new possibilities for the sequence generation
 in the field of RNA sequence design, allowing to enforce additional
 constraints, like \GCb\%, while controlling the energy of
-multiple target structures. Thus it presents a major advance over
+multiple target structures. Thus, it presents a major advance over
 previously applied ad-hoc sampling and even efficient uniform sampling
 strategies. We demonstrated the practical feasibility of such controlled sequence
 generation, including the case of pseudoknotted structures, and studied its use for multi-target RNA design.
 
 %perspectives:
 Our framework is extensible to include various more complex sequence constraints, including mandatory/forbidden motifs at specific
-positions, or anywhere in the designed sequences, by adapting formal language constructs
+positions or anywhere in the designed sequences, by adapting formal language constructs
 of Zhou \emph{et al}~\citet{Zhou2013}. In future work, negative design principles could 
 be explicitly supported at the generation stage, for instance by
 penalizing a set of alternative helices/structures.
 
-One could also envision using positive design as a null model, for instance in order to assess the significance of observed properties. Indeed, the complex set of constraints required in order to achieve a desired function must be equally enforced in RNA design, and to produce random sequences that are known to be constrained at a phenotypic level. One could therefore use constrained design to assess whether P-values, and therefore our perception of the statistical significance, are affected by the overly simplistic simple null models (\emph{e.g.} dinucleotide shuffling) used to model random RNAs~\cite{Rivas2017}.
+One could also envision using positive design as a null model, for instance in order to assess the significance of observed properties. Indeed, the complex set of constraints required in order to achieve a desired function must be equally enforced in RNA design, and to produce random sequences that are known to be constrained at a phenotypic level. \revised{Therefore, one could} use constrained design to assess whether P-values, and \revised{thus} our perception of the statistical significance, are affected by the overly simplistic simple null models (\emph{e.g.} dinucleotide shuffling) used to model random RNAs~\cite{Rivas2017}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
