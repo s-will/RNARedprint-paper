@@ -115,7 +115,7 @@ Related to that problem, it is also not clear what methods (or what options or a
 Thus, this manuscript is considered to be further improved in terms of intelligibility of the methods and results using fair evaluation criteria.}%
 
 \Answer{
-  We thank the reviewer for the criticism, which motivated us to work on clarifying the practical use of the method and tool RNARedPrint in several ways; we have carefully edited the entire manuscript having these issues in mind.
+  We thank the reviewer for voicing her concerns, which motivated us to work on clarifying the practical use of the method/tool RNARedPrint in several ways; we have carefully edited the entire manuscript having these issues in mind.
   In the methods section, we tried to improve the general readability especially of our overview of the method and central problem.
   Moreover, we structured and rephrased the Results section more clearly and adapted our contributions outline and conclusion accordingly. In Results, we introduce single subsections for the following sub-results to reflect our main results in a logical order:
   \begin{itemize}
@@ -158,24 +158,19 @@ According to their results, adaptive sampling has a strong power to improve the 
 It would be better that the authors introduce the concept of weights at the beginning (and whether they are completely same with those in RNAblueprint or not).}%
 
 \Answer{
-Weights are used for two different purposes:
-\begin{itemize}
-    \item In order to induce a Boltzmann distribution on the set of sequences;
-    \item As a technical artifact, to ensure the efficiency of a rejection-based strategy to control auxiliary features (free-energies for structures, GC\%\ldots)
-\end{itemize}
+Weights are used for two different purposes: 1) In order to induce a Boltzmann distribution on the set of sequences. 2) As a technical artifact, to ensure the efficiency of a rejection-based strategy to control auxiliary features (free-energies for structures, GC\%\ldots).
+%
 In both cases, the use of weights is rather technical, which explains why weights are mentioned in the methods section. Weights are much rather a means to target specific energies (or other feature values like the GC content).
 
-Partially, we have problems to understand the question, since RNAblueprint does not use weights at all. We hope that our improvements to the text help to clarify.
-}
+We are not, however, quite certain to correctly understand the question, since RNAblueprint does not use weights at all. We hope that our improved description of the method helps clarify what we believe to be a misunderstanding.}
 
 \Comment{
 Moreover, it is not well described how we can choose the initial weights and what values they are converged in the actual cases (e.g., Fig2 and S4) after adaptive sampling.}
 
 \Answer{
-The initial weights are somewhat arbitrary and do not have much influence, while the final weights are automatically derived by the adaptive strategy. Thus, the actual value of the weights is not informative for the typical use of the method. That being said, we used 1 as initial weights. In the example of Figure 3, in the case of targeting respective energies of -20 and -30 kcal/mol for the two target structures, we arrive at respecticve weights of 229 and 117 in the last iteration. The entire procedure to generate 5000 samples targeted at these energies took 6m20s (CPU i7-4770). Note that most of this time is consumed by expensive energy evaluations by HotKnots, which we need due to the pseudoknots in this example. 
+The initial weights are somewhat arbitrary and do not have much influence, while the final weights are automatically derived by the adaptive strategy. Thus, the actual value of the weights is not informative for the typical use of the method. That being said, we used 1 as initial weights. In the example of Figure 3, in the case of targeting respective energies of -20 and -30 kcal/mol for the two target structures, we arrive at respective weights of 229 and 117 at the last iteration. The entire procedure to generate 5000 samples targeted at these energies took 6m20s (CPU i7-4770). Note that most of this time is consumed by expensive energy evaluations by HotKnots, which we need due to the pseudoknots in this example. 
 
-Some additional more technical remarks:
-The calibration of weights relies on a numerical iteration aiming at computing weights such that expected properties of sampled sequences (which depend on weights) match their targeted values. Associated problems are usually convex, and we describe in supplementary material a numerical iteration to compute suitable weights.
+%Additional technical remarks: The calibration of weights relies on a numerical iteration aiming at computing weights such that expected properties of sampled sequences (which depend on weights) match their targeted values. Associated problems are usually convex, and we describe in supplementary material a numerical iteration to compute suitable weights.
 }
 
 \Comment{
@@ -207,7 +202,7 @@ Multi defect can be a good measure to understand the overall performance of the 
 However, we felt that for our purpose of demonstrating the principle use of our tool for negative design using one 
 generally accepted reasonable measure is sufficient.
 
-To elaborate: the MultiDefect objective function is based on the rationale that target structures should achieve high stability, and that the chosen RNA cannot adopt alternative, more stable, structures. It is a well accepted metrics introduced by other contributors, which we did not feel necessary to question or further improve.
+%To elaborate: the MultiDefect objective function is based on the rationale that target structures should achieve high stability, and that the chosen RNA cannot adopt alternative, more stable, structures. It is a well accepted metrics introduced by other contributors, which we did not feel necessary to question or further improve.
 }
 
 \Comment{
@@ -290,18 +285,19 @@ Thanks for reporting this issue. We could resolve some problems and re-checked t
 \Comment{
 * Is the section "\# P-hardness of counting valid designs" necessary in the main script (not supplementary) to explain the results? The complexity of the problem is important to consider theoretical limitations, but the assumption in that section seems not to be necessary since the authors applied a greedy sampling strategy and not in the scope of this study.}
 
-\Answer{We respectfully disagree with that assessment. This result is directly relevant to the strategy that we propose in the paper. Without showing the \#P-hardness of the design counting problem, devising an algorithm that is efficient only for fixed treewidth would be unjustified. 
+\Answer{We respectfully disagree with that assessment. This result is directly relevant to the strategy that we propose in the paper. Without showing the \#P-hardness of the RNA design counting problem, one could not understand that it makes sense to devise an algorithm that is efficient only for fixed treewidth. We now provide more explanations in the main text that clarify the relevance of this proof. 
 
-The core of our approach consists in generating, uniformly at random (resp. in a Boltzmann distribution, which identifies with the uniform distribution when $T\to +\infty$). Such a generation algorithm usually starts by precomputing some numbers of solutions (here, sequences that satisfy the classic base pairing rules) later to be used to ensure the uniformity of the generation through stochastic choices. The precomputation step  requires an efficient algorithm for counting the number of solutions. In this work, we provide an {\bfseries exact} algorithm (not a heuristics) for the problem which, while being FPT, still requires exponential time when the tree-width increases with the sequence length. This motivates the natural question: Can a truly polynomial algorithm exist for the problem? Our proof of \#P-hardness provides a negative answer to this problem under fairly reasonable assumptions. We tried to clarify those points in our introduction of the \#P hardness result.
+%The core of our approach consists in generating, uniformly at random (resp. in a Boltzmann distribution, which identifies with the uniform distribution when $T\to +\infty$). Such a generation algorithm usually starts by precomputing some numbers of solutions (here, sequences that satisfy the classic base pairing rules) later to be used to ensure the uniformity of the generation through stochastic choices. The precomputation step  requires an efficient algorithm for counting the number of solutions. In this work, we provide an {\bfseries exact} algorithm (not a heuristics) for the problem which, while being FPT, still requires exponential time when the tree-width increases with the sequence length. This motivates the natural question: Can a truly polynomial algorithm exist for the problem? Our proof of \#P-hardness provides a negative answer to this problem under fairly reasonable assumptions. We tried to clarify those points in our introduction of the \#P hardness result.
 }
 
 \Comment{
-* Move the first section in the result to the method.}%
+* Move the first section in the result to the method.}
 
 \Answer{
 In this revised version, we have largely restructured the Methods and Results section, including the suggested modification.
 }
 \end{enumerate}
+
 \subsection{Reviewer \#2}
 \begin{enumerate}
 \Comment{
@@ -347,7 +343,8 @@ In Figure 3 of Supplementary Material: more detailed description for explaining 
 }
 
 \Comment{
-In "Detailed result of MultiDefect Analysis" of Supplementary Material, running time is missing. Since the Boltzmann sampling in RNARedPrint utilizes the rejection approach, I would like to know the difference between the running times of the Boltzmann sampling and the uniform sampling. }%
+In "Detailed result of MultiDefect Analysis" of Supplementary Material, running time is missing. Since the Boltzmann sampling in RNARedPrint utilizes the rejection approach, I would like to know the difference between the running times of the Boltzmann sampling and the uniform sampling. }
+
 \Answer{We were unsure about what was meant in this comment. Just to be precise, we distinguish the term 'Boltzmann sampling' from 'multi-dimensional Bolzmann sampling' in our paper. 
 On the one hand, Boltzmann sampling, i.e. drawing sequences from the Boltzmann distribution does not involve any rejection, and is actually exactly as costly as drawing them uniformly. In such a uniform mode, RNARedPrint performs equally as fast as RNABluePrint, and usually faster, since the graph decomposition used in RNABluePrint implies time and memory consumptions that are provably strictly less efficient than the tree decomposition underlying RNARedPrint.
 On the other hand, multi-dimensional Boltzmann sampling requires a rejection step to target specific properties that are typically difficult to obtain by chance in the uniform distribution. There is, of course, an added cost associated to this rejection, and the simultaneous weight optimization, which we discuss further in a new "Result" subsection, where we also report the exact time differences.}
