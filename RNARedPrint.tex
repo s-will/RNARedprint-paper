@@ -432,7 +432,7 @@
   Moreover, we study general properties of our approach empirically and generate
   biologically relevant multi-target Boltzmann-weighted designs for a
   \revised{established} design benchmark. \revised{Our results demonstrate the effectivity and feasibility of the method in practice
-  as well as the benefits of Boltzmann sampling over the previously best multi-target sampling strategy---even for the case of negative design of multi-stable RNAs.}\\
+  as well as the benefits of Boltzmann sampling over the previously best multi-target sampling strategy---even for the case of negative design of multi-stable RNAs.}
 %
   \revised{Besides empirically studies, we finally justify the algorithmic details due to a fundamental theoretic result about multi-stable RNA design, namely the \#P-hardness of the counting of designs.}
 %
@@ -1196,7 +1196,7 @@ base pair energy model, and filtering sequences based on the {\tt RNAeval} tool 
 	\caption{\revised{Comparison of free-energy and Boltzmann probability for 10~000 uniform ($\pi=1$; blue dots) and Boltzmann distributed ($\pi=500$; green dots) sequences, targeting a simple structure consisting of two adjacent helices.}}\label{fig:BoltzmannBenefits}
 \end{figure}
 
-\revised{First, we show how seed sequences can be generated in a Boltzmann distribution, leading to designs that are substantially more stable that those generated uniformly. As can be seen in Figure~\ref{fig:BoltzmannBenefits} and Supp. Mat. \ref{appsec:immediate-benefits-for-negative-design}, sequences generated in the Boltzmann distribution not only reach lower free-energies than those generated in a uniform setting, but also achieve better Boltzmann probabilities. While the former is expected since the Boltzmann distribution explicitly favors low-energy candidates, the latter is somewhat surprising, since the Boltzmann probability of a target structure could, in principle, decrease under Boltzmann sampling due to the partition function growing faster than the Boltzmann factor. The empirical superiority of Boltzmann sampling appears robust, and is at the foundation of other approaches~\cite{Reinharz2013}.
+\revised{First, we show how seed sequences can be generated in a Boltzmann distribution, leading to designs that are substantially more stable that those generated uniformly. As can be seen in Figure~\ref{fig:BoltzmannBenefits} and Supp. Mat. \ref{appsec:immediate-benefits-for-negative-design}, sequences generated in the Boltzmann distribution not only reach lower free-energies than those generated in a uniform setting, but also achieve better Boltzmann probabilities. While the former is expected since the Boltzmann distribution explicitly favors low-energy candidates, the latter is somewhat surprising, since the Boltzmann probability of a target structure could, in principle, decrease under Boltzmann sampling due to the partition function growing faster than the Boltzmann factor. The empirical superiority of Boltzmann sampling appears robust to the target structure length and topology, as demonstrated by prior work~\cite{Reinharz2013}.
 	
 \begin{figure}
 	  \begin{minipage}{.35\textwidth}\centering 
@@ -1241,7 +1241,7 @@ base pair energy model, and filtering sequences based on the {\tt RNAeval} tool 
 	\caption{\revised{A fitted energy model based on stacking pairs ({\sffamily\bfseries A}) leads to approximated free-energies that are highly correlated (R=0.99) with free-energies in the Turner energy model ({\sffamily\bfseries B}), yet induces tree widths that are amenable to practical sampling ({\sffamily\bfseries C})}.\label{fig:correlation}}
 \end{figure}
 
-However, while in principle feasible, sampling in a Boltzmann distribution directly using the Turner energy model may induce extreme computational demands, with tree-widths scaling at least as large as the number of nucleotides in the largest loop. Fortunately, we found that intricacy of the Turner energy model can be circumvented with minimal loss of precision by using a simpler stacking energy model. As shown in Figure~\ref{fig:correlation}, a simple stacking energy model, further described in Supp. Mat.~\ref{appsec:modelparameters}, can be used to well approximate the Turner energy model (correlation coefficient $R=0.99$) for our purpose. This greatly reduces the treewidth, and thus the computational requirements of the whole method even for complex instances.
+However, while in principle feasible, sampling in a Boltzmann distribution directly using the Turner energy model may induce extreme computational demands, with treewidths scaling at least as large as the number of nucleotides in the largest loop. Fortunately, we found that intricacy of the Turner energy model can be circumvented with minimal loss of precision by using a simpler stacking energy model. As shown in Figure~\ref{fig:correlation}, a simple stacking energy model, whose design principles are further described in Supp. Mat.~\ref{appsec:modelparameters}, can be used to approximate the Turner energy model very adequately (correlation coefficient $R=0.99$) in the context of sequence design. Using this simpler model greatly reduces the treewidth, and thus the computational requirements of the whole method even for complex instances.
 }
 
 \subsection*{Effectively targeting Turner energies using multi-dimensional sampling}
@@ -1446,37 +1446,45 @@ optimization run.
 %(partial) sequences (even if in implementations, explicit handling of constraints is advantageous). In particular, the %framework
 %captures various RNA energy models, they can be handled efficiently (in the sense of FPT), as long as the dependencies of their additive energy contributions are bounded.
 
-
-
-\revised{Based on a general framework and efficient algorithms, we introduced a novel approach to design RNA
+\revised{Based on a general framework and efficient algorithms, we introduce a novel approach to design RNA
 sequences while targeting very specific complex properties}. In particular, we describe the targeting of the free energies of multiple target structures and the \GCb-content.
-Our method combines an FPT stochastic sampling algorithm
+%
+Our method combines a fixed-parameter tractable (FPT) sampling algorithm
 with multi-dimensional Boltzmann sampling over distributions
-controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice, which is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. By conducting a proof-of-concept study 
+controlled by expressive RNA energy models. \revised{We demonstrate that the approach, despite of its theoretical hardness, performs well on typical multi-stable RNA design instances in practice. This good performance is a direct consequence of the approximability of Turner energies as well as the systematic algorithmic framework. By conducting a proof-of-concept study 
   on an established benchmark set for negative multi-target RNA design (including pseudoknotted instances), we showcase a typical application of our tool \ourprog{}. In this study, 
-  the approach generated significantly better seed sequences than
-the previously best available method (uniform sampling). These results strongly suggest that the presented technique for positive design can be highly beneficial in future negative design approaches.
-}
+  the approach generates significantly better seed sequences than
+the previously best available method (uniform sampling). Our results strongly suggest that the presented technique for positive design can be highly beneficial in future negative design approaches.
+}%
+%
+% SW--we have written most of this already:
+%In this way, we as well demonstrated the practical feasibility of such controlled %sequence generation, including the case of pseudoknotted structures.
+% YP--Stick to the present tense if you write anything new :) (or move everything to past) 
+%
 %
 To substantiate our work additionally, we establish the $\#${\sf P}-hardness of uniform sampling which,
 from a complexity-theoretic point of view, motivates the FPT, tree decomposition-based nature of our method.  
 
-The presented method enables new possibilities for the sequence generation
-in the field of RNA sequence design, allowing to enforce additional
-constraints, like \GCb\%, while controlling the energy of
-multiple target structures. Thus, it presents a major advance over
-previously applied ad-hoc sampling and even efficient uniform sampling
-strategies. We demonstrated the practical feasibility of such controlled sequence
-generation, including the case of pseudoknotted structures, and studied its use for multi-target RNA design.
 
+\revised{In this way, our framework enables new possibilities
+in the field of RNA sequence design.}
+%allowing to enforce additional
+%constraints, like \GCb\%, while controlling the energy of
+%multiple target structures.
+%Thus, it presents a major advance over
+%previously applied ad-hoc sampling and even efficient %uniform sampling
+%strategies. 
+%
 %perspectives:
-Our framework is extensible to include various more complex sequence constraints, including mandatory/forbidden motifs at specific
+\revised{As particular advantage over previous sequence generation methods,} it is extensible to include various more complex sequence constraints, including mandatory/forbidden motifs at specific
 positions or anywhere in the designed sequences, by adapting formal language constructs
 of Zhou \emph{et al}~\citet{Zhou2013}. In future work, negative design principles could 
 be explicitly supported at the generation stage, for instance by
 penalizing a set of alternative helices/structures.
+%
+\revised{We moreover envision using positive design to assess the significance of observed properties. Critically, our current perception of statisitical significance suffers from overly simplistic simple null models (\emph{e.g.} dinucleotide shuffling) used to model random RNAs~\cite{Rivas2017}). Here, our approach promises fundamental improvements by constructing null models of random sequences that satisfy multiple complex constraints.} 
 
-One could also envision using positive design as a null model, for instance in order to assess the significance of observed properties. Indeed, the complex set of constraints required in order to achieve a desired function must be equally enforced in RNA design, and to produce random sequences that are known to be constrained at a phenotypic level. \revised{Therefore, one could} use constrained design to assess whether P-values, and \revised{thus} our perception of the statistical significance, are affected by the overly simplistic simple null models (\emph{e.g.} dinucleotide shuffling) used to model random RNAs~\cite{Rivas2017}.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1511,7 +1519,7 @@ by the
 {\em Agence
   Nationale de la Recherche} and the
 %Austrian
-FWF (ANR-14-CE34-0011; project RNALands).  SH is supported by the
+Austrian Science Fund (ANR-14-CE34-0011 and FWF-I-1804-N28; project RNALands).  SH is supported by the
 German Federal Ministry of Education and Research (BMBF support code
 031A538B; de.NBI: German Network for Bioinformatics Infrastructure)
 and the
