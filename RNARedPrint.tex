@@ -22,7 +22,7 @@
 %%                                                                 %%
 %% For instructions on how to fill out this Tex template           %%
 %% document please refer to Readme.html and the instructions for   %%
-%% authors page on the biomed central website                      %%https://www.overleaf.com/project/5b98dc8ced90175e9717c15a
+%% authors page on the biomed central website                      %%
 %% http://www.biomedcentral.com/info/authors/                      %%
 %%                                                                 %%
 %% Please do not use \input{...} to include other tex files.       %%
@@ -43,8 +43,8 @@
 
 %%% loading packages, author definitions
 
-%\documentclass[doublespacing,linenumbers]{bmcart}% uncomment this for twocolumn layout and comment line below
-\documentclass[]{bmcart}
+\documentclass[doublespacing,linenumbers]{bmcart}% uncomment this for twocolumn layout and comment line below
+%\documentclass[]{bmcart}
 %\documentclass[twocolumn]{bmcart}
 
 %%% PACKAGES
@@ -80,8 +80,8 @@
 
 \usepackage{xcolor}
 
-\usepackage{todonotes}
 
+%\usepackage{todonotes}
 
 %\hypersetup{
 %    bookmarks=false,         % show bookmarks bar?
@@ -120,21 +120,24 @@
 %\def\includegraphic{}
 %\def\includegraphics{}
 
-
+\usepackage{graphicx}
+%\usepackage{endfloat}
+%\usepackage{caption}
+%\captionsetup{labelsep=none,textformat=empty}
 
 %%% Put your definitions there:
 \startlocaldefs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rolf's includegraphicstop
-\makeatletter
-\newsavebox{\@alignepsbox}
-\newlength{\@aligneps}
-\newcommand{\includegraphicstop}[2][]{%
-\sbox{\@alignepsbox}{\includegraphics[#1]{#2}}%
-\setlength{\@aligneps}{-\ht\@alignepsbox}%
-\addtolength{\@aligneps}{2ex}%
-\raisebox{\@aligneps}{\usebox{\@alignepsbox}}}
-\makeatother
+% \makeatletter
+% \newsavebox{\@alignepsbox}
+% \newlength{\@aligneps}
+% \newcommand{\includegraphicstop}[2][]{%
+% \sbox{\@alignepsbox}{\includegraphics[#1]{#2}}%
+% \setlength{\@aligneps}{-\ht\@alignepsbox}%
+% \addtolength{\@aligneps}{2ex}%
+% \raisebox{\@aligneps}{\usebox{\@alignepsbox}}}
+% \makeatother
 
 
 %\makeatletter
@@ -436,7 +439,7 @@
 %
   \revised{Besides empirically studies, we finally justify the algorithmic details due to a fundamental theoretic result about multi-stable RNA design, namely the \#P-hardness of the counting of designs.}
 %
-  \parttitle{Conclusion} \ourprog{} introduces a novel, flexible and---as we demonstrate---effective approach to multi-target RNA design, which promises broad applicability and extensibility. 
+  \parttitle{Conclusion} \ourprog{} introduces a novel, flexible, and effective approach to multi-target RNA design, which promises broad applicability and extensibility. 
 
   \smallskip
   \noindent
@@ -1192,11 +1195,12 @@ base pair energy model, and filtering sequences based on the {\tt RNAeval} tool 
 \subsection*{Practical efficacy of Boltzmann sampling for sequences}
 
 \begin{figure}
-	\includegraphicstop[width=0.8\textwidth]{Figs/Plots/doublestem_weight1-500_mean}
-	\caption{\revised{Comparison of free-energy and Boltzmann probability for 10~000 uniform ($\pi=1$; blue dots) and Boltzmann distributed ($\pi=500$; green dots) sequences, targeting a simple structure consisting of two adjacent helices.}}\label{fig:BoltzmannBenefits}
+	\includegraphics[width=0.8\textwidth]{Figs/Plots/doublestem_weight1-500_mean}
+	\caption{\revised{Comparison of free-energy and Boltzmann probability for 10~000 uniform ($\pi=1$; blue dots) and Boltzmann distributed ($\pi=500$; green dots) sequences, targeting a simple structure consisting of two adjacent helices.}}
+        \label{fig:BoltzmannBenefits}
 \end{figure}
 
-\revised{First, we show how seed sequences can be generated in a Boltzmann distribution, leading to designs that are substantially more stable that those generated uniformly. As can be seen in Figure~\ref{fig:BoltzmannBenefits} and Supp. Mat. \ref{appsec:immediate-benefits-for-negative-design}, sequences generated in the Boltzmann distribution not only reach lower free-energies than those generated in a uniform setting, but also achieve better Boltzmann probabilities. While the former is expected since the Boltzmann distribution explicitly favors low-energy candidates, the latter is somewhat surprising, since the Boltzmann probability of a target structure could, in principle, decrease under Boltzmann sampling due to the partition function growing faster than the Boltzmann factor. The empirical superiority of Boltzmann sampling appears robust to the target structure length and topology, as demonstrated by prior work~\cite{Reinharz2013}.
+\revised{First, we show how seed sequences can be generated in a Boltzmann distribution, leading to designs that are substantially more stable that those generated uniformly. As can be seen in Figure~\ref{fig:BoltzmannBenefits} and Supp. Mat. \ref{appsec:immediate-benefits-for-negative-design}, sequences generated in the Boltzmann distribution not only reach lower free-energies than those generated in a uniform setting, but also achieve better Boltzmann probabilities. While the former is expected since the Boltzmann distribution explicitly favors low-energy candidates, the latter is somewhat surprising, since the Boltzmann probability of a target structure could, in principle, decrease under Boltzmann sampling due to the partition function growing faster than the Boltzmann factor. The empirical superiority of Boltzmann sampling appears robust to the target structure length and topology, as demonstrated by prior work~\cite{Reinharz2013}.}
 	
 \begin{figure}
 	  \begin{minipage}{.35\textwidth}\centering 
@@ -1235,12 +1239,14 @@ base pair energy model, and filtering sequences based on the {\tt RNAeval} tool 
 \end{minipage}
 	  \begin{minipage}{.6\textwidth}\centering
 	{\sffamily {\bfseries B} -- Correlation plot}\\
-	  	\includegraphicstop[width=\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor} 
+	  	\includegraphics[width=\textwidth,trim=0 0 0 50,clip]{Figs/stackingcor} 
   	\end{minipage}
 	  
-	\caption{\revised{A fitted energy model based on stacking pairs ({\sffamily\bfseries A}) leads to approximated free-energies that are highly correlated (R=0.99) with free-energies in the Turner energy model ({\sffamily\bfseries B}), yet induces tree widths that are amenable to practical sampling ({\sffamily\bfseries C})}.\label{fig:correlation}}
+        \caption{\revised{A fitted energy model based on stacking pairs ({\sffamily\bfseries A}) leads to approximated free-energies that are highly correlated (R=0.99) with free-energies in the Turner energy model ({\sffamily\bfseries B}), yet induces tree widths that are amenable to practical sampling ({\sffamily\bfseries C})}.}
+      \label{fig:correlation}
 \end{figure}
 
+\revised{%
 However, while in principle feasible, sampling in a Boltzmann distribution directly using the Turner energy model may induce extreme computational demands, with treewidths scaling at least as large as the number of nucleotides in the largest loop. Fortunately, we found that intricacy of the Turner energy model can be circumvented with minimal loss of precision by using a simpler stacking energy model. As shown in Figure~\ref{fig:correlation}, a simple stacking energy model, whose design principles are further described in Supp. Mat.~\ref{appsec:modelparameters}, can be used to approximate the Turner energy model very adequately (correlation coefficient $R=0.99$) in the context of sequence design. Using this simpler model greatly reduces the treewidth, and thus the computational requirements of the whole method even for complex instances.
 }
 
@@ -1292,7 +1298,7 @@ pseudoknot-free target structures.}
 \begin{figure*}[t]
   \begin{center}
     %{\sf \bfseries A}\
-    \includegraphicstop[width=0.97\textwidth]{Figs/energy_shift}\hfill
+    \includegraphics[width=0.97\textwidth]{Figs/energy_shift}\hfill
     %{\sf \bfseries B}\ \includegraphicstop[width=0.55\textwidth]{Figs/PKB00211_PKB00239_0_energy_distribution}
   \end{center}
   \caption{%
