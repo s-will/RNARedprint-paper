@@ -71,7 +71,11 @@ Response: We understand that the text was still hard to read and thus rewrote la
 
 Response: We included additional explanations and took care to define all variables (like the sequence S, the dependencies dep(f), etc). We considered the inclusion of a table, but this seems to offer little further advantages.
 
- Detailed comments: ------------------ 16. Comment: * Ensemble free energy: might be an ambiguous definition
+
+Detailed comments:
+------------------
+
+16. Comment: * Ensemble free energy: might be an ambiguous definition
 
 Response: The concept of ensemble free-energy is a well-defined concept in statistical mechanics, and is used here in a way that, to the best of our knowledge, matches its usual definition.
 
