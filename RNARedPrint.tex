@@ -81,7 +81,7 @@
 \usepackage{xcolor}
 
 
-%\usepackage{todonotes}
+\usepackage{todonotes}
 
 %\hypersetup{
 %    bookmarks=false,         % show bookmarks bar?
@@ -278,6 +278,10 @@
 \newcommand{\revised}[1]{{\color{red!60!black} #1}}
 
 
+\newcommand{\numTargetStructures}{\revised{k}}
+\newcommand{\numFeatures}{\revised{m}}
+\newcommand{\motif}{\revised{\frak m}}
+
 %%% end macro defs
 
 %% fix some weirdness of the bioinfo class (footer overlapping text on page 1)
@@ -436,7 +440,7 @@
   with specific free energies (for each of multiple, possibly pseudoknotted, target structures) and \GCb-content.
 %
   Moreover, we study general properties of our approach empirically and generate
-  biologically relevant multi-target Boltzmann-weighted designs for a
+  biologically relevant multi-target Boltzmann-weighted designs for an
   \revisedOne{established} design benchmark. \revisedOne{Our results demonstrate the efficacy and feasibility of the method in practice
   as well as the benefits of Boltzmann sampling over the previously best multi-target sampling strategy---even for the case of negative design of multi-stable RNAs.}
 %
@@ -587,6 +591,10 @@ As well, the \Software{RNAdesign}/\RNAblueprint{} approach is specialized to uni
 \end{figure*}
 
 \revisedOne{As central contribution, we provide a systematic and flexibly extensible technique for sampling that targets multiple versatile features. For the sake of clarity, we introduce this method specialized to the sampling of RNA sequences that have specific energies for multiple structures and specific \GCb\%.}
+\revised{In this way, we address the positive design of RNA sequences. Positive design is contrasted to the often
+desirable negative design of RNAs, which optimizes the stability of the target structures \emph{in relation to all
+other potential structures}. Remarkably, the even more complex task of negative design immediately benefits from positive
+design (Additional file 1: Section~\ref{appsec:immediate-benefits-for-negative-design}), which provides an initial motivation to study the positive design problem by itself.}
 
 \revisedOne{Figure~\ref{fig:workflow} summarizes our generic framework, which enables this targeted sequence generation based on multi-dimensional Boltzmann sampling. \emph{Algorithmically}, we originally contribute} dynamic programming (DP) algorithms, based on the concept of \Def{tree decomposition}, to compute partition functions and sample sequences from the Boltzmann distribution%
 % (Subsection~\ref{sec:PF})
@@ -635,19 +643,22 @@ On this basis, we can finely calibrate the weights, to maximize the probability 
 \label{sec:problem-statement}
 
 %\paragraph{Central computational problem.}
-Let us consider $m$ (secondary) structures $R_1,\dots, R_m$, each abstracted as a set of base pairs, and \revisedOne{$k\geq m$} features $F_1,\dots, F_k$\revisedOne{, typically representing the energies of the structures and additional sequence properties,} associated with weights $\pi_1,\dots,\pi_k$. Our goal is to sample sequences \revisedOne{$S$ (which satisfy the base pairing rules for all structures) from the Boltzmann distribution defined by} 
+Let us consider \revised{a set of} $\numTargetStructures$ (secondary) structures $\R = \{R_1,\dots, R_{\numTargetStructures}\}$, each abstracted as a set of base pairs, and
+\revisedOne{$\numFeatures\geq \numTargetStructures$} features $F_1,\dots, F_{\numFeatures}$\revisedOne{, typically
+representing the energies of the structures and additional sequence properties,} associated with weights
+$\pi_1,\dots,\pi_{\numFeatures}$ \revised{in $\mathbb{R}^+$}. Our goal is to sample sequences \revisedOne{$S$ (which satisfy the base pairing rules for all structures) from the Boltzmann distribution defined by} 
 \begin{equation}
 \label{eq:sample-distribution}
-\Pr(S\mid\pi_1,\dots,\pi_k) \propto \displaystyle\prod_{1\leq \ell\leq k}\!\! \pi_\ell^{-F_\ell(S)} \end{equation}
+\Pr(S\mid\pi_1,\dots,\pi_{\numFeatures}) \propto \displaystyle\prod_{1\leq \ell\leq \numFeatures}\!\! \pi_\ell^{-F_\ell(S)} \end{equation}
 
 
 The workhorse of our approach is the \revisedOne{fixed-parameter tractable} computation of feature-dependent partition functions over sequences, \revisedOne{namely partition functions of the form} 
 %
   \begin{equation}
     \label{eq:mainproblem}
-    \partfun{\pi_1,\dots,\pi_k} = \sum_{S\in\Sigma^n} \prod_{1\leq \ell\leq k} \pi_\ell^{-F_\ell(S)},
+    \partfun{\pi_1,\dots,\pi_{\numFeatures}} = \sum_{S\in\Sigma^n} \prod_{1\leq \ell\leq \numFeatures} \pi_\ell^{-F_\ell(S)},
   \end{equation}
-  for specific weights $\pi_1,\dots,\pi_k$.
+  for specific weights $\pi_1,\dots,\pi_{\numFeatures}$.
 
 \subsection*{Expressing \GCb\%-content, sequence validity and energies as features}
 Formally, we define a \Def{feature $F$} as a function on sequences, whose value is obtained by summing over an associated set of \Def{contributions}. Each contribution $f$ takes values in $\mathbb{R}\cup \{+\infty\}$, and depends on the nucleotides assigned to a restricted set of positions, \revisedOne{namely its \emph{dependencies}, denoted $\dep(f)$}, such that
@@ -655,7 +666,9 @@ Formally, we define a \Def{feature $F$} as a function on sequences, whose value 
 $$
 F(S) =\!\!\!\!\!\!\!\sum_{\substack{\text{$f$ contribution of $F$,}\\\text{ $\dep(f)=\{x_1,\ldots,x_p\}$}}}\!\!\!\!\!\! f\left(\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}\right).
 $$
-\revisedOne{Here, since $\dep(f)=\{x_1,\ldots,x_p\}$, $\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto S_{x_p}}\right\}$ denotes the assignment, that assigns to all positions $x_k$  in $\dep(f)$ the respective nucleotide $S_{x_k}$ ($1\leq k\leq p$; $p=|\dep(f)|$).} 
+\revisedOne{Here, since $\dep(f)=\{x_1,\ldots,x_p\}$, $\left\{\substack{x_1\mapsto S_{x_1}\\\cdots\\x_p\mapsto
+S_{x_p}}\right\}$ denotes the assignment, that assigns the respective nucleotides $S_{x_q}$ ($1\leq q\leq p$;
+$p=|\dep(f)|$)} \revised{to the positions $x_q$  in $\dep(f)$}. 
 
 The $\GCb\%$ can be simply expressed using $n$ contributions $f^{\GCb}_i$, \revisedOne{each depending only on position $i\in[1,n]$, i.e.~$\dep(f^{\GCb}_i)=\{i\}$}, such that 
 $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&\text{ otherwise}.\end{cases}$$ 
@@ -668,8 +681,12 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
         The value of $F^{\tt BP}$ is $0$ for any valid sequence, and $+\infty$ as soon as some non canonical base pair is created. For any associated weight $\pi_{{\sf BP}}>1$, the contribution of a valid sequence is $\pi_{{\sf BP}}^0 = 1$, and the contribution of an invalid sequence is $\pi_{{\sf BP}}^{+\infty} = 0$, so that Eq.~\ref{eq:mainproblem} (when restricted to $F^{\tt BP})$ simply counts the number of valid sequences.
 
 
-        Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions associated with local structural motifs (base pairs, base pair stacks, loops, \ldots) under a certain nucleotide assignment. Energy models can thus be captured generically by introducing, for each motif $m$ occurring in a target structure, a contribution $f_m$, taking a specific value for each assignment of nucleotides to its positions $\dep(f_m)$. For instance, the contribution of a \Def{base pair stack}, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
-        We refer to energy models that consider the contributions of all base pair stacks (and thus introduce the corresponding dependencies) collectively as the \Def{stacking energy model}.
+Energy models for structure prediction vary considerably, yet can always be expressed as sums over contributions
+associated with local structural motifs (base pairs, base pair stacks, loops, \ldots) under a certain nucleotide
+assignment. Energy models can thus be captured generically by introducing, for each motif $\motif$ occurring in
+a target structure, a contribution $f_{\motif}$, taking a specific value for each assignment of nucleotides to its
+positions $\dep(f_{\motif})$. For instance, the contribution of a \Def{base pair stack}, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
+We refer to energy models that consider the contributions of all base pair stacks (and thus introduce the corresponding dependencies) collectively as the \Def{stacking energy model}.
 }
 
 
@@ -724,7 +741,7 @@ $$f^{\GCb}_i(\{i\mapsto c\})=\begin{cases}-1&\text{ if }c=\Gb\text{ or }\Cb\\ 0&
 \revisedOne{
 In the simplest case, this set captures the requirement of canonical base pairing for each structure.
 To express this, let us define the \Def{base pair dependency graph} $G_{\R}$ as the graph with nodes $\{1,\dots,n\}$
-and edges $\bigcup_{\ell\in[1,k]} R_\ell$. %Any edge between two nodes $i$ and $j$ materializes the existence of a base pair between positions $i$ and $j$ in some structure, inducing a direct dependency between the chosen nucleotide assignments for the two positions.
+and edges $\bigcup_{\ell\in[1,\numTargetStructures]} R_\ell$. 
 
 Since $\F$ defines potentially more complex dependencies, which can
 relate more than two positions, in general its dependencies cannot be 
@@ -755,7 +772,7 @@ Let us finally define the \Def{tree decomposition} of the graph $G_\F$, a fundam
 \smallskip
 \noindent
 The \Def{treewidth} of a tree decomposition $(T,\chi)$ is defined as
-$\min_{u\in T} |\chi(u)| - 1.$ 
+$\max_{u\in T} |\chi(u)| - 1.$ 
 %The \Def{treewidth} of a graph $G$ is the smallest treewidth of any tree decomposition of $G$.
 \end{definition}
 %
@@ -801,7 +818,7 @@ $exp(-\ln(\pi)f(S))=\pi^{-f(S)}.$
 %such that $exp(-\weighttransform{f}{\pi}(S))=\pi^{-f(S)}.$ 
 %
 Let us now specify the concrete set $\F$ of contributions that we use
-for the design in the base pair model targeting \GCb\% and structures $\R$ with weights $\pi_0,\dots,\pi_k$. The set $\F$ thus consists of
+for the design in the base pair model\todo{Didn't we plan to get rid of the bp model?}{} targeting \GCb\% and structures $\R$ with weights $\pi_0,\dots,\pi_k$. The set $\F$ thus consists of
 \begin{itemize}
 \item the transformed contributions $\ln(\pi_0)f^{\GCb}_i$ for the ~$\GCb\%$ feature ($i=1,\dots,n$);
 \item the transformed contributions $\ln(\pi_\ell)f^{R_\ell}_{ij}$for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
@@ -815,7 +832,8 @@ By these definitions, the set $\F$ encodes the partition function $\partfun{\pi_
 
 We compute the partition function (as specified by $\F$) by dynamic programming based
 on a tree decomposition of $G_{\F}$, the dependency graph associated with $\F$.
-Note, that analogous algorithms could be easily derived to count valid sequences, or list sequences having minimal free-energy.
+Note, that analogous algorithms could be easily derived to count valid sequences, or list sequences having minimum free
+energy.
 %This yields fixed parameter tractable (FPT) algorithms, based on the treewidth.
 
 %\begin{figure}[t]
@@ -836,7 +854,7 @@ moreover, we define the \Def{difference positions} from $u$ to an
 adjacent $v$ by $\difference{u}{v}:=\chi(v) - \separator{u}{v}$.
 
 Since our algorithms iterate over specific sets of sequence positions, we moreover define
-the \Def{set $\partseqs(\Y)$ of all partial sequences determining the positions of $\Y=\subseteq\{1,\dots,n\}$} in all combinations of nucleotides $\{\Ab,\Cb,\Gb,\Ub\}$,
+the \Def{set $\partseqs(\Y)$ of all partial sequences determining the positions of $\Y\subseteq\{1,\dots,n\}$} in all combinations of nucleotides $\{\Ab,\Cb,\Gb,\Ub\}$,
 i.e.~for $\Y=\{y_1,\dots,y_{q}\}$,
 \begin{align*}
 \partseqs(\Y) = \{ & \{ y_i\mapsto v_i \mid i=1,\dots,q \} \\& | (v_1,\dots,v_{q}) \in \{\Ab,\Cb,\Gb,\Ub\}^{q} \}.
@@ -865,7 +883,7 @@ in $\real$. The message from $u$ to $v$ represents the
 partition functions of the subtree of $u$ for all possible partial
 sequences in $\partseqs(\separator{u}{v})$. Induction over $T$ lets us show
 the correctness of the algorithm
-(Supp.\ Mat.~\ref{appsec:correctness}).  After running
+(Additional file~1: Section~\ref{appsec:correctness}).  After running
 Alg.~\ref{alg:pf}, multiplying the 0-ary messages sent to the root $r$
 yields the total partition function (i.e.~due to proper encoding the partition function of our design problem) through
 \begin{math}
@@ -914,7 +932,7 @@ $\mathcal{O}((|\F|+|V|)\cdot 4^{w+1})$ time and
 $\mathcal{O}(|V|\cdot4^s)$ space; Alg.~\ref{alg:sampling} would
 require $\mathcal{O}((|\F|+|V|)\cdot 4^D)$ per sample on arbitrary
 tree decompositions
-(Supp.\ Mat.~\ref{appsec:algcomplexity}). W.l.o.g.\ we assume that
+(Additional file 1: Section~\ref{appsec:algcomplexity}). W.l.o.g.\ we assume that
 $D=1$; note that tree decompositions can generally be transformed,
 such that $\difference{u}{v}\leq 1$.
 %
@@ -987,7 +1005,7 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 By this theorem, the complexity is polynomial for fixed value of $w$, and Boltzmann sampling in our setting is thus fixed parameter tractable (FPT) in the treewidth.
 %
 The complexity of the precomputation can be further improved to
-$\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ ($c\le w+1$) is the maximum number of connected components represented in a node of the tree decomposition (Supp.\ Mat.~\ref{appsec:improvedComplexity}).
+$\mathcal{O}(n\,k\,2^{w+1}\,2^{c})$, where $c$ ($c\le w+1$) is the maximum number of connected components represented in a node of the tree decomposition (Additional file~1: Section~\ref{appsec:improvedComplexity}).
 
 
 Note that in this complexity analysis, we do not include time and space for computing the
@@ -995,7 +1013,7 @@ tree decomposition itself, since we observed that the computation time
 of tree decomposition (\Software{GreedyFillIn}, implemented in
 \Software{LibTW}~by \citet{Dijk2006}) for multi-target sampling is
 negligible compared to Alg.~\ref{alg:pf}
-(Supp.\ Mat.~\ref{appsec:treedecomp} and
+(Additional file~1: Sections~\ref{appsec:treedecomp} and
 \ref{appsec:dependency-cliques}).
 
 \subsection*{Design within expressive energy models}\label{sec:energy_models}
@@ -1041,7 +1059,7 @@ nine bases for interior loops, with a total of 5 unpaired bases (``2x3'' interio
 \paragraph{Approximating Turner Energy using Simpler Energy Models.}
 To capture the realistic Turner model $\EnergyTurner$ more efficiently, we exploit the tight correlation between
 $\EnergyTurner$ and the fitted stacking model $\EnergyStacking$
-(Supp.\ Mat.~\ref{appsec:modelparameters}). More precisely, we observed a
+(Additional file~1: Section~\ref{appsec:modelparameters}). More precisely, we observed a
 structure-specific affine dependency between the Turner and stacking
 energy models, so that
 $\EnergyTurner(S;R) \approx \gamma\cdot \EnergyStacking(S;R) + \delta$
@@ -1057,7 +1075,10 @@ $\EnergyTurner^{\star}$ in the Turner model.
 
 \subsection*{Extension to multidimensional Boltzmann sampling}\label{sec:multiBoltzmann}
 The flexibility of our framework allows to support the advanced sampling technique called "multidimensional Boltzmann sampling"~\citep{Bodini2010}, which allows to enforce (probabilistically)  additional, complex properties of the samples through an additional rejection.
-This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and di-nucleotide content~\citep{Zhang2013} of sampled RNA sequences. Here, in addition to controlling \GCb\% (our feature $F_0$) we use it to target the free energies $(\TargetE_1,\ldots,\TargetE_k)$ of the individual target structures (features $F_1,\dots,F_m$).
+This technique was previously used to control \GCb\%~\citep{Waldispuehl2011,Reinharz2013} and di-nucleotide
+content~\citep{Zhang2013} of sampled RNA sequences. Here, in addition to controlling \GCb\% (our feature $F_0$) we use
+it to target the free energies $(\TargetE_1,\ldots,\TargetE_{\numTargetStructures})$ of the individual target structures (features
+$F_1,\dots,F_{\numFeatures}$).
 
 For the multidimensional Boltzmann sampling, we require the already established ability to \Def{sample from a weighted distribution} over the set of valid sequences, where the probability of a sequence $S$ is
 $$\mathbb{P}(S\mid \pmb{\pi}) = \frac{\prod_{\ell=0}^{k} \pi_i^{-F_i(S)}}{\partfun{\pmb{\pi}}},$$
@@ -1069,7 +1090,8 @@ where $\pmb{\pi}:=(\pi_0\cdots\pi_k)$ is the vector of the positive real-valued 
 %$\prod_{\ell=0}^{k} \pi_i^{-F_i(S)} = \prod_{f\in\F} f(S).$
 
 One then needs to \Def{learn a weights vector} $\pmb{\pi}$ such that, on average, the targeted energies are achieved by a random sequences in the weighted distribution. In other words,  $\mathbb{E}(F_\ell(S)\mid \pmb{\pi})=\TargetE_\ell$,  $\forall\ell\in[1,k]$ and, analogously, the expectation of $F_0(S)$ is the targeted GC content.
-The expected value of $F_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Supp.\ Mat.~\ref{appsec:weight_derivatives}). More generally, computing a suitable parameter vector $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
+The expected value of $F_\ell$ is always decreasing for increasing weights $\pi_\ell$ (see Additional file~1: Section~\ref{appsec:weight_derivatives}).
+More generally, computing a suitable parameter vector $\pmb{\pi}$ can be restated as a convex optimization problem, and be efficiently solved using a wide array of methods~\citep{Denise2010,Bendkowski2017}.
 
 In practice, we use a simple heuristics which starts from an initial weight vector $\pmb{\pi}^{[0]}:=(e^\beta,\dots,e^\beta)$ for $\beta=1/(RT)$, T=$37^\circ$, and gas constant $R$. Then, at each iteration, it generates samples $\mathcal{S}$ of sequences. The expected value of an energy $F_\ell$ is estimated as $\hat\mu_\ell(\mathcal{S}) = \sum_{S\in\mathcal{S}}F_\ell(S)/|\mathcal{S}|$, and the weights are updated at the $t$-th iteration by %  $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot\TargetE_\ell/\hat\mu_\ell(\mathcal{S})$.
 $\pi_\ell^{[t+1]} = \pi_\ell^{[t]}\cdot \gamma^{\hat\mu_\ell(\mathcal{S})-\TargetE_\ell}$. In practice, the constant $\gamma>1$ is chosen empirically  ($\gamma=1.2$) to achieve effective optimization.
@@ -1157,7 +1179,7 @@ In other words, any efficient algorithm for \NumDesign implies an efficient algo
 
 \revisedOne{Proposition~\ref{prop:bijection} also strongly impacts the complexity of computing the partition function. Indeed it implies that, among the $4^k$ possible assignments of nucleotides to $k$ connected positions (in the base-pair dependency graph), at most $2^k$ are compatible with base pairing rules. One can thus sharply reduce the complexity of Algorithm~\ref{alg:pf} by restricting the precomputations to compatible assignments.
 
-For a discussion on the implications of our hardness results beyond exact counting see Supp.\ Mat.~\ref{appsec:approximate-counting}.
+For a discussion on the implications of our hardness results beyond exact counting see Additional file~1: Section~\ref{appsec:approximate-counting}.
 }
 
 % \begin{proof}
@@ -1199,11 +1221,11 @@ base pair energy model, and filtering sequences based on the {\tt RNAeval} tool 
 
 \begin{figure}
 	\includegraphics[width=0.8\textwidth]{Figs/Plots/doublestem_weight1-500_mean}
-	\caption{\revisedOne{Comparison of free-energy and Boltzmann probability for 10~000 uniform ($\pi=1$; blue dots) and Boltzmann distributed ($\pi=500$; green dots) sequences, targeting a simple structure consisting of two adjacent helices.}}
+	\caption{\revisedOne{Comparison of free energy and Boltzmann probability for 10~000 uniform ($\pi=1$; blue dots) and Boltzmann distributed ($\pi=500$; green dots) sequences, targeting a simple structure consisting of two adjacent helices.}}
         \label{fig:BoltzmannBenefits}
 \end{figure}
 
-\revisedOne{First, we show how seed sequences can be generated in a Boltzmann distribution, leading to designs that are substantially more stable that those generated uniformly. As can be seen in Figure~\ref{fig:BoltzmannBenefits} and Supp. Mat. \ref{appsec:immediate-benefits-for-negative-design}, sequences generated in the Boltzmann distribution not only reach lower free-energies than those generated in a uniform setting, but also achieve better Boltzmann probabilities. While the former is expected since the Boltzmann distribution explicitly favors low-energy candidates, the latter is somewhat surprising, since the Boltzmann probability of a target structure could, in principle, decrease under Boltzmann sampling due to the partition function growing faster than the Boltzmann factor. The empirical superiority of Boltzmann sampling appears robust to the target structure length and topology, as demonstrated by prior work~\cite{Reinharz2013}.}
+\revisedOne{First, we show how seed sequences can be generated in a Boltzmann distribution, leading to designs that are substantially more stable that those generated uniformly. As can be seen in Figure~\ref{fig:BoltzmannBenefits} and Additional file~1: Section~\ref{appsec:immediate-benefits-for-negative-design}, sequences generated in the Boltzmann distribution not only reach lower free-energies than those generated in a uniform setting, but also achieve better Boltzmann probabilities. While the former is expected since the Boltzmann distribution explicitly favors low-energy candidates, the latter is somewhat surprising, since the Boltzmann probability of a target structure could, in principle, decrease under Boltzmann sampling due to the partition function growing faster than the Boltzmann factor. The empirical superiority of Boltzmann sampling appears robust to the target structure length and topology, as demonstrated by prior work~\cite{Reinharz2013}.}
 	
 \begin{figure}
 	  \begin{minipage}{.35\textwidth}\centering 
@@ -1237,7 +1259,7 @@ base pair energy model, and filtering sequences based on the {\tt RNAeval} tool 
 			-0.69
 			\\
 	\end{tabular}}\\[3em]
-{\sffamily {\bfseries C} -- Tree widths}\\
+{\sffamily {\bfseries C} -- Treewidths}\\
 \includegraphics[width=\textwidth,trim=350 0 0 50,clip]{Figs/td-widths}
 \end{minipage}
 	  \begin{minipage}{.6\textwidth}\centering
@@ -1250,7 +1272,7 @@ base pair energy model, and filtering sequences based on the {\tt RNAeval} tool 
 \end{figure}
 
 \revisedOne{%
-However, while in principle feasible, sampling in a Boltzmann distribution directly using the Turner energy model may induce extreme computational demands, with treewidths scaling at least as large as the number of nucleotides in the largest loop. Fortunately, we found that intricacy of the Turner energy model can be circumvented with minimal loss of precision by using a simpler stacking energy model. As shown in Figure~\ref{fig:correlation}, a simple stacking energy model, whose design principles are further described in Supp. Mat.~\ref{appsec:modelparameters}, can be used to approximate the Turner energy model very adequately (correlation coefficient $R=0.99$) in the context of sequence design. Using this simpler model greatly reduces the treewidth, and thus the computational requirements of the whole method even for complex instances.
+However, while in principle feasible, sampling in a Boltzmann distribution directly using the Turner energy model may induce extreme computational demands, with treewidths scaling at least as large as the number of nucleotides in the largest loop. Fortunately, we found that intricacy of the Turner energy model can be circumvented with minimal loss of precision by using a simpler stacking energy model. As shown in Figure~\ref{fig:correlation}, a simple stacking energy model, whose design principles are further described in Additional file~1: Section~\ref{appsec:modelparameters}, can be used to approximate the Turner energy model very adequately (correlation coefficient $R=0.99$) in the context of sequence design. Using this simpler model greatly reduces the treewidth, and thus the computational requirements of the whole method even for complex instances.
 }
 
 \subsection*{Effectively targeting Turner energies using multi-dimensional sampling}
@@ -1264,7 +1286,7 @@ stacking energy model $\EnergyStacking$, whose parameters were fitted
 to best approximate Turner energies. As well, we implemented and
 fitted a base pair energy model for \ourprog{}, which was not studied
 for its targeting performance (both models:
-Supp.\ Mat.~\ref{appsec:modelparameters}).
+Additional file~1: Section~\ref{appsec:modelparameters}).
 %
 %\paragraph{Implementation of multi-dimensional Boltzmann sampling}
 %As suggested in Section~\ref{sec:multiBoltzmann}, we heuristically optimize weights to target specific energies and \GCb\% in an iterative procedure (based on the core sampling algorithm).
@@ -1287,7 +1309,7 @@ the Turner energy distributions of the single structures as they
 result from sampling with different weight parameters. The figure
 illustrates how our multidimensional Boltzmann sampling strategy can,
 to a large extent, independently shift the Turner energies of sampled
-sequences towards prescribed targets. See Supp.\ Mat.~\ref{appsec:illustrating-mdbs} for a further example with three
+sequences towards prescribed targets. See Additional file~1: Section~\ref{appsec:illustrating-mdbs} for a further example with three
 pseudoknot-free target structures.}
 
 
@@ -1328,18 +1350,18 @@ As a quality measure, we applied the objective function introduced by~\citet{Ham
 % \end{align}
 \begin{multline}
   \label{eq:blueprintobjective}
-    \Obj(S) = \frac{1}{k} \sum_{\ell=1}^{k} (E(S, R_\ell) - \EnsE(S))\\
-    +\frac{1}{2\binom{k}{2}} \sum\limits_{1\leq\ell<j\leq k}|E(S,R_\ell) - E(S,R_j)|,
+    \Obj(S) = \frac{1}{m} \sum_{\ell=1}^{m} (E(S, R_\ell) - \EnsE(S))\\
+    +\frac{1}{2\binom{m}{2}} \sum\limits_{1\leq\ell<j\leq m}|E(S,R_\ell) - E(S,R_j)|,
 \end{multline}
 %
 where the free energies $E(S, R)$ as well as the \Def{ensemble free energy} $\EnsE(S)$ of $S$ are computed
 by {\tt RNAfold}~\citep{Lorenz2011} in the pseudoknot-free case; for
 pseudoknotted targets, $\EnsE(S)$ is approximated by the \Def{minimum
-  free energy} (MFE) of $S$ as estimated by {\tt HotKnots}~\citep{Ren2005} in the energy model
+  free energy} of $S$ as estimated by {\tt HotKnots}~\citep{Ren2005} in the energy model
 of~\citet{dirks-pierce-03}.  Intuitively, the first term of \Obj{}
 captures the distance of the targets from the ensemble free energy,
 while the second term penalizes the dispersion of targets; \Obj{} is
-best (minimal) when all targets simultaneously achieve the minimum
+best (minimized) when all targets simultaneously achieve the minimum
 free energy of the sequence.
 
 We considered a benchmark of six sets of target structures described in \citep{Taneda2015}: {\sf 2str}, {\sf 3str}, and {\sf 4str} consist of non-pseudoknotted structures, while {\sf PK60}, {\sf PK80}, and {\sf LE80} contain pseudoknotted structures.
@@ -1355,7 +1377,7 @@ For this purpose, we determine good common target energies that
 can be successfully targeted for all single target structures simultaneously.
 Generally, we targeted 60\% \GCb\%.
 \revisedOne{%
-Supp.\ Mat.~\ref{appsec:effectivity-seed-generation} provides detailed results from this iterative procedure, which works similarly to the previously described multi-dimensional Boltzmann sampling. In particular, we observe that most of the benchmark inputs finish within only few iterations, where each iteration requires  little time (confer Supp.\ Mat.~\ref{appsec:run-times}).}
+Additional file~1: Section~\ref{appsec:effectivity-seed-generation} provides detailed results from this iterative procedure, which works similarly to the previously described multi-dimensional Boltzmann sampling. In particular, we observe that most of the benchmark inputs finish within only few iterations, where each iteration requires  little time (confer Additional file~1: Section~\ref{appsec:run-times}).}
 
 We compared the
 \Obj{} value of \revisedOne{the derived} sequences against that of seed sequences,
@@ -1375,21 +1397,21 @@ Boltzmann-sampled sequences outperform uniform seeds on every data-set,
 leading to average improvements in \Obj{} values ranging from $7.26$
 ({\sf LE80}) to $16.05$ ({\sf 2str}) units. Remarkably, this
 improvement is observed for both terms in \Obj{} (see
-Supp. Mat.~\ref{appsec:contributions-multidefect}).  This means that \ourprog{}
-produces sequences whose targets are both, substantially closer to
-the sequence ensemble/minimal free energy, and more similarly stable across targets.  In fact, for
+Additional file~1: Section~\ref{appsec:contributions-multidefect}).  This means that \ourprog{}
+produces sequences whose targets are substantially closer to
+the ensemble free energy \emph{and} have more similar stability across targets.  In fact, for
 every sequence in our benchmark, consisting of 332 sets of target
 structures, we observed better \Obj{} for Boltzmann sampling than for
-uniform sampling (see Supp. Mat.~\ref{appsec:detailed-benchmark-results}).  Notably,
+uniform sampling (see Additional file~1: Section~\ref{appsec:detailed-benchmark-results}).  Notably,
 \ourprog{} performs equally well in the presence of pseudoknots;
 the difficulty rather lies in the computation of the \Obj{} function, since
-free-energy minimization is costly in the presence of
+free energy minimization is costly in the presence of
 pseudoknots~\citep{Sheikh2012} and good implementations are scarce.
 
 %
 Moreover, for all instances as well, the Boltzmann designs
 remain superior even after local optimizations, as shown by
-Fig.~\ref{fig:benchmark-results} and Supp. Mat.~\ref{appsec:contributions-multidefect}
+todo~\ref{fig:benchmark-results} and Additional file~1: Section~\ref{appsec:contributions-multidefect}
 and \ref{appsec:detailed-benchmark-results}. This observation is consistent with a
 superior quality of the starting point for the greedy walk, probably leading
 to better local minima of the \Obj{} function. However, it should be noted
@@ -1502,14 +1524,36 @@ penalizing a set of alternative helices/structures.
 %%                                          %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section*{Additional Files}
+
+\subsection*{Additional file 1}
+\revised{Supplemental Material providing additional detailed information on 
+``Immediate benefits of positive design for negative design'', ``Tree decomposition for RNA design instances in
+practice'', ``Run times for Boltzmann sampling (at fixed weights)'', ``Illustrating multi-dimensional Boltzmann sampling
+for three pseudoknot-free target structures'', ``Effectivity of the seed sequence generation'', ``Parameters for the
+base pair and the stacking energy model'', ``Tree decomposition with hyper-dependencies'', ``Correctness of the FPT
+partition function algorithm'', ``General complexity of the partition function computation by cluster tree elimination
+and generation of samples'', ``Exploiting constraint consistency to reduce the complexity'', ``Monotonicity of the
+partial derivatives within weight calibration'', ``Approximate counting and random generation'', ``Contribution of terms
+to the MultiDefect score'', and ``Detailed results of the negative design benchmark''.}
+
 \begin{backmatter}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Additional Files              %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section*{Competing interests}
-  The authors declare that they have no competing interests.
-
+\section*{Abbreviations}
+\GCb\%: GC-content; \#P: complexity class ``Sharp P''; DP: dynamic programming; FPT: fixed-parameter tractable; D\&P
+model: pseudoknot energy model by Dirks and Pierce
 
 \section*{Availability of data and materials}
 The software and data of this work are available in the Github repository \url{https://github.com/yannponty/RNARedPrint}.
+\todo[inline]{This section should include a link to the most recent version of your software or code (e.g. GitHub or
+  Sourceforge) as well as a link to the archived version referenced in the manuscript. The software or code should be
+  archived in an appropriate repository with a DOI or other unique identifier. For software in GitHub, we recommend
+using Zenodo.}
 
 \section*{Author's contributions}
   YP and SW initiated the project and designed the algorithms.
@@ -1520,7 +1564,7 @@ The software and data of this work are available in the Github repository \url{h
     % Text for this section \ldots
     % https://www.biomedcentral.com/getpublished/editorial-policies#authorship
 
-\section*{Acknowledgements}
+\section*{Funding}
 YP is supported
 %jointly supported
 by the
@@ -1538,8 +1582,25 @@ Future and Emerging Technologies programme
 % within the Seventh Framework Programme for Research of the
 %European Commission, under
 (FET-Open grant 323987; project RiboNets).
+\revised{The funding bodies did not played any roles in the design
+of the study and collection, analysis, and interpretation of data and in writing
+the manuscript.}
+
+\section*{Acknowledgements}
 %
 We thank Leonid Chindelevitch for suggesting a drastic optimization of our FPT algorithm based on stable sets combinatorics, and Arie Koster for practical recommendations on tree decompositions.
+\revised{A preliminary version of this work was presented at the conference RECOMB 2019 in Paris; we acknowledge the
+contributions of the anonymous reviewers.}
+
+\section*{Ethics approval and consent to participate}
+Not applicable.
+
+\section*{Consent to publish}
+Not applicable.
+
+\section*{Competing interests}
+  The authors declare that they have no competing interests.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                  The Bibliography                       %%
@@ -1616,21 +1677,6 @@ We thank Leonid Chindelevitch for suggesting a drastic optimization of our FPT a
 %       \end{tabular}
 % \end{table}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                               %%
-%% Additional Files              %%
-%%                               %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \section*{Additional Files}
-%   \subsection*{Additional file 1 --- Sample additional file title}
-%     Additional file descriptions text (including details of how to
-%     view the file, if it is in a non-standard format or the file extension).  This might
-%     refer to a multi-page table or a figure.
-%
-%  \subsection*{Additional file 2 --- Sample additional file title}
-%    Additional file descriptions text.
-
-
+    
 \end{backmatter}
 \end{document}
