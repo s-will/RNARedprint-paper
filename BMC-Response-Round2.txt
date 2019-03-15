@@ -1,0 +1,126 @@
+$$  We thoroughly edited our manuscript according to the Journal standard / technical comments and the reviewers' comments. Please find our point-by-point response below.
+
+
+Technical Comments:
+1. Upon resubmission, please remove any tracked changes or highlighting and include only a single clean copy of the manuscript. Please ensure the document is in the final form for publication 
+
+$$  We removed the highlighting
+
+2. As abbreviations are used throughout the paper, we ask that you include a list of abbreviations (before the declarations section) for reference and ease of reading. All abbreviations should still be defined in the text at first use. 
+
+$$  We added the requested abbreviation section.
+
+3. In accordance with BioMed Central editorial policies and formatting guidelines, all manuscript submissions to BMC Bioinformatics must contain a Declarations section which includes the mandatory sub-sections listed below.  Please refer to the journal's Submission Guidelines web page for information regarding the criteria for each sub-section (https://bmcbioinformatics.biomedcentral.com/).
+ 
+Where a mandatory Declarations section is not relevant to your study design or article type, please write "Not applicable" in these sections.
+ 
+For the 'Availability of data and materials' section, please provide information about where the data supporting your findings can be found.  We encourage authors to deposit their datasets in publicly available repositories (where available and appropriate), or to be presented within the manuscript and/or additional supporting files.  Please note that identifying/confidential patient data should not be shared.  Authors who do not wish to share their data must confirm this under this sub-heading and also provide their reasons.  For further guidance on how to format this section, please refer to BioMed Central's editorial policies page (see links below).
+ 
+Declarations
+-    	Ethics approval and consent to participate
+-    	Consent to publish
+-    	Availability of data and materials
+-    	Competing interests
+-    	Funding (including the role played by the funder in the design of the study and collection, analysis, and interpretation of data and in writing the manuscript)
+-    	Authors' Contributions
+-       Acknowledgements
+ 
+Further information about our editorial policies can be found at the following links:
+Ethical approval and consent:
+http://www.biomedcentral.com/about/editorialpolicies#Ethics
+Availability of data and materials section:
+http://www.biomedcentral.com/submissions/editorial-policies#availability+of+data+and+materials
+
+$$  We completed the declarations sections with respect to Journal style. 
+
+4. Please add a section "Additional files" (after the References/Figure legends) where you list the following information for each additional/supplementary file in the file inventory:
+- File name (e.g. Additional file 1)
+- Title of data
+- Description of data
+
+    We added the Section Additional Files with the according description. The references to Supplemental Material in the text were adapted to the Journal style. 
+
+5. Please mention that this has been presented at conference (RECOMB 2018 conference, Paris) in the Acknowledgements.
+
+$$  We added a corresponding sentence to the Acknowledgements.
+
+
+
+Editor Comments:
+
+The authors appropriately addressed the comments from reviewers.
+
+Therefore, I am happy to recommend acceptance of the manuscript.
+
+Since one reviewer has discretionary comments, I recommend the authors
+to take these comments into account in the final version.
+(However, it is optional.)
+
+
+
+Reviewer reports:
+
+Reviewer 1: After the respectful revision, the manuscript gets more reachable to readers. Moreover, the authors have clearly emphasized the direct evaluation or rational descriptions about advantage and feasibility of RNARedPrint compared to other state-of-the methods (even with the longer running time).
+
+$$  We appreciate this positive general assessment and thank the reviewer for pointing out remaining issues below.
+
+Since there are several ambiguous descriptions and suspected mistakes,
+I would like to recommend the authors to check them before publishing.
+Considering the revision comment, it would be better to describe the concept of positive and negative design in the main text well because it is critical for this work.
+(In addition, I finally succeeded to run RNARedPrint, but an actual requirement was java 8 or later. It would be appreciated if the authors could be careful on its README.)
+
+$$  We agree that the some earlier discussion of the relation between positive and negative design in the main text would be beneficial. For this purpose, we added the following text in the Subsection Contributions of Background:
+$$  "In this way, we address the positive design of RNA sequences. Positive design is contrasted to the often desirable negative design of RNAs, which optimizes the stability of the target structures in relation to all other potential structures. Remarkably, the even more complex task of negative design immediately benefits from positive design (Additional file 1: Section A), which provides an initial motivation to study the positive design problem by itself."
+
+
+Minor comments:
+* While T is defined as an "unrooted tree" at P8L25, the example shown in Figure 2 contains a root. If Figure2C is a schematic illustration during DP to extract a decomposed rooted tree for Algorithm 1 and it contains a decomposed unrooted tree as a part, please specify it.
+
+$$  Thank you for pointing out this potentially confusing inconsistency. 
+$$  We removed the root in the figure.
+
+* P8 L11 This R represents the same one at P6L11? The range of index seems inconsistent.
+
+$$  Indeed, there was a mismatch in the number of structures. We changed the text accordingly.
+$$  Thanks for pointing out.
+
+* For the introduction of "general tree decomposition" definition, it requires any reference at P4L20-30.
+
+$$  Since the definition of tree decomposition is almost folklore in computer science,
+$$  we do not feel this strictly requires a reference.
+
+* Please put the information about where the readers can find a description about "#P-hardness of counting valid designs"  at P5L32.
+
+$$  Sorry, but we didn't understand to what this refers.
+
+* P8 L31 I think it is a typo of max.
+
+$$  Indeed. Thanks!
+
+* It would be kind if the authors explicitly define the range of weights [0, 1] in Problem statement.
+
+$$ The range of weights is in R^+. We added the range specification.
+
+Suspected typos:
+* Abstract Results L20 "for a established"
+* P7 L2: that assigns (to) all positions xk in dep(f) the respective nucleotide Sxk?
+* P10 L27
+* P12L9
+$$  We do not see the typo
+
+* P12L27 O(nx4^{w+1}tnk)
+$$  ??
+
+* An abbreviation of dynamic programming is not used at all time. (e.g., P10L15, P11 L9, …)
+$$   Thanks for pointing this out, but we decided to keep this spelled out later in the text to increase readability.
+* An abbreviation of minimum free energy is not used at all time. (e.g., P22L6)
+$$  We removed the abbreviation, since it was never used.
+  
+(Supplementary)
+* P4 L7 tree width -> treewidth
+* A few examples in Fig 9(Right) is very interesting because most targets were finished soon. Also it would be great if the authors check the difficult benchmark instances for future improvements.
+
+
+Reviewer 2: I'm satisfied with the authors corrections and responses.
+
+
