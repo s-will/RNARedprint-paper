@@ -1,5 +1,6 @@
 $$  We thoroughly edited our manuscript according to the Journal standard / technical comments and the reviewers' comments. Please find our point-by-point response below.
 
+$$  In addition to addressing the reviewers comments, we fixed an remaining issue concerning our use of the stacking energy model in the text and for experiments (as opposed to the simpler base pair energy model). 
 
 Technical Comments:
 1. Upon resubmission, please remove any tracked changes or highlighting and include only a single clean copy of the manuscript. Please ensure the document is in the final form for publication 
@@ -38,13 +39,11 @@ $$  We completed the declarations sections with respect to Journal style.
 - Title of data
 - Description of data
 
-    We added the Section Additional Files with the according description. The references to Supplemental Material in the text were adapted to the Journal style. 
+$$  We added the Section Additional Files with the according description. The references to Supplemental Material in the text were adapted to the Journal style. 
 
 5. Please mention that this has been presented at conference (RECOMB 2018 conference, Paris) in the Acknowledgements.
 
 $$  We added a corresponding sentence to the Acknowledgements.
-
-
 
 Editor Comments:
 
@@ -106,10 +105,10 @@ Suspected typos:
 * P7 L2: that assigns (to) all positions xk in dep(f) the respective nucleotide Sxk?
 * P10 L27
 * P12L9
-$$  We do not see the typo
+$$  In this case, we do not see the typo
 
 * P12L27 O(nx4^{w+1}tnk)
-$$  ??
+$$  We fixed the overfull line typesetting issue. 
 
 * An abbreviation of dynamic programming is not used at all time. (e.g., P10L15, P11 L9, …)
 $$   Thanks for pointing this out, but we decided to keep this spelled out later in the text to increase readability.

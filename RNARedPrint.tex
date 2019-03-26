@@ -80,9 +80,6 @@
 
 \usepackage{xcolor}
 
-
-\usepackage{todonotes}
-
 %\hypersetup{
 %    bookmarks=false,         % show bookmarks bar?
 %    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
@@ -686,7 +683,8 @@ associated with local structural motifs (base pairs, base pair stacks, loops, \l
 assignment. Energy models can thus be captured generically by introducing, for each motif $\motif$ occurring in
 a target structure, a contribution $f_{\motif}$, taking a specific value for each assignment of nucleotides to its
 positions $\dep(f_{\motif})$. For instance, the contribution of a \Def{base pair stack}, consisting of two pairs $(i,j)$ and $(i+1,j-1)$, can be captured by the introduction of a function $f^{\textsf{Stack}}_{\substack{i,j}}$ such that $\dep(f^{\textsf{Stack}}_{\substack{i,j}}) = \{i,i+1,j-1,j\}$.
-We refer to energy models that consider the contributions of all base pair stacks (and thus introduce the corresponding dependencies) collectively as the \Def{stacking energy model}.
+We refer to energy models that consider the contributions of all base pair stacks (and thus introduce the corresponding
+dependencies) collectively as the \Def{stacking energy model} \revised{(briefly, \Def{stacking model})}.
 }
 
 
@@ -818,15 +816,16 @@ $exp(-\ln(\pi)f(S))=\pi^{-f(S)}.$
 %such that $exp(-\weighttransform{f}{\pi}(S))=\pi^{-f(S)}.$ 
 %
 Let us now specify the concrete set $\F$ of contributions that we use
-for the design in the base pair model\todo{Didn't we plan to get rid of the bp model?}{} targeting \GCb\% and structures $\R$ with weights $\pi_0,\dots,\pi_k$. The set $\F$ thus consists of
+for the design in the stacking energy model targeting \GCb\% and structures $\R$ with weights $\pi_0,\dots,\pi_k$. The set $\F$ thus consists of
 \begin{itemize}
 \item the transformed contributions $\ln(\pi_0)f^{\GCb}_i$ for the ~$\GCb\%$ feature ($i=1,\dots,n$);
-\item the transformed contributions $\ln(\pi_\ell)f^{R_\ell}_{ij}$for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
+\item the transformed contributions $\ln(\pi_\ell)f^{{\textsf{Stack}}}_{ij}$ for each structure $R_\ell\in\R$ and $(i,j)\in R_\ell.$
 \end{itemize}
-
+%
 By these definitions, the set $\F$ encodes the partition function $\partfun{\pi_0,\dots,\pi_k}$ of Eq.~(\ref{eq:mainproblem}).
 %Subsequently, we show how to efficiently compute this partition function based on the 
 %corresponding dependency graph and its tree decomposition.
+
 
 \subsubsection*{Partition function and stochastic backtracking}\label{sec:PF}
 
@@ -993,11 +992,11 @@ tree nodes is in $O(n)$, such that $|\F|+|V| \in \mathcal{O}(n\,k)$.
 
 
 \begin{theorem}[Complexities]\label{th:complexities}
-  For sequence length $n$, $k$ target structures and treewidth $w$,
+  \revised{Given are sequence length $n$, $k$ target structures, and tree\-width $w$.
   % and a base pair dependency graph having $c$ connected components%
   $t$ sequences
   are generated from the Boltzmann distribution  in
-  $O( n\, k \, 4^{w+1} + t\, n\, k )$ time.
+  $O( n\, k \, 4^{w+1} + t\, n\, k )$ time.}
   %$O( n\, k \min(2^{w+c+1},4^{w+1}) + t\, n\, k )$ time.
   %$\mathcal{O}( 2^d\, n\, k  + t\, n\, k )$ time, where $d:=\min(w+c+1,2(w+1))$.
 \end{theorem}
@@ -1030,8 +1029,14 @@ negligible compared to Alg.~\ref{alg:pf}
 % \end{itemize}
 % Finally add for each $R_\ell$ and unpaired base $i$ in a multi loop of $R_\ell$, the function $f$, $\evalfor{f}{\val_S}=c$.
 
-In order to capture realistic energy models like the Turner model or pseudoknot models like {\tt HotKnots}~\citep{Ren2005}, our sampling strategy can be extended in two ways: 1) either by directly sampling based on more expressive energy models \revisedOne{or 2) by sampling in a simple energy model which} can be used to approximate sampling in more complex models.  In practice, complex energy models \revisedOne{have} a strong influence on the treewidth (of optimal tree decompositions) of the dependency graph and \revisedOne{thus on} the computational complexity of our approach. Therefore, it is interesting to consider---in addition to the base pair model---other
-stripped-down variants of the nearest neighbor model, which could offer a compromise between the low-complexity base pair energy model and the high-accuracy Turner model. 
+In order to capture realistic energy models like the Turner model or pseudoknot models like {\tt
+HotKnots}~\citep{Ren2005}, our sampling strategy can be extended in two ways: 1) either by directly sampling based on
+more expressive energy models \revisedOne{or 2) by sampling in a simple energy model which} can be used to approximate
+sampling in more complex models.  In practice, complex energy models \revisedOne{have} a strong influence on the
+treewidth (of optimal tree decompositions) of the dependency graph and \revisedOne{thus on} the computational complexity
+of our approach. Therefore, it is interesting to consider---in addition to the \revised{stacking energy model}---other
+stripped-down variants of the nearest neighbor model, which could offer a compromise between \revised{low-complexity (as due to
+the stacking energy model) and the high-accuracy of the Turner model.}
 
 
 \paragraph{Exact energy models.}
@@ -1143,7 +1148,7 @@ Finally, let $\IS{G}$ denote the set of all independent sets in the connected gr
 \end{proposition}
 %
 \begin{proof}
-Consider the mapping $\Psi: \Design{G} \to \IS{G}, f \mapsto \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$
+  Consider the mapping\\\hspace*{2em}$\Psi: \Design{G} \to \IS{G}, f \mapsto \left\{v\in V\mid f(v)\in\{\Ab,\Cb\}\right\}.$\\
 We show that $\Psi$ is bijective:%
 \begin{itemize}
 \item $\Psi$ is injective, i.e. $\Psi(f)\neq\Psi(f')$ for all $f\neq f'$.
@@ -1200,13 +1205,14 @@ For a discussion on the implications of our hardness results beyond exact counti
 
 We implemented the core algorithms in \texttt{C++}, resulting in the tool
 \ourprog{}, available at: 
+%
+{\url{https://github.com/yannponty/RNARedPrint}}.%
 
-{\centering \url{https://github.com/yannponty/RNARedPrint}\\[.3em]}%
-
+\noindent
 \ourprog{}  takes a set of target structures, as well as
 weights for each energy feature and \GCb\%, and generates a sample set of sequences compatible with the structures in the corresponding
-Boltzmann distribution. \ourprog{} currently supports the base pair
-energy model and the stacking energy model.
+Boltzmann distribution\revised{; it currently supports the stacking energy model and the base pair energy model
+(Additional file~1: Section~\ref{appsec:modelparameters}).} 
 
 Moreover, we provide two {\tt Python} wrapper scripts. 
 The first script targets prescribed energies using multi-dimensional Boltzmann sampling.
@@ -1215,7 +1221,7 @@ and target \GCb\%, this script generates a series of sequences that satisfy the 
 \GCb\% features within configurable tolerances.
 Notably, these target energies are actual free energies in the realistic
 Turner energy model, and are targeted by efficiently sampling in the
-base pair energy model, and filtering sequences based on the {\tt RNAeval} tool from the Vienna package~\cite{Lorenz2011}. The second script generates high quality seed sequences suitable for negative RNA design. The details of this approach are described in the subsections below.
+stacking energy model, and filtering sequences based on the {\tt RNAeval} tool from the Vienna package~\cite{Lorenz2011}. The second script generates high quality seed sequences suitable for negative RNA design. The details of this approach are described in the subsections below.
 
 \subsection*{Practical efficacy of Boltzmann sampling for sequences}
 
@@ -1524,18 +1530,21 @@ penalizing a set of alternative helices/structures.
 %%                                          %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section*{Additional Files}
+\section*{Additional file}
 
 \subsection*{Additional file 1}
-\revised{Supplemental Material providing additional detailed information on 
-``Immediate benefits of positive design for negative design'', ``Tree decomposition for RNA design instances in
-practice'', ``Run times for Boltzmann sampling (at fixed weights)'', ``Illustrating multi-dimensional Boltzmann sampling
-for three pseudoknot-free target structures'', ``Effectivity of the seed sequence generation'', ``Parameters for the
-base pair and the stacking energy model'', ``Tree decomposition with hyper-dependencies'', ``Correctness of the FPT
-partition function algorithm'', ``General complexity of the partition function computation by cluster tree elimination
-and generation of samples'', ``Exploiting constraint consistency to reduce the complexity'', ``Monotonicity of the
-partial derivatives within weight calibration'', ``Approximate counting and random generation'', ``Contribution of terms
-to the MultiDefect score'', and ``Detailed results of the negative design benchmark''.}
+\revised{The Supplemental Material contains additional
+information on methods and parameters; elaboration of theory and proofs; and additional and detailed empirical results.}
+% 
+% \revised{Supplemental Material providing additional detailed information on 
+% ``Immediate benefits of positive design for negative design'', ``Tree decomposition for RNA design instances in
+% practice'', ``Run times for Boltzmann sampling (at fixed weights)'', ``Illustrating multi-dimensional Boltzmann sampling
+% for three pseudoknot-free target structures'', ``Effectivity of the seed sequence generation'', ``Parameters for the
+% base pair and the stacking energy model'', ``Tree decomposition with hyper-dependencies'', ``Correctness of the FPT
+% partition function algorithm'', ``General complexity of the partition function computation by cluster tree elimination
+% and generation of samples'', ``Exploiting constraint consistency to reduce the complexity'', ``Monotonicity of the
+% partial derivatives within weight calibration'', ``Approximate counting and random generation'', ``Contribution of terms
+% to the MultiDefect score'', and ``Detailed results of the negative design benchmark''.}
 
 \begin{backmatter}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1549,11 +1558,9 @@ to the MultiDefect score'', and ``Detailed results of the negative design benchm
 model: pseudoknot energy model by Dirks and Pierce
 
 \section*{Availability of data and materials}
-The software and data of this work are available in the Github repository \url{https://github.com/yannponty/RNARedPrint}.
-\todo[inline]{This section should include a link to the most recent version of your software or code (e.g. GitHub or
-  Sourceforge) as well as a link to the archived version referenced in the manuscript. The software or code should be
-  archived in an appropriate repository with a DOI or other unique identifier. For software in GitHub, we recommend
-using Zenodo.}
+The software and data of this work are maintained in the Github repository
+\url{https://github.com/yannponty/RNARedPrint}\revised{; the acrchived version referenced in this manuscript is
+available at \href{https://dx.doi.org/10.5281/zenodo.2597571}{doi:10.5281/zenodo.2597571}.}
 
 \section*{Author's contributions}
   YP and SW initiated the project and designed the algorithms.
