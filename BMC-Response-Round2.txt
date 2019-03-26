@@ -1,6 +1,6 @@
 $$  We thoroughly edited our manuscript according to the Journal standard / technical comments and the reviewers' comments. Please find our point-by-point response below.
 
-$$  In addition to addressing the reviewers comments, we fixed an remaining issue concerning our use of the stacking energy model in the text and for experiments (as opposed to the simpler base pair energy model). 
+$$  In addition to addressing the reviewers comments, we fixed an remaining issue concerning our use of the stacking energy model in the text and for experiments (as opposed to the simpler base pair energy model).
 
 Technical Comments:
 1. Upon resubmission, please remove any tracked changes or highlighting and include only a single clean copy of the manuscript. Please ensure the document is in the final form for publication 
@@ -39,7 +39,7 @@ $$  We completed the declarations sections with respect to Journal style.
 - Title of data
 - Description of data
 
-$$  We added the Section Additional Files with the according description. The references to Supplemental Material in the text were adapted to the Journal style. 
+$$  We added Section Additional Files with the according description. The references to Supplemental Material in the text were adapted to the Journal style.
 
 5. Please mention that this has been presented at conference (RECOMB 2018 conference, Paris) in the Acknowledgements.
 
@@ -68,7 +68,7 @@ I would like to recommend the authors to check them before publishing.
 Considering the revision comment, it would be better to describe the concept of positive and negative design in the main text well because it is critical for this work.
 (In addition, I finally succeeded to run RNARedPrint, but an actual requirement was java 8 or later. It would be appreciated if the authors could be careful on its README.)
 
-$$  We agree that the some earlier discussion of the relation between positive and negative design in the main text would be beneficial. For this purpose, we added the following text in the Subsection Contributions of Background:
+$$  We agree that some earlier discussion of the relation between positive and negative design in the main text would be beneficial. For this purpose, we added the following text in the Subsection Contributions of Background:
 $$  "In this way, we address the positive design of RNA sequences. Positive design is contrasted to the often desirable negative design of RNAs, which optimizes the stability of the target structures in relation to all other potential structures. Remarkably, the even more complex task of negative design immediately benefits from positive design (Additional file 1: Section A), which provides an initial motivation to study the positive design problem by itself."
 
 
